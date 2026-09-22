@@ -6,7 +6,7 @@
   "description": "Better Calatagan \u2014 an independent civic-information portal for the Municipality of Calatagan, Batangas.",
   "license": "MIT",
   "engines": {
-    "node": ">=20"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "astro dev",
