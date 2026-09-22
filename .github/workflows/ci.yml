@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Typecheck, lint, civic-data tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      # The civic-data guardrails: missing sources, future verification dates,
+      # unverified records in published tiers, invalid PSGC, and population
+      # totals that do not reconcile all fail here.
+      - name: Civic data tests
+        run: npm run test
+
+      # Validates the generated FDP dataset against its Zod schema: duplicate
+      # local or portal ids, invalid year/quarter combinations, unknown form
+      # types, missing checksums and schema drift all fail here.
+      - name: Validate generated datasets
+        run: npm run validate:data
+
+      - name: Build
+        run: npm run build
+
+      # The generated dataset is committed. A build must not silently depend on
+      # a dataset that differs from what is in the repository.
+      - name: Generated dataset is committed and unmodified
+        run: git diff --exit-code -- src/data/generated data/staging
+
+      # Belt and braces: assert that facts recorded as withheld did not reach
+      # the rendered output as published figures.
+      - name: Check withheld data did not leak
+        run: |
+          set -euo pipefail
+          fail=0
+          for pattern in "60,420" "419-0150" "mayorsoffice1011" "Rico" "Zarraga" "Palacio"; do
+            if grep -rqF "$pattern" dist/ --include='*.html' \
+               --exclude-dir=sources 2>/dev/null; then
+              echo "::error::withheld value '$pattern' appears in built output"
+              fail=1
+            fi
+          done
+          exit $fail

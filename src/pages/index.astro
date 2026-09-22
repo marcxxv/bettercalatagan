@@ -1,0 +1,125 @@
+---
+import Base from '../layouts/Base.astro';
+import Source from '../components/Source.astro';
+import { barangays } from '../data/barangays';
+import { barangayPopulation2024, population2024, populationSeries } from '../data/population';
+import { incomeClassification, municipality } from '../data/municipality';
+
+const ORDINAL = ['', '1st', '2nd', '3rd', '4th', '5th', '6th'];
+const number = new Intl.NumberFormat('en-PH');
+
+const populationByCode = new Map(
+  barangayPopulation2024.data.map((row) => [row.psgc10, row]),
+);
+const barangayRows = [...barangays.data]
+  .map((barangay) => ({ ...barangay, census: populationByCode.get(barangay.psgc10) }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+const barangayTotal = barangayRows.reduce((sum, row) => sum + (row.census?.totalPopulation ?? 0), 0);
+---
+
+<Base
+  title="Overview"
+  description="Verified public information about the Municipality of Calatagan, Batangas, with the source for every figure."
+>
+  <h1>Calatagan, Batangas</h1>
+  <p>
+    Better Calatagan collects public information about the Municipality of Calatagan and shows
+    where each figure came from. This is the first release: it carries only the facts that have
+    been checked against a government source, and it says plainly what is missing.
+  </p>
+
+  <h2>Identity</h2>
+  <dl class="facts">
+    <dt>Official name</dt>
+    <dd>{municipality.data.officialName}</dd>
+    <dt>Province</dt>
+    <dd>{municipality.data.province}</dd>
+    <dt>Region</dt>
+    <dd>{municipality.data.region} ({municipality.data.regionName})</dd>
+    <dt>PSGC</dt>
+    <dd><code>{municipality.data.psgc10}</code> (10-digit) · <code>{municipality.data.psgc9}</code> (9-digit)</dd>
+    <dt>Barangays</dt>
+    <dd>{municipality.data.barangayCount}</dd>
+  </dl>
+  <Source source={municipality.source} />
+
+  <h2>Income classification</h2>
+  <p>
+    Calatagan is a <strong>{ORDINAL[incomeClassification.data.incomeClass]} class municipality</strong>, effective{' '}
+    {incomeClassification.data.effectiveFrom}. It was reclassified from{' '}
+    {ORDINAL[incomeClassification.data.previousIncomeClass ?? 2]} class under{' '}
+    {incomeClassification.data.legalBasis}.
+  </p>
+  <p class="src-note">Issuance: {incomeClassification.data.issuance}</p>
+  <Source source={incomeClassification.source} />
+
+  <h2>Population</h2>
+  <p>
+    The latest official count is
+    <strong>{number.format(population2024.data.population)}</strong>
+    as of {population2024.source.asOf}, in {number.format(population2024.data.households)} households
+    ({population2024.data.census}).
+  </p>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th scope="col">Census</th><th scope="col">Reference date</th><th scope="col" class="num">Population</th></tr>
+      </thead>
+      <tbody>
+        {populationSeries.data.map((entry) => (
+          <tr>
+            <td>{entry.census}</td>
+            <td>{entry.referenceDate}</td>
+            <td class="num">{number.format(entry.population)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <Source source={population2024.source} />
+
+  <h2>Barangays</h2>
+  <p>
+    Calatagan has {barangays.data.length} barangays. Their PSGC codes are not a continuous run —
+    012, 024 and 025 are unassigned. Populations are from the {population2024.data.census} and sum
+    to {number.format(barangayTotal)}, matching the municipal total.
+  </p>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Barangay</th>
+          <th scope="col">PSGC</th>
+          <th scope="col" class="num">Population</th>
+          <th scope="col" class="num">Households</th>
+        </tr>
+      </thead>
+      <tbody>
+        {barangayRows.map((row) => (
+          <tr>
+            <td>{row.name}</td>
+            <td><code>{row.psgc10}</code></td>
+            <td class="num">{row.census ? number.format(row.census.totalPopulation) : '—'}</td>
+            <td class="num">{row.census ? number.format(row.census.households) : '—'}</td>
+          </tr>
+        ))}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row" colspan="2">Total</th>
+          <td class="num"><strong>{number.format(barangayTotal)}</strong></td>
+          <td class="num"><strong>{number.format(population2024.data.households)}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <Source source={barangayPopulation2024.source} />
+
+  <p class="src-note">
+    Land area is not published. See <a href="/sources">Sources</a> for why.
+  </p>
+
+  <style>
+    .src-note { color: var(--muted); font-size: 0.88rem; margin-top: -0.5em; }
+  </style>
+</Base>

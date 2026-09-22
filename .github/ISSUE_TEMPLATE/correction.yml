@@ -1,0 +1,35 @@
+name: Correction to published information
+description: Something on the site is wrong or out of date
+labels: [correction]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. Corrections from people in Calatagan are especially valuable.
+
+        **A source is required.** If you know something is wrong but cannot cite it, please still
+        open this issue and say so — that tells us where to look, which is genuinely useful.
+  - type: input
+    id: what
+    attributes:
+      label: What is wrong?
+      placeholder: e.g. the income classification on the overview page
+    validations: { required: true }
+  - type: textarea
+    id: correct
+    attributes:
+      label: What should it say instead?
+    validations: { required: true }
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: >
+        A URL, or a description of the document (issuing agency, title, number, date). Government
+        sources carry more weight — see CONTRIBUTING.md for the hierarchy.
+    validations: { required: true }
+  - type: input
+    id: asof
+    attributes:
+      label: What period does your information describe?
+      placeholder: e.g. "as of January 2026", "CY2025"

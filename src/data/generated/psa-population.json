@@ -1,0 +1,216 @@
+{
+  "barangays": [
+    {
+      "householdPopulation": 2638,
+      "households": 649,
+      "name": "Bagong Silang",
+      "psgc10": "0401008001",
+      "totalPopulation": 2638
+    },
+    {
+      "householdPopulation": 0,
+      "households": 0,
+      "name": "Baha",
+      "psgc10": "0401008002",
+      "totalPopulation": 83
+    },
+    {
+      "householdPopulation": 3460,
+      "households": 864,
+      "name": "Balibago",
+      "psgc10": "0401008003",
+      "totalPopulation": 3460
+    },
+    {
+      "householdPopulation": 3720,
+      "households": 956,
+      "name": "Balitoc",
+      "psgc10": "0401008004",
+      "totalPopulation": 3720
+    },
+    {
+      "householdPopulation": 3575,
+      "households": 901,
+      "name": "Biga",
+      "psgc10": "0401008005",
+      "totalPopulation": 3575
+    },
+    {
+      "householdPopulation": 1080,
+      "households": 263,
+      "name": "Bucal",
+      "psgc10": "0401008006",
+      "totalPopulation": 1080
+    },
+    {
+      "householdPopulation": 1628,
+      "households": 417,
+      "name": "Carlosa",
+      "psgc10": "0401008007",
+      "totalPopulation": 1628
+    },
+    {
+      "householdPopulation": 1760,
+      "households": 414,
+      "name": "Carretunan",
+      "psgc10": "0401008008",
+      "totalPopulation": 1760
+    },
+    {
+      "householdPopulation": 1295,
+      "households": 316,
+      "name": "Encarnacion",
+      "psgc10": "0401008009",
+      "totalPopulation": 1295
+    },
+    {
+      "householdPopulation": 3536,
+      "households": 1038,
+      "name": "Gulod",
+      "psgc10": "0401008010",
+      "totalPopulation": 3536
+    },
+    {
+      "householdPopulation": 2640,
+      "households": 749,
+      "name": "Hukay",
+      "psgc10": "0401008011",
+      "totalPopulation": 2640
+    },
+    {
+      "householdPopulation": 4844,
+      "households": 1260,
+      "name": "Lucsuhin",
+      "psgc10": "0401008013",
+      "totalPopulation": 4844
+    },
+    {
+      "householdPopulation": 570,
+      "households": 140,
+      "name": "Luya",
+      "psgc10": "0401008014",
+      "totalPopulation": 570
+    },
+    {
+      "householdPopulation": 1445,
+      "households": 346,
+      "name": "Paraiso",
+      "psgc10": "0401008015",
+      "totalPopulation": 1445
+    },
+    {
+      "householdPopulation": 4347,
+      "households": 1086,
+      "name": "Barangay 1",
+      "psgc10": "0401008016",
+      "totalPopulation": 4347
+    },
+    {
+      "householdPopulation": 1753,
+      "households": 420,
+      "name": "Barangay 2",
+      "psgc10": "0401008017",
+      "totalPopulation": 1753
+    },
+    {
+      "householdPopulation": 1079,
+      "households": 273,
+      "name": "Barangay 3",
+      "psgc10": "0401008018",
+      "totalPopulation": 1079
+    },
+    {
+      "householdPopulation": 3380,
+      "households": 879,
+      "name": "Barangay 4",
+      "psgc10": "0401008019",
+      "totalPopulation": 3380
+    },
+    {
+      "householdPopulation": 2453,
+      "households": 653,
+      "name": "Quilitisan",
+      "psgc10": "0401008020",
+      "totalPopulation": 2453
+    },
+    {
+      "householdPopulation": 1757,
+      "households": 423,
+      "name": "Real",
+      "psgc10": "0401008021",
+      "totalPopulation": 1757
+    },
+    {
+      "householdPopulation": 2248,
+      "households": 581,
+      "name": "Sambungan",
+      "psgc10": "0401008022",
+      "totalPopulation": 2248
+    },
+    {
+      "householdPopulation": 3286,
+      "households": 830,
+      "name": "Santa Ana",
+      "psgc10": "0401008023",
+      "totalPopulation": 3286
+    },
+    {
+      "householdPopulation": 21,
+      "households": 6,
+      "name": "Talibayog",
+      "psgc10": "0401008026",
+      "totalPopulation": 21
+    },
+    {
+      "householdPopulation": 2910,
+      "households": 723,
+      "name": "Talisay",
+      "psgc10": "0401008027",
+      "totalPopulation": 2910
+    },
+    {
+      "householdPopulation": 4912,
+      "households": 1255,
+      "name": "Tanagan",
+      "psgc10": "0401008028",
+      "totalPopulation": 4912
+    }
+  ],
+  "municipality": {
+    "householdPopulation": 60337,
+    "households": 15442,
+    "name": "Calatagan",
+    "psgc10": "0401008000",
+    "totalPopulation": 60420
+  },
+  "populationSeries": [
+    {
+      "census": "2015 POPCEN",
+      "population": 56449,
+      "referenceDate": "2015-08-01"
+    },
+    {
+      "census": "2020 CPH",
+      "population": 58719,
+      "referenceDate": "2020-05-01"
+    },
+    {
+      "census": "2024 POPCEN",
+      "population": 60420,
+      "referenceDate": "2024-07-01"
+    }
+  ],
+  "reportedDensity2024": 5754,
+  "reportedLandAreaKm2": 10.5,
+  "retrievedAt": "2026-09-22T14:55:12.616Z",
+  "schemaVersion": "1.0.0",
+  "source": {
+    "api": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/1A",
+    "name": "PSA OpenSTAT — 2024 Census of Population",
+    "publisher": "Philippine Statistics Authority",
+    "tables": {
+      "census2024": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/1A/PO_2024/0041A6DTPH3.px",
+      "series": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/1A/PO_2024/0221A6DLPD0.px"
+    }
+  }
+}

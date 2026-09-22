@@ -1,0 +1,53 @@
+---
+import type { DataSource } from '../data/types/provenance';
+
+interface Props {
+  source: DataSource;
+}
+const { source } = Astro.props;
+
+/**
+ * The label describes what the record *is*, not how old it is.
+ *
+ * A census two years past its reference date is still the latest official
+ * count, and saying "stale" would be wrong. Equally, a contact number verified
+ * last month can already be wrong, so age alone earns nothing. We therefore
+ * label from `status` and `isLatestKnownOfficial`, never from elapsed time.
+ */
+const LABELS: Record<DataSource['status'], { text: string; tone: string }> = {
+  current: { text: 'Current', tone: 'ok' },
+  'latest-official': { text: 'Latest official release', tone: 'ok' },
+  historical: { text: 'Historical record', tone: 'neutral' },
+  archived: { text: 'Archived — from a source no longer online', tone: 'warn' },
+  draft: { text: 'Draft — not adopted', tone: 'warn' },
+  unverified: { text: 'Unverified', tone: 'warn' },
+};
+
+const label = LABELS[source.status];
+const verificationNote =
+  source.verification === 'reported' ? 'reported, pending confirmation from the issuer' : null;
+---
+
+<p class={`badge ${label.tone}`}>
+  <span class="dot" aria-hidden="true"></span>
+  {label.text}
+  {source.expectedRefresh !== 'none' && <span class="cadence"> · updated {source.expectedRefresh}</span>}
+  {verificationNote && <span class="cadence"> · {verificationNote}</span>}
+</p>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--fg);
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .ok .dot { background: #2e8b57; }
+  .neutral .dot { background: #6b7280; }
+  .warn .dot { background: #c07800; }
+  .cadence { font-weight: 400; color: var(--muted); }
+</style>

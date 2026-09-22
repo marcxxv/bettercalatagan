@@ -1,0 +1,129 @@
+---
+import Base from '../layouts/Base.astro';
+import { barangays } from '../data/barangays';
+import { barangayPopulation2024, population2024, populationSeries } from '../data/population';
+import { fdpFilings, fdpSummary } from '../data/fdp';
+import { incomeClassification, municipality, WITHHELD } from '../data/municipality';
+import { isPublishable } from '../data/types/provenance';
+
+const datasets = [
+  { name: 'Municipal identity and PSGC', record: municipality },
+  { name: 'Income classification', record: incomeClassification },
+  { name: 'Barangay list', record: barangays },
+  { name: 'Population — 2024 POPCEN', record: population2024 },
+  { name: 'Population — census series', record: populationSeries },
+  { name: 'Barangay populations — 2024 POPCEN', record: barangayPopulation2024 },
+  { name: 'DILG Full Disclosure Policy filings', record: fdpFilings },
+].filter((entry) => isPublishable(entry.record.source));
+
+// Deduplicate citations across datasets for the reference list.
+const references = new Map<string, (typeof municipality.source.sources)[number]>();
+for (const entry of datasets) {
+  for (const reference of entry.record.source.sources) references.set(reference.url, reference);
+}
+---
+
+<Base
+  title="Sources"
+  description="Every source behind the figures on this site, what has been verified, and what is deliberately withheld."
+>
+  <h1>Sources</h1>
+  <p>
+    Every figure on this site traces to a source listed here. Where a source could not be reached
+    or a figure could not be confirmed, that is recorded too — an absence you can see is more
+    useful than a number you cannot check.
+  </p>
+
+  <h2>Datasets published</h2>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Dataset</th>
+          <th scope="col">Status</th>
+          <th scope="col">Verification</th>
+          <th scope="col">Tier</th>
+          <th scope="col">Last verified</th>
+        </tr>
+      </thead>
+      <tbody>
+        {datasets.map(({ name, record }) => (
+          <tr>
+            <td>{name}</td>
+            <td>{record.source.status}</td>
+            <td>{record.source.verification}</td>
+            <td>{record.source.tier}</td>
+            <td>{record.source.lastVerified}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="note">
+    Tier 1 is published as-is. Tier 2 is published with a caveat shown next to the figure. Tiers 3
+    and 4 are held back and do not appear on this site.
+  </p>
+
+  <h2>References</h2>
+  <ol>
+    {[...references.values()].map((reference) => (
+      <li>
+        <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a> —
+        {' '}{reference.publisher}
+        {reference.locator && <> ({reference.locator})</>}.
+        {' '}Accessed {reference.accessedOn}. Authority: {reference.authority}.
+        {reference.sha256 && <><br /><code class="hash">sha256 {reference.sha256}</code></>}
+      </li>
+    ))}
+  </ol>
+
+  <h2>Deliberately not published</h2>
+  <dl class="withheld">
+    {WITHHELD.map((entry) => (
+      <>
+        <dt>{entry.fact}</dt>
+        <dd>{entry.reason}</dd>
+      </>
+    ))}
+  </dl>
+
+  <h2>Transparency filings</h2>
+  <p>
+    The <a href="/transparency">transparency section</a> indexes
+    {fdpSummary.total} Full Disclosure Policy filings across {fdpSummary.forms.length} statutory
+    forms. {fdpSummary.available} download cleanly from the DILG portal;
+    {fdpSummary.sourceError} endpoints were returning a server error when last checked, and those
+    filings remain listed with their metadata. No financial figure has been extracted from any of
+    them — each entry links to the DILG original.
+  </p>
+
+  <h2>Open items</h2>
+  <ul>
+    <li>
+      <strong>Settle the land area.</strong> PSA's own statistical table reports 10.50 km² for
+      Calatagan and derives a 2024 density of 5,754 persons per km² from it. Comparable Batangas
+      municipalities in the same table sit near 50 km², and a widely circulated figure is
+      101.50 km². A second primary source is needed to say which is correct.
+    </li>
+    <li>
+      Confirm the current incumbency of elected officials against COMELEC or DILG records. Election
+      results are not the same as holding office today.
+    </li>
+    <li>
+      Establish which Commission on Audit annual reports exist for Calatagan. The COA site returns
+      a bot challenge to this project's tooling.
+    </li>
+    <li>
+      Find government-hosted copies of the municipal development and land use plans. Copies
+      circulate on third-party document hosts, which attest nothing about authenticity or adoption.
+    </li>
+  </ul>
+
+  <style>
+    .note { color: var(--muted); font-size: 0.88rem; }
+    .hash { font-size: 0.75rem; color: var(--muted); word-break: break-all; }
+    dl.withheld dt { font-weight: 600; margin-top: 12px; }
+    dl.withheld dd { margin: 2px 0 0; color: var(--muted); }
+    ol li { margin-bottom: 10px; }
+  </style>
+</Base>

@@ -1,0 +1,122 @@
+---
+import Disclaimer from '../components/Disclaimer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const year = new Date().getUTCFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} — Better Calatagan</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <Disclaimer />
+
+    <header class="wrap">
+      <a class="brand" href="/">Better&nbsp;Calatagan</a>
+      <nav aria-label="Primary">
+        <a href="/">Overview</a>
+        <a href="/transparency">Transparency</a>
+        <a href="/sources">Sources</a>
+      </nav>
+    </header>
+
+    <main class="wrap" id="main">
+      <slot />
+    </main>
+
+    <footer class="wrap">
+      <p>
+        Better Calatagan is an independent civic project. It is <strong>not</strong> the official
+        website of the Municipality of Calatagan and is not affiliated with, endorsed by, or
+        operated by the municipal government.
+      </p>
+      <p>
+        Compilation and code &copy; {year} Better Calatagan contributors. Code under MIT; this
+        project's own compilation under CC BY 4.0. Cited government documents remain the works of
+        their issuing agencies and carry their own legal status — see
+        <a href="/sources">Sources</a>.
+      </p>
+    </footer>
+
+    <style is:global>
+      :root {
+        --bg: #fdfdfb;
+        --fg: #1b1b18;
+        --muted: #5d5d55;
+        --line: #d9d7cd;
+        --accent: #0b5d4e;
+        --warn-bg: #fff6e0;
+        --warn-line: #e0b95c;
+        --measure: 68ch;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --bg: #15161a;
+          --fg: #ececea;
+          --muted: #a3a39c;
+          --line: #33353c;
+          --accent: #6fd3bb;
+          --warn-bg: #2e2716;
+          --warn-line: #7d6526;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      }
+      .wrap {
+        max-width: var(--measure);
+        margin-inline: auto;
+        padding-inline: 20px;
+      }
+      header.wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 24px;
+        align-items: baseline;
+        justify-content: space-between;
+        padding-block: 24px 8px;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand { font-weight: 700; text-decoration: none; color: var(--fg); }
+      nav a { margin-left: 16px; color: var(--accent); }
+      nav a:first-child { margin-left: 0; }
+      main.wrap { padding-block: 24px 48px; }
+      footer.wrap {
+        border-top: 1px solid var(--line);
+        padding-block: 20px 48px;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      h1 { font-size: 1.7rem; line-height: 1.25; margin-block: 0 0.4em; }
+      h2 { font-size: 1.2rem; margin-block: 2em 0.5em; }
+      a { color: var(--accent); }
+      table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+      th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+      th { font-weight: 600; }
+      td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+      .scroll { overflow-x: auto; max-width: 100%; }
+      dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: 6px 20px; margin: 0; }
+      dl.facts dt { color: var(--muted); }
+      dl.facts dd { margin: 0; }
+      @media (max-width: 460px) {
+        dl.facts { grid-template-columns: 1fr; gap: 2px; }
+        dl.facts dd { margin-bottom: 10px; }
+      }
+    </style>
+  </body>
+</html>

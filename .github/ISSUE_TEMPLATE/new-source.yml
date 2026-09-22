@@ -1,0 +1,30 @@
+name: New source or document
+description: Point us at a government source we are not using
+labels: [source]
+body:
+  - type: input
+    id: url
+    attributes: { label: URL }
+    validations: { required: true }
+  - type: input
+    id: publisher
+    attributes:
+      label: Issuing agency or publisher
+    validations: { required: true }
+  - type: textarea
+    id: covers
+    attributes:
+      label: What information does it contain, and for what period?
+    validations: { required: true }
+  - type: checkboxes
+    id: open-items
+    attributes:
+      label: Does this close an open item in SOURCES.md?
+      options:
+        - label: PSA-hosted page for the 2024 POPCEN count
+        - label: PSA-hosted PSGC page for the barangay codes
+        - label: Official land area
+        - label: Current incumbency of elected officials
+        - label: COA Annual Audit Report coverage
+        - label: Government-hosted copy of the CDP or CLUP
+        - label: Municipal contact details

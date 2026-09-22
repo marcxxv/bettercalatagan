@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+
+# The generated FDP dataset and its staging snapshot ARE committed on purpose:
+# they are the auditable record of what the DILG portal returned and when.
+# Do not add data/staging or src/data/generated here.

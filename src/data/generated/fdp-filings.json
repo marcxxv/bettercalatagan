@@ -1,0 +1,5266 @@
+{
+  "generatedAt": "2026-09-22T15:02:15.371Z",
+  "lgu": "Calatagan, Batangas",
+  "listingUrl": "https://fdpp.dilg.gov.ph/fdpp/report/index?region_filter=04&province_filter=010&lgu_filter=08&document_filter=&year_filter=&quarter_filter=&docperiod_filter=&page=1",
+  "portalReportedTotal": 156,
+  "psgc": "0401008000",
+  "recordCount": 156,
+  "records": [
+    {
+      "availability": "available",
+      "byteLength": 86064,
+      "contentSha256": "8d6dfd509eeb3941d074e0cbd76cbabe0924243b2ee3ce869611bb3b259ec421",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=264887",
+      "fdppId": 264887,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2026-q2-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Municipal Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 11088,
+      "contentSha256": "f28c8afb968c6824e03402afbc049dc410ad5459f30c5e9fb83af554dd4506b0",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=264198",
+      "fdppId": 264198,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2026-q2-ldrrmf-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "MUNICIPAL HALL CALATAGAN",
+        "CALATAGAN PUBLIC MARKET",
+        "MUNICIPAL TRAINING HALL"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 9835,
+      "contentSha256": "b5b793a295c23c57b56b278ec81de2e848280a3b3bb5175b604806e5ced2b172",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=264196",
+      "fdppId": 264196,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2026-q2-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "MUNICIPAL HALL CALATAGAN",
+        "CALATAGAN PUBLIC MARKET",
+        "MUNICIPAL TRAINING HALL"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 14099,
+      "contentSha256": "634375b7123cb177e59d1a84b0adbbf4da7d0bfa07461fe615d8e6ed790eb17c",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=264197",
+      "fdppId": 264197,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2026-q2-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "MUNICIPAL HALL CALATAGAN",
+        "CALATAGAN PUBLIC MARKET",
+        "MUNICIPAL TRAINING HALL"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 21780,
+      "contentSha256": "e020301520e81b24bcd7d588497c252874587c3cfd9225c1ab351f1c235903e2",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=264202",
+      "fdppId": 264202,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2026-q2-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "MUNICIPAL HALL CALATAGAN",
+        "CALATAGAN PUBLIC MARKET",
+        "MUNICIPAL TRAINING HALL"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 11415,
+      "contentSha256": "79edbb92e7a9230905ef3a5e26d7a2ebe2c00e484504af2ffcbfd6d2d9084a86",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=264199",
+      "fdppId": 264199,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2026-q2-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "MUNICIPAL HALL CALATAGAN",
+        "CALATAGAN PUBLIC MARKET",
+        "MUNICIPAL TRAINING HALL"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 12218,
+      "contentSha256": "830b5711011b56a69de8d611733f4c3a8376b45a9c76b6475dcc1e28d1fc481f",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=264203",
+      "fdppId": 264203,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2026-q2-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "MUNICIPAL HALL CALATAGAN",
+        "CALATAGAN PUBLIC MARKET",
+        "MUNICIPAL TRAINING HALL"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 13855,
+      "contentSha256": "e7c40c953a3f51f143d7974147aeb25c33a8ad6ccf8ef26145ffe3608c36bea7",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=264250",
+      "fdppId": 264250,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2026-q2-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "CALATAGAN MUNICIPAL HALL",
+        "CALATAGAN PUBLIC MARKET",
+        "MUNICIPAL TRAINING HALL"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 12205,
+      "contentSha256": "523bdc7c00d54dc22e1771f35f2b350f47fb1fb397a01cbf27033522ecc05557",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=264201",
+      "fdppId": 264201,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2026-q2-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "MUNICIPAL HALL CALATAGAN",
+        "CALATAGAN PUBLIC MARKET",
+        "MUNICIPAL TRAINING HALL"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 11023,
+      "contentSha256": "3dafc2fa08c91e0f64baae3443d0e65f32528d341501490362e9f2559e3cb1eb",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=264200",
+      "fdppId": 264200,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2026-q2-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "MUNICIPAL HALL CALATAGAN",
+        "CALATAGAN PUBLIC MARKET",
+        "MUNICIPAL TRAINING HALL"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 64176,
+      "contentSha256": "6404ebad0bbfa7f83cd428097a13480a25997fa1df41820bc2f66fcae7af128c",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=246429",
+      "fdppId": 246429,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2026-q1-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 10708,
+      "contentSha256": "6a0b8070a7e43ca5d4b3a9dfaa9a6de0fbfefa64b9e2045919c8613c2849d68a",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=246575",
+      "fdppId": 246575,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2026-q1-ldrrmf-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 10699,
+      "contentSha256": "5c1e42a8f89628cad13053a4f47111785eff90d4a4fc869921c73f45bdbc1bf1",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=246430",
+      "fdppId": 246430,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2026-q1-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 20381,
+      "contentSha256": "5d4f4f3510ab3bf3dba13586ec6768b99ae6342dfed7819f0926f78a8c7e3168",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=246433",
+      "fdppId": 246433,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2026-q1-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 21474,
+      "contentSha256": "320edaebbaa5b2372f0a5f206dd4727a7977be89d39cf8a8d0202839a17849b2",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=246439",
+      "fdppId": 246439,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2026-q1-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 11230,
+      "contentSha256": "cfd5d6646db67b22cb10ff011c55cc38ac256bb49200fb01a3eb01ecf8077b67",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=246442",
+      "fdppId": 246442,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2026-q1-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Muncipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 16083,
+      "contentSha256": "215e6c84c1a13e45d4ac1a7f67313134ea7b7d2fe4c19e5c7e1606583f5b7d92",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=246445",
+      "fdppId": 246445,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2026-q1-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 13795,
+      "contentSha256": "21761651e2f39637d2410d07e71a73838e1e7c638fd45b7295366a0e6fcfa0f4",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=246561",
+      "fdppId": 246561,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2026-q1-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 18255,
+      "contentSha256": "f3da41bdd61a897946807ebd810b8b5b04ce04a6b30a003dbdcec09cfb7df6d5",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=246435",
+      "fdppId": 246435,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2026-q1-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 11041,
+      "contentSha256": "db06e173d280e499b5ab3414fb02a044782f7a994e32239b13306badd549bd81",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=246427",
+      "fdppId": 246427,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2026-q1-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=226967",
+      "fdppId": 226967,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Budget Report",
+      "formSlug": "annual-budget-report",
+      "httpStatus": 500,
+      "id": "fdp-2026-annual-budget-report",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2026
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=226937",
+      "fdppId": 226937,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Procurement Plan",
+      "formSlug": "annual-procurement-plan",
+      "httpStatus": 500,
+      "id": "fdp-2026-annual-procurement-plan",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 77918,
+      "contentSha256": "6ad0daabeadd050b456455ee61452234b499ae0f1dd4c6b589f2008de8c9c945",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=224091",
+      "fdppId": 224091,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2025-q4-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 11106,
+      "contentSha256": "3e1831601a88727f4f1e01242d7159c8c1be55aebb2a7c1f7b67f154ded3463f",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=225738",
+      "fdppId": 225738,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q4-ldrrmf-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=224097",
+      "fdppId": 224097,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 500,
+      "id": "fdp-2025-q4-manpower-complement",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 15351,
+      "contentSha256": "af99630c2338eb79849e7f68efe3cd4409485da896f2ccd798b84cb852684337",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=224118",
+      "fdppId": 224118,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q4-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 21362,
+      "contentSha256": "4b548942e740976717c6de0cd5bade2506d03cea5d9290fbdcd2444b27ffd76c",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=225672",
+      "fdppId": 225672,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2025-q4-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 12058,
+      "contentSha256": "6adc91f4a2dfc1e31c28f30936f30b4203ac0f92dfd31d55668f412ef9b14118",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=224103",
+      "fdppId": 224103,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q4-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 19881,
+      "contentSha256": "6c77424817912ede91e2e876087f72109680e934ee3e02e650dbb09a0536ee79",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=224114",
+      "fdppId": 224114,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2025-q4-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 44372,
+      "contentSha256": "d070b1e78fc335cc0f7599bd7cd9db0315580ff5a942a3f672c0fee14040a4af",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=226929",
+      "fdppId": 226929,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2025-q4-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calataga Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 9207,
+      "contentSha256": "e635246004bed07142e311390d39e022ca784f18bbbc4fa6a950c51d84c6c7d0",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=227039",
+      "fdppId": 227039,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q4-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 10728,
+      "contentSha256": "ea6aec1d694efca5bed5fbac59fc9db0a82a355cee327079c9378be9de159783",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=224109",
+      "fdppId": 224109,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2025-q4-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 65241,
+      "contentSha256": "d011f0dfcc4b7f81334576190956330258f21d1f2f922588cfcd944544ceed46",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=208796",
+      "fdppId": 208796,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2025-q3-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Municipal Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 11162,
+      "contentSha256": "7f27ec764df33cef6552c2bcae751efde2e256cc63a517e8d9f095a50cd9a26c",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=208842",
+      "fdppId": 208842,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q3-ldrrmf-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 9696,
+      "contentSha256": "2dbf0441ef0553c8362ca24a62dbcb6e41dd014b88f6dbd72a3ae3a3404abde1",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=208821",
+      "fdppId": 208821,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2025-q3-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 13725,
+      "contentSha256": "9decef7d65db29b99354b73894d844c64a6db84d2629cd89356805baf9fc45ed",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=208843",
+      "fdppId": 208843,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q3-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 21287,
+      "contentSha256": "e568be97798eb59d203d832617a266aa16087493f39fde37045131caecc4a8c9",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=208866",
+      "fdppId": 208866,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2025-q3-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Municipal Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 11773,
+      "contentSha256": "371cfe6680271dbad0235c5d0a3e7c8a146d935c83da12452f03a7a75c411be7",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=208806",
+      "fdppId": 208806,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q3-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=208800",
+      "fdppId": 208800,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 500,
+      "id": "fdp-2025-q3-statement-of-indebtedness",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 13907,
+      "contentSha256": "9ad12f478039c47f5bf2cb3f54181bd6948dccf9bd98e6b87907c0f68c3abc5d",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=208837",
+      "fdppId": 208837,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2025-q3-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 9244,
+      "contentSha256": "c4f483d35f5cc40da878653725e9ffe3d28edcc33457d16faf6424c9888ab90e",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=208799",
+      "fdppId": 208799,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q3-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 10823,
+      "contentSha256": "723a249db1fd125cc30cac8c3265a045f27324d472b54b814ae99d609169a657",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=208798",
+      "fdppId": 208798,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2025-q3-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Municipal Hall Calatagan",
+        "Calatagan Public Market",
+        "Municipal Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 85462,
+      "contentSha256": "4120650b1ec48bf846212414646f010695f5350b05671605cae68d344393e356",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=183325",
+      "fdppId": 183325,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2025-q2-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=183332",
+      "fdppId": 183332,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 500,
+      "id": "fdp-2025-q2-ldrrmf-utilization",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 84355,
+      "contentSha256": "227ed296d9f2b7cd9c632984c4182d95a2b2ee273aaf3529e6a57cbb9d2b4c83",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=183333",
+      "fdppId": 183333,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2025-q2-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 98252,
+      "contentSha256": "eee05626ae6f7ce1c81684f37b18e1e16f3e0280c945253f5ad4d809f7d16186",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=183324",
+      "fdppId": 183324,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q2-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=183331",
+      "fdppId": 183331,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 500,
+      "id": "fdp-2025-q2-quarterly-statement-of-cash-flow",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 77743,
+      "contentSha256": "173626c62987d145f253b57d461cfb19e418d122aa7df04352177c07661d8f97",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=183316",
+      "fdppId": 183316,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q2-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 40215,
+      "contentSha256": "1a8d5c27d6bbddeb4a3767dcd119d1576682b86b9b804f81dccdefe19bcec43d",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=183334",
+      "fdppId": 183334,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2025-q2-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 35034,
+      "contentSha256": "db3c11fcb2af23f3079341ac7f3689f4c5b49c3bbf939ca393a53fa03b5daf25",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=183335",
+      "fdppId": 183335,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2025-q2-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=183337",
+      "fdppId": 183337,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 500,
+      "id": "fdp-2025-q2-trust-fund-utilization",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 76681,
+      "contentSha256": "cf3517178525df0421c169a3a8327dfe54873a22a25737cc22776511e853a4ea",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=183338",
+      "fdppId": 183338,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2025-q2-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 114720,
+      "contentSha256": "27f9189ad3fcc8c33f49f9f3e8cd54884e2336cc845fdb37df3290132de07732",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=164226",
+      "fdppId": 164226,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2025-q1-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 18212,
+      "contentSha256": "971acef8bbf088455e89a9cde8f68b3a01e28f66d2eafcf707b3164f1d2b50d0",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=163738",
+      "fdppId": 163738,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q1-ldrrmf-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 56822,
+      "contentSha256": "799cbb3d7f8a35b1bb08c2ebac54be84a3f9619e5dd4e3a9c027e4ccd37d2724",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=164224",
+      "fdppId": 164224,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2025-q1-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 58600,
+      "contentSha256": "1e6842b8430a008ad5683e7520326a003c7e2a0aacac447cc03df55ab6ba8341",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=163750",
+      "fdppId": 163750,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q1-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 98351,
+      "contentSha256": "d263f690a701580561dc89e395a825cffd86ccd219c4c389bbf83eeaa4d9f547",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=163793",
+      "fdppId": 163793,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2025-q1-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 37503,
+      "contentSha256": "9a162fc65b9b77ed94daaa6ddfe48941826cae068e03448a2b04cab8949de34a",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=163757",
+      "fdppId": 163757,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q1-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 50066,
+      "contentSha256": "10bacf7b6892a2d5d5c4bb9caa1b8b4adaf4cf027ac5f9ba2512de703502dcdf",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=163758",
+      "fdppId": 163758,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2025-q1-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 44768,
+      "contentSha256": "cfc2cfc9d243219696d83a0570e4a38adfc1c95d3a03db9897e51ea01a546694",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=163789",
+      "fdppId": 163789,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2025-q1-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 61544,
+      "contentSha256": "8a75f12b3e2c06002db1f794d5e20e79f24c7f3f14283d1d237726a595a4a274",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=163741",
+      "fdppId": 163741,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2025-q1-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 36950,
+      "contentSha256": "47b692e07d577e2fb609176c432180ca8fa245d4c26c0afde208e08f783dede6",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=163752",
+      "fdppId": 163752,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2025-q1-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=139967",
+      "fdppId": 139967,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Budget Report",
+      "formSlug": "annual-budget-report",
+      "httpStatus": 500,
+      "id": "fdp-2025-annual-budget-report",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=139890",
+      "fdppId": 139890,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Procurement Plan",
+      "formSlug": "annual-procurement-plan",
+      "httpStatus": 500,
+      "id": "fdp-2025-annual-procurement-plan",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 65917,
+      "contentSha256": "d400d51fe0453a1f97ca7765fd8311c4f8e3270ccbe26b145a948c60adeef92e",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=246567",
+      "fdppId": 246567,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Gender and Development Accomplishment Report",
+      "formSlug": "gad-accomplishment-report",
+      "httpStatus": 200,
+      "id": "fdp-2025-gad-accomplishment-report",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2025
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=226938",
+      "fdppId": 226938,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Supplemental Procurement Plan",
+      "formSlug": "supplemental-procurement-plan",
+      "httpStatus": 500,
+      "id": "fdp-2025-supplemental-procurement-plan",
+      "postingLocations": [
+        "Calatagan Municipal Hall",
+        "Calatagan Public Market",
+        "Calatagan Training Hall"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2026
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 109300,
+      "contentSha256": "af39d2ef51a04474f4c5444f68134c154475432ce71ad0bb8d27420c07c573a4",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=138721",
+      "fdppId": 138721,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2024-q4-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 18520,
+      "contentSha256": "ba6ed4447d78acf0bac6cba4590c5b2fbab6579a19dcead8707d549f475b2798",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=138709",
+      "fdppId": 138709,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q4-ldrrmf-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 258906,
+      "contentSha256": "b3781ece744140fb29dda5331df3d5f1aaadda20658048be6ed77f5115f0d9b2",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=138203",
+      "fdppId": 138203,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2024-q4-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 101265,
+      "contentSha256": "3b14e56db150d90c1c84f8e9d54034a9a4679f4096580c7bd9babfdc3a082fdc",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=138698",
+      "fdppId": 138698,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q4-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 217648,
+      "contentSha256": "ba03fbd3852dac0ecb11d297d689e67162cec0ca0e46f759e0d7d16236b5921e",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=138531",
+      "fdppId": 138531,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2024-q4-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 77861,
+      "contentSha256": "628ebd6ffa12cf66185a2ac7bd751b05345386e575dd900b5adcbf6cd0030ec5",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=138533",
+      "fdppId": 138533,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q4-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 40262,
+      "contentSha256": "87e64e6524364d2aeed3fd1656b3867c4f3a9e7d6b33d88fe02f1ebc2e06ded6",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=138205",
+      "fdppId": 138205,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2024-q4-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 35057,
+      "contentSha256": "965f4f9eed18b89e2638ff99c3112bffec216db0aeca4b43bb894b0d06bfa845",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=140013",
+      "fdppId": 140013,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2024-q4-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 101608,
+      "contentSha256": "bd179699e47c7fbdae05051df5454346ae64b0ef64f74d5db36568981e1b11ac",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=138201",
+      "fdppId": 138201,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q4-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 76497,
+      "contentSha256": "73a0abf38be4c3f7ebe54ff4bac605b23b16d93766b3dc02abf2093d789964db",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=138527",
+      "fdppId": 138527,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2024-q4-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 109509,
+      "contentSha256": "bb62e644e8b4fb392ea7b2f724b798c1b648f074ba38c0ebf43ea92fca4fe174",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=117417",
+      "fdppId": 117417,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2024-q3-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 18340,
+      "contentSha256": "2fb0fea9dd6597262a065cef7bca0ccbaf01e5ebb3e55dce9f389a31c5bd92ac",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=116839",
+      "fdppId": 116839,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q3-ldrrmf-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 218846,
+      "contentSha256": "fa4cb3553f52a06dd3e4ccf78e1b056ea7ee5510a9c215aa5aacfcb6be064c2a",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=116824",
+      "fdppId": 116824,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2024-q3-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 121145,
+      "contentSha256": "2ecad7623d5fb58ec0bf8f5ab56f0b79abc78e77f78e4c27a44504ea8efa485c",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=116835",
+      "fdppId": 116835,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q3-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 37824,
+      "contentSha256": "555b1058148b4949392f3c7f8f8f3d6a3fc9830dd681e70d6ce5b50903a33e6b",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=123867",
+      "fdppId": 123867,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2024-q3-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 37849,
+      "contentSha256": "6e919b14937c063bb5b270cae0234e6100e11306b0ab369d5895ff3d09cbd941",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=124041",
+      "fdppId": 124041,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q3-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "THIS WAS POSTED IN THREE (3) CONSPICUOUS PLACES: 1. PUBLIC MARKET BARANGAY 4",
+        "CALATAGAN",
+        "BATANGAS 2. MUNICIPAL BUILDING",
+        "BARANGAY 2",
+        "CALATAGAN",
+        "BATANGAS 3. LGU BUILDING 3",
+        "BARANGAY 3",
+        "CALATAGAN",
+        "BATANGAS"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 82963,
+      "contentSha256": "d93f1238d88a0f64966a51aad670f7d1a472022043dc7542d49625e578cd3d0d",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=116819",
+      "fdppId": 116819,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2024-q3-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 34966,
+      "contentSha256": "dd4cdf8259f255cb14ab77632b3a484484c68a831686990a4759884733a935ab",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=116826",
+      "fdppId": 116826,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2024-q3-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 121907,
+      "contentSha256": "7ffcf2d363efa048adb27fd91dd03aaedd123aea14af312a72f66c04c5476fe0",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=123848",
+      "fdppId": 123848,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q3-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 44821,
+      "contentSha256": "47d2f55952ed266c613723aab8b7a92bd3632791ba5e63c64cc9766b10f90dd6",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=123843",
+      "fdppId": 123843,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2024-q3-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 178829,
+      "contentSha256": "d4c0a639afef384b87dd2f43ba5043228d3ff121f7d11dd6ba952750e75fc284",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=104186",
+      "fdppId": 104186,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2024-q2-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 27307,
+      "contentSha256": "3c6dd97af07679269519613769a01f707cf3574ec3d792441628c0209ba5e94b",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=104771",
+      "fdppId": 104771,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q2-ldrrmf-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 93671,
+      "contentSha256": "14de57077de1b515c6e9d35139bde82a60ffdc64d9d02a2801618c8e79431409",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=104192",
+      "fdppId": 104192,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2024-q2-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 115661,
+      "contentSha256": "5af45c78aac308e8213bede15881b99d3832236d1d07086a38d9a8e865c668e2",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=104761",
+      "fdppId": 104761,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q2-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 51250,
+      "contentSha256": "fbe365b123df93c91181577fd7ab6a61713cf0c19d78eb6e8f4fdb6c701eb6b1",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=104237",
+      "fdppId": 104237,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2024-q2-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 43664,
+      "contentSha256": "4b81f0b35ab07658992cd2fec7a8f0daa41f437ba35f2058b9eee5b87d39efb5",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=104238",
+      "fdppId": 104238,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q2-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 40245,
+      "contentSha256": "c190a1457c2915902bac24f1ac743ac048e2c9dca32c0d9bf3c7a494f5809bba",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=104195",
+      "fdppId": 104195,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2024-q2-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 34893,
+      "contentSha256": "b90df4e2562b0e82b4a974cb8d44430765c13dd7c7cf5d7d0f4097b5a4f62392",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=104802",
+      "fdppId": 104802,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2024-q2-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 107098,
+      "contentSha256": "079e5cd946a42b7aa412967192e2b96479807a8a71432d9b2d2d12fde09fd03e",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=104241",
+      "fdppId": 104241,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q2-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 37062,
+      "contentSha256": "438c65b569d0d8b486f853842d891d160065adc6e229d165f1a497422b50e667",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=104239",
+      "fdppId": 104239,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2024-q2-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 109271,
+      "contentSha256": "d5cdcc7d606bfb652e42a3c71d6f35d042a109952acbdad1e1a0c67de4df5833",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=85393",
+      "fdppId": 85393,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2024-q1-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 25733,
+      "contentSha256": "4e056e139d63f9486ed3fbdce0c6573d3907726279152d28c11d5f09b9be63db",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=88063",
+      "fdppId": 88063,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q1-ldrrmf-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 227291,
+      "contentSha256": "532e8d7342f891494f4e2995da26c41cf24f26b0ad6c592e54c40fc885393f44",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=88072",
+      "fdppId": 88072,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2024-q1-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 93977,
+      "contentSha256": "04d76ddd5b4071b147d98c7acf7f8fd709bfd89928d4834c59fd7298b597f3bf",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=88055",
+      "fdppId": 88055,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q1-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 116083,
+      "contentSha256": "8d8b4cbc45ccf52d8ee8f6d756386822cc9d455a2f65d83a52ef333489ce9ee5",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=88018",
+      "fdppId": 88018,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2024-q1-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 43691,
+      "contentSha256": "dc8af90f20769b21dc73cb0b7edb2755ac467196a88d4fdae9a3e7f80c10b562",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=86012",
+      "fdppId": 86012,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q1-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 82945,
+      "contentSha256": "e2a6a3f364a7d8fd359bd5c5e8b3eaa2e8ed6cf1b6c0da980f78ba4ff4d3174a",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=85395",
+      "fdppId": 85395,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2024-q1-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 34852,
+      "contentSha256": "5e2ed6c17ddb2041e2aea93c09de15a73e0460968d3ebfad4fb19059e7adfbdb",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=87989",
+      "fdppId": 87989,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2024-q1-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 99331,
+      "contentSha256": "e10d46c77394f0065b3121cf6ebee2590452101ef173887f4029d4cd5fa3f4c6",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=88014",
+      "fdppId": 88014,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2024-q1-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 40580,
+      "contentSha256": "232f2f62acb6f80c49fb635ef329bf1459ee5f004c7aec6cdf44d3906dc9c76e",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=88012",
+      "fdppId": 88012,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2024-q1-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=75732",
+      "fdppId": 75732,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Budget Report",
+      "formSlug": "annual-budget-report",
+      "httpStatus": 500,
+      "id": "fdp-2024-annual-budget-report",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 34334,
+      "contentSha256": "ab2aa8c65c9abb468c42d3ef689eed7e3f711a6e001948684c7a3667d0d7ca50",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=75339",
+      "fdppId": 75339,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Procurement Plan",
+      "formSlug": "annual-procurement-plan",
+      "httpStatus": 200,
+      "id": "fdp-2024-annual-procurement-plan",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=163728",
+      "fdppId": 163728,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Gender and Development Accomplishment Report",
+      "formSlug": "gad-accomplishment-report",
+      "httpStatus": 500,
+      "id": "fdp-2024-gad-accomplishment-report",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2024
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=141947",
+      "fdppId": 141947,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Supplemental Procurement Plan",
+      "formSlug": "supplemental-procurement-plan",
+      "httpStatus": 500,
+      "id": "fdp-2024-supplemental-procurement-plan",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2025
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 82558,
+      "contentSha256": "d6b2e97c5c7ca2eb0b7a8f3ec8240c95ec168e3c1156f57264d10f3f144c0971",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=67562",
+      "fdppId": 67562,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2023-q4-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 26351,
+      "contentSha256": "7c5f5a1e7ec9166719a15268ba8891a321f27860d8118260b6f0fecfaf4d616f",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=67482",
+      "fdppId": 67482,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2023-q4-ldrrmf-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 89585,
+      "contentSha256": "a6290a32fa788ae036b89970948d648b1a2d176d6fa7fc6b4ef8141c53c8ff4f",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=67483",
+      "fdppId": 67483,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2023-q4-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 92842,
+      "contentSha256": "7cf7106bdfe15b044dd4b11748192764852ead7b1472ae013c2aac7c934b4d20",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=67453",
+      "fdppId": 67453,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2023-q4-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 140362,
+      "contentSha256": "ead41d50bee212a90102fcd6ae02aae71641596dc49591fd5386b5f7b78f5e97",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=67435",
+      "fdppId": 67435,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2023-q4-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 43770,
+      "contentSha256": "2c9c4b13172cf17464d216ec5300d36c2ec86c5d8ce0741691a6f73f2201d5e3",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=67445",
+      "fdppId": 67445,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2023-q4-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 82954,
+      "contentSha256": "3f679d06a1ab94154b643f8a9fa6971c507f2464a1d495853d925aed590bedbd",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=67484",
+      "fdppId": 67484,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2023-q4-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 35002,
+      "contentSha256": "2a0e646584bfc555f96bbed6ccc3ad82db339e4c7c37ddf65ef735904cd9e105",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=69153",
+      "fdppId": 69153,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2023-q4-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 99554,
+      "contentSha256": "ef96d36baca18e595ef2e19ca0b37bf2a9630291a410fbfb357967025d797b60",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=67486",
+      "fdppId": 67486,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2023-q4-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=67448",
+      "fdppId": 67448,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 500,
+      "id": "fdp-2023-q4-unliquidated-cash-advances",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 129298,
+      "contentSha256": "f032df667a3dbc82dc98397d92a4a3183c7ea74b915bb54dd1bc71b9f210b4a4",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=49859",
+      "fdppId": 49859,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2023-q3-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 23999,
+      "contentSha256": "57dc2cc9c6d6a85425f1982e2157589cdd8faebea21c17206c848b58f503ee00",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=50000",
+      "fdppId": 50000,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2023-q3-ldrrmf-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 226268,
+      "contentSha256": "563ae9e7cf38a590f6fd006bf150fb76ee8220bbb613bf614f939e77204da99d",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=49992",
+      "fdppId": 49992,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2023-q3-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 100617,
+      "contentSha256": "7a5a49e8f9f4606590c25a465fdf6d13757517a01efbda94999fa9da450846b1",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=49914",
+      "fdppId": 49914,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2023-q3-nta-20-percent-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 133431,
+      "contentSha256": "e9bbafc193f08227203f5f5a12b702fe5ab0b494a076bedbe2e2f19f8f754b96",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=49918",
+      "fdppId": 49918,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2023-q3-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 49517,
+      "contentSha256": "1b232e4af51e656a44e59ec62923838c2d7bc72aec6948423faf29dfbffed595",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=49922",
+      "fdppId": 49922,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2023-q3-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 82950,
+      "contentSha256": "d818aa36984a953e0e18c28f428d565f25609d3073d5faa9a582204e976849e8",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=49993",
+      "fdppId": 49993,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2023-q3-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 34953,
+      "contentSha256": "1d05e340ba118dbad4d0cb1e7a2333cf569f49661cdd3ac687ec53c33420dacb",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=50463",
+      "fdppId": 50463,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2023-q3-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 107499,
+      "contentSha256": "cde98c2614a760020dd48fba1adb278587380f48caf0f27ea015e798c237cdc9",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=50465",
+      "fdppId": 50465,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2023-q3-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 50992,
+      "contentSha256": "716d124c7f524da94c2085d48195dbe2cf81aa37b1c2437e85ac9f03879c1963",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=49994",
+      "fdppId": 49994,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2023-q3-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 4,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 175714,
+      "contentSha256": "17b41fd25931f4a785bc3ec05658f302b26b62a835c5b67d6cb05210c738f0fd",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=32430",
+      "fdppId": 32430,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2023-q2-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=32464",
+      "fdppId": 32464,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 500,
+      "id": "fdp-2023-q2-ldrrmf-utilization",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 223745,
+      "contentSha256": "10c89af1c040d0afe266cb680f3de233f3675b35d51c096121e134a76cbe79e0",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=32380",
+      "fdppId": 32380,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2023-q2-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=32438",
+      "fdppId": 32438,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 500,
+      "id": "fdp-2023-q2-nta-20-percent-utilization",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 107997,
+      "contentSha256": "08cabb7016965b6915135979d0804503858f902717ecea809c970a5c585e4efa",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=32458",
+      "fdppId": 32458,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2023-q2-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 41376,
+      "contentSha256": "a37ae48e1de4db2d6ad5f6a1e49cfebcd243dfe802fee1cc74ffe1206d426873",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=32455",
+      "fdppId": 32455,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2023-q2-sef-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=32432",
+      "fdppId": 32432,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 500,
+      "id": "fdp-2023-q2-statement-of-indebtedness",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 34755,
+      "contentSha256": "89a8e8dfdd20d4fb78b62ec1b15325e423ed13beec5de8e1cc533f3a1d57e15d",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=32486",
+      "fdppId": 32486,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2023-q2-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=32472",
+      "fdppId": 32472,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 500,
+      "id": "fdp-2023-q2-trust-fund-utilization",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 44248,
+      "contentSha256": "509ee3620f23030f9dd0b624396be67873d8b80811c001b2476db870da051a82",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=32474",
+      "fdppId": 32474,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2023-q2-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 3,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 109214,
+      "contentSha256": "83ec4c38d8df77a84c02f9660ca999b35516ca157ada719cdd0073bae3ff8963",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=5601",
+      "fdppId": 5601,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Bid Results on Civil Works, Goods and Services, and Consulting Services",
+      "formSlug": "bid-results",
+      "httpStatus": 200,
+      "id": "fdp-2023-q1-bid-results",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=14100",
+      "fdppId": 14100,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Local Disaster Risk Reduction and Management Fund Utilization",
+      "formSlug": "ldrrmf-utilization",
+      "httpStatus": 500,
+      "id": "fdp-2023-q1-ldrrmf-utilization",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 231820,
+      "contentSha256": "05836d5454e64333d1b89ca0d1e6e406fe5f49d3a18730ba28e04876c526d6f2",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=14121",
+      "fdppId": 14121,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Manpower Complement",
+      "formSlug": "manpower-complement",
+      "httpStatus": 200,
+      "id": "fdp-2023-q1-manpower-complement",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=14141",
+      "fdppId": 14141,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "20% of the National Tax Allotment Utilization",
+      "formSlug": "nta-20-percent-utilization",
+      "httpStatus": 500,
+      "id": "fdp-2023-q1-nta-20-percent-utilization",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 132155,
+      "contentSha256": "60db52780f3e037501702d78584f23c1ffd47ebcdb6623bee1d169ea259c80f5",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=7470",
+      "fdppId": 7470,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Quarterly Statement of Cash Flow",
+      "formSlug": "quarterly-statement-of-cash-flow",
+      "httpStatus": 200,
+      "id": "fdp-2023-q1-quarterly-statement-of-cash-flow",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=7528",
+      "fdppId": 7528,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Report of Special Education Fund Utilization",
+      "formSlug": "sef-utilization",
+      "httpStatus": 500,
+      "id": "fdp-2023-q1-sef-utilization",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 50065,
+      "contentSha256": "87f29dc24d04d4bed6e1cf8144c1a9b5b0974a1774ea481bd47fa59bd134f9c4",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=14164",
+      "fdppId": 14164,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Indebtedness, Payments and Balances",
+      "formSlug": "statement-of-indebtedness",
+      "httpStatus": 200,
+      "id": "fdp-2023-q1-statement-of-indebtedness",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 44432,
+      "contentSha256": "755705b0d838d2a259324a22b676035cbf3850eb7595f532941408eabc6441d8",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=21421",
+      "fdppId": 21421,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Statement of Receipts and Expenditures",
+      "formSlug": "statement-of-receipts-and-expenditures",
+      "httpStatus": 200,
+      "id": "fdp-2023-q1-statement-of-receipts-and-expenditures",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 104689,
+      "contentSha256": "ea19fee803ba32c3a46f6b7b641bd7a23e2f0cb1a63a6bcab0583354c238db72",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=7473",
+      "fdppId": 7473,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Trust Fund Utilization",
+      "formSlug": "trust-fund-utilization",
+      "httpStatus": 200,
+      "id": "fdp-2023-q1-trust-fund-utilization",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 48924,
+      "contentSha256": "c72ae9fcf719ea3a178a27165ace161a824d76cb1af7971a273356014d88ef49",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": 1,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=6404",
+      "fdppId": 6404,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "quarterly",
+      "formLabel": "Unliquidated Cash Advances",
+      "formSlug": "unliquidated-cash-advances",
+      "httpStatus": 200,
+      "id": "fdp-2023-q1-unliquidated-cash-advances",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=6399",
+      "fdppId": 6399,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Budget Report",
+      "formSlug": "annual-budget-report",
+      "httpStatus": 500,
+      "id": "fdp-2023-annual-budget-report",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=5549",
+      "error": "The operation was aborted due to timeout",
+      "fdppId": 5549,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Procurement Plan",
+      "formSlug": "annual-procurement-plan",
+      "httpStatus": null,
+      "id": "fdp-2023-annual-procurement-plan",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 99000,
+      "contentSha256": "cb90b3c1eb7d6a244c4098094a05ffb8ec7303e4bf3557fa1369f5b8ad08e191",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=97643",
+      "fdppId": 97643,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Gender and Development Accomplishment Report",
+      "formSlug": "gad-accomplishment-report",
+      "httpStatus": 200,
+      "id": "fdp-2023-gad-accomplishment-report",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 2. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 3. LGU Building 3",
+        "Barangay 3 Calatagan Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "source-error",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2023
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=76654",
+      "fdppId": 76654,
+      "fileType": null,
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Supplemental Procurement Plan",
+      "formSlug": "supplemental-procurement-plan",
+      "httpStatus": 500,
+      "id": "fdp-2023-supplemental-procurement-plan",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 1,
+        "year": 2024
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 97353,
+      "contentSha256": "d334c61b3178e4a9f530675e5debad20fa29c57918bcfe04a8b19862396856b3",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2022
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=5529",
+      "fdppId": 5529,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Annual Gender and Development Accomplishment Report",
+      "formSlug": "gad-accomplishment-report",
+      "httpStatus": 200,
+      "id": "fdp-2022-gad-accomplishment-report",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three (3) conspicuous places: 1.Public Market Poblacion IV",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    },
+    {
+      "availability": "available",
+      "byteLength": 6156176,
+      "contentSha256": "cecc9d005776107f1bfe72cf9cfa74f703c2af07e7781ada40b1a5f6e0b22112",
+      "contentType": "application/vnd.ms-excel",
+      "documentPeriod": {
+        "quarter": null,
+        "year": 2022
+      },
+      "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=5593",
+      "fdppId": 5593,
+      "fileType": "xlsx",
+      "firstSeenAt": "2026-09-22T15:02:15.371Z",
+      "formCadence": "annual",
+      "formLabel": "Supplemental Procurement Plan",
+      "formSlug": "supplemental-procurement-plan",
+      "httpStatus": 200,
+      "id": "fdp-2022-supplemental-procurement-plan",
+      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "postingLocations": [
+        "This was posted in three 3 conspicuous places: 1.Public Market Barangay 4",
+        "Calatagan",
+        "Batangas 2. Municipal Building",
+        "Barangay 2",
+        "Calatagan",
+        "Batangas 3. Lucsuhin Covered Court",
+        "Barangay Lucsuhin",
+        "Calatagan",
+        "Batangas"
+      ],
+      "postingPeriod": {
+        "quarter": 2,
+        "year": 2023
+      },
+      "retrievedAt": "2026-09-22T15:02:15.371Z"
+    }
+  ],
+  "schemaVersion": "1.0.0"
+}
