@@ -25,7 +25,7 @@
     "psa:fetch": "node scripts/psa.mjs fetch"
   },
   "dependencies": {
-    "astro": "^5.6.1",
+    "astro": "^7.2.8",
     "zod": "^3.24.2"
   },
   "devDependencies": {
