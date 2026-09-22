@@ -1,0 +1,208 @@
+---
+import Base from '../layouts/Base.astro';
+import Source from '../components/Source.astro';
+import { archivedDocuments, documentKinds, documentYears, documentsSource } from '../data/documents';
+import { KIND_LABELS } from '../data/schemas/documents';
+
+const number = new Intl.NumberFormat('en-PH');
+const docs = archivedDocuments.documents;
+
+const sizeLabel = (bytes: number | null) => {
+  if (bytes === null) return null;
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
+const rows = docs.map((doc) => ({
+  ...doc,
+  kindLabel: KIND_LABELS[doc.kind],
+  size: sizeLabel(doc.byteLength),
+  search: `${doc.title} ${doc.filename} ${KIND_LABELS[doc.kind]}`.toLowerCase(),
+}));
+---
+
+<Base
+  title="Archived documents"
+  description="Documents recovered from the Municipality of Calatagan's former website, which is now offline. A historical record, indexed and linked, not presented as current."
+>
+  <h1>Archived documents</h1>
+
+  <p class="notice">
+    <strong>The municipality's website is offline.</strong> <code>calatagan.gov.ph</code> no longer
+    resolves — the domain is still delegated to government nameservers, but it has no address
+    record, and the Internet Archive holds no capture after 2025.
+  </p>
+
+  <p>
+    What that site published is still public record. This indexes the
+    <strong>{number.format(archivedDocuments.documentCount)} documents</strong> the archive still
+    holds, and links to each one.
+  </p>
+  <p>
+    <strong>These are historical documents.</strong> None of them should be read as the
+    municipality's current position, current fees, or current procedure. Some are clearly expired —
+    a land use plan for 2001–2010, for instance. Others may or may not still reflect practice;
+    without a live official source there is no way to tell, and this site will not pretend
+    otherwise.
+  </p>
+
+  <Source source={documentsSource} />
+
+  <h2>What is here</h2>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th scope="col">Kind</th><th scope="col" class="num">Documents</th></tr>
+      </thead>
+      <tbody>
+        {documentKinds.map(({ kind, count }) => (
+          <tr>
+            <th scope="row">{KIND_LABELS[kind as keyof typeof KIND_LABELS] ?? kind}</th>
+            <td class="num">{number.format(count)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="index">The index</h2>
+
+  <form class="filters" role="search" aria-labelledby="doc-filters-heading">
+    <h3 id="doc-filters-heading" class="visually-hidden">Filter documents</h3>
+    <p class="field">
+      <label for="d-search">Search</label>
+      <input type="search" id="d-search" name="search" placeholder="Title or filename" autocomplete="off" />
+    </p>
+    <p class="field wide">
+      <label for="d-kind">Kind</label>
+      <select id="d-kind" name="kind">
+        <option value="">All kinds</option>
+        {documentKinds.map(({ kind, count }) => (
+          <option value={kind}>{KIND_LABELS[kind as keyof typeof KIND_LABELS] ?? kind} ({count})</option>
+        ))}
+      </select>
+    </p>
+    <p class="field">
+      <label for="d-year">Published</label>
+      <select id="d-year" name="year">
+        <option value="">Any year</option>
+        {documentYears.map((year) => <option value={year}>{year}</option>)}
+      </select>
+    </p>
+    <p class="field actions"><button type="reset">Clear filters</button></p>
+  </form>
+
+  <p class="count" id="doc-count" role="status" aria-live="polite">
+    Showing all {number.format(rows.length)} documents.
+  </p>
+
+  <ul class="docs" id="doc-list">
+    {rows.map((doc) => (
+      <li
+        class="doc"
+        data-kind={doc.kind}
+        data-year={doc.publishedYear ?? ''}
+        data-search={doc.search}
+      >
+        <h3>{doc.title}</h3>
+        <p class="meta">
+          <span class="chip">{doc.kindLabel}</span>
+          <span class={`chip state ${doc.status}`}>
+            {doc.status === 'superseded' ? 'Superseded' : 'Archived'}
+          </span>
+          {doc.publishedYear && <span class="chip">Published {doc.publishedYear}</span>}
+          <span class="chip">{doc.fileType.toUpperCase()}{doc.size && ` · ${doc.size}`}</span>
+        </p>
+        <p class="links">
+          <a href={doc.archiveUrl} rel="noopener noreferrer nofollow">Open archived copy ↗</a>
+          <span class="hint"> · captured {doc.capturedAt} · original URL <code>{doc.originalUrl}</code> (dead)</span>
+        </p>
+      </li>
+    ))}
+  </ul>
+
+  <p class="empty" id="doc-empty" hidden>No documents match these filters.</p>
+
+  <script is:inline>
+    (function () {
+      const form = document.querySelector('.filters');
+      const list = document.getElementById('doc-list');
+      const count = document.getElementById('doc-count');
+      const empty = document.getElementById('doc-empty');
+      if (!form || !list || !count || !empty) return;
+      const items = Array.from(list.querySelectorAll('.doc'));
+      const total = items.length;
+
+      function apply() {
+        const data = new FormData(form);
+        const search = String(data.get('search') || '').trim().toLowerCase();
+        const kind = String(data.get('kind') || '');
+        const year = String(data.get('year') || '');
+        let shown = 0;
+        for (const item of items) {
+          const ok =
+            (!kind || item.dataset.kind === kind) &&
+            (!year || item.dataset.year === year) &&
+            (!search || (item.dataset.search || '').includes(search));
+          item.hidden = !ok;
+          if (ok) shown += 1;
+        }
+        empty.hidden = shown !== 0;
+        count.textContent =
+          shown === total
+            ? 'Showing all ' + total + ' documents.'
+            : 'Showing ' + shown + ' of ' + total + ' documents.';
+      }
+
+      form.addEventListener('input', apply);
+      form.addEventListener('change', apply);
+      form.addEventListener('reset', function () { setTimeout(apply, 0); });
+      form.addEventListener('submit', function (e) { e.preventDefault(); apply(); });
+    })();
+  </script>
+
+  <style>
+    .notice {
+      background: var(--warn-bg); border: 1px solid var(--warn-line);
+      border-radius: 4px; padding: 10px 12px; font-size: 0.92rem;
+    }
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px; overflow: hidden;
+      clip: rect(0 0 0 0); white-space: nowrap;
+    }
+    .filters {
+      display: flex; flex-wrap: wrap; gap: 12px 16px;
+      border: 1px solid var(--line); border-radius: 6px;
+      padding: 14px 16px; margin-block: 16px;
+    }
+    .field { display: flex; flex-direction: column; gap: 4px; margin: 0; flex: 1 1 150px; }
+    .field.wide { flex-basis: 240px; }
+    .field.actions { justify-content: flex-end; flex: 0 0 auto; }
+    .filters label { font-size: 0.78rem; font-weight: 600; color: var(--muted); }
+    .filters input, .filters select, .filters button {
+      font: inherit; font-size: 0.9rem; padding: 7px 9px;
+      border: 1px solid var(--line); border-radius: 4px;
+      background: var(--bg); color: var(--fg); min-height: 38px; max-width: 100%;
+    }
+    .filters button { cursor: pointer; }
+    .filters :focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+    .count { font-size: 0.85rem; color: var(--muted); }
+    ul.docs { list-style: none; padding: 0; margin: 0; }
+    .doc { border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .doc[hidden] { display: none; }
+    .doc h3 { margin: 0 0 6px; font-size: 0.98rem; line-height: 1.35; font-weight: 600; }
+    .meta { margin: 0 0 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      display: inline-block; font-size: 0.74rem; font-weight: 600;
+      padding: 2px 8px; border-radius: 10px;
+      border: 1px solid var(--line); color: var(--muted);
+    }
+    .chip.state.superseded { border-color: #c07800; color: #c07800; }
+    .links { margin: 0; font-size: 0.85rem; }
+    .hint { color: var(--muted); }
+    .hint code { word-break: break-all; font-size: 0.75rem; }
+    .empty { color: var(--muted); }
+  </style>
+</Base>

@@ -84,6 +84,30 @@ describe('publication safety', () => {
     const best = Math.min(...record.source.sources.map((s) => AUTHORITY_RANK[s.authority]));
     expect(best).toBeLessThanOrEqual(4);
   });
+
+  it('allows an archived record to rest on a web archive, but only as archived', () => {
+    // A web archive is authoritative for "this document existed here", which is
+    // the only claim an archived record makes. It must not unlock a current one.
+    const archivedOnArchive = {
+      ...municipality.source,
+      status: 'archived' as const,
+      tier: 2 as const,
+      caveat: 'Archived record.',
+      sources: [
+        {
+          name: 'Internet Archive',
+          publisher: 'Internet Archive',
+          url: 'https://web.archive.org/web/*/example.gov.ph' as const,
+          accessedOn: '2026-09-22' as const,
+          authority: 'archived-official' as const,
+        },
+      ],
+    };
+    expect(dataSourceSchema.safeParse(archivedOnArchive).success).toBe(true);
+    expect(
+      dataSourceSchema.safeParse({ ...archivedOnArchive, status: 'current' as const }).success,
+    ).toBe(false);
+  });
 });
 
 describe('municipality identity', () => {

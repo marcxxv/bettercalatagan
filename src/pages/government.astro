@@ -1,0 +1,146 @@
+---
+import Base from '../layouts/Base.astro';
+import { archivedDocuments } from '../data/documents';
+import { KIND_LABELS } from '../data/schemas/documents';
+
+/**
+ * A deliberate gap page.
+ *
+ * Who holds office and how to reach each office are the two things residents
+ * most often want, and they are exactly what this project cannot currently
+ * source to its own standard. Saying so plainly, and saying where to look
+ * instead, is more useful than a confident page that might be wrong.
+ */
+
+const officeDocuments = archivedDocuments.documents
+  .filter((doc) => doc.kind === 'office-document' || doc.kind === 'citizens-charter')
+  .sort((a, b) => (b.publishedYear ?? 0) - (a.publishedYear ?? 0) || a.title.localeCompare(b.title));
+
+const latestOfficeYear = Math.max(...officeDocuments.map((doc) => doc.publishedYear ?? 0));
+---
+
+<Base
+  title="Government"
+  description="Who holds municipal office in Calatagan, and how to contact each office — what this project can and cannot yet verify, and why."
+>
+  <h1>Government</h1>
+
+  <p class="notice">
+    <strong>This page is deliberately incomplete.</strong> Two things residents most often need —
+    who currently holds office, and how to reach each office — are the two things this project
+    cannot yet establish to its own evidence standard. Rather than publish a plausible answer, it
+    publishes the gap.
+  </p>
+
+  <h2>Elected officials</h2>
+
+  <p>
+    Calatagan elects a Mayor, a Vice Mayor and eight members of the Sangguniang Bayan. The May 2025
+    local elections have been held and the results are a matter of public record.
+  </p>
+
+  <p>
+    <strong>We do not publish the roster here</strong>, for one specific reason:
+    <em>an election result is not proof of present incumbency.</em> Between an election and today, an
+    officeholder can resign, be suspended, be disqualified, die, or be succeeded. Publishing
+    election winners as current officials asserts something the election return does not say.
+  </p>
+
+  <p>What we would need to publish it:</p>
+  <ul>
+    <li>
+      A Commission on Elections certificate of canvass or official published return, rather than
+      media reporting of the count.
+    </li>
+    <li>
+      A current roster from the Department of the Interior and Local Government or its municipal
+      field office, confirming who is in office now.
+    </li>
+  </ul>
+  <p>
+    Neither is currently reachable. COMELEC's published attachment directories return errors to this
+    project's tooling, and DILG publishes no machine-readable municipal roster we have found.
+    Election results are available from civic-tech derivatives of COMELEC data and from news
+    organisations; both are useful for finding the answer and neither is sufficient to publish it.
+  </p>
+  <p class="src-note">
+    This is tracked as an open item in <a href="/sources">Sources</a>. If you have a primary
+    document, a correction with a citation is welcome.
+  </p>
+
+  <h2>Offices and contact details</h2>
+
+  <p>
+    A telephone number, an e-mail address and a postal address for the municipal hall circulate on a
+    national government portal. We do not republish them as current, and the reason is worth stating
+    precisely.
+  </p>
+  <p>
+    Those contact details sit in a single record submitted by the LGU to that portal. Three other
+    fields in the same record — the municipality's income classification, the name of its mayor, and
+    its website address — are all demonstrably out of date. The income classification is two years
+    stale; the website it lists no longer resolves at all. Contact details drawn from the same
+    record, of the same vintage, cannot be presented as current simply because they are the only
+    ones available.
+  </p>
+  <p>
+    <strong>Publishing a wrong phone number has a real cost.</strong> Someone travels to an office
+    that has moved, or calls a line nobody answers, and concludes the information was checked when
+    it was not.
+  </p>
+
+  <h2>What the archive holds</h2>
+
+  <p>
+    The municipality's former website published a set of {officeDocuments.length} documents naming
+    individual offices, most of them in {latestOfficeYear}. They are listed below and are
+    <strong>archived, not current</strong> — fees, requirements and processing times in a document
+    of that age should be treated as a starting point for a question, not as an answer.
+  </p>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Document</th>
+          <th scope="col">Kind</th>
+          <th scope="col">Published</th>
+          <th scope="col">Archived copy</th>
+        </tr>
+      </thead>
+      <tbody>
+        {officeDocuments.map((doc) => (
+          <tr>
+            <th scope="row">{doc.title}</th>
+            <td>{KIND_LABELS[doc.kind]}</td>
+            <td>{doc.publishedYear ?? '—'}</td>
+            <td><a href={doc.archiveUrl} rel="noopener noreferrer nofollow">Open ↗</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="src-note">
+    These documents are named for an office; this project has not opened them, so it does not
+    describe their contents. They appear in the full <a href="/documents">document index</a> with
+    the rest of the archive.
+  </p>
+
+  <h2>If you need to reach the municipality today</h2>
+  <p>
+    Go in person to the municipal hall, or contact the Provincial Government of Batangas, which
+    maintains current contact routes to its municipalities. This project would rather send you to a
+    source that is current than to one of its own that might not be.
+  </p>
+
+  <style>
+    .notice {
+      background: var(--warn-bg); border: 1px solid var(--warn-line);
+      border-radius: 4px; padding: 12px 14px;
+    }
+    .src-note { color: var(--muted); font-size: 0.88rem; }
+    th[scope='row'] { text-align: left; font-weight: 500; }
+    li { margin-bottom: 6px; }
+  </style>
+</Base>

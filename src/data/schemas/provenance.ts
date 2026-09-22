@@ -124,11 +124,21 @@ export const dataSourceSchema = z
     'records with status "unverified" must be tier 3 or 4',
   )
   // A published fact must rest on something better than an encyclopaedia.
+  //
+  // One narrow exception, and it turns on WHAT IS BEING CLAIMED. A record with
+  // status `archived` does not assert a current civic fact; it asserts that a
+  // document existed at a government URL and that a copy survives. A web
+  // archive is authoritative for exactly that claim, and it is the only thing
+  // that can be, since the original site is gone. Such a record still may not
+  // be dressed up as current: `status` pins it to `archived`, and the reader
+  // sees that label.
   .refine(
     (value) =>
       value.tier >= 3 ||
-      value.sources.some((source) => AUTHORITY_RANK[source.authority] <= 4),
-    'published records need at least one source of authority "civic-tech-derivative" or stronger',
+      value.sources.some((source) => AUTHORITY_RANK[source.authority] <= 4) ||
+      (value.status === 'archived' &&
+        value.sources.some((source) => source.authority === 'archived-official')),
+    'published records need at least one source of authority "civic-tech-derivative" or stronger, unless the record is an archived one attested by a web archive',
   );
 
 export type DataSourceInput = z.infer<typeof dataSourceSchema>;
