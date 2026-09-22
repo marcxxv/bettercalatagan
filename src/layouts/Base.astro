@@ -20,6 +20,7 @@ const year = new Date().getUTCFullYear();
     <link rel="icon" href="data:," />
   </head>
   <body>
+    <a class="skip" href="#main">Skip to content</a>
     <Disclaimer />
 
     <header class="wrap">
@@ -61,7 +62,7 @@ const year = new Date().getUTCFullYear();
         --accent: #0b5d4e;
         --warn-bg: #fff6e0;
         --warn-line: #e0b95c;
-        --measure: 68ch;
+        --measure: 74ch;
       }
       @media (prefers-color-scheme: dark) {
         :root:not([data-theme='light']) {
@@ -86,6 +87,19 @@ const year = new Date().getUTCFullYear();
         margin-inline: auto;
         padding-inline: 20px;
       }
+      .skip {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: var(--bg);
+        color: var(--fg);
+        border: 2px solid var(--accent);
+        padding: 10px 16px;
+        z-index: 10;
+      }
+      .skip:focus { left: 8px; top: 8px; }
+      :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+      nav a { padding-block: 4px; display: inline-block; }
       header.wrap {
         display: flex;
         flex-wrap: wrap;

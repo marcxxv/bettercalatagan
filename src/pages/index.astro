@@ -22,11 +22,30 @@ const barangayTotal = barangayRows.reduce((sum, row) => sum + (row.census?.total
   description="Verified public information about the Municipality of Calatagan, Batangas, with the source for every figure."
 >
   <h1>Calatagan, Batangas</h1>
-  <p>
-    Better Calatagan collects public information about the Municipality of Calatagan and shows
-    where each figure came from. This is the first release: it carries only the facts that have
-    been checked against a government source, and it says plainly what is missing.
+  <p class="lede">
+    Better Calatagan collects public information about the Municipality of Calatagan and shows,
+    for every figure, where it came from and how well it has been checked. It publishes only what
+    it can trace to a source — and says plainly what it cannot.
   </p>
+
+  <nav class="sections" aria-label="Sections">
+    <a href="/government">
+      <strong>Government</strong>
+      <span>Who holds office, and what we cannot yet verify</span>
+    </a>
+    <a href="/finances">
+      <strong>Finances</strong>
+      <span>14 quarters of income and spending, every figure traceable</span>
+    </a>
+    <a href="/transparency">
+      <strong>Filings</strong>
+      <span>156 Full Disclosure filings, CY2022–CY2026</span>
+    </a>
+    <a href="/documents">
+      <strong>Documents</strong>
+      <span>232 documents saved from the municipality's dead website</span>
+    </a>
+  </nav>
 
   <h2>Identity</h2>
   <dl class="facts">
@@ -121,5 +140,23 @@ const barangayTotal = barangayRows.reduce((sum, row) => sum + (row.census?.total
 
   <style>
     .src-note { color: var(--muted); font-size: 0.88rem; margin-top: -0.5em; }
+    .lede { font-size: 1.05rem; }
+    nav.sections {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+      margin-block: 22px 28px;
+    }
+    nav.sections a {
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px 14px;
+      text-decoration: none;
+      color: var(--fg);
+    }
+    nav.sections a:hover { border-color: var(--accent); }
+    nav.sections strong { display: block; color: var(--accent); margin-bottom: 3px; }
+    nav.sections span { font-size: 0.86rem; color: var(--muted); }
   </style>
 </Base>

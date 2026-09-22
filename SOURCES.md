@@ -143,48 +143,32 @@ are preserved by a test.
 
 ## Open items
 
-1. **Read a PSA-hosted page.** This single blocker drives four separate limitations: the 2024
-   POPCEN count (60,420) and the barangay-level 2020 populations are both held at tier 3 and not
-   published, while the PSGC codes and the 2020 municipal total are published only at tier 2 with
-   caveats. The page of record for the population figure is *Highlights of the 2024 Census of
-   Population (POPCEN) for Batangas Province* on the PSA CALABARZON site. Every PSA host returns a
-   bot challenge to this project's tooling, so no maintainer has opened it.
-2. **Confirm the barangay names and codes against a PSA-hosted PSGC page**, replacing the two
-   mirrors and promoting that dataset from tier 2 to tier 1.
-3. **Establish land area from a PSA source** and resolve 101.50 vs 112.00 km².
-4. **Confirm current incumbency** of elected officials against COMELEC or DILG, not election
-   results and not media.
-5. **Establish COA Annual Audit Report coverage** for Calatagan beyond the known CY2022 summary.
-6. **Find government-hosted copies** of the Comprehensive Development Plan 2017–2026 and the CLUP
-   (2018–2027 and the 2023–2032 draft). Copies circulate on third-party document hosts; adoption
-   status and authenticity are unconfirmed, so none is cited here.
-7. **Verify municipal contact details** independently of the DTI CMCI profile block, whose other
-   fields are demonstrably stale.
+1. **Settle the land area.** PSA's own statistical table reports **10.50 km²** for Calatagan and
+   derives a 2024 density of 5,754 persons/km² from it — roughly ten times its neighbours in the
+   same table. The widely circulated alternative, 101.50 km², yields 595/km², which fits. A second
+   primary source is needed; neither figure is published.
+2. **Confirm current incumbency** of the Mayor, Vice Mayor and Sangguniang Bayan against COMELEC or
+   DILG. Election results are available from civic-tech derivatives and media; neither establishes
+   who holds office today. COMELEC's published attachment directories return errors to this
+   project's tooling.
+3. **Verify municipal contact details** independently of the DTI CMCI profile block, whose income
+   class, mayor and website fields are all demonstrably stale.
+4. **Establish COA Annual Audit Report coverage.** `coa.gov.ph` returns a bot challenge. One CY2022
+   executive summary URL is known to exist; the rest of the series is unconfirmed.
+5. **Find government-hosted copies** of the Comprehensive Development Plan 2017–2026 and the CLUP
+   (2018–2027, and the 2023–2032 draft). Copies circulate on Scribd, Studocu and similar hosts,
+   which attest nothing about authenticity or adoption status. Not cited here.
+6. **Obtain a current Citizen's Charter.** The most recent set the archive holds is from 2022 and
+   is published only as an archived record.
+7. **Post-2016 legislation.** No public digital register of Sangguniang Bayan ordinances and
+   resolutions was found. The provincial Sanggunian portal records review actions but generally not
+   the municipal text.
+8. **Barangay officials.** No roster from the 2023 BSKE was found in any public digital source.
 
----
+### Closed
 
-## Extracted financial figures (Phase 3)
-
-The Statement of Receipts and Expenditures (FDP Form 3, BLGF MC 023-2019 Annex A) is the most
-standardised of the 14 forms: fixed labels, four value columns, and several identities the form
-asserts about itself. All **14 filings CY2023 Q1 – CY2026 Q2** were parsed.
-
-**Method.** Line items are located by their **label**, never by row number, so a shifted layout
-cannot silently misattribute a value. Every extracted number records the cell it came from. Each
-filing's header is checked to confirm it names Calatagan and the period claimed.
-
-**Reconciliation as a gate.** 838 identity checks were recomputed across the 14 quarters — fund
-columns summing to totals, tax and non-tax revenue summing to local sources, the eight sectoral
-spending lines summing to total operating expenditure, and so on. **All passed.** A filing whose
-own arithmetic failed would be marked unverified and withheld rather than published with a warning.
-
-**Label drift.** Earlier filings carry typos in the LGU's own spreadsheets — "General Pubic
-Services", "TOTAL CURRENT OPERATING INCOE", "Scial Services and Social Welfare". These are accepted
-through an explicit alias list of literally observed strings, never fuzzy matching, so two
-different line items cannot collide. One alias is not a typo: **"Internal Revenue Allotment"** was
-renamed the **"National Tax Allotment"** after the Mandanas-Garcia ruling, so filings either side of
-the change name the same line differently.
-
-**What this is not.** An SRE is the municipality's own report to DILG. It is **not audited**. The
-Commission on Audit publishes separate audited statements, which remain unobtainable to this
-project's tooling. The two use different accounting bases and should not be compared line for line.
+- ~~Read a PSA-hosted page.~~ **Solved.** PSA OpenSTAT, PSA's own statistical database, answers
+  normally where its editorial pages do not. Population, households, the census series and
+  barangay-level figures now rest on a primary government source.
+- ~~Confirm the barangay names and codes against PSA.~~ **Solved.** OpenSTAT keys its geography by
+  PSGC, confirming all 25 codes including the non-contiguous run.

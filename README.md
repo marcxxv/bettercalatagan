@@ -36,23 +36,24 @@ cannot check.
 
 ## Current status
 
-**Phase 2 — Full Disclosure Policy filing index.** It publishes:
+Six pages, four machine-readable datasets, 164 tests.
 
 | Dataset | Tier | Basis |
 | --- | --- | --- |
-| Income classification (1st class, from 2025-01-01) | 1 | BLGF MC No. 020.2024, Annex A, read directly |
-| DILG Full Disclosure Policy filings | 2 | Every filing enumerated and every download endpoint exercised |
-| Municipal identity and PSGC | 2 | Two independent PSA-derived mirrors, agreeing — but not PSA itself |
-| 25 barangays with PSGC codes | 2 | Same two mirrors |
-| 2020 CPH population (58,719) | 2 | Aggregators republishing PSA, corroborated by reconciliation |
+| Identity, PSGC, 25 barangays | 1 | PSA OpenSTAT — PSA's own statistical database |
+| Population: 60,420 (2024), households 15,442, census series | 1 | PSA OpenSTAT; barangay counts reconcile exactly |
+| Income classification: 1st class, from 2025-01-01 | 1 | BLGF MC No. 020.2024, Annex A, read directly |
+| Municipal finances — 14 quarters, CY2023 Q1–CY2026 Q2 | 2 | Extracted from DILG filings; 838 reconciliation checks, all passing |
+| Full Disclosure filings — 156 across 14 forms | 2 | DILG portal, every download endpoint exercised |
+| Archived documents — 232 | 2 | Internet Archive of the municipality's dead website |
 
-The transparency section is a **document index, not a figure index**: it tells you which filings
-exist and links you to each DILG original. No amount has been extracted or restated.
+Every figure on the finances page records the spreadsheet cell it came from. Filings that do not
+reconcile against their own internal arithmetic are withheld, not flagged.
 
-Not published, and why: land area (two irreconcilable figures), the 2024 population count and the
-barangay-level populations (available only from aggregators, and PSA itself is unreachable),
-current elected officials (election results are not incumbency), office contact details (their
-source record is demonstrably stale), and COA or planning-document facts.
+**Not published, and why:** land area (PSA's own table reports a figure implying ten times its
+neighbours' density), elected officials (an election result is not proof of present incumbency),
+office contact details (their source record is demonstrably stale), COA figures, and planning
+documents that exist only on third-party hosts. Each appears on the Sources page with its reason.
 
 See [SOURCES.md](SOURCES.md) for the full inventory and open items.
 
