@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "description": "Better Calatagan — an independent civic-information portal for the Municipality of Calatagan, Batangas.",
+  "description": "Better Calatagan \u2014 an independent civic-information portal for the Municipality of Calatagan, Batangas.",
   "license": "MIT",
   "engines": {
     "node": ">=20"
@@ -20,7 +20,9 @@
     "check": "npm run typecheck && npm run lint && npm run test && npm run build",
     "fdp:stage": "NODE_EXTRA_CA_CERTS=certs/geotrust-tls-rsa-ca-g1.pem node scripts/fdp.mjs stage",
     "fdp:promote": "node scripts/fdp.mjs promote",
-    "validate:data": "vitest run src/data"
+    "validate:data": "vitest run src/data",
+    "fdp:extract": "NODE_EXTRA_CA_CERTS=certs/geotrust-tls-rsa-ca-g1.pem node scripts/sre.mjs extract",
+    "psa:fetch": "node scripts/psa.mjs fetch"
   },
   "dependencies": {
     "astro": "^5.6.1",

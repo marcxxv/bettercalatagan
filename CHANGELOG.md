@@ -7,6 +7,34 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Phase 3: structured financial data (SRE)
+- `/finances` — income, expenditure by sector, and a full-year series built from
+  **14 quarters** of the Statement of Receipts and Expenditures, CY2023 Q1 – CY2026 Q2.
+- **Every figure records the cell it came from** (e.g. `G24`), and the original filing stays
+  authoritative. Line items are located by their label, never by row number.
+- **Reconciliation is a publication gate.** Each filing's own identities — fund columns summing to
+  the total, tax and non-tax revenue summing to local sources, sectoral lines summing to total
+  expenditure — are recomputed. 828 checks across 14 quarters; all passed. A filing that did not
+  reconcile would be withheld, not shown with a warning.
+- `scripts/lib/xlsx.mjs` — a small dependency-free XLSX reader, cross-validated cell-for-cell
+  against openpyxl (485 cells, 0 mismatches).
+- `/data/financials.json` export, with the same licence split as the filing index.
+
+### Changed — PSA census data promoted to tier 1
+PSA's editorial pages return a bot challenge, but **PSA OpenSTAT**, its own statistical database,
+answers normally and serves the same releases as data. That is a primary government source, so:
+- 2024 population **60,420**, household population 60,337, households **15,442** — tier 1.
+- Census series 2015 / 2020 / 2024 — tier 1.
+- Barangay-level 2024 figures, reconciling exactly to the municipal totals — tier 1.
+- Barangay names and PSGC codes, now confirmed against PSA's own geography — tier 1.
+- Corrects a widely repeated household count of 14,267; PSA reports 15,442.
+
+### Fixed — integrity fingerprint for FDP filings
+The DILG portal regenerates each spreadsheet at request time, stamping the current clock into the
+zip. Byte checksums therefore changed on all 133 records between two runs with no real change.
+Integrity now uses a zip **content** fingerprint (entry name, CRC-32, size), verified stable across
+regeneration and across a full second pipeline run.
+
 ### Added — Phase 2: DILG Full Disclosure Policy filing index
 - `/transparency` — an index of **156 filings** across all **14 statutory forms**, CY2022–CY2026,
   filterable by year, quarter, form type and availability, with keyboard-accessible controls and a

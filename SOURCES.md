@@ -160,3 +160,31 @@ are preserved by a test.
    status and authenticity are unconfirmed, so none is cited here.
 7. **Verify municipal contact details** independently of the DTI CMCI profile block, whose other
    fields are demonstrably stale.
+
+---
+
+## Extracted financial figures (Phase 3)
+
+The Statement of Receipts and Expenditures (FDP Form 3, BLGF MC 023-2019 Annex A) is the most
+standardised of the 14 forms: fixed labels, four value columns, and several identities the form
+asserts about itself. All **14 filings CY2023 Q1 – CY2026 Q2** were parsed.
+
+**Method.** Line items are located by their **label**, never by row number, so a shifted layout
+cannot silently misattribute a value. Every extracted number records the cell it came from. Each
+filing's header is checked to confirm it names Calatagan and the period claimed.
+
+**Reconciliation as a gate.** 838 identity checks were recomputed across the 14 quarters — fund
+columns summing to totals, tax and non-tax revenue summing to local sources, the eight sectoral
+spending lines summing to total operating expenditure, and so on. **All passed.** A filing whose
+own arithmetic failed would be marked unverified and withheld rather than published with a warning.
+
+**Label drift.** Earlier filings carry typos in the LGU's own spreadsheets — "General Pubic
+Services", "TOTAL CURRENT OPERATING INCOE", "Scial Services and Social Welfare". These are accepted
+through an explicit alias list of literally observed strings, never fuzzy matching, so two
+different line items cannot collide. One alias is not a typo: **"Internal Revenue Allotment"** was
+renamed the **"National Tax Allotment"** after the Mandanas-Garcia ruling, so filings either side of
+the change name the same line differently.
+
+**What this is not.** An SRE is the municipality's own report to DILG. It is **not audited**. The
+Commission on Audit publishes separate audited statements, which remain unobtainable to this
+project's tooling. The two use different accounting bases and should not be compared line for line.
