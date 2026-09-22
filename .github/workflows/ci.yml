@@ -49,16 +49,45 @@ jobs:
       - name: Generated dataset is committed and unmodified
         run: git diff --exit-code -- src/data/generated data/staging
 
-      # Belt and braces: assert that facts recorded as withheld did not reach
-      # the rendered output as published figures.
+      # Belt and braces: assert that values we deliberately withhold never
+      # reach the rendered output.
+      #
+      # This list is values, not topics, and it must be kept in step with
+      # src/data/municipality.ts (WITHHELD). Note what is NOT here: the 2024
+      # population 60,420 was withheld while PSA was unreachable and is now
+      # published at tier 1 from PSA OpenSTAT, so listing it would be wrong.
       - name: Check withheld data did not leak
         run: |
           set -euo pipefail
           fail=0
-          for pattern in "60,420" "419-0150" "mayorsoffice1011" "Rico" "Zarraga" "Palacio"; do
-            if grep -rqF "$pattern" dist/ --include='*.html' \
-               --exclude-dir=sources 2>/dev/null; then
-              echo "::error::withheld value '$pattern' appears in built output"
+          check() {
+            # $1 = pattern, $2 = why it must not appear
+            if grep -rqF -- "$1" dist --include='*.html' --include='*.json' 2>/dev/null; then
+              echo "::error::withheld value '$1' appears in built output ($2)"
+              fail=1
+            fi
+          }
+          # 2022 municipal contact details, read from an archived document but
+          # never republished as current.
+          check "(043)"            "2022 archived phone numbers"
+          check "mayorsoffice1011" "2022 archived e-mail address"
+          check "@gmail.com"       "2022 archived e-mail addresses"
+          check "@yahoo.com"       "2022 archived e-mail addresses"
+          # Figures superseded by primary sources.
+          check "64,234"           "DTI CMCI population; PSA is authoritative"
+          check "14,267"           "incorrect household count; PSA reports 15,442"
+          exit $fail
+
+      # Elected officials are withheld pending primary confirmation of
+      # incumbency. Checked separately because surnames are short strings that
+      # could appear incidentally, so we scan rendered prose only.
+      - name: Check no unverified officials are named
+        run: |
+          set -euo pipefail
+          fail=0
+          for name in Puno Zarraga Palacio Pantoja Ancheta Anzaldo; do
+            if grep -rqE "\b$name\b" dist --include='*.html' 2>/dev/null; then
+              echo "::error::official '$name' named in output while incumbency is unverified"
               fail=1
             fi
           done
