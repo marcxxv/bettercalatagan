@@ -41,17 +41,25 @@ const USER_AGENT =
 const KINDS = [
   { kind: 'citizens-charter', test: /citizen.?s?.?charter|frontline-services/i },
   /**
-   * A set of documents named only for an office, all published together in
-   * February 2022 alongside a list of offices and a feedback mechanism.
+   * The February 2022 set: one document per office, plus a list of offices and
+   * a feedback mechanism.
    *
-   * They are catalogued by what is verifiable — the office named on the file —
-   * rather than by an assumption about their contents. Opening them would allow
-   * a firmer classification; nobody has.
+   * A sample was opened to establish what these actually are rather than guess
+   * from the filename. They are Citizen's Charter service standards in the
+   * Anti-Red Tape Authority format — each service lists "Office or Division",
+   * "Classification", "Type of Transaction", a checklist of requirements, fees
+   * and processing times. They are therefore classified as charters.
+   *
+   * Classifying them is NOT the same as publishing them. They are from 2022 and
+   * remain archived: no fee, requirement, processing time or contact detail
+   * from them appears anywhere on this site as current.
    */
   {
-    kind: 'office-document',
-    test: /^(office-o?f?-?the-|municipal-)|^(business-permit-and-licensing|public-employment-services|list-of-offices|feedback-and-complaints)/i,
+    kind: 'citizens-charter',
+    test: /^(office-o?f?-?the-|municipal-)|^(business-permit-and-licensing|public-employment-services)/i,
   },
+  /** Components of the same 2022 charter package that are not per-office. */
+  { kind: 'office-document', test: /^(list-of-offices|feedback-and-complaints)/i },
   { kind: 'executive-order', test: /executive-order|^EO-|\bEO\d/i },
   { kind: 'ordinance', test: /ordinance/i },
   { kind: 'resolution', test: /resolution/i },
@@ -104,6 +112,45 @@ function titleFrom(filename) {
 }
 
 const archiveUrl = (timestamp, original) => `https://web.archive.org/web/${timestamp}/${original}`;
+
+/**
+ * Documents a maintainer has actually opened, with what was found inside.
+ *
+ * Everything else in this index is described only by its filename. Recording
+ * the difference matters: it separates "we know what this is" from "this is
+ * what the municipality called the file".
+ */
+const INSPECTED = {
+  'OFFICE-OF-THE-MAYOR.pdf': {
+    pages: 11,
+    inspectedOn: '2026-09-22',
+    summary:
+      "Citizen's Charter for the Office of the Mayor, in the ARTA format. Covers mayor\u2019s clearance, certifications, and job recommendation and endorsement letters, each with a checklist of requirements.",
+  },
+  'MUNICIPAL-CIVIL-REGISTRAR.pdf': {
+    pages: 43,
+    inspectedOn: '2026-09-22',
+    summary:
+      "Citizen's Charter for the Municipal Civil Registrar, in the ARTA format. The longest of the set; covers birth, marriage and death registration services.",
+  },
+  'BUSINESS-PERMIT-AND-LICENSING-OFFICE.pdf': {
+    pages: 3,
+    inspectedOn: '2026-09-22',
+    summary: "Citizen's Charter for the Business Permits and Licensing Office, in the ARTA format.",
+  },
+  'List-of-Offices.pdf': {
+    pages: 1,
+    inspectedOn: '2026-09-22',
+    summary:
+      'A one-page directory of municipal offices with e-mail addresses and telephone numbers, as of 2022. These contact details are deliberately NOT republished on this site as current; see the Government page.',
+  },
+  'Feedback-and-Complaints-Mechanism.pdf': {
+    pages: 1,
+    inspectedOn: '2026-09-22',
+    summary:
+      'The feedback and complaints procedure that accompanies the Citizen\u2019s Charter: a drop box in the municipal lobby, monthly collection, and a three-day response target.',
+  },
+};
 
 function sortKeys(value) {
   if (Array.isArray(value)) return value.map(sortKeys);
@@ -159,6 +206,8 @@ async function build() {
       capturedAt: `${timestamp.slice(0, 4)}-${timestamp.slice(4, 6)}-${timestamp.slice(6, 8)}`,
       /** The archive's own content digest for this capture. */
       archiveDigest: digest,
+      /** Present only where a maintainer opened the document. */
+      inspected: INSPECTED[filename] ?? null,
     });
   }
 

@@ -50,6 +50,19 @@ export const archivedDocumentSchema = z
     archiveUrl: z.string().url().startsWith('https://web.archive.org/'),
     capturedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     archiveDigest: z.string().min(8),
+    /**
+     * What was found inside, where a maintainer actually opened the document.
+     * `null` means the entry is described by its filename only — a distinction
+     * worth keeping visible rather than blurring.
+     */
+    inspected: z
+      .object({
+        pages: z.number().int().positive(),
+        inspectedOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+        summary: z.string().trim().min(20),
+      })
+      .strict()
+      .nullable(),
   })
   .strict()
   // The archive link must point at the document it claims to archive.

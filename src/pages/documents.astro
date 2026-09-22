@@ -40,6 +40,11 @@ const rows = docs.map((doc) => ({
     holds, and links to each one.
   </p>
   <p>
+    Most entries are described by the filename the municipality chose. Where a maintainer has
+    actually opened a document, what was found inside is noted on the entry — the difference
+    between "we know what this is" and "this is what the file was called" is worth keeping visible.
+  </p>
+  <p>
     <strong>These are historical documents.</strong> None of them should be read as the
     municipality's current position, current fees, or current procedure. Some are clearly expired —
     a land use plan for 2001–2010, for instance. Others may or may not still reflect practice;
@@ -114,6 +119,12 @@ const rows = docs.map((doc) => ({
           {doc.publishedYear && <span class="chip">Published {doc.publishedYear}</span>}
           <span class="chip">{doc.fileType.toUpperCase()}{doc.size && ` · ${doc.size}`}</span>
         </p>
+        {doc.inspected && (
+          <p class="inspected">
+            <strong>Opened and checked {doc.inspected.inspectedOn}</strong> ({doc.inspected.pages}
+            {doc.inspected.pages === 1 ? ' page' : ' pages'}): {doc.inspected.summary}
+          </p>
+        )}
         <p class="links">
           <a href={doc.archiveUrl} rel="noopener noreferrer nofollow">Open archived copy ↗</a>
           <span class="hint"> · captured {doc.capturedAt} · original URL <code>{doc.originalUrl}</code> (dead)</span>
@@ -200,6 +211,10 @@ const rows = docs.map((doc) => ({
       border: 1px solid var(--line); color: var(--muted);
     }
     .chip.state.superseded { border-color: #c07800; color: #c07800; }
+    .inspected {
+      margin: 0 0 8px; font-size: 0.84rem;
+      border-left: 3px solid var(--accent); padding-left: 10px;
+    }
     .links { margin: 0; font-size: 0.85rem; }
     .hint { color: var(--muted); }
     .hint code { word-break: break-all; font-size: 0.75rem; }
