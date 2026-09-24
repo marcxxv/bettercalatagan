@@ -10,193 +10,602 @@ import {
   populationSeries,
 } from '../data/population';
 import { incomeClassification, municipality } from '../data/municipality';
+import { fdpSummary } from '../data/fdp';
+import { verifiedFilings } from '../data/financials';
+import { archivedDocuments } from '../data/documents';
+import { formatDate, formatNumber, ordinal } from '../lib/format';
+import { NAV, SITE } from '../lib/site';
 
-const ORDINAL = ['', '1st', '2nd', '3rd', '4th', '5th', '6th'];
-const number = new Intl.NumberFormat('en-PH');
-
-const populationByCode = new Map(
-  barangayPopulation2024.data.map((row) => [row.psgc10, row]),
-);
+const populationByCode = new Map(barangayPopulation2024.data.map((row) => [row.psgc10, row]));
 const barangayRows = [...barangays.data]
   .map((barangay) => ({ ...barangay, census: populationByCode.get(barangay.psgc10) }))
   .sort((a, b) => a.name.localeCompare(b.name));
 const barangayTotal = barangayRows.reduce((sum, row) => sum + (row.census?.totalPopulation ?? 0), 0);
 const institutionalCodes = new Set(outsideHouseholds.map((b) => b.psgc10));
+const largest = Math.max(...barangayRows.map((row) => row.census?.totalPopulation ?? 0));
+
+const yearsLabel = (years: number[]) =>
+  years.length ? `CY${Math.min(...years)}–CY${Math.max(...years)}` : '';
+
+/** What each section holds, counted from the data rather than written by hand. */
+const counts: Record<string, string> = {
+  '/history': 'Sourced narrative',
+  '/government': 'Verification status',
+  '/finances': `${verifiedFilings.length} quarterly statements`,
+  '/transparency': `${formatNumber(fdpSummary.total)} filings, ${yearsLabel(fdpSummary.years)}`,
+  '/documents': `${formatNumber(archivedDocuments.documents.length)} archived documents`,
+  '/sources': 'Every source, and what is withheld',
+};
+const sections = NAV.filter((item) => item.href !== '/');
+
+const description =
+  'Calatagan, Batangas in verified public data: 2024 population, 25 barangays, income class, finances, Full Disclosure filings and history, each linked to its source.';
+
+const origin = Astro.site ?? new URL('http://localhost:4321');
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Calatagan, Batangas — 2024 population by barangay',
+    description: `Total population, household population and households for each of Calatagan’s ${barangays.data.length} barangays, from the Philippine Statistics Authority’s ${population2024.data.census}, as republished by ${SITE.name} with provenance.`,
+    url: new URL('/#barangays', origin).toString(),
+    isAccessibleForFree: true,
+    creator: { '@type': 'Organization', name: 'Philippine Statistics Authority', url: 'https://psa.gov.ph' },
+    publisher: { '@type': 'Organization', name: SITE.name },
+    temporalCoverage: '2024',
+    spatialCoverage: { '@type': 'Place', name: 'Calatagan, Batangas, Philippines' },
+    isBasedOn: barangayPopulation2024.source.sources.map((s) => s.url),
+    distribution: [
+      {
+        '@type': 'DataDownload',
+        encodingFormat: 'application/json',
+        contentUrl: new URL('/data/municipality.json', origin).toString(),
+      },
+    ],
+  },
+];
 ---
 
-<Base
-  title="Overview"
-  description="Verified public information about the Municipality of Calatagan, Batangas, with the source for every figure."
->
-  <h1>Calatagan, Batangas</h1>
-  <p class="lede">
-    Better Calatagan collects public information about the Municipality of Calatagan and shows,
-    for every figure, where it came from and how well it has been checked. It publishes only what
-    it can trace to a source — and says plainly what it cannot.
-  </p>
-
-  <nav class="sections" aria-label="Sections">
-    <a href="/government">
-      <strong>Government</strong>
-      <span>Who holds office, and what we cannot yet verify</span>
-    </a>
-    <a href="/finances">
-      <strong>Finances</strong>
-      <span>14 quarters of income and spending, every figure traceable</span>
-    </a>
-    <a href="/transparency">
-      <strong>Filings</strong>
-      <span>156 Full Disclosure filings, CY2022–CY2026</span>
-    </a>
-    <a href="/documents">
-      <strong>Documents</strong>
-      <span>232 documents saved from the municipality's dead website</span>
-    </a>
-  </nav>
-
-  <h2>Identity</h2>
-  <dl class="facts">
-    <dt>Official name</dt>
-    <dd>{municipality.data.officialName}</dd>
-    <dt>Province</dt>
-    <dd>{municipality.data.province}</dd>
-    <dt>Region</dt>
-    <dd>{municipality.data.region} ({municipality.data.regionName})</dd>
-    <dt>PSGC</dt>
-    <dd><code>{municipality.data.psgc10}</code> (10-digit) · <code>{municipality.data.psgc9}</code> (9-digit)</dd>
-    <dt>Barangays</dt>
-    <dd>{municipality.data.barangayCount}</dd>
-  </dl>
-  <Source source={municipality.source} />
-
-  <h2>Income classification</h2>
-  <p>
-    Calatagan is a <strong>{ORDINAL[incomeClassification.data.incomeClass]} class municipality</strong>, effective{' '}
-    {incomeClassification.data.effectiveFrom}. It was reclassified from{' '}
-    {ORDINAL[incomeClassification.data.previousIncomeClass ?? 2]} class under{' '}
-    {incomeClassification.data.legalBasis}.
-  </p>
-  <p class="src-note">Issuance: {incomeClassification.data.issuance}</p>
-  <Source source={incomeClassification.source} />
-
-  <h2>Population</h2>
-  <p>
-    The latest official count is
-    <strong>{number.format(population2024.data.population)}</strong>
-    as of {population2024.source.asOf}, in {number.format(population2024.data.households)} households
-    ({population2024.data.census}).
-  </p>
-  <div class="scroll">
-    <table>
-      <thead>
-        <tr><th scope="col">Census</th><th scope="col">Reference date</th><th scope="col" class="num">Population</th></tr>
-      </thead>
-      <tbody>
-        {populationSeries.data.map((entry) => (
-          <tr>
-            <td>{entry.census}</td>
-            <td>{entry.referenceDate}</td>
-            <td class="num">{number.format(entry.population)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-  <Source source={population2024.source} />
-
-  <h2>Barangays</h2>
-  <p>
-    Calatagan has {barangays.data.length} barangays. Their PSGC codes are not a continuous run —
-    012, 024 and 025 are unassigned. Populations are from the {population2024.data.census} and sum
-    to {number.format(barangayTotal)}, matching the municipal total.
-  </p>
-  <div class="scroll">
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Barangay</th>
-          <th scope="col">PSGC</th>
-          <th scope="col" class="num">Population</th>
-          <th scope="col" class="num">Households</th>
-        </tr>
-      </thead>
-      <tbody>
-        {barangayRows.map((row) => (
-          <tr>
-            <td>{row.name}</td>
-            <td><code>{row.psgc10}</code></td>
-            <td class="num">{row.census ? number.format(row.census.totalPopulation) : '—'}</td>
-            <td class="num">
-              {row.census ? number.format(row.census.households) : '—'}
-              {institutionalCodes.has(row.psgc10) && (
-                <a href="#outside-households" class="fn" aria-label="See note on households">*</a>
-              )}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-      <tfoot>
-        <tr>
-          <th scope="row" colspan="2">Total</th>
-          <td class="num"><strong>{number.format(barangayTotal)}</strong></td>
-          <td class="num"><strong>{number.format(population2024.data.households)}</strong></td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-  {outsideHouseholds.length > 0 && (
-    <div class="fn-note" id="outside-households">
-      <p>
-        <strong>*</strong>
-        {outsideHouseholds.map((b, i) => (
-          <>
-            {i > 0 && '; '}
-            {b.name} is reported by PSA with {number.format(b.institutionalPopulation)} persons,
-            no household population and no households
-          </>
-        ))}. This is what PSA publishes, not a gap in our data. PSA defines total population as
-        household population plus institutional population, so these persons were enumerated
-        outside private households. PSA does not say which institutional quarters they were in,
-        and this site does not guess.
+<Base title="Overview" {description} {jsonLd}>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-inner">
+      <p class="hero-eyebrow">Independent civic guide · Batangas, Philippines</p>
+      <h1 id="hero-title">Calatagan, Batangas</h1>
+      <p class="hero-lede">
+        Better Calatagan collects public information about the Municipality of Calatagan and shows,
+        for every figure, where it came from and how well it has been checked. It publishes only
+        what it can trace to a source — and says plainly what it cannot.
       </p>
-      <p class="defs">PSA's definitions, verbatim:</p>
-      <ul class="defs">
-        <li>{censusDefinitions.totalPopulation}</li>
-        <li>{censusDefinitions.householdPopulation}</li>
-        <li>{censusDefinitions.institutionalPopulation}</li>
-      </ul>
+
+      <dl class="stats">
+        <div>
+          <dt>Population</dt>
+          <dd class="figure">{formatNumber(population2024.data.population)}</dd>
+          <dd class="stat-note">PSA census, {formatDate(population2024.source.asOf ?? '')}</dd>
+        </div>
+        <div>
+          <dt>Barangays</dt>
+          <dd class="figure">{municipality.data.barangayCount}</dd>
+          <dd class="stat-note">PSA geographic code {municipality.data.psgc10}</dd>
+        </div>
+        <div>
+          <dt>Income class</dt>
+          <dd class="figure">{ordinal(incomeClassification.data.incomeClass)}</dd>
+          <dd class="stat-note">From {formatDate(incomeClassification.data.effectiveFrom)}</dd>
+        </div>
+        <div>
+          <dt>Disclosure filings</dt>
+          <dd class="figure">{formatNumber(fdpSummary.total)}</dd>
+          <dd class="stat-note">Indexed from DILG, {yearsLabel(fdpSummary.years)}</dd>
+        </div>
+      </dl>
+      <p class="hero-foot">
+        Sources: Philippine Statistics Authority, Bureau of Local Government Finance and the DILG
+        Full Disclosure Policy Portal. <a href="#population">See how each figure was checked</a>.
+      </p>
     </div>
-  )}
-  <Source source={barangayPopulation2024.source} />
+  </section>
 
-  <p class="src-note">
-    Land area is not published. See <a href="/sources">Sources</a> for why.
-  </p>
+  <section class="section container" aria-labelledby="explore-title">
+    <header class="section-head">
+      <p class="eyebrow">What’s here</p>
+      <h2 id="explore-title">Explore Calatagan’s public record</h2>
+    </header>
+    <ul class="grid three sections-grid">
+      {sections.map((item) => (
+        <li>
+          <a class="card section-card" href={item.href}>
+            <span class="card-title">{item.label}</span>
+            <span class="card-blurb">{item.blurb}</span>
+            <span class="card-count">{counts[item.href]}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
 
-  <style>
-    .src-note { color: var(--muted); font-size: 0.88rem; margin-top: -0.5em; }
-    .fn { margin-left: 2px; text-decoration: none; font-weight: 700; }
-    .fn-note { font-size: 0.85rem; margin-top: 10px; }
-    .fn-note p { margin: 0 0 6px; }
-    .defs { color: var(--muted); }
-    ul.defs { margin: 0 0 10px; padding-left: 18px; }
-    .lede { font-size: 1.05rem; }
-    nav.sections {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 10px;
-      margin-block: 22px 28px;
-    }
-    nav.sections a {
-      display: block;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 12px 14px;
-      text-decoration: none;
-      color: var(--fg);
-    }
-    nav.sections a:hover { border-color: var(--accent); }
-    nav.sections strong { display: block; color: var(--accent); margin-bottom: 3px; }
-    nav.sections span { font-size: 0.86rem; color: var(--muted); }
-  </style>
+  <section class="section container" aria-labelledby="history-title">
+    <div class="history-teaser">
+    <div class="teaser-text">
+      <p class="eyebrow">History</p>
+      <h2 id="history-title">Six centuries on the Calatagan peninsula</h2>
+      <p>
+        Fifteenth-century graves at Pulong Bakaw held pottery from Siam and Annam. By 1895 most of
+        the town’s farmland belonged to one sugar-milling family, and a lighthouse at Cape Santiago guided ships
+        toward Manila. In 1903 Calatagan was folded into Balayan; in 1912 it was restored.
+      </p>
+      <p><a class="button" href="/history">Read the history, with its sources</a></p>
+    </div>
+    <ol class="teaser-dates" aria-label="Selected dates">
+      <li><span class="figure">14th–15th c.</span> Burials at Pulong Bakaw</li>
+      <li><span class="figure">1890</span> Cape Santiago lighthouse built</li>
+      <li><span class="figure">1903</span> Merged into Balayan</li>
+      <li><span class="figure">1912</span> Restored as a municipality</li>
+    </ol>
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="how-title">
+    <header class="section-head">
+      <p class="eyebrow">How this works</p>
+      <h2 id="how-title">Every figure carries its source</h2>
+    </header>
+    <ol class="grid three how">
+      <li>
+        <h3>Official sources first</h3>
+        <p>
+          Figures come from government publications — PSA, BLGF, DILG — read directly, not from
+          mirrors or news reports.
+        </p>
+      </li>
+      <li>
+        <h3>Checked and dated</h3>
+        <p>
+          Each record says when the data is as of and, separately, when it was last verified. They
+          are rarely the same day.
+        </p>
+      </li>
+      <li>
+        <h3>Gaps stated, not filled</h3>
+        <p>
+          When something cannot be verified — including who holds office — the site says so rather
+          than guessing. <a href="/sources">What we withhold</a>.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <div class="container data-sections">
+    <section class="section" id="population" aria-labelledby="population-title">
+      <header class="section-head">
+        <p class="eyebrow">People</p>
+        <h2 id="population-title">Population</h2>
+      </header>
+      <p class="prose">
+        The latest official count is <strong>{formatNumber(population2024.data.population)}</strong>{' '}
+        people as of {formatDate(population2024.source.asOf ?? '')}, in
+        {' '}{formatNumber(population2024.data.households)} households ({population2024.data.census}).
+      </p>
+      <div class="table-wrap narrow" role="region" aria-labelledby="series-caption" tabindex="0">
+        <table>
+          <caption id="series-caption">Population at each census</caption>
+          <thead>
+            <tr>
+              <th scope="col">Census</th>
+              <th scope="col">Reference date</th>
+              <th scope="col" class="num">Population</th>
+            </tr>
+          </thead>
+          <tbody>
+            {populationSeries.data.map((entry) => (
+              <tr>
+                <th scope="row">{entry.census}</th>
+                <td>{formatDate(entry.referenceDate)}</td>
+                <td class="num">{formatNumber(entry.population)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <Source source={population2024.source} label="the population figures" />
+    </section>
+
+    <section class="section" id="barangays" aria-labelledby="barangays-title">
+      <header class="section-head">
+        <p class="eyebrow">Places</p>
+        <h2 id="barangays-title">The {barangays.data.length} barangays</h2>
+      </header>
+      <p class="prose">
+        Populations are from the {population2024.data.census} and sum to
+        {' '}{formatNumber(barangayTotal)}, matching the municipal total. The barangays’ PSA codes
+        are not a continuous run: 012, 024 and 025 are unassigned.
+      </p>
+      <div class="table-wrap medium" role="region" aria-labelledby="barangay-caption" tabindex="0">
+        <table class="barangays">
+          <caption id="barangay-caption">
+            Barangays of Calatagan by population, {population2024.data.census}
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Barangay</th>
+              <th scope="col" class="num">Population</th>
+              <th scope="col" class="num">Households</th>
+            </tr>
+          </thead>
+          <tbody>
+            {barangayRows.map((row) => (
+              <tr>
+                <th scope="row">
+                  {row.name}
+                  <span class="code">PSGC {row.psgc10}</span>
+                </th>
+                <td class="num">
+                  {row.census ? formatNumber(row.census.totalPopulation) : '—'}
+                  {row.census && (
+                    <span
+                      class="bar"
+                      aria-hidden="true"
+                      style={`--w:${((row.census.totalPopulation / largest) * 100).toFixed(1)}%`}
+                    ></span>
+                  )}
+                </td>
+                <td class="num">
+                  {row.census ? formatNumber(row.census.households) : '—'}
+                  {institutionalCodes.has(row.psgc10) && (
+                    <a href="#outside-households" class="fn">
+                      <span aria-hidden="true">*</span>
+                      <span class="visually-hidden">See the note on {row.name}’s households</span>
+                    </a>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row">Total</th>
+              <td class="num"><strong>{formatNumber(barangayTotal)}</strong></td>
+              <td class="num"><strong>{formatNumber(population2024.data.households)}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      {outsideHouseholds.length > 0 && (
+        <div class="fn-note" id="outside-households">
+          <p>
+            <strong aria-hidden="true">*</strong>
+            {outsideHouseholds.map((b, i) => (
+              <>
+                {i > 0 && '; '}
+                {b.name} is reported by PSA with {formatNumber(b.institutionalPopulation)} persons, no
+                household population and no households
+              </>
+            ))}. This is what PSA publishes, not a gap in our data. PSA defines total population as
+            household population plus institutional population, so these persons were enumerated
+            outside private households. PSA does not say which institutional quarters they were in,
+            and this site does not guess.
+          </p>
+          <details class="defs">
+            <summary>PSA’s definitions, verbatim</summary>
+            <ul>
+              <li>{censusDefinitions.totalPopulation}</li>
+              <li>{censusDefinitions.householdPopulation}</li>
+              <li>{censusDefinitions.institutionalPopulation}</li>
+            </ul>
+          </details>
+        </div>
+      )}
+      <Source source={barangayPopulation2024.source} label="the barangay figures" showNote={false} />
+    </section>
+
+    <section class="section" id="identity" aria-labelledby="identity-title">
+      <header class="section-head">
+        <p class="eyebrow">The municipality</p>
+        <h2 id="identity-title">Identity and income class</h2>
+      </header>
+      <dl class="facts">
+        <div><dt>Official name</dt><dd>{municipality.data.officialName}</dd></div>
+        <div><dt>Province</dt><dd>{municipality.data.province}</dd></div>
+        <div>
+          <dt>Region</dt>
+          <dd>{municipality.data.region} ({municipality.data.regionName})</dd>
+        </div>
+        <div>
+          <dt>PSA geographic code</dt>
+          <dd>
+            <code>{municipality.data.psgc10}</code> (10-digit) · <code>{municipality.data.psgc9}</code> (9-digit)
+          </dd>
+        </div>
+        <div><dt>Barangays</dt><dd>{municipality.data.barangayCount}</dd></div>
+      </dl>
+      <Source source={municipality.source} label="the municipality’s identity" />
+
+      <p class="prose">
+        Calatagan is a <strong>{ordinal(incomeClassification.data.incomeClass)} class municipality</strong>,
+        effective {formatDate(incomeClassification.data.effectiveFrom)}. It was reclassified from
+        {' '}{ordinal(incomeClassification.data.previousIncomeClass ?? 2)} class under
+        {' '}{incomeClassification.data.legalBasis}.
+      </p>
+      <p class="small muted">Issuance: {incomeClassification.data.issuance}</p>
+      <Source source={incomeClassification.source} label="the income class" />
+
+      <p class="small muted">
+        Land area is not published yet. <a href="/sources#withheld">See why</a>.
+      </p>
+    </section>
+  </div>
 </Base>
+
+<style>
+  .hero {
+    background: var(--c-band);
+    color: var(--c-band-ink);
+    padding-block: var(--sp-7) var(--sp-6);
+    border-bottom: 4px solid var(--c-clay);
+  }
+  @media (min-width: 48rem) {
+    .hero {
+      padding-block: var(--sp-8) var(--sp-7);
+    }
+  }
+  .hero-eyebrow {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-band-accent);
+    margin: 0 0 var(--sp-3);
+  }
+  .hero h1 {
+    color: var(--c-band-ink);
+    font-size: var(--fs-3xl);
+    margin: 0;
+  }
+  .hero-lede {
+    max-width: 60ch;
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+    line-height: 1.55;
+    color: var(--c-band-ink);
+    margin: var(--sp-4) 0 0;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-5) var(--sp-4);
+    margin: var(--sp-7) 0 0;
+    padding-top: var(--sp-5);
+    border-top: 1px solid rgb(201 214 222 / 0.35);
+  }
+  @media (min-width: 64rem) {
+    .stats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .stats dt {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-band-muted);
+  }
+  .stats dd {
+    margin: 0;
+  }
+  .stats .figure {
+    font-family: var(--font-serif);
+    font-size: var(--fs-2xl);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--c-band-ink);
+    margin-top: var(--sp-1);
+  }
+  .stat-note {
+    font-size: var(--fs-xs);
+    color: var(--c-band-muted);
+    margin-top: var(--sp-1) !important;
+  }
+  .hero-foot {
+    margin: var(--sp-6) 0 0;
+    font-size: var(--fs-sm);
+    color: var(--c-band-muted);
+  }
+  .hero a {
+    color: var(--c-band-accent);
+  }
+  .hero :focus-visible {
+    outline-color: var(--c-band-accent);
+  }
+
+  .section-head {
+    margin-bottom: var(--sp-5);
+  }
+  .section-head h2 {
+    margin: 0;
+  }
+
+  .sections-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .sections-grid li + li {
+    margin-top: 0;
+  }
+  .section-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: var(--sp-2);
+  }
+  .card-title {
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    color: var(--c-navy);
+  }
+  .card-blurb {
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+  }
+  .card-count {
+    margin-top: auto;
+    padding-top: var(--sp-3);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--c-clay);
+  }
+
+  .history-teaser {
+    display: grid;
+    gap: var(--sp-6);
+    padding: var(--sp-6) var(--sp-5);
+    background: var(--c-sunk);
+    border-radius: var(--radius-lg);
+  }
+  @media (min-width: 48rem) {
+    .history-teaser {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      align-items: center;
+      padding: var(--sp-7);
+    }
+  }
+  .teaser-text p:not(.eyebrow) {
+    max-width: 55ch;
+    color: var(--c-ink-2);
+  }
+  .teaser-dates {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 2px solid var(--c-clay);
+  }
+  .teaser-dates li {
+    padding: var(--sp-2) 0 var(--sp-2) var(--sp-4);
+    margin: 0;
+    color: var(--c-ink-2);
+  }
+  .teaser-dates .figure {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    color: var(--c-navy);
+    line-height: 1.2;
+  }
+
+  .how {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .how li {
+    margin: 0;
+    padding-top: var(--sp-4);
+    border-top: 2px solid var(--c-navy);
+  }
+  .how h3 {
+    font-size: var(--fs-md);
+    margin: 0 0 var(--sp-2);
+  }
+  .how p {
+    margin: 0;
+    color: var(--c-ink-2);
+  }
+
+  .data-sections {
+    padding-bottom: var(--sp-8);
+  }
+  .narrow {
+    max-width: 36rem;
+  }
+  .medium {
+    max-width: 44rem;
+  }
+  .barangays th[scope='row'] {
+    font-weight: 600;
+  }
+  @media (max-width: 30rem) {
+    .barangays th,
+    .barangays td {
+      padding-inline: var(--sp-2);
+    }
+  }
+  .code {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: var(--c-muted);
+  }
+  .barangays td.num {
+    position: relative;
+    vertical-align: top;
+  }
+  .bar {
+    display: block;
+    height: 4px;
+    margin-top: var(--sp-1);
+    margin-left: auto;
+    width: calc(var(--w) * 0.6);
+    max-width: 6rem;
+    background: var(--c-accent);
+    border-radius: 2px;
+    opacity: 0.55;
+  }
+  .fn {
+    display: inline-grid;
+    place-items: center;
+    min-width: 24px;
+    min-height: 24px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .fn-note {
+    max-width: var(--w-prose);
+    margin-top: var(--sp-4);
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .defs summary {
+    color: var(--c-accent);
+    font-weight: 650;
+    min-height: var(--tap);
+    display: flex;
+    align-items: center;
+  }
+  .defs ul {
+    padding-left: 1.2em;
+    color: var(--c-muted);
+  }
+
+  .facts {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    max-width: 44rem;
+    border-top: var(--border);
+  }
+  .facts > div {
+    display: grid;
+    gap: var(--sp-1);
+    padding: var(--sp-3) 0;
+    border-bottom: var(--border);
+  }
+  @media (min-width: 40rem) {
+    .facts > div {
+      grid-template-columns: 14rem minmax(0, 1fr);
+      gap: var(--sp-4);
+    }
+  }
+  .facts dt {
+    color: var(--c-muted);
+    font-size: var(--fs-sm);
+    font-weight: 650;
+  }
+  .facts dd {
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,154 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { SITE } from '../lib/site';
+
+const crumbs = [{ name: 'About', href: '/about' }];
+---
+
+<Base
+  title="About this project"
+  description="Better Calatagan is an independent civic project, not the Municipality of Calatagan’s website: how it works, how figures are checked, licensing and corrections."
+  {crumbs}
+>
+  <PageHeader
+    eyebrow="About"
+    title="An independent civic guide"
+    lede="Better Calatagan collects public information about the Municipality of Calatagan, Batangas from government sources, and shows for every figure where it came from and how well it has been checked."
+    {crumbs}
+  />
+
+  <div class="container page-body">
+    <div class="prose">
+      <section class="section" aria-labelledby="independent-title">
+        <h2 id="independent-title">Independent, and not the municipality</h2>
+        <p class="statement">{SITE.independence}</p>
+        <p>
+          It does not use the municipal seal, coat of arms or any government branding, and nothing
+          on it should be read as an official statement. For official business, go to the
+          municipal hall. Where a figure here and the government document it cites differ, the
+          document is authoritative.
+        </p>
+        <p>
+          It is part of the <a href="https://bettergov.ph">BetterGov.ph</a> Better LGU community of
+          volunteer-built civic sites.
+        </p>
+      </section>
+
+      <section class="section" aria-labelledby="how-title">
+        <h2 id="how-title">How it works</h2>
+        <p>
+          Most civic portals publish a number. This one publishes a number and the evidence behind
+          it. Every record carries its sources, the period the data describes, the date a person
+          last checked it, how strong the evidence is, and whether it is fit to publish.
+        </p>
+        <ul>
+          <li>
+            <strong>Official sources come first.</strong> The Philippine Statistics Authority, the
+            Bureau of Local Government Finance and the DILG Full Disclosure Policy Portal are read
+            directly. Encyclopaedias, news and social posts can point to a source; they are never
+            the source.
+          </li>
+          <li>
+            <strong>The rules are tested.</strong> A record with no source, or verified on a future
+            date, or resting only on a weak source, fails the build and cannot be published.
+          </li>
+          <li>
+            <strong>Gaps are shown.</strong> When something cannot be verified — who holds office
+            today, office phone numbers, the land area — the site says so and explains why, on the
+            <a href="/sources#withheld">Sources</a> page.
+          </li>
+          <li>
+            <strong>History is held to the same standard.</strong> Each sentence on the
+            <a href="/history">History</a> page cites its sources; claims we could not verify are
+            listed separately rather than retold.
+          </li>
+        </ul>
+        <p>
+          The site is static: no accounts, no tracking, no analytics, no database. The data is
+          available as <a href="/data/index.json">open JSON</a>, with the same provenance.
+        </p>
+      </section>
+
+      <section class="section" id="licensing" aria-labelledby="licensing-title">
+        <h2 id="licensing-title">Licensing</h2>
+        <p>Three different things, three different answers:</p>
+        <dl class="licences">
+          <div>
+            <dt>Code</dt>
+            <dd>MIT licence.</dd>
+          </div>
+          <div>
+            <dt>This project’s own compilation</dt>
+            <dd>
+              Its schemas, annotations, provenance records and written text — including the history
+              narrative — are licensed CC BY 4.0.
+            </dd>
+          </div>
+          <div>
+            <dt>Government documents and data</dt>
+            <dd>
+              Not licensed by this project. They remain the works of their issuing agencies under
+              Philippine law. We link to them and describe them; we do not relicense them.
+            </dd>
+          </div>
+        </dl>
+        <p class="small muted">
+          Full terms are in the <a href={`${SITE.repository}/blob/main/LICENSES.md`}>repository</a>.
+          The typeface is Source Serif 4, under the SIL Open Font License.
+        </p>
+      </section>
+
+      <section class="section" aria-labelledby="contribute-title">
+        <h2 id="contribute-title">Corrections and contributions</h2>
+        <p>
+          Corrections are welcome, especially from people in Calatagan. The one firm rule: every
+          civic fact needs a source. An unsourced correction will be declined even if it is right,
+          because the project cannot tell the difference.
+        </p>
+        <p>
+          <a class="button primary" href={`${SITE.repository}/issues/new/choose`}>Report a correction</a>
+          <a class="button" href={SITE.repository}>View the source code</a>
+        </p>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page-body {
+    padding-block: var(--sp-6) var(--sp-8);
+  }
+  .statement {
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+    line-height: 1.5;
+    padding-left: var(--sp-4);
+    border-left: 3px solid var(--c-clay);
+    color: var(--c-ink);
+  }
+  .section li + li {
+    margin-top: var(--sp-3);
+  }
+  .licences {
+    margin: var(--sp-4) 0;
+    border-top: var(--border);
+  }
+  .licences > div {
+    padding: var(--sp-3) 0;
+    border-bottom: var(--border);
+  }
+  .licences dt {
+    font-weight: 650;
+  }
+  .licences dd {
+    margin: var(--sp-1) 0 0;
+    color: var(--c-ink-2);
+  }
+  .button + .button {
+    margin-left: var(--sp-2);
+  }
+  .button {
+    margin-top: var(--sp-2);
+  }
+</style>

@@ -1,19 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Freshness from '../components/Freshness.astro';
 import { barangays } from '../data/barangays';
 import { barangayPopulation2024, population2024, populationSeries } from '../data/population';
 import { fdpFilings, fdpSummary } from '../data/fdp';
+import { financials } from '../data/financials';
+import { documents } from '../data/documents';
 import { incomeClassification, municipality, WITHHELD } from '../data/municipality';
 import { isPublishable } from '../data/types/provenance';
+import { formatDate } from '../lib/format';
+import { SITE } from '../lib/site';
 
 const datasets = [
-  { name: 'Municipal identity and PSGC', record: municipality },
-  { name: 'Income classification', record: incomeClassification },
-  { name: 'Barangay list', record: barangays },
-  { name: 'Population — 2024 POPCEN', record: population2024 },
-  { name: 'Population — census series', record: populationSeries },
-  { name: 'Barangay populations — 2024 POPCEN', record: barangayPopulation2024 },
-  { name: 'DILG Full Disclosure Policy filings', record: fdpFilings },
+  { name: 'Municipal identity and PSGC', record: municipality, href: '/#identity' },
+  { name: 'Income classification', record: incomeClassification, href: '/#identity' },
+  { name: 'Barangay list', record: barangays, href: '/#barangays' },
+  { name: 'Population — 2024 census', record: population2024, href: '/#population' },
+  { name: 'Population — census series', record: populationSeries, href: '/#population' },
+  { name: 'Barangay populations — 2024 census', record: barangayPopulation2024, href: '/#barangays' },
+  { name: 'Statements of Receipts and Expenditures', record: financials, href: '/finances' },
+  { name: 'Full Disclosure Policy filings', record: fdpFilings, href: '/transparency' },
+  { name: 'Archived municipal documents', record: documents, href: '/documents' },
 ].filter((entry) => isPublishable(entry.record.source));
 
 // Deduplicate citations across datasets for the reference list.
@@ -21,109 +29,228 @@ const references = new Map<string, (typeof municipality.source.sources)[number]>
 for (const entry of datasets) {
   for (const reference of entry.record.source.sources) references.set(reference.url, reference);
 }
+
+const VERIFICATION: Record<string, string> = {
+  verified: 'Verified',
+  reported: 'Reported',
+  unverified: 'Unverified',
+};
+const TIER: Record<number, string> = {
+  1: 'Tier 1 · as published',
+  2: 'Tier 2 · with caveat',
+};
+
+const crumbs = [{ name: 'Sources', href: '/sources' }];
 ---
 
 <Base
-  title="Sources"
-  description="Every source behind the figures on this site, what has been verified, and what is deliberately withheld."
+  title="Sources and methods"
+  description="Every source behind the Calatagan figures on this site — PSA, BLGF, DILG and archived municipal records — how each was verified, and what is withheld."
+  {crumbs}
 >
-  <h1>Sources</h1>
-  <p>
-    Every figure on this site traces to a source listed here. Where a source could not be reached
-    or a figure could not be confirmed, that is recorded too — an absence you can see is more
-    useful than a number you cannot check.
-  </p>
+  <PageHeader
+    eyebrow="Sources"
+    title="Where every figure comes from"
+    lede="Every figure on this site traces to a source listed here. Where a source could not be reached or a figure could not be confirmed, that is recorded too — an absence you can see is more useful than a number you cannot check."
+    {crumbs}
+  />
 
-  <h2>Datasets published</h2>
-  <div class="scroll">
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Dataset</th>
-          <th scope="col">Status</th>
-          <th scope="col">Verification</th>
-          <th scope="col">Tier</th>
-          <th scope="col">Last verified</th>
-        </tr>
-      </thead>
-      <tbody>
-        {datasets.map(({ name, record }) => (
-          <tr>
-            <td>{name}</td>
-            <td>{record.source.status}</td>
-            <td>{record.source.verification}</td>
-            <td>{record.source.tier}</td>
-            <td>{record.source.lastVerified}</td>
-          </tr>
+  <div class="container page-body">
+    <nav class="on-page" aria-label="On this page">
+      <a href="#datasets">Datasets</a>
+      <a href="#references">References</a>
+      <a href="#withheld">Not published</a>
+      <a href="#open">Open items</a>
+    </nav>
+
+    <section class="section" id="datasets" aria-labelledby="datasets-title">
+      <h2 id="datasets-title">Datasets published</h2>
+      <div class="table-wrap" role="region" aria-labelledby="datasets-caption" tabindex="0">
+        <table class="stack">
+          <caption id="datasets-caption">Published datasets and their verification status</caption>
+          <thead>
+            <tr>
+              <th scope="col">Dataset</th>
+              <th scope="col">Status</th>
+              <th scope="col">Verification</th>
+              <th scope="col">Readiness</th>
+              <th scope="col">Last verified</th>
+            </tr>
+          </thead>
+          <tbody>
+            {datasets.map(({ name, record, href }) => (
+              <tr>
+                <th scope="row"><a href={href}>{name}</a></th>
+                <td data-label="Status"><Freshness source={record.source} /></td>
+                <td data-label="Verification">
+                  {VERIFICATION[record.source.verification] ?? record.source.verification}
+                </td>
+                <td data-label="Readiness">{TIER[record.source.tier] ?? `Tier ${record.source.tier}`}</td>
+                <td data-label="Last verified">
+                  <time datetime={record.source.lastVerified}>{formatDate(record.source.lastVerified)}</time>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted prose">
+        Tier 1 is published as-is. Tier 2 is published with a caveat shown next to the figure. Tiers
+        3 and 4 are held back and do not appear on this site. “Last verified” is when a maintainer
+        last checked the source — not the date the data describes.
+      </p>
+      <p class="small muted prose">
+        The <a href="/history">history</a> is sourced separately, sentence by sentence, with its own
+        reference list.
+      </p>
+    </section>
+
+    <section class="section" id="references" aria-labelledby="references-title">
+      <h2 id="references-title">References</h2>
+      <ol class="references">
+        {[...references.values()].map((reference) => (
+          <li>
+            <p class="ref-title">
+              <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a>
+            </p>
+            <p class="small muted">
+              {reference.publisher}
+              {reference.locator && <> · {reference.locator}</>}. Accessed{' '}
+              {formatDate(reference.accessedOn)}. Authority: {reference.authority}.
+            </p>
+            {reference.sha256 && <p class="hash">SHA-256 {reference.sha256}</p>}
+          </li>
         ))}
-      </tbody>
-    </table>
+      </ol>
+    </section>
+
+    <section class="section" id="withheld" aria-labelledby="withheld-title">
+      <h2 id="withheld-title">Deliberately not published</h2>
+      <p class="prose">
+        These are facts people often expect to find here. Each is held back for a stated reason, and
+        will be published once it can be sourced to the site’s standard.
+      </p>
+      <dl class="withheld">
+        {WITHHELD.map((entry) => (
+          <div>
+            <dt>{entry.fact}</dt>
+            <dd>{entry.reason}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section class="section prose" aria-labelledby="filings-title">
+      <h2 id="filings-title">Disclosure filings</h2>
+      <p>
+        The <a href="/transparency">disclosures index</a> lists {fdpSummary.total} Full Disclosure
+        Policy filings across {fdpSummary.forms.length} statutory forms. {fdpSummary.available}
+        download cleanly from the DILG portal; {fdpSummary.sourceError} were returning a server
+        error when last checked, and those filings remain listed with their metadata. The index
+        restates no figures; the quarterly statements behind <a href="/finances">Finances</a> are
+        extracted separately and checked against their own totals.
+      </p>
+    </section>
+
+    <section class="section prose" id="open" aria-labelledby="open-title">
+      <h2 id="open-title">Open items</h2>
+      <ul class="open-items">
+        <li>
+          <strong>Settle the land area.</strong> PSA’s own statistical table reports 10.50 km² for
+          Calatagan and derives a 2024 density of 5,754 persons per km² from it. Comparable Batangas
+          municipalities in the same table sit near 50 km², and a widely circulated figure is
+          101.50 km². A second primary source is needed to say which is correct.
+        </li>
+        <li>
+          Confirm the current incumbency of elected officials against COMELEC or DILG records.
+          Election results are not the same as holding office today.
+        </li>
+        <li>
+          Establish which Commission on Audit annual reports exist for Calatagan. The COA site
+          returns a bot challenge to this project’s tooling.
+        </li>
+        <li>
+          Find government-hosted copies of the municipal development and land use plans. Copies
+          circulate on third-party document hosts, which attest nothing about authenticity or
+          adoption.
+        </li>
+      </ul>
+      <p class="small muted">
+        Have a primary source for any of these?
+        <a href={`${SITE.repository}/issues/new/choose`}>Open an issue</a>.
+      </p>
+    </section>
   </div>
-  <p class="note">
-    Tier 1 is published as-is. Tier 2 is published with a caveat shown next to the figure. Tiers 3
-    and 4 are held back and do not appear on this site.
-  </p>
-
-  <h2>References</h2>
-  <ol>
-    {[...references.values()].map((reference) => (
-      <li>
-        <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a> —
-        {' '}{reference.publisher}
-        {reference.locator && <> ({reference.locator})</>}.
-        {' '}Accessed {reference.accessedOn}. Authority: {reference.authority}.
-        {reference.sha256 && <><br /><code class="hash">sha256 {reference.sha256}</code></>}
-      </li>
-    ))}
-  </ol>
-
-  <h2>Deliberately not published</h2>
-  <dl class="withheld">
-    {WITHHELD.map((entry) => (
-      <>
-        <dt>{entry.fact}</dt>
-        <dd>{entry.reason}</dd>
-      </>
-    ))}
-  </dl>
-
-  <h2>Transparency filings</h2>
-  <p>
-    The <a href="/transparency">transparency section</a> indexes
-    {fdpSummary.total} Full Disclosure Policy filings across {fdpSummary.forms.length} statutory
-    forms. {fdpSummary.available} download cleanly from the DILG portal;
-    {fdpSummary.sourceError} endpoints were returning a server error when last checked, and those
-    filings remain listed with their metadata. No financial figure has been extracted from any of
-    them — each entry links to the DILG original.
-  </p>
-
-  <h2>Open items</h2>
-  <ul>
-    <li>
-      <strong>Settle the land area.</strong> PSA's own statistical table reports 10.50 km² for
-      Calatagan and derives a 2024 density of 5,754 persons per km² from it. Comparable Batangas
-      municipalities in the same table sit near 50 km², and a widely circulated figure is
-      101.50 km². A second primary source is needed to say which is correct.
-    </li>
-    <li>
-      Confirm the current incumbency of elected officials against COMELEC or DILG records. Election
-      results are not the same as holding office today.
-    </li>
-    <li>
-      Establish which Commission on Audit annual reports exist for Calatagan. The COA site returns
-      a bot challenge to this project's tooling.
-    </li>
-    <li>
-      Find government-hosted copies of the municipal development and land use plans. Copies
-      circulate on third-party document hosts, which attest nothing about authenticity or adoption.
-    </li>
-  </ul>
-
-  <style>
-    .note { color: var(--muted); font-size: 0.88rem; }
-    .hash { font-size: 0.75rem; color: var(--muted); word-break: break-all; }
-    dl.withheld dt { font-weight: 600; margin-top: 12px; }
-    dl.withheld dd { margin: 2px 0 0; color: var(--muted); }
-    ol li { margin-bottom: 10px; }
-  </style>
 </Base>
+
+<style>
+  .page-body {
+    padding-block: var(--sp-6) var(--sp-8);
+  }
+  .on-page {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-6);
+  }
+  .on-page a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding: 0 var(--sp-4);
+    border: var(--border);
+    border-radius: 999px;
+    background: var(--c-surface);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .on-page a:hover {
+    border-color: var(--c-accent);
+  }
+  .section {
+    scroll-margin-top: var(--sp-5);
+  }
+  th[scope='row'] {
+    font-weight: 600;
+  }
+  .references {
+    max-width: var(--w-prose);
+    padding-left: 1.5rem;
+  }
+  .references li + li {
+    margin-top: var(--sp-4);
+  }
+  .references p {
+    margin: 0;
+  }
+  .ref-title {
+    font-weight: 600;
+  }
+  .hash {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--c-muted);
+    overflow-wrap: anywhere;
+    margin-top: var(--sp-1) !important;
+  }
+  .withheld {
+    max-width: var(--w-prose);
+    margin: var(--sp-4) 0 0;
+    border-top: var(--border);
+  }
+  .withheld > div {
+    padding: var(--sp-3) 0;
+    border-bottom: var(--border);
+  }
+  .withheld dt {
+    font-weight: 650;
+  }
+  .withheld dd {
+    margin: var(--sp-1) 0 0;
+    color: var(--c-ink-2);
+  }
+  .open-items li + li {
+    margin-top: var(--sp-3);
+  }
+</style>

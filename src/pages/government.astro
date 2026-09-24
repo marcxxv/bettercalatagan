@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
 import { archivedDocuments } from '../data/documents';
 import { KIND_LABELS } from '../data/schemas/documents';
 
@@ -17,142 +18,192 @@ const officeDocuments = archivedDocuments.documents
   .sort((a, b) => (b.publishedYear ?? 0) - (a.publishedYear ?? 0) || a.title.localeCompare(b.title));
 
 const latestOfficeYear = Math.max(...officeDocuments.map((doc) => doc.publishedYear ?? 0));
+const age = new Date().getUTCFullYear() - latestOfficeYear;
+const crumbs = [{ name: 'Government', href: '/government' }];
 ---
 
 <Base
-  title="Government"
-  description="Who holds municipal office in Calatagan, and how to contact each office — what this project can and cannot yet verify, and why."
+  title="Government of Calatagan"
+  description="Who holds municipal office in Calatagan, Batangas, and how to reach each office — what can and cannot yet be verified from primary sources, and where to look instead."
+  {crumbs}
 >
-  <h1>Government</h1>
+  <PageHeader
+    eyebrow="Government"
+    title="Who governs Calatagan — and what we can prove"
+    lede="Who holds office and how to reach each office are what residents ask for most. They are also the two things this project cannot yet establish to its evidence standard, so this page sets out the gap instead of filling it with a plausible guess."
+    {crumbs}
+  />
 
-  <p class="notice">
-    <strong>This page is deliberately incomplete.</strong> Two things residents most often need —
-    who currently holds office, and how to reach each office — are the two things this project
-    cannot yet establish to its own evidence standard. Rather than publish a plausible answer, it
-    publishes the gap.
-  </p>
+  <div class="container page-body">
+    <nav class="on-page" aria-label="On this page">
+      <a href="#officials">Elected officials</a>
+      <a href="#contacts">Offices and contacts</a>
+      <a href="#archive">What the archive holds</a>
+      <a href="#reach">Reaching the municipality today</a>
+    </nav>
 
-  <h2>Elected officials</h2>
+    <section class="section prose" id="officials" aria-labelledby="officials-title">
+      <h2 id="officials-title">Elected officials</h2>
+      <p>
+        Calatagan elects a Mayor, a Vice Mayor and eight members of the Sangguniang Bayan. The May
+        2025 local elections have been held and the results are a matter of public record.
+      </p>
+      <div class="callout clay">
+        <p class="callout-title">Why the roster is not published here</p>
+        <p>
+          <em>An election result is not proof of present incumbency.</em> Between an election and
+          today, an officeholder can resign, be suspended, be disqualified, die, or be succeeded.
+          Publishing election winners as current officials asserts something the election return
+          does not say.
+        </p>
+      </div>
+      <h3>What we would need to publish it</h3>
+      <ul>
+        <li>
+          A Commission on Elections certificate of canvass or official published return, rather
+          than media reporting of the count.
+        </li>
+        <li>
+          A current roster from the Department of the Interior and Local Government or its
+          municipal field office, confirming who is in office now.
+        </li>
+      </ul>
+      <p>
+        Neither is currently reachable. COMELEC’s published attachment directories return errors to
+        this project’s tooling, and DILG publishes no machine-readable municipal roster we have
+        found. Election results are available from civic-tech derivatives of COMELEC data and from
+        news organisations; both are useful for finding the answer and neither is sufficient to
+        publish it.
+      </p>
+      <p class="small muted">
+        Tracked as an open item in <a href="/sources#withheld">Sources</a>. If you have a primary
+        document, a correction with a citation is welcome.
+      </p>
+    </section>
 
-  <p>
-    Calatagan elects a Mayor, a Vice Mayor and eight members of the Sangguniang Bayan. The May 2025
-    local elections have been held and the results are a matter of public record.
-  </p>
+    <section class="section prose" id="contacts" aria-labelledby="contacts-title">
+      <h2 id="contacts-title">Offices and contact details</h2>
+      <p>
+        A telephone number, an e-mail address and a postal address for the municipal hall circulate
+        on a national government portal. We do not republish them as current, and the reason is
+        worth stating precisely.
+      </p>
+      <p>
+        Those contact details sit in a single record submitted by the LGU to that portal. Three
+        other fields in the same record — the municipality’s income classification, the name of its
+        mayor, and its website address — are all demonstrably out of date. The income
+        classification is two years stale; the website it lists no longer resolves at all. Contact
+        details drawn from the same record, of the same vintage, cannot be presented as current
+        simply because they are the only ones available.
+      </p>
+      <p>
+        <strong>Publishing a wrong phone number has a real cost.</strong> Someone travels to an
+        office that has moved, or calls a line nobody answers, and concludes the information was
+        checked when it was not.
+      </p>
+    </section>
 
-  <p>
-    <strong>We do not publish the roster here</strong>, for one specific reason:
-    <em>an election result is not proof of present incumbency.</em> Between an election and today, an
-    officeholder can resign, be suspended, be disqualified, die, or be succeeded. Publishing
-    election winners as current officials asserts something the election return does not say.
-  </p>
+    <section class="section" id="archive" aria-labelledby="archive-title">
+      <div class="prose">
+        <h2 id="archive-title">What the archive holds</h2>
+        <p>
+          The municipality’s former website published a set of {officeDocuments.length} per-office
+          documents, most of them in {latestOfficeYear}. A sample has been opened: they are
+          <strong>Citizen’s Charter service standards</strong> in the Anti-Red Tape Authority format
+          — each service listing its requirements, fees and processing times.
+        </p>
+        <div class="callout warn">
+          <p class="callout-title">Archived, not current</p>
+          <p>
+            The {latestOfficeYear} set is {age} years old. A fee or a processing time from it is a
+            starting point for a question at the municipal hall, never an answer. This site does not
+            restate any of those figures — nor the e-mail addresses and telephone numbers in the
+            one-page <em>List of Offices</em>, which the only other record of them cannot confirm.
+            The document is linked below so you can judge its age for yourself.
+          </p>
+        </div>
+      </div>
 
-  <p>What we would need to publish it:</p>
-  <ul>
-    <li>
-      A Commission on Elections certificate of canvass or official published return, rather than
-      media reporting of the count.
-    </li>
-    <li>
-      A current roster from the Department of the Interior and Local Government or its municipal
-      field office, confirming who is in office now.
-    </li>
-  </ul>
-  <p>
-    Neither is currently reachable. COMELEC's published attachment directories return errors to this
-    project's tooling, and DILG publishes no machine-readable municipal roster we have found.
-    Election results are available from civic-tech derivatives of COMELEC data and from news
-    organisations; both are useful for finding the answer and neither is sufficient to publish it.
-  </p>
-  <p class="src-note">
-    This is tracked as an open item in <a href="/sources">Sources</a>. If you have a primary
-    document, a correction with a citation is welcome.
-  </p>
+      <div class="table-wrap" role="region" aria-labelledby="office-caption" tabindex="0">
+        <table class="stack">
+          <caption id="office-caption">
+            Per-office documents from the former municipal website ({officeDocuments.length})
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Document</th>
+              <th scope="col">Kind</th>
+              <th scope="col">Published</th>
+              <th scope="col">Archived copy</th>
+            </tr>
+          </thead>
+          <tbody>
+            {officeDocuments.map((doc) => (
+              <tr>
+                <th scope="row">{doc.title}</th>
+                <td data-label="Kind">{KIND_LABELS[doc.kind]}</td>
+                <td data-label="Published">{doc.publishedYear ?? '—'}</td>
+                <td data-label="Archived copy">
+                  <a href={doc.archiveUrl} rel="noopener noreferrer nofollow">
+                    Open<span class="visually-hidden"> {doc.title} on the Wayback Machine</span>
+                    <span aria-hidden="true"> ↗</span>
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted prose">
+        Entries a maintainer has actually opened carry a note saying what was found inside; the rest
+        are described by the filename the municipality chose. All of them appear in the
+        <a href="/documents">archive</a>.
+      </p>
+    </section>
 
-  <h2>Offices and contact details</h2>
-
-  <p>
-    A telephone number, an e-mail address and a postal address for the municipal hall circulate on a
-    national government portal. We do not republish them as current, and the reason is worth stating
-    precisely.
-  </p>
-  <p>
-    Those contact details sit in a single record submitted by the LGU to that portal. Three other
-    fields in the same record — the municipality's income classification, the name of its mayor, and
-    its website address — are all demonstrably out of date. The income classification is two years
-    stale; the website it lists no longer resolves at all. Contact details drawn from the same
-    record, of the same vintage, cannot be presented as current simply because they are the only
-    ones available.
-  </p>
-  <p>
-    <strong>Publishing a wrong phone number has a real cost.</strong> Someone travels to an office
-    that has moved, or calls a line nobody answers, and concludes the information was checked when
-    it was not.
-  </p>
-
-  <h2>What the archive holds</h2>
-
-  <p>
-    The municipality's former website published a set of {officeDocuments.length} per-office
-    documents, most of them in {latestOfficeYear}. A sample has been opened: they are
-    <strong>Citizen's Charter service standards</strong> in the Anti-Red Tape Authority format —
-    each service listing its requirements, fees and processing times.
-  </p>
-  <p>
-    <strong>They are archived, not current.</strong> The 2022 set is four years old. A fee or a
-    processing time from it should be treated as a starting point for a question at the municipal
-    hall, never as an answer. This site does not restate any of those figures.
-  </p>
-  <p>
-    The same set includes a one-page <em>List of Offices</em> carrying e-mail addresses and
-    telephone numbers as of 2022. <strong>Those contact details are not republished here.</strong>
-    They are four years old, and the only other record of them — a national portal profile — is
-    demonstrably stale on every field we can independently check. The document is linked below so
-    you can see it for yourself and judge its age.
-  </p>
-
-  <div class="scroll">
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Document</th>
-          <th scope="col">Kind</th>
-          <th scope="col">Published</th>
-          <th scope="col">Archived copy</th>
-        </tr>
-      </thead>
-      <tbody>
-        {officeDocuments.map((doc) => (
-          <tr>
-            <th scope="row">{doc.title}</th>
-            <td>{KIND_LABELS[doc.kind]}</td>
-            <td>{doc.publishedYear ?? '—'}</td>
-            <td><a href={doc.archiveUrl} rel="noopener noreferrer nofollow">Open ↗</a></td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <section class="section prose" id="reach" aria-labelledby="reach-title">
+      <h2 id="reach-title">If you need to reach the municipality today</h2>
+      <p>
+        Go in person to the municipal hall, or contact the Provincial Government of Batangas, which
+        maintains current contact routes to its municipalities. This project would rather send you
+        to a source that is current than to one of its own that might not be.
+      </p>
+    </section>
   </div>
-
-  <p class="src-note">
-    Entries a maintainer has actually opened carry a note saying what was found inside; the rest are
-    described by the filename the municipality chose. All of them appear in the full
-    <a href="/documents">document index</a> with the rest of the archive.
-  </p>
-
-  <h2>If you need to reach the municipality today</h2>
-  <p>
-    Go in person to the municipal hall, or contact the Provincial Government of Batangas, which
-    maintains current contact routes to its municipalities. This project would rather send you to a
-    source that is current than to one of its own that might not be.
-  </p>
-
-  <style>
-    .notice {
-      background: var(--warn-bg); border: 1px solid var(--warn-line);
-      border-radius: 4px; padding: 12px 14px;
-    }
-    .src-note { color: var(--muted); font-size: 0.88rem; }
-    th[scope='row'] { text-align: left; font-weight: 500; }
-    li { margin-bottom: 6px; }
-  </style>
 </Base>
+
+<style>
+  .page-body {
+    padding-block: var(--sp-6) var(--sp-8);
+  }
+  .on-page {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-6);
+  }
+  .on-page a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding: 0 var(--sp-4);
+    border: var(--border);
+    border-radius: 999px;
+    background: var(--c-surface);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .on-page a:hover {
+    border-color: var(--c-accent);
+  }
+  .section {
+    scroll-margin-top: var(--sp-5);
+  }
+  .callout {
+    margin-block: var(--sp-5);
+  }
+  th[scope='row'] {
+    font-weight: 600;
+  }
+</style>
