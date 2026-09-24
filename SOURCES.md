@@ -40,10 +40,6 @@ Ranks refer to the evidence hierarchy in [CONTRIBUTING.md](CONTRIBUTING.md).
 (`ns3/4/5.dns.gov.ph`) with SOA serial `2025102103`, and `www` is a CNAME to the apex, so the zone
 exists but nothing resolves.
 
-This is a *partial* correction to a stronger claim made elsewhere that the domain returns
-NXDOMAIN/SERVFAIL with inactive nameservers: the nameservers answer, and the zone is live. The
-practical effect is the same — the site is unreachable — but the diagnosis differs.
-
 Archive coverage runs 2010 through 2025 (283 snapshots in 2025 alone) and stops. Documents
 recovered: 236, by upload year — 2016: 60, 2017: 13, 2018: 1, 2019: 103, 2020: 4, 2022: 47.
 
@@ -94,8 +90,8 @@ What that unblocked, all promoted to tier 1:
   the municipal totals
 - Barangay names and PSGC codes, since OpenSTAT keys its geography by PSGC
 
-One correction this produced: the household count of **14,267** that circulates widely (and which
-the adversarial audit repeated from Wikipedia) is **wrong**. PSA reports **15,442**.
+One correction this produced: the household count of **14,267** that circulates widely is
+**wrong**. PSA reports **15,442**.
 
 ### Source conflicts on the record
 
@@ -103,7 +99,8 @@ the adversarial audit repeated from Wikipedia) is **wrong**. PSA reports **15,44
 | --- | --- | --- | --- |
 | Population | **PSA OpenSTAT 60,420** (1 Jul 2024) | DTI CMCI 64,234 | **PSA published.** CMCI's basis is undocumented and its profile block is stale on several fields. |
 | Households | **PSA OpenSTAT 15,442** | 14,267 (widely repeated) | **PSA published.** |
-| Land area | **PSA OpenSTAT 10.50 km²** | 101.50 km² (PhilAtlas) / 112.00 km² | **Neither published — see below.** |
+| Land area | **PSA OpenSTAT 10.50 km²** | 101.50 km² (PhilAtlas, attributed to 2013) | **Neither published — see below.** |
+| Income class | **BLGF/DOF 1st class**, effective 2025-01-01 | CMCI "Second Class Municipality" | **1st class published.** CMCI is stale. |
 
 ### The land-area problem
 
@@ -123,21 +120,29 @@ cities. The widely circulated alternative, 101.50 km², yields 595/km², which f
 and 10.50 versus 101.50 is consistent with a dropped digit.
 
 We cannot confirm which is correct from a second primary source, so **we publish neither**. The
-raw PSA value is recorded in the dataset for audit, flagged as a suspected source error. Note also
-that the provincial total in this table (2,725.23 km²) differs from the 3,119.75 km² figure used
-elsewhere, so the discrepancy may be a boundary-vintage issue rather than a simple typo.
-| Income class | BLGF/DOF **1st class**, effective 2025-01-01 | CMCI **Second Class Municipality** | **1st class published.** CMCI is stale. |
-| Barangay PSGC codes | Two mirrors: `001–011, 013–023, 026–028` | A claimed sequential `001–025` | **Mirrors published.** The sequential claim is wrong; see below. |
+raw PSA value is recorded in the dataset for audit, flagged as a suspected source error.
 
-### On the barangay code "gap"
+### The barangay code "gap"
 
-Codes 012, 024 and 025 are **not assigned** within Calatagan. Both independent mirrors agree.
+Codes 012, 024 and 025 are **not assigned** within Calatagan. PSA OpenSTAT keys its geography by
+PSGC and returns exactly the 25 codes `001–011, 013–023, 026–028`; two independent PSA-derived
+mirrors agree. PSGC codes are hierarchical — every Calatagan barangay code begins `0401008` — so
+the gaps are properties of Calatagan's own segment. They are preserved by a test.
 
-An explanation circulating elsewhere — that the gaps are an artefact of "provincial-level database
-queries that include deleted historical sitios in other municipalities, offsetting numeric primary
-keys" — is not tenable. PSGC codes are hierarchical, not sequential keys: every Calatagan barangay
-code begins `0401008`, and nothing in another municipality can shift them. The gaps are real and
-are preserved by a test.
+### Baha: people, but no households
+
+PSA reports Baha with **83 persons, 0 household population and 0 households**. This was checked
+directly against the source table (`PO_2024/0041A6DTPH3.px`, geographic key `0401008002`) and is
+published exactly as PSA gives it.
+
+PSA's own definitions, carried in the same table's metadata and now captured by the pipeline, give
+the zero its meaning: *total population is the sum of the household population and the
+institutional population*, and institutional population is *persons living in institutional living
+quarters*. So Baha's 83 persons were enumerated outside private households. They are also the whole
+of Calatagan's non-household population — 60,420 total minus 60,337 household population — which a
+test asserts.
+
+PSA does not say which institutional quarters were involved, and this project does not speculate.
 
 ---
 

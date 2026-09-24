@@ -53,6 +53,49 @@ async function queryCsv(table, geoCodes) {
   return parseCsv(await response.text());
 }
 
+/**
+ * PSA's own definitions for the table's measures, from the PX file's NOTEX.
+ *
+ * Captured so that a reader can interpret the figures — in particular how a
+ * barangay can have people but no households — from PSA's words rather than
+ * ours. Each definition is matched by the term PSA leads it with; a missing
+ * term fails the run instead of being silently dropped.
+ */
+async function queryDefinitions(table, geoCode) {
+  const response = await fetch(table, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'User-Agent': USER_AGENT },
+    signal: AbortSignal.timeout(60_000),
+    body: JSON.stringify({
+      query: [{ code: 'Geographic Location', selection: { filter: 'item', values: [geoCode] } }],
+      response: { format: 'px' },
+    }),
+  });
+  if (!response.ok) throw new Error(`${table} (px) -> HTTP ${response.status}`);
+  const px = new TextDecoder('windows-1252').decode(await response.arrayBuffer());
+  const notex = px.match(/NOTEX=([\s\S]*?);\s*\r?\n[A-Z]/)?.[1];
+  if (!notex) throw new Error('PSA table carries no NOTEX definitions');
+  const lines = notex
+    .replace(/"\s*\r?\n\s*"/g, '')
+    .replace(/^"|"$/g, '')
+    .replace(/<[^>]+>/g, '')
+    .split(/#+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const find = (pattern, term) => {
+    const line = lines.find((candidate) => pattern.test(candidate));
+    if (!line) throw new Error(`PSA definition for "${term}" not found in NOTEX`);
+    return line;
+  };
+  return {
+    totalPopulation: find(/^Total population defines/i, 'total population'),
+    householdPopulation: find(/^Household Population:/i, 'household population'),
+    institutionalPopulation: find(/^Institutional Population:/i, 'institutional population'),
+    household: find(/^Household is defined/i, 'household'),
+  };
+}
+
 /** Minimal CSV reader; PxWeb quotes labels and leaves numbers bare. */
 function parseCsv(text) {
   return text
@@ -144,6 +187,8 @@ async function fetchAll() {
   const reportedLandAreaKm2 = Number(column(/Land Area/));
   const reportedDensity2024 = Number(column(/2024 Population Density/));
 
+  const definitions = await queryDefinitions(TABLE_2024, MUNICIPALITY_PSGC);
+
   await mkdir(dirname(OUT_PATH), { recursive: true });
   await writeFile(
     OUT_PATH,
@@ -157,6 +202,8 @@ async function fetchAll() {
           tables: { census2024: TABLE_2024, series: TABLE_SERIES },
         },
         retrievedAt,
+        /** PSA's own definitions for the measures, verbatim from the table's NOTEX. */
+        definitions,
         municipality,
         barangays,
         populationSeries,
@@ -179,6 +226,7 @@ async function fetchAll() {
   console.log(`  2024 population : ${municipality.totalPopulation.toLocaleString()}`);
   console.log(`  2024 households : ${municipality.households.toLocaleString()}`);
   console.log(`  barangays       : ${barangays.length} (reconcile exactly)`);
+  console.log(`  definitions     : ${Object.keys(definitions).join(', ')}`);
   console.log(`  series          : ${populationSeries.map((s) => `${s.census}=${s.population}`).join(', ')}`);
   console.log(`  land area (raw) : ${reportedLandAreaKm2} km² — suspected source error, not published`);
   console.log(`  → ${OUT_PATH}`);

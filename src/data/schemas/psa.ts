@@ -24,6 +24,15 @@ export const psaPopulationSchema = z
       tables: z.record(z.string().url().startsWith('https://')),
     }),
     retrievedAt: z.string().datetime(),
+    /** PSA's own definitions of the measures, verbatim from the table's NOTEX. */
+    definitions: z
+      .object({
+        totalPopulation: z.string().trim().min(20),
+        householdPopulation: z.string().trim().min(20),
+        institutionalPopulation: z.string().trim().min(20),
+        household: z.string().trim().min(20),
+      })
+      .strict(),
     municipality: censusUnitSchema,
     barangays: z.array(barangayUnitSchema).length(25),
     populationSeries: z

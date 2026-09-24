@@ -176,6 +176,12 @@
       "totalPopulation": 4912
     }
   ],
+  "definitions": {
+    "household": "Household is defined as a social unit consisting of a person or a group of persons who sleep in the same housing unit and have a common arrangement in the preparation and consumption of food.",
+    "householdPopulation": "Household Population: All persons who are members of a private household, meaning a person or group of persons sleeping in the same housing unit with common arrangements for food preparation and consumption.",
+    "institutionalPopulation": "Institutional Population: Persons living in institutional living quarters (ILQs) such as penal/corrective institutions, dormitories, hotels, military camps, or welfare facilities.",
+    "totalPopulation": "Total population defines as the sum of the household population and the institutional population, covering all persons living within a specific territory at a given reference time, including Filipinos in embassies or missions abroad."
+  },
   "municipality": {
     "householdPopulation": 60337,
     "households": 15442,
@@ -202,7 +208,7 @@
   ],
   "reportedDensity2024": 5754,
   "reportedLandAreaKm2": 10.5,
-  "retrievedAt": "2026-09-22T14:55:12.616Z",
+  "retrievedAt": "2026-09-24T10:46:12.019Z",
   "schemaVersion": "1.0.0",
   "source": {
     "api": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/1A",

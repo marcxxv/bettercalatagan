@@ -9,11 +9,11 @@ repositories, derived datasets, archives and, in places, social media. Without a
 the path of least resistance is to cite whatever is reachable — which in practice means Wikipedia,
 Scribd and Facebook.
 
-That is not hypothetical. An independent audit of this project's research sourced Calatagan's
-income class, population, land area, household count and barangay codes to **Wikipedia**, cited
-**Scribd** for municipal planning documents, cited **media outlets** while describing them as
-"COMELEC certified canvass returns", and supported a fire-station hotline with a Facebook post from
-a station in a different province.
+That is not hypothetical. During this project's own research, the 2024 population count was at
+first reachable only through PSA's social media account; municipal planning documents turned up
+only on Scribd and similar hosts; and a national portal's LGU profile — the most convenient source
+for contact details — proved stale on its income class, mayor and website fields. Each was the
+easiest citation available, and each would have been the wrong one.
 
 ## Decision
 

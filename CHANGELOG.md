@@ -7,6 +7,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — post-launch cleanup
+- **Removed the raw research audit** (`Calatagan Civic Data Audit.md`) from the repository. Several
+  of its claims were shown by primary-source verification to be incorrect or unsupported. Passages
+  elsewhere that restated those claims in order to rebut them were rewritten to state only the
+  verified findings.
+- **Baha, 2024: 83 persons, 0 household population, 0 households** — re-checked directly against
+  PSA OpenSTAT table `PO_2024/0041A6DTPH3.px` and retained exactly as PSA publishes it. PSA's own
+  definitions of total, household and institutional population are now captured from the table's
+  metadata by the pipeline, exported with the data, and shown beside the figure. Per those
+  definitions the 83 persons were enumerated outside private households; they account for all of
+  Calatagan's non-household population, which a test asserts. PSA does not say which institutional
+  quarters were involved, and the site does not speculate.
+- Removed a hardcoded test count from the README, which had already drifted.
+
 ### Added — Phase 3: structured financial data (SRE)
 - `/finances` — income, expenditure by sector, and a full-year series built from
   **14 quarters** of the Statement of Receipts and Expenditures, CY2023 Q1 – CY2026 Q2.
@@ -82,8 +96,7 @@ as verified:
   total exactly.
 
 ### Withheld — deliberately not published
-- **Land area.** 101.50 km² (PhilAtlas, 2013 figure) and 112.00 km² both circulate and cannot be
-  reconciled; neither confirmed from a PSA page.
+- **Land area.** Circulating figures could not be confirmed from a PSA source.
 - **2024 POPCEN population (60,420).** Held at tier 3: the only available citation is a PSA
   social-media post, and the PSA page of record is unreachable.
 - **Current elected officials.** Election results are available from a civic-tech derivative, but
@@ -91,7 +104,7 @@ as verified:
 - **Municipal contact details.** Their source record (DTI CMCI profile block) has demonstrably
   stale income-class, mayor and website fields.
 
-### Corrected — from the September 2026 audit reconciliation
+### Corrected — after primary-source verification
 - Income classification corrected from 2nd to **1st class**, verified against the primary issuance.
 - The earlier statement that municipal planning ceased after the CLUP 2001–2010 is **withdrawn**;
   later plans appear to exist, though only on third-party document hosts, so none is cited.

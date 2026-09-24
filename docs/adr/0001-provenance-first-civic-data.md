@@ -13,10 +13,9 @@ One project (Better Calapan) had a genuine `DataSource` type and tests over it; 
 scattering of `sourceUrl` fields; the ecosystem's default starter kit had essentially none, and
 shipped template prose that invents biography for whoever is pasted into a `{MAYOR}` placeholder.
 
-We also had a concrete demonstration of the failure mode. During reconciliation of an independent
-audit, a per-barangay population table presented with confidence turned out to sum to 60,929
-against a stated municipal total of 58,719 — a fabrication that a single reconciliation rule
-catches instantly.
+Some errors are cheap to catch mechanically. A barangay table whose rows do not sum to the stated
+municipal total is internally inconsistent whatever its source, and a single reconciliation rule
+rejects it before it reaches a reader.
 
 ## Decision
 

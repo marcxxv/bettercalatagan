@@ -8,6 +8,8 @@ import {
   populationSeries,
   psaPopulation,
   LAND_AREA_UNRESOLVED,
+  censusDefinitions,
+  outsideHouseholds,
 } from './population.js';
 import { incomeClassification, municipality, WITHHELD } from './municipality.js';
 import { dataSourceSchema, AUTHORITY_RANK } from './schemas/provenance.js';
@@ -209,8 +211,8 @@ describe('population, from PSA primary data', () => {
   });
 
   it('reconciles barangay counts exactly to the municipal total', () => {
-    // The reconciliation rule that caught a fabricated barangay table during
-    // the audit reconciliation. Now applied to PSA's own figures.
+    // Rows that do not sum to the municipal total are inconsistent whatever
+    // their source. Applied here to PSA's own figures.
     const population = barangayPopulation2024.data.reduce((sum, b) => sum + b.totalPopulation, 0);
     const households = barangayPopulation2024.data.reduce((sum, b) => sum + b.households, 0);
     expect(population).toBe(population2024.data.population);
@@ -239,6 +241,34 @@ describe('population, from PSA primary data', () => {
     const dates = series.map((entry) => Date.parse(entry.referenceDate));
     for (let i = 1; i < dates.length; i += 1) expect(dates[i]).toBeGreaterThan(dates[i - 1]);
     expect(series.at(-1)?.population).toBe(population2024.data.population);
+  });
+});
+
+describe('people outside private households (Baha)', () => {
+  it('keeps Baha exactly as PSA publishes it: 83 persons, 0 household population, 0 households', () => {
+    const baha = barangayPopulation2024.data.find((b) => b.psgc10 === '0401008002');
+    expect(baha).toMatchObject({ name: 'Baha', totalPopulation: 83, householdPopulation: 0, households: 0 });
+  });
+
+  it('carries PSA\u2019s own definitions, which is what gives the zero its meaning', () => {
+    expect(censusDefinitions.totalPopulation).toMatch(/sum of the household population and the institutional population/i);
+    expect(censusDefinitions.institutionalPopulation).toMatch(/institutional living quarters/i);
+    expect(censusDefinitions.householdPopulation).toMatch(/private household/i);
+  });
+
+  it('accounts for the municipality\u2019s entire non-household population, and nothing else', () => {
+    // PSA: total = household + institutional. The municipal difference must
+    // equal the sum of barangay differences, or we have misread the table.
+    const municipal = psaPopulation.municipality.totalPopulation - psaPopulation.municipality.householdPopulation;
+    const barangaySum = outsideHouseholds.reduce((sum, b) => sum + b.institutionalPopulation, 0);
+    expect(barangaySum).toBe(municipal);
+    expect(outsideHouseholds.map((b) => b.name)).toEqual(['Baha']);
+  });
+
+  it('never has households without a household population, or the reverse', () => {
+    for (const b of psaPopulation.barangays) {
+      expect(b.households === 0).toBe(b.householdPopulation === 0);
+    }
   });
 });
 

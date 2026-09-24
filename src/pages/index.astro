@@ -2,7 +2,13 @@
 import Base from '../layouts/Base.astro';
 import Source from '../components/Source.astro';
 import { barangays } from '../data/barangays';
-import { barangayPopulation2024, population2024, populationSeries } from '../data/population';
+import {
+  barangayPopulation2024,
+  censusDefinitions,
+  outsideHouseholds,
+  population2024,
+  populationSeries,
+} from '../data/population';
 import { incomeClassification, municipality } from '../data/municipality';
 
 const ORDINAL = ['', '1st', '2nd', '3rd', '4th', '5th', '6th'];
@@ -15,6 +21,7 @@ const barangayRows = [...barangays.data]
   .map((barangay) => ({ ...barangay, census: populationByCode.get(barangay.psgc10) }))
   .sort((a, b) => a.name.localeCompare(b.name));
 const barangayTotal = barangayRows.reduce((sum, row) => sum + (row.census?.totalPopulation ?? 0), 0);
+const institutionalCodes = new Set(outsideHouseholds.map((b) => b.psgc10));
 ---
 
 <Base
@@ -119,7 +126,12 @@ const barangayTotal = barangayRows.reduce((sum, row) => sum + (row.census?.total
             <td>{row.name}</td>
             <td><code>{row.psgc10}</code></td>
             <td class="num">{row.census ? number.format(row.census.totalPopulation) : '—'}</td>
-            <td class="num">{row.census ? number.format(row.census.households) : '—'}</td>
+            <td class="num">
+              {row.census ? number.format(row.census.households) : '—'}
+              {institutionalCodes.has(row.psgc10) && (
+                <a href="#outside-households" class="fn" aria-label="See note on households">*</a>
+              )}
+            </td>
           </tr>
         ))}
       </tbody>
@@ -132,6 +144,29 @@ const barangayTotal = barangayRows.reduce((sum, row) => sum + (row.census?.total
       </tfoot>
     </table>
   </div>
+  {outsideHouseholds.length > 0 && (
+    <div class="fn-note" id="outside-households">
+      <p>
+        <strong>*</strong>
+        {outsideHouseholds.map((b, i) => (
+          <>
+            {i > 0 && '; '}
+            {b.name} is reported by PSA with {number.format(b.institutionalPopulation)} persons,
+            no household population and no households
+          </>
+        ))}. This is what PSA publishes, not a gap in our data. PSA defines total population as
+        household population plus institutional population, so these persons were enumerated
+        outside private households. PSA does not say which institutional quarters they were in,
+        and this site does not guess.
+      </p>
+      <p class="defs">PSA's definitions, verbatim:</p>
+      <ul class="defs">
+        <li>{censusDefinitions.totalPopulation}</li>
+        <li>{censusDefinitions.householdPopulation}</li>
+        <li>{censusDefinitions.institutionalPopulation}</li>
+      </ul>
+    </div>
+  )}
   <Source source={barangayPopulation2024.source} />
 
   <p class="src-note">
@@ -140,6 +175,11 @@ const barangayTotal = barangayRows.reduce((sum, row) => sum + (row.census?.total
 
   <style>
     .src-note { color: var(--muted); font-size: 0.88rem; margin-top: -0.5em; }
+    .fn { margin-left: 2px; text-decoration: none; font-weight: 700; }
+    .fn-note { font-size: 0.85rem; margin-top: 10px; }
+    .fn-note p { margin: 0 0 6px; }
+    .defs { color: var(--muted); }
+    ul.defs { margin: 0 0 10px; padding-left: 18px; }
     .lede { font-size: 1.05rem; }
     nav.sections {
       display: grid;

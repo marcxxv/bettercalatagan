@@ -29,8 +29,27 @@ const census2024Source: DataSource = {
   expectedRefresh: 'per-census',
   isLatestKnownOfficial: true,
   methodology:
-    "Retrieved from PSA's own statistical database (OpenSTAT) for the 2024 Census of Population. The 25 barangay counts reconcile exactly to PSA's municipal total for both population and households; the pipeline refuses to write the dataset otherwise.",
+    "Retrieved from PSA's own statistical database (OpenSTAT) for the 2024 Census of Population. The 25 barangay counts reconcile exactly to PSA's municipal total for both population and households; the pipeline refuses to write the dataset otherwise. PSA's definitions of each measure are captured from the same table and published alongside the figures.",
+  note: 'Per PSA, total population is household population plus institutional population. A barangay can therefore report people but no households: Baha reports 83 persons, 0 household population and 0 households, exactly as PSA publishes them. PSA does not say which institutional quarters those persons were enumerated in, and this project does not speculate.',
 };
+
+/** PSA's definitions of the census measures, verbatim. */
+export const censusDefinitions = psaPopulation.definitions;
+
+/**
+ * Barangays where PSA counts people outside private households.
+ *
+ * Derived only from PSA's own identity (total = household + institutional), so
+ * the difference is institutional population by PSA's definition. Nothing is
+ * said about which institution, because PSA does not say.
+ */
+export const outsideHouseholds = psaPopulation.barangays
+  .filter((b) => b.totalPopulation !== b.householdPopulation)
+  .map((b) => ({
+    psgc10: b.psgc10,
+    name: b.name,
+    institutionalPopulation: b.totalPopulation - b.householdPopulation,
+  }));
 
 /** The latest official population count. */
 export const population2024: Sourced<{

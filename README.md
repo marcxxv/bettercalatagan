@@ -36,7 +36,7 @@ cannot check.
 
 ## Current status
 
-Six pages, four machine-readable datasets, 164 tests.
+Six pages and four machine-readable datasets, guarded by a civic-data test suite that runs on every push.
 
 | Dataset | Tier | Basis |
 | --- | --- | --- |
