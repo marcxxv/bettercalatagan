@@ -18,36 +18,51 @@ const LABELS: Record<DataSource['status'], { text: string; tone: string }> = {
   current: { text: 'Current', tone: 'ok' },
   'latest-official': { text: 'Latest official release', tone: 'ok' },
   historical: { text: 'Historical record', tone: 'neutral' },
-  archived: { text: 'Archived — from a source no longer online', tone: 'warn' },
+  archived: { text: 'Archived — source no longer online', tone: 'warn' },
   draft: { text: 'Draft — not adopted', tone: 'warn' },
   unverified: { text: 'Unverified', tone: 'warn' },
 };
 
 const label = LABELS[source.status];
-const verificationNote =
-  source.verification === 'reported' ? 'reported, pending confirmation from the issuer' : null;
 ---
 
-<p class={`badge ${label.tone}`}>
+<span class={`status ${label.tone}`}>
   <span class="dot" aria-hidden="true"></span>
   {label.text}
-  {source.expectedRefresh !== 'none' && <span class="cadence"> · updated {source.expectedRefresh}</span>}
-  {verificationNote && <span class="cadence"> · {verificationNote}</span>}
-</p>
+</span>
 
 <style>
-  .badge {
+  .status {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    margin: 0 0 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--fg);
+    gap: 0.45em;
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    line-height: 1.2;
+    padding: 0.3em 0.7em;
+    border-radius: 999px;
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    color: var(--c-ink);
+    white-space: nowrap;
   }
-  .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-  .ok .dot { background: #2e8b57; }
-  .neutral .dot { background: #6b7280; }
-  .warn .dot { background: #c07800; }
-  .cadence { font-weight: 400; color: var(--muted); }
+  .dot {
+    width: 0.55em;
+    height: 0.55em;
+    border-radius: 50%;
+    flex: none;
+  }
+  .ok .dot {
+    background: var(--c-ok);
+  }
+  .neutral .dot {
+    background: var(--c-muted);
+  }
+  .warn {
+    background: var(--c-warn-bg);
+    border-color: var(--c-warn-line);
+  }
+  .warn .dot {
+    background: var(--c-warn-line);
+  }
 </style>

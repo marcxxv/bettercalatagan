@@ -1,0 +1,123 @@
+/*
+ * Better Calatagan — design tokens.
+ *
+ * The palette is drawn from the place, not from government or tourism
+ * convention: deep navigation-chart navy, the teal of the Verde Island Passage,
+ * limestone and sand for surfaces, and a restrained clay taken from the
+ * earthenware of the Calatagan excavations. Every text pairing below was
+ * measured against WCAG 2.2 AA (4.5:1 text, 3:1 non-text controls) in both
+ * themes; see docs/adr/0005-design-system.md for the ratios.
+ *
+ * Breakpoints (used as literal values in media queries, since custom
+ * properties cannot appear there):
+ *   --bp-sm 30rem (480px)  --bp-md 48rem (768px)
+ *   --bp-lg 64rem (1024px) --bp-xl 80rem (1280px)
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Colour — light */
+  --c-bg: #f6f2e9;          /* sand */
+  --c-surface: #fffcf5;     /* paper */
+  --c-sunk: #ede6d6;        /* limestone */
+  --c-ink: #10212e;         /* body text, 14.7:1 on bg */
+  --c-ink-2: #3d4b55;       /* secondary text, 8.0:1 */
+  --c-muted: #56636b;       /* captions, 5.5:1 */
+  --c-accent: #0a615d;      /* coastal teal: links, 6.5:1 */
+  --c-accent-strong: #074643;
+  --c-accent-wash: #dcebe6;
+  --c-navy: #12304a;        /* chart navy: masthead, headings */
+  --c-clay: #8f4325;        /* earthenware: sparing emphasis, 6.3:1 */
+  --c-clay-wash: #f2e2d6;
+  --c-line: #d6ccb8;        /* decorative rules */
+  --c-control: #857a66;     /* form borders, 3.8:1 */
+  --c-warn-bg: #fbf0d6;
+  --c-warn-line: #c9a24a;
+  --c-ok: #1f6b3a;
+  --c-on-navy: #f6f2e9;
+  /* The dark hero band stays dark in both themes. */
+  --c-band: #12304a;
+  --c-band-ink: #f6f2e9;      /* 12.2:1 */
+  --c-band-muted: #c9d6de;    /* 9.2:1 */
+  --c-band-accent: #8fdad0;   /* 8.5:1 */
+
+  /* Typography */
+  --font-serif: 'Source Serif 4', 'Source Serif Pro', Georgia, 'Times New Roman', serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Fluid type scale: min at 360px, max at 1280px */
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.875rem;
+  --fs-base: clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);
+  --fs-md: clamp(1.125rem, 1.07rem + 0.25vw, 1.25rem);
+  --fs-lg: clamp(1.25rem, 1.14rem + 0.5vw, 1.5rem);
+  --fs-xl: clamp(1.5rem, 1.3rem + 0.9vw, 2rem);
+  --fs-2xl: clamp(1.875rem, 1.5rem + 1.7vw, 2.75rem);
+  --fs-3xl: clamp(2.25rem, 1.7rem + 2.5vw, 3.75rem);
+
+  --lh-tight: 1.15;
+  --lh-snug: 1.3;
+  --lh-body: 1.6;
+
+  /* Spacing: a 4px base, named by step */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --sp-9: 6rem;
+
+  /* Shape */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --border: 1px solid var(--c-line);
+  --shadow-sm: 0 1px 2px rgb(16 33 46 / 0.06), 0 1px 1px rgb(16 33 46 / 0.04);
+  --shadow-md: 0 6px 20px -8px rgb(16 33 46 / 0.18);
+
+  /* Measures */
+  --w-prose: 68ch;
+  --w-content: 72rem;
+  --w-wide: 84rem;
+  --gutter: clamp(1rem, 0.6rem + 2vw, 2rem);
+
+  /* Interaction */
+  --tap: 44px;
+  --focus: 3px solid var(--c-accent);
+  --focus-offset: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --c-bg: #0b1721;
+    --c-surface: #10202c;
+    --c-sunk: #162a38;
+    --c-ink: #e9eef0;
+    --c-ink-2: #c3cdd1;
+    --c-muted: #9fb0b7;
+    --c-accent: #5fc4b8;
+    --c-accent-strong: #8fdad0;
+    --c-accent-wash: #123a3a;
+    --c-navy: #9fc2dc;
+    --c-clay: #e39a78;
+    --c-clay-wash: #3a2319;
+    --c-line: #27404f;
+    --c-control: #6f8a98;
+    --c-warn-bg: #2c2615;
+    --c-warn-line: #8a7230;
+    --c-ok: #7fcf98;
+    --c-on-navy: #0b1721;
+    --c-band: #0f2536;
+    --c-band-ink: #e9eef0;
+    --c-band-muted: #b9c8d0;
+    --c-band-accent: #8fdad0;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-md: 0 8px 24px -10px rgb(0 0 0 / 0.5);
+  }
+}

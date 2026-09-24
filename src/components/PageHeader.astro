@@ -1,0 +1,88 @@
+---
+/**
+ * The opening of every inner page: where you are, what the page is, and — in
+ * the `meta` slot — how current it is.
+ */
+import type { Crumb } from './Seo.astro';
+
+interface Props {
+  title: string;
+  eyebrow?: string;
+  lede?: string;
+  crumbs?: Crumb[];
+}
+
+const { title, eyebrow, lede, crumbs = [] } = Astro.props;
+const hasMeta = Astro.slots.has('meta');
+---
+
+<header class="page-header">
+  <div class="container">
+    {crumbs.length > 0 && (
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Overview</a></li>
+          {crumbs.map((crumb, index) =>
+            index === crumbs.length - 1 ? (
+              <li aria-current="page">{crumb.name}</li>
+            ) : (
+              <li><a href={crumb.href}>{crumb.name}</a></li>
+            ),
+          )}
+        </ol>
+      </nav>
+    )}
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{title}</h1>
+    {lede && <p class="lede">{lede}</p>}
+    <slot />
+    {hasMeta && (
+      <div class="page-meta">
+        <slot name="meta" />
+      </div>
+    )}
+  </div>
+</header>
+
+<style>
+  .page-header {
+    padding-block: var(--sp-6) var(--sp-6);
+    border-bottom: var(--border);
+    background: var(--c-surface);
+  }
+  @media (min-width: 48rem) {
+    .page-header {
+      padding-block: var(--sp-7) var(--sp-7);
+    }
+  }
+  .page-header h1 {
+    max-width: 22ch;
+  }
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-1);
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+  .crumbs li + li {
+    margin-top: 0;
+  }
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: var(--sp-1);
+    color: var(--c-line);
+  }
+  .crumbs a {
+    color: var(--c-muted);
+  }
+  .page-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin-top: var(--sp-5);
+  }
+</style>

@@ -1,0 +1,102 @@
+---
+/**
+ * Page metadata: title, description, canonical URL, social previews and
+ * structured data.
+ *
+ * The canonical origin comes from `Astro.site`, which astro.config.mjs derives
+ * from the deployment environment, so previews never canonicalise to a
+ * throwaway URL and no domain is assumed.
+ */
+import { SITE } from '../lib/site';
+
+export interface Crumb {
+  name: string;
+  href: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  /** Breadcrumb trail, excluding the home page. Omit on the home page. */
+  crumbs?: Crumb[];
+  /** Additional JSON-LD objects, e.g. Dataset or Article. */
+  jsonLd?: Record<string, unknown>[];
+  ogType?: 'website' | 'article';
+}
+
+const { title, description, crumbs, jsonLd = [], ogType = 'website' } = Astro.props;
+
+const origin = Astro.site ?? new URL('http://localhost:4321');
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonical = new URL(path, origin).toString();
+const isHome = path === '/';
+const fullTitle = isHome ? `${SITE.name} — ${SITE.shortDescription}` : `${title} — ${SITE.name}`;
+const ogImage = new URL('/og.png', origin).toString();
+
+const structured: Record<string, unknown>[] = [];
+
+if (isHome) {
+  structured.push({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: new URL('/', origin).toString(),
+    description: SITE.description,
+    inLanguage: 'en-PH',
+    about: {
+      '@type': 'AdministrativeArea',
+      name: 'Calatagan, Batangas',
+      containedInPlace: { '@type': 'AdministrativeArea', name: 'Batangas, Philippines' },
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE.name,
+      url: new URL('/about', origin).toString(),
+      description: SITE.independence,
+    },
+  });
+}
+
+if (crumbs && crumbs.length > 0) {
+  const trail = [{ name: 'Overview', href: '/' }, ...crumbs];
+  structured.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((crumb, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: crumb.name,
+      item: new URL(crumb.href, origin).toString(),
+    })),
+  });
+}
+
+structured.push(...jsonLd);
+
+// `<` is escaped so no string inside the data can close the script element.
+const serialise = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c');
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={isHome ? SITE.name : title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={SITE.locale} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta
+  property="og:image:alt"
+  content="Better Calatagan — an independent civic guide to Calatagan, Batangas"
+/>
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={isHome ? SITE.name : title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+{structured.map((data) => <script type="application/ld+json" set:html={serialise(data)} />)}

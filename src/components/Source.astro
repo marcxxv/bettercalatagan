@@ -1,75 +1,161 @@
 ---
+/**
+ * Provenance for one civic record.
+ *
+ * Always visible: what the record is, where it comes from (linked), when it
+ * was last verified, and any caveat. One click away: the method and the full
+ * list of sources with their locators and checksums. A primary source is never
+ * more than one interaction from the figure it supports.
+ */
 import type { DataSource } from '../data/types/provenance';
 import Freshness from './Freshness.astro';
+import { formatDate } from '../lib/format';
 
 interface Props {
   source: DataSource;
+  /** Short name for what this block describes, used in the disclosure label. */
+  label?: string;
+  /**
+   * Set false only where the page already states the note in full right
+   * beside the figure, so the reader is not shown the same paragraph twice.
+   */
+  showNote?: boolean;
 }
-const { source } = Astro.props;
+const { source, label = 'this data', showNote = true } = Astro.props;
+const [primary, ...others] = source.sources;
+const verification =
+  source.verification === 'verified'
+    ? 'Verified'
+    : source.verification === 'reported'
+      ? 'Reported, not yet confirmed'
+      : 'Unverified';
 ---
 
-<aside class="prov">
-  <Freshness source={source} />
-
-  {source.caveat && <p class="caveat"><strong>Caveat:</strong> {source.caveat}</p>}
-
-  <dl>
+<div class="provenance" role="group" aria-label={`Source for ${label}`}>
+  <div class="prov-row">
+    <Freshness source={source} />
+    <span class="prov-item">
+      <span class="prov-key">Source</span>
+      <a href={primary.url} rel="noopener noreferrer nofollow">{primary.publisher}</a>
+      {others.length > 0 && <span class="muted"> +{others.length}</span>}
+    </span>
     {source.asOf && (
-      <>
-        <dt>Data as of</dt>
-        <dd>{source.asOf}</dd>
-      </>
+      <span class="prov-item">
+        <span class="prov-key">Data as of</span>
+        {formatDate(source.asOf)}
+      </span>
     )}
-    <dt>Last verified</dt>
-    <dd>{source.lastVerified}</dd>
-    {source.methodology && (
-      <>
-        <dt>Method</dt>
-        <dd>{source.methodology}</dd>
-      </>
-    )}
-    <dt>{source.sources.length === 1 ? 'Source' : 'Sources'}</dt>
-    <dd>
-      <ul>
+    <span class="prov-item">
+      <span class="prov-key">{verification}</span>
+      <time datetime={source.lastVerified}>{formatDate(source.lastVerified)}</time>
+    </span>
+  </div>
+
+  {source.caveat && (
+    <p class="prov-caveat"><strong>Caveat.</strong> {source.caveat}</p>
+  )}
+  {showNote && source.note && <p class="prov-note"><strong>Note.</strong> {source.note}</p>}
+
+  <details class="prov-more">
+    <summary>Method and sources<span class="visually-hidden"> for {label}</span></summary>
+    <div class="prov-body">
+      {source.methodology && <p>{source.methodology}</p>}
+      <ol class="prov-sources">
         {source.sources.map((reference) => (
           <li>
             <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a>
-            <span class="pub"> — {reference.publisher}</span>
-            {reference.locator && <span class="pub"> ({reference.locator})</span>}
-            <span class="pub"> · accessed {reference.accessedOn}</span>
-            {reference.archiveUrl && (
-              <> · <a href={reference.archiveUrl} rel="noopener noreferrer nofollow">archived copy</a></>
+            <span class="muted"> — {reference.publisher}</span>
+            {reference.locator && <span class="muted">. {reference.locator}</span>}
+            <span class="muted">. Accessed {formatDate(reference.accessedOn)}.</span>
+            {reference.sha256 && (
+              <span class="hash">SHA-256 {reference.sha256}</span>
             )}
           </li>
         ))}
-      </ul>
-    </dd>
-  </dl>
-</aside>
+      </ol>
+      <p class="muted small">
+        Refreshed {source.expectedRefresh === 'none' ? 'only when corrected' : source.expectedRefresh.replace('-', ' ')}.
+        <a href="/sources">About our sources</a>
+      </p>
+    </div>
+  </details>
+</div>
 
 <style>
-  .prov {
-    border-left: 3px solid var(--line);
-    padding: 2px 0 2px 14px;
-    margin-block: 14px 28px;
-    font-size: 0.82rem;
-    color: var(--muted);
+  .provenance {
+    margin-block: var(--sp-4) var(--sp-6);
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--c-surface);
+    border: var(--border);
+    border-left: 3px solid var(--c-accent);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-size: var(--fs-sm);
   }
-  .caveat {
-    background: var(--warn-bg);
-    border: 1px solid var(--warn-line);
-    border-radius: 4px;
-    padding: 8px 10px;
-    color: var(--fg);
-    margin-block: 8px;
+  .prov-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2) var(--sp-4);
   }
-  dl { display: grid; grid-template-columns: max-content 1fr; gap: 3px 14px; margin: 6px 0 0; }
-  dt { font-weight: 600; }
-  dd { margin: 0; }
-  ul { margin: 0; padding-left: 18px; }
-  .pub { color: var(--muted); }
-  @media (max-width: 460px) {
-    dl { grid-template-columns: 1fr; }
-    dd { margin-bottom: 8px; }
+  .prov-item {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    align-items: baseline;
+  }
+  .prov-key {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+  .prov-caveat {
+    margin: var(--sp-3) 0 0;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-warn-bg);
+    border-radius: var(--radius-sm);
+    color: var(--c-ink);
+  }
+  .prov-note {
+    margin: var(--sp-3) 0 0;
+    color: var(--c-ink-2);
+  }
+  .prov-more {
+    margin-top: var(--sp-1);
+  }
+  .prov-more > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    min-height: var(--tap);
+    color: var(--c-accent);
+    font-weight: 650;
+  }
+  .prov-more > summary::before {
+    content: '';
+    width: 0.45em;
+    height: 0.45em;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    margin-right: 0.15em;
+  }
+  .prov-more[open] > summary::before {
+    transform: rotate(45deg);
+  }
+  .prov-body {
+    padding-top: var(--sp-2);
+    color: var(--c-ink-2);
+  }
+  .prov-sources {
+    padding-left: 1.2em;
+  }
+  .hash {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--c-muted);
+    overflow-wrap: anywhere;
   }
 </style>

@@ -1,0 +1,254 @@
+---
+/**
+ * Site header.
+ *
+ * Two navigation renderings share one <nav> landmark: an inline list for wide
+ * screens and a native <details> menu for narrow ones. The one not in use is
+ * display:none, which also removes it from the accessibility tree, so screen
+ * readers only ever meet one list. No JavaScript is involved.
+ */
+import Mark from './Mark.astro';
+import { NAV, isCurrent } from '../lib/site';
+
+const pathname = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="independence">
+    <div class="container independence-inner">
+      <p><strong>Independent civic project.</strong> Not affiliated with the Municipality of Calatagan.</p>
+      <a href="/about">About this site</a>
+    </div>
+  </div>
+  <div class="container header-inner">
+    <a class="brand" href="/">
+      <Mark size={34} />
+      <span class="brand-text">
+        <span class="brand-name">Better Calatagan</span>
+        <span class="brand-tag">Civic data · Batangas</span>
+      </span>
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="nav-inline">
+        {NAV.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href, pathname) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <details class="nav-menu">
+        <summary>
+          <span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+          Menu
+        </summary>
+        <ul>
+          {NAV.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(item.href, pathname) ? 'page' : undefined}>
+                <span class="menu-label">{item.label}</span>
+                <span class="menu-blurb">{item.blurb}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .independence {
+    background: var(--c-sunk);
+    border-bottom: var(--border);
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+  }
+  .independence-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--sp-1) var(--sp-4);
+    padding-block: var(--sp-2);
+  }
+  .independence p {
+    margin: 0;
+  }
+  .independence a {
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  .site-header {
+    background: var(--c-surface);
+    border-bottom: var(--border);
+    position: relative;
+    z-index: 5;
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    min-height: 4.25rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    color: var(--c-navy);
+    text-decoration: none;
+    min-height: var(--tap);
+  }
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  .brand-name {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .brand-tag {
+    font-size: 0.7rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    margin-top: 3px;
+  }
+
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav li + li {
+    margin-top: 0;
+  }
+
+  /* Wide screens: inline list. */
+  .nav-inline {
+    display: none;
+  }
+  @media (min-width: 64rem) {
+    .nav-inline {
+      display: flex;
+      gap: var(--sp-1);
+    }
+    .nav-menu {
+      display: none;
+    }
+  }
+  .nav-inline a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding: 0 var(--sp-3);
+    border-radius: var(--radius-sm);
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    text-decoration: none;
+    position: relative;
+  }
+  .nav-inline a:hover {
+    color: var(--c-navy);
+    background: var(--c-sunk);
+  }
+  .nav-inline a[aria-current='page'] {
+    color: var(--c-navy);
+  }
+  .nav-inline a[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    left: var(--sp-3);
+    right: var(--sp-3);
+    bottom: 6px;
+    height: 2px;
+    background: var(--c-clay);
+    border-radius: 2px;
+  }
+
+  /* Narrow screens: disclosure menu. */
+  .nav-menu > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-height: var(--tap);
+    padding: 0 var(--sp-4);
+    border: 1px solid var(--c-control);
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-sm);
+    font-weight: 650;
+    color: var(--c-navy);
+    background: var(--c-surface);
+  }
+  .menu-icon {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .menu-icon span {
+    display: block;
+    width: 16px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 1px;
+  }
+  .nav-menu[open] > summary {
+    background: var(--c-sunk);
+  }
+  .nav-menu:not([open]) > ul {
+    display: none;
+  }
+  .nav-menu > ul {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: var(--c-surface);
+    border-bottom: var(--border);
+    box-shadow: var(--shadow-md);
+    padding: var(--sp-2) var(--gutter) var(--sp-4);
+  }
+  .nav-menu a {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--sp-3) var(--sp-2);
+    border-bottom: var(--border);
+    text-decoration: none;
+    color: var(--c-ink);
+  }
+  .nav-menu li:last-child a {
+    border-bottom: 0;
+  }
+  .menu-label {
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+    font-weight: 600;
+    color: var(--c-navy);
+  }
+  .menu-blurb {
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+  .nav-menu a[aria-current='page'] .menu-label::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 8px;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: var(--c-clay);
+  }
+</style>

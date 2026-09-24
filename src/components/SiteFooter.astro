@@ -1,0 +1,119 @@
+---
+import Mark from './Mark.astro';
+import { NAV, SECONDARY_NAV, SITE } from '../lib/site';
+
+const year = new Date().getUTCFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <a class="footer-brand" href="/">
+        <Mark size={28} />
+        <span>Better Calatagan</span>
+      </a>
+      <p class="statement">{SITE.independence}</p>
+      <p class="small muted">
+        Every figure on this site links to the government document it came from. Where the two
+        differ, the original document is authoritative.
+      </p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer">
+      <h2 class="footer-heading">Sections</h2>
+      <ul>
+        {NAV.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="footer-nav">
+      <h2 class="footer-heading">Project</h2>
+      <ul>
+        {SECONDARY_NAV.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        <li><a href={SITE.repository}>Source code</a></li>
+        <li><a href={`${SITE.repository}/issues/new/choose`}>Report a correction</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer-legal">
+    <p>
+      © {year} Better Calatagan contributors. Code under MIT; this project’s own compilation under
+      CC BY 4.0. Government documents cited here remain the works of their issuing agencies and are
+      not relicensed. <a href="/about#licensing">Licensing</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--sp-9);
+    background: var(--c-sunk);
+    border-top: var(--border);
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .footer-grid {
+    display: grid;
+    gap: var(--sp-6);
+    padding-block: var(--sp-7) var(--sp-6);
+  }
+  @media (min-width: 48rem) {
+    .footer-grid {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+  }
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 650;
+    color: var(--c-navy);
+    text-decoration: none;
+    margin-bottom: var(--sp-3);
+  }
+  .statement {
+    color: var(--c-ink);
+    max-width: 52ch;
+  }
+  .footer-heading {
+    font-family: var(--font-sans);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    margin: 0 0 var(--sp-3);
+  }
+  .footer-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .footer-nav li + li {
+    margin-top: 0;
+  }
+  .footer-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    color: var(--c-ink-2);
+    text-decoration: none;
+  }
+  .footer-nav a:hover {
+    color: var(--c-accent-strong);
+    text-decoration: underline;
+  }
+  .footer-legal {
+    border-top: var(--border);
+    padding-block: var(--sp-4) var(--sp-6);
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .footer-legal p {
+    margin: 0;
+    max-width: 90ch;
+  }
+</style>
