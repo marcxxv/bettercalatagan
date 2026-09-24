@@ -7,6 +7,40 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — History
+- **`/history`** — Calatagan from the fifteenth-century burials at Kay Tomas and Pulong Bakaw,
+  through the Roxas hacienda and the Cape Santiago lighthouse, to the 1903 merger into Balayan and
+  the 1912 restoration. Held to the civic-data standard: every sentence is a claim that cites its
+  sources and is marked *documented*, *attributed* or *disputed*, and a test enforces that a
+  documented claim rests on a primary-grade source or two independent ones.
+- Primary sources include Sastrón's *Batangas y su provincia* (1895), Act No. 958 (1903),
+  Executive Order No. 78 (1911), *Republic v. Ayala y Cía.* (G.R. No. L-20950, 1965), the NHCP
+  Cape Santiago marker (2018) and peer-reviewed archaeology (Fox 1959; Barretto-Tesoro 2003).
+- **Stated, not smoothed over:** the reading of the Calatagan Pot inscription is disputed; the
+  common "founded in 1912" is a restoration of an earlier municipality; and six widely repeated
+  claims we could not trace to a primary record (the name's etymology, the 1829 and 1931 land
+  transfers, the 1934 barrio transfer, the 1957 land purchase, the National Cultural Treasure date)
+  are listed separately rather than retold.
+
+### Changed — Design and identity
+- A new design system (see `docs/adr/0005-design-system.md`): sand, limestone, reef teal, deep
+  navy and earthenware clay; Source Serif 4 for headings and narrative; a lighthouse mark in a
+  rounded square that cannot be mistaken for a seal. Every text pairing measured ≥ 4.5:1 in light
+  and dark schemes.
+- Navigation relabelled for newcomers — *Disclosures* for the Full Disclosure filings, *Archive* for
+  the former website's documents — with the independence statement in the header of every page
+  and a new `/about` page. URLs unchanged.
+- Provenance redesigned: status, publisher, "data as of" and "verified" always visible beside the
+  figure; caveats always visible; method and full source list one click away.
+- Tables are labelled, keyboard-scrollable regions; record tables stack on phones; wide numeric
+  tables pin their row labels.
+
+### Added — Search and sharing
+- Unique titles and descriptions, canonical URLs, Open Graph and Twitter cards, `sitemap.xml`
+  (with `lastmod` from each page's verification date, never the build date), `robots.txt`,
+  favicons, and JSON-LD: `WebSite`, `BreadcrumbList`, `Article` (history) and `Dataset` (census,
+  finances, filings).
+
 ### Changed — post-launch cleanup
 - **Removed the raw research audit** (`Calatagan Civic Data Audit.md`) from the repository. Several
   of its claims were shown by primary-source verification to be incorrect or unsupported. Passages

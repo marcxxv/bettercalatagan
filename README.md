@@ -36,7 +36,7 @@ cannot check.
 
 ## Current status
 
-Six pages and four machine-readable datasets, guarded by a civic-data test suite that runs on every push.
+Eight pages — including a sourced history of Calatagan — and four machine-readable datasets, guarded by a civic-data test suite that runs on every push.
 
 | Dataset | Tier | Basis |
 | --- | --- | --- |
