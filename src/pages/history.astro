@@ -1,0 +1,500 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Cites from '../components/Cites.astro';
+import {
+  chapters,
+  citationNumbers,
+  HISTORY_RESEARCHED_ON,
+  orderedCitations,
+  timeline,
+  unverified,
+} from '../data/history';
+import type { Citation } from '../data/schemas/history';
+import { SITE } from '../lib/site';
+
+const title = 'History of Calatagan';
+const description =
+  'History of Calatagan, Batangas: 15th-century burial sites and the Calatagan Pot, the Roxas hacienda, Cape Santiago lighthouse and the 1912 separation from Balayan.';
+const crumbs = [{ name: 'History', href: '/history' }];
+
+const KIND_LABELS: Record<Citation['kind'], string> = {
+  'primary-document': 'Primary document',
+  'government-record': 'Government record',
+  'government-publication': 'Government publication',
+  'peer-reviewed': 'Peer-reviewed',
+  photograph: 'Photograph of a marker',
+  'archived-official': 'Archived official website',
+  secondary: 'Secondary source',
+};
+
+const numbersFor = (ids: readonly string[]) =>
+  [...new Set(ids.map((id) => citationNumbers.get(id)!))].sort((a, b) => a - b);
+
+const researched = new Date(`${HISTORY_RESEARCHED_ON}T00:00:00Z`).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+const origin = Astro.site ?? new URL('http://localhost:4321');
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    url: new URL('/history', origin).toString(),
+    inLanguage: 'en-PH',
+    dateModified: HISTORY_RESEARCHED_ON,
+    image: new URL('/og.png', origin).toString(),
+    author: { '@type': 'Organization', name: SITE.name, url: new URL('/about', origin).toString() },
+    publisher: { '@type': 'Organization', name: SITE.name },
+    about: {
+      '@type': 'AdministrativeArea',
+      name: 'Calatagan, Batangas',
+      containedInPlace: { '@type': 'AdministrativeArea', name: 'Batangas, Philippines' },
+    },
+    citation: orderedCitations.map((c) => ({
+      '@type': 'CreativeWork',
+      name: c.title,
+      url: c.url,
+      ...(c.year ? { datePublished: String(c.year) } : {}),
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} crumbs={crumbs} jsonLd={jsonLd} ogType="article">
+  <PageHeader
+    eyebrow="History"
+    title="Calatagan, from the record"
+    lede="A trading coast six centuries ago, a sugar estate for most of the nineteenth, a lighthouse for ships bound for Manila, and a town that was merged into Balayan and then separated from it again. This is what the documents show — and where they fall silent."
+    crumbs={crumbs}
+  >
+    <ul class="legend" aria-label="How claims are marked">
+      <li><span class="mark-sup" aria-hidden="true">1</span> Numbered notes lead to the sources below.</li>
+      <li><span class="chip clay">Attributed</span> Rests on a single secondary source, named in the text.</li>
+      <li><span class="chip warn">Disputed</span> Scholars disagree; we describe the disagreement.</li>
+    </ul>
+    <p class="small muted researched">Sources consulted on {researched}.</p>
+  </PageHeader>
+
+  <div class="container history">
+    <nav class="toc" aria-labelledby="toc-title">
+      <h2 id="toc-title" class="toc-title">Chapters</h2>
+      <ol>
+        {chapters.map((chapter) => (
+          <li>
+            <a href={`#${chapter.id}`}>
+              <span class="toc-kicker">{chapter.kicker}</span>
+            </a>
+          </li>
+        ))}
+        <li><a href="#timeline"><span class="toc-kicker">Timeline</span></a></li>
+        <li><a href="#unverified"><span class="toc-kicker">What we could not verify</span></a></li>
+        <li><a href="#references"><span class="toc-kicker">Sources</span></a></li>
+      </ol>
+    </nav>
+
+    <div class="narrative">
+      {chapters.map((chapter, index) => (
+        <section class="chapter" id={chapter.id} aria-labelledby={`${chapter.id}-title`}>
+          <p class="eyebrow">
+            <span class="chapter-no">{String(index + 1).padStart(2, '0')}</span> {chapter.kicker}
+          </p>
+          <h2 id={`${chapter.id}-title`}>{chapter.title}</h2>
+          {chapter.claims.map((claim) => (
+            <p class:list={['claim', claim.status]}>
+              {claim.status === 'disputed' && <span class="chip warn">Disputed</span>}{' '}
+              {claim.status === 'attributed' && <span class="chip clay">Attributed</span>}{' '}
+              {claim.text}
+              <Cites numbers={numbersFor(claim.cite)} />
+            </p>
+          ))}
+          {chapter.id === 'today' && (
+            <ul class="continue" aria-label="Calatagan today on this site">
+              <li><a href="/">Population and barangays</a></li>
+              <li><a href="/finances">Municipal finances</a></li>
+              <li><a href="/transparency">Full Disclosure filings</a></li>
+              <li><a href="/government">Government</a></li>
+            </ul>
+          )}
+        </section>
+      ))}
+
+      <section class="chapter" id="timeline" aria-labelledby="timeline-title">
+        <p class="eyebrow">At a glance</p>
+        <h2 id="timeline-title">Timeline</h2>
+        <ol class="timeline">
+          {timeline.map((entry) => (
+            <li>
+              <p class="when">{entry.when}</p>
+              <p class="event">
+                {entry.event}
+                <Cites numbers={numbersFor(entry.cite)} />
+                {entry.status === 'attributed' && (
+                  <span class="attribution">
+                    <span class="chip clay">Attributed</span> {entry.attribution}; not independently
+                    confirmed.
+                  </span>
+                )}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="chapter" id="unverified" aria-labelledby="unverified-title">
+        <div class="callout warn">
+          <h2 id="unverified-title" class="callout-heading">What we could not verify</h2>
+          <p>
+            These statements circulate widely, including on the municipality’s own former website.
+            We could not find a primary record for them, so they are not part of the narrative
+            above. If you know where the record is, <a href={`${SITE.repository}/issues/new/choose`}
+              >tell us</a
+            >.
+          </p>
+          <ul class="unverified-list">
+            {unverified.map((item) => (
+              <li>
+                <p class="u-claim">{item.claim}</p>
+                <p class="u-why small">
+                  {item.why} Found in{' '}
+                  {numbersFor(item.foundIn).map((n, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      <a href={`#ref-${n}`}>source {n}</a>
+                    </>
+                  ))}
+                  .
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="chapter" id="references" aria-labelledby="references-title">
+        <p class="eyebrow">Sources</p>
+        <h2 id="references-title">Where this comes from</h2>
+        <p class="muted">
+          Primary documents, government records and peer-reviewed scholarship come first. Where
+          only a source’s bibliographic details could be confirmed, the note says so.
+        </p>
+        <ol class="references">
+          {orderedCitations.map((c) => (
+            <li id={`ref-${citationNumbers.get(c.id)}`}>
+              <p class="ref-kind small">{KIND_LABELS[c.kind]}</p>
+              <p class="ref-title">
+                <a href={c.url} rel="noopener">{c.title}</a>
+              </p>
+              <p class="small muted">
+                {c.publisher}
+                {c.year && <>, {c.year}</>}.{c.locator && <> {c.locator}.</>}
+                {c.doi && <> DOI {c.doi}.</>} Consulted {c.accessedOn}.
+              </p>
+              {c.note && <p class="small ref-note">{c.note}</p>}
+            </li>
+          ))}
+        </ol>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .legend {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-5) 0 0;
+    display: grid;
+    gap: var(--sp-2);
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .legend li + li {
+    margin-top: 0;
+  }
+  .legend .chip {
+    margin-right: var(--sp-1);
+  }
+  .mark-sup {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.5em;
+    height: 1.5em;
+    margin-right: var(--sp-1);
+    border-radius: var(--radius-sm);
+    background: var(--c-accent-wash);
+    color: var(--c-accent-strong);
+    font-weight: 700;
+    font-size: var(--fs-xs);
+  }
+  .researched {
+    margin-top: var(--sp-4);
+  }
+
+  .history {
+    display: grid;
+    gap: var(--sp-6);
+    padding-block: var(--sp-6) var(--sp-8);
+  }
+  @media (min-width: 64rem) {
+    .history {
+      grid-template-columns: 14rem minmax(0, 1fr);
+      gap: var(--sp-8);
+      padding-block: var(--sp-7) var(--sp-9);
+    }
+    .toc {
+      position: sticky;
+      top: var(--sp-5);
+      align-self: start;
+    }
+  }
+
+  .toc-title {
+    font-family: var(--font-sans);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-muted);
+    margin: 0 0 var(--sp-2);
+  }
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 2px solid var(--c-line);
+  }
+  .toc li + li {
+    margin-top: 0;
+  }
+  .toc a {
+    display: flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding-left: var(--sp-4);
+    margin-left: -2px;
+    border-left: 2px solid transparent;
+    color: var(--c-ink-2);
+    text-decoration: none;
+    font-size: var(--fs-sm);
+  }
+  .toc a:hover {
+    color: var(--c-accent-strong);
+    border-left-color: var(--c-clay);
+  }
+  @media (max-width: 63.99rem) {
+    .toc ol {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+      column-gap: var(--sp-4);
+      border-left: 0;
+      border-top: var(--border);
+    }
+    .toc a {
+      padding-left: 0;
+      margin-left: 0;
+      border-left: 0;
+      border-bottom: var(--border);
+    }
+  }
+
+  .narrative {
+    max-width: var(--w-prose);
+  }
+  .chapter {
+    scroll-margin-top: var(--sp-5);
+  }
+  .chapter + .chapter {
+    margin-top: var(--sp-8);
+  }
+  .chapter-no {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--c-muted);
+    margin-right: var(--sp-1);
+  }
+  .chapter h2 {
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--sp-5);
+  }
+  .claim {
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+    line-height: 1.65;
+    color: var(--c-ink);
+  }
+  .claim + .claim {
+    margin-top: var(--sp-4);
+  }
+  .claim .chip {
+    font-family: var(--font-sans);
+    vertical-align: 0.15em;
+  }
+  .claim.attributed,
+  .claim.disputed {
+    padding-left: var(--sp-4);
+    border-left: 3px solid var(--c-warn-line);
+  }
+  .claim.attributed {
+    border-left-color: var(--c-clay);
+  }
+
+  .continue {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-5) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+  .continue li + li {
+    margin-top: 0;
+  }
+  .continue a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding: 0 var(--sp-4);
+    border: var(--border);
+    border-radius: 999px;
+    background: var(--c-surface);
+    text-decoration: none;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+  .continue a::after {
+    content: '→';
+    margin-left: var(--sp-2);
+    color: var(--c-clay);
+  }
+
+  .timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 2px solid var(--c-line);
+  }
+  .timeline li {
+    position: relative;
+    padding: 0 0 var(--sp-5) var(--sp-5);
+  }
+  .timeline li + li {
+    margin-top: 0;
+  }
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--sp-2) + -1px);
+    top: 0.45em;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: var(--c-bg);
+    border: 2px solid var(--c-clay);
+  }
+  .when {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    color: var(--c-navy);
+    margin: 0;
+  }
+  .event {
+    margin: var(--sp-1) 0 0;
+    color: var(--c-ink-2);
+  }
+  .attribution {
+    display: block;
+    margin-top: var(--sp-1);
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+  @media (min-width: 48rem) {
+    .timeline {
+      border-left: 0;
+    }
+    .timeline li {
+      display: grid;
+      grid-template-columns: 12rem minmax(0, 1fr);
+      gap: var(--sp-5);
+      padding: var(--sp-3) 0;
+      border-top: var(--border);
+    }
+    .timeline li::before {
+      display: none;
+    }
+    .event {
+      margin: 0;
+    }
+  }
+
+  .callout-heading {
+    font-size: var(--fs-xl);
+    margin: 0 0 var(--sp-3);
+  }
+  .unverified-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-5) 0 0;
+  }
+  .unverified-list li {
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--c-warn-line);
+  }
+  .unverified-list li + li {
+    margin-top: var(--sp-3);
+  }
+  .u-claim {
+    font-weight: 600;
+    margin: 0;
+  }
+  .u-why {
+    margin: var(--sp-1) 0 0;
+    color: var(--c-ink-2);
+  }
+
+  .references {
+    padding-left: 1.75rem;
+    margin: var(--sp-5) 0 0;
+  }
+  .references li {
+    scroll-margin-top: var(--sp-5);
+    padding-left: var(--sp-2);
+  }
+  .references li + li {
+    margin-top: var(--sp-4);
+  }
+  .references li::marker {
+    font-weight: 700;
+    color: var(--c-accent-strong);
+  }
+  .references li:target {
+    background: var(--c-accent-wash);
+    outline: 4px solid var(--c-accent-wash);
+    border-radius: var(--radius-sm);
+  }
+  .references p {
+    margin: 0;
+  }
+  .ref-kind {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    color: var(--c-clay);
+  }
+  .ref-title {
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+    margin-top: var(--sp-1) !important;
+  }
+  .ref-note {
+    margin-top: var(--sp-1) !important;
+    color: var(--c-ink-2);
+    font-style: italic;
+  }
+</style>

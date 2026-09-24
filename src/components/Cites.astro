@@ -1,0 +1,48 @@
+---
+/**
+ * Superscript note numbers for one claim, linking to the reference list.
+ *
+ * One <sup> per claim rather than one per source, so a run like "1, 2, 3"
+ * reads as a single note to a screen reader ("sources 1, 2, 3").
+ */
+interface Props {
+  numbers: readonly number[];
+}
+const { numbers } = Astro.props;
+---
+
+{numbers.length > 0 && (
+  <sup class="cite">
+    <span class="visually-hidden">{numbers.length === 1 ? 'Source' : 'Sources'} </span>
+    {numbers.map((n, i) => (<>{i > 0 && <span class="sep">,</span>}<a href={`#ref-${n}`}>{n}</a></>))}
+  </sup>
+)}
+
+<style>
+  .cite {
+    font-family: var(--font-sans);
+    font-size: 0.7em;
+    font-weight: 700;
+    line-height: 0;
+    margin-left: 0.15em;
+    white-space: nowrap;
+  }
+  .sep {
+    color: var(--c-muted);
+    margin-right: 0.1em;
+  }
+  /* Sized to the 24px minimum target, without changing the line height. */
+  a {
+    display: inline-block;
+    min-width: 2em;
+    line-height: 1;
+    padding: 0.6em 0.25em;
+    margin: -0.6em 0;
+    text-align: center;
+    text-decoration: none;
+    color: var(--c-accent-strong);
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+</style>
