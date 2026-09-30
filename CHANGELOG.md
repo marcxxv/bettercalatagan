@@ -7,6 +7,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Search and answer-engine visibility
+- Every page now declares a `WebPage` tied to one publisher `Organization` (with logo) and the
+  `WebSite`; `/data` is a `DataCatalog` of all five datasets and `/documents` a `Dataset`, so each
+  export can surface in Google Dataset Search.
+- Robots directives allow large image previews and full snippets; the 404 page is `noindex`; the
+  reader's pass-through paths are excluded from crawling.
+- **`/llms.txt`**: a plain-text guide for AI answer engines, generated from the same data modules as
+  the pages, including the list of withheld facts so assistants do not fill those gaps from elsewhere.
+  CI's withheld-value check now scans `.txt` output too.
+
 ### Added — Read documents on the site
 See `docs/adr/0007-in-site-document-reader.md`. **No data changed.**
 - **Reader:** every archived PDF (227) and DOCX, and every retrievable DILG filing (132 XLSX),

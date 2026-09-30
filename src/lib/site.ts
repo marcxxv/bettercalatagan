@@ -39,7 +39,7 @@ export const NAV: readonly NavItem[] = [
   { href: '/history', label: 'History', blurb: 'From 15th-century burial sites to the modern town', icon: 'book' },
   { href: '/government', label: 'Government', blurb: 'Officials and offices — and what we cannot yet verify', icon: 'landmark' },
   { href: '/finances', label: 'Finances', blurb: 'Income and spending, from the municipality’s own quarterly statements', icon: 'coins' },
-  { href: '/transparency', label: 'Disclosures', blurb: 'Every Full Disclosure Policy filing, with links to DILG', icon: 'file' },
+  { href: '/transparency', label: 'Disclosures', blurb: 'Every Full Disclosure Policy filing, readable on the site', icon: 'file' },
   { href: '/documents', label: 'Archive', blurb: 'Documents saved from the municipality’s former website', icon: 'archive' },
   { href: '/sources', label: 'Sources', blurb: 'Where every figure comes from, and what is withheld', icon: 'shield' },
 ];

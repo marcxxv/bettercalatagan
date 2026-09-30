@@ -33,12 +33,38 @@ const years = docs.map((d) => d.publishedYear).filter((y): y is number => y !== 
 const span = years.length ? `${Math.min(...years)}–${Math.max(...years)}` : '—';
 
 const crumbs = [{ name: 'Archive', href: '/documents' }];
+
+const origin = Astro.site ?? new URL('http://localhost:4321');
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Calatagan, Batangas — documents archived from the former municipal website',
+    description: `An index of ${archivedDocuments.documentCount} documents that calatagan.gov.ph published and the Internet Archive preserved: ordinances, plans, reports, notices of award and forms, classified by kind and year, each linked to its archived copy.`,
+    url: new URL('/documents', origin).toString(),
+    isAccessibleForFree: true,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    creator: { '@id': new URL('/#publisher', origin).toString() },
+    temporalCoverage: years.length ? `${Math.min(...years)}/${Math.max(...years)}` : undefined,
+    spatialCoverage: { '@type': 'Place', name: 'Calatagan, Batangas, Philippines' },
+    isBasedOn: documentsSource.sources.map((s) => s.url),
+    dateModified: documentsSource.lastVerified,
+    distribution: [
+      {
+        '@type': 'DataDownload',
+        encodingFormat: 'application/json',
+        contentUrl: new URL('/data/documents.json', origin).toString(),
+      },
+    ],
+  },
+];
 ---
 
 <Base
   title="Archived Calatagan municipal documents"
-  description={`${formatNumber(archivedDocuments.documentCount)} documents recovered from the former Calatagan municipal website — ordinances, plans, reports and forms — indexed as a historical record.`}
+  description={`${formatNumber(archivedDocuments.documentCount)} documents recovered from the former Calatagan municipal website — ordinances, plans, reports and forms — readable on this site as a historical record.`}
   {crumbs}
+  {jsonLd}
 >
   <PageHeader
     eyebrow="Archive"

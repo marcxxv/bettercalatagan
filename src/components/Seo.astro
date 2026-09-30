@@ -22,9 +22,11 @@ interface Props {
   /** Additional JSON-LD objects, e.g. Dataset or Article. */
   jsonLd?: Record<string, unknown>[];
   ogType?: 'website' | 'article';
+  /** Keep the page out of search results (the 404 page). */
+  noindex?: boolean;
 }
 
-const { title, description, crumbs, jsonLd = [], ogType = 'website' } = Astro.props;
+const { title, description, crumbs, jsonLd = [], ogType = 'website', noindex = false } = Astro.props;
 
 const origin = Astro.site ?? new URL('http://localhost:4321');
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
@@ -39,10 +41,39 @@ const ogImage = new URL(OG_PAGES.has(section) ? `/og/${section}.png` : '/og.png'
 
 const structured: Record<string, unknown>[] = [];
 
+/** The publisher, referenced by id from every page. */
+const publisherId = new URL('/#publisher', origin).toString();
+const websiteId = new URL('/#website', origin).toString();
+const publisher = {
+  '@type': 'Organization',
+  '@id': publisherId,
+  name: SITE.name,
+  url: new URL('/about', origin).toString(),
+  logo: { '@type': 'ImageObject', url: new URL('/icon-512.png', origin).toString(), width: 512, height: 512 },
+  description: SITE.independence,
+  sameAs: [SITE.repository],
+};
+
+// Every page says what it is and what site it belongs to, so search engines
+// can attribute it to the publisher above rather than guessing.
+structured.push({
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${canonical}#page`,
+  url: canonical,
+  name: isHome ? SITE.name : title,
+  description,
+  inLanguage: 'en-PH',
+  isPartOf: { '@id': websiteId },
+  publisher: { '@id': publisherId },
+  primaryImageOfPage: { '@type': 'ImageObject', url: ogImage, width: 1200, height: 630 },
+});
+
 if (isHome) {
   structured.push({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': websiteId,
     name: SITE.name,
     url: new URL('/', origin).toString(),
     description: SITE.description,
@@ -52,12 +83,7 @@ if (isHome) {
       name: 'Calatagan, Batangas',
       containedInPlace: { '@type': 'AdministrativeArea', name: 'Batangas, Philippines' },
     },
-    publisher: {
-      '@type': 'Organization',
-      name: SITE.name,
-      url: new URL('/about', origin).toString(),
-      description: SITE.independence,
-    },
+    publisher: publisher,
   });
 }
 
@@ -83,7 +109,12 @@ const serialise = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u00
 
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
-<link rel="canonical" href={canonical} />
+<meta
+  name="robots"
+  content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
+/>
+{!noindex && <link rel="canonical" href={canonical} />}
+<link rel="alternate" type="application/json" title="Open data catalogue" href="/data/index.json" />
 
 <meta property="og:site_name" content={SITE.name} />
 <meta property="og:type" content={ogType} />
@@ -92,6 +123,7 @@ const serialise = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u00
 <meta property="og:url" content={canonical} />
 <meta property="og:locale" content={SITE.locale} />
 <meta property="og:image" content={ogImage} />
+<meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta
