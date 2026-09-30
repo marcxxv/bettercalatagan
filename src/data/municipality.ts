@@ -92,9 +92,9 @@ export const WITHHELD: readonly { fact: string; reason: string }[] = [
       'Election results for May 2025 are available from a civic-tech derivative of COMELEC data, but results are not the same as present incumbency, and no COMELEC or DILG primary source has been read. Scheduled for a later phase.',
   },
   {
-    fact: 'Poverty incidence and other social statistics',
+    fact: 'Calatagan’s own poverty incidence',
     reason:
-      'Not yet retrieved from a primary source. PSA OpenSTAT carries poverty tables; they have not been fetched or reviewed.',
+      'PSA publishes municipal poverty (small-area estimates) only on psa.gov.ph, which this project’s tools cannot read. PSA OpenSTAT’s tables stop at the province, so the Statistics page shows Batangas’s figures, labelled as the province’s, and not a figure for Calatagan.',
   },
   {
     fact: 'Financial figures from Full Disclosure Policy filings other than the Statement of Receipts and Expenditures',

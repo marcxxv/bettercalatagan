@@ -28,6 +28,7 @@ const DATASETS = [
   { file: 'src/data/generated/archived-documents.json', label: 'Archived municipal documents', list: 'documents', key: 'id' },
   { file: 'src/data/generated/dpwh-projects.json', label: 'DPWH infrastructure projects', list: 'projects', key: 'contractId' },
   { file: 'src/data/generated/cmci.json', label: 'DTI competitiveness index', list: 'years', key: 'year' },
+  { file: 'src/data/generated/psa-poverty.json', label: 'PSA poverty statistics (province)', list: 'population.rows', key: 'place+year' },
 ];
 
 /** Restamped on every run; a change here is not a change in the data. */
@@ -63,8 +64,11 @@ function compare({ file, label, list, key }) {
   const lines = [];
   if (!before) return { substantive: true, lines: [`### ${label}`, '', 'New dataset (not in HEAD).', ''] };
 
-  const oldById = new Map((before[list] ?? []).map((r) => [r[key], r]));
-  const newById = new Map((after[list] ?? []).map((r) => [r[key], r]));
+  // `list` may be a dotted path ("population.rows"); `key` may join fields ("place+year").
+  const at = (obj) => list.split('.').reduce((o, k) => o?.[k], obj) ?? [];
+  const id = (r) => key.split('+').map((k) => r[k]).join(' ');
+  const oldById = new Map(at(before).map((r) => [id(r), r]));
+  const newById = new Map(at(after).map((r) => [id(r), r]));
   const added = [...newById.keys()].filter((id) => !oldById.has(id));
   const removed = [...oldById.keys()].filter((id) => !newById.has(id));
   const changed = [];

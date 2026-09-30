@@ -65,6 +65,11 @@ jobs:
         continue-on-error: true
         run: npm run cmci:fetch
 
+      - name: PSA poverty statistics
+        id: poverty
+        continue-on-error: true
+        run: npm run poverty:fetch
+
       # The same gate as every pull request: schemas, provenance rules,
       # reconciliation, never-shrink snapshots, and a clean build.
       - name: Full check
@@ -79,6 +84,7 @@ jobs:
           ARCHIVE: ${{ steps.archive.outcome }}
           DPWH: ${{ steps.dpwh.outcome }}
           CMCI: ${{ steps.cmci.outcome }}
+          POVERTY: ${{ steps.poverty.outcome }}
         run: |
           set -euo pipefail
           node scripts/data-report.mjs --github > "$RUNNER_TEMP/report.md"

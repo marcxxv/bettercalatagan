@@ -8,7 +8,8 @@ import { cmciYears, competitivenessSource, latestCmci } from '../data/competitiv
 import { annualSeries, financialsSource } from '../data/financials';
 import { incomeClassification, municipality } from '../data/municipality';
 import { barangayPopulation2024, population2024, populationSeries } from '../data/population';
-import { formatDate, formatNumber, formatPesoMillions, ordinal } from '../lib/format';
+import { poverty } from '../data/poverty';
+import { formatDate, formatNumber, formatPeso, formatPesoMillions, ordinal } from '../lib/format';
 
 /**
  * The statistics hub the Better LGU portals all have: demographics, the
@@ -26,6 +27,17 @@ const latestYear = years.at(-1);
 const largest = [...barangayPopulation2024.data].sort((a, b) => b.totalPopulation - a.totalPopulation)[0];
 
 const place = ordinal;
+
+const povertyYears = [...new Set(poverty.data.population.map((r) => r.year))]
+  .sort((a, b) => b - a)
+  .map((year) => ({
+    year,
+    batangas: poverty.data.population.find((r) => r.year === year && r.place === 'Batangas')!,
+    region: poverty.data.population.find((r) => r.year === year && r.place !== 'Batangas'),
+  }))
+  .filter((y) => y.batangas);
+const batangasLatest = povertyYears[0].batangas;
+const batangasFamilies = poverty.data.families.find((r) => r.place === 'Batangas' && r.year === batangasLatest.year);
 
 const description = `Calatagan, Batangas in figures: ${formatNumber(pop.population)} people (2024), ${municipality.data.barangayCount} barangays, 1st class income, and DTI competitiveness rankings ${cmciYears[0].year}–${latestCmci.year}.`;
 ---
@@ -95,6 +107,47 @@ const description = `Calatagan, Batangas in figures: ${formatNumber(pop.populati
           <a class="link-arrow" href="/barangays">All 25 barangays</a>
         </p>
         <Source source={population2024.source} label="the census figures" />
+
+        <h3 id="poverty-title">Poverty in Batangas province</h3>
+        <p>
+          PSA’s latest poverty statistics go down to the province, not the town. For the whole of
+          Batangas, the share of people living below the poverty line was
+          <strong> {batangasLatest.incidence}%</strong> in {batangasLatest.year}, against a poverty
+          threshold of <strong>{formatPeso(batangasLatest.threshold ?? 0)}</strong> a year per person.
+          Calatagan’s own figure is not published here (<a href="/sources#withheld">see why</a>).
+        </p>
+        <div class="table-wrap" tabindex="0">
+          <table>
+            <caption>Poverty incidence among the population, Batangas and Region IV-A (PSA, full-year estimates)</caption>
+            <thead>
+              <tr>
+                <th scope="col">Year</th>
+                <th scope="col" class="num">Batangas</th>
+                <th scope="col" class="num">95% interval</th>
+                <th scope="col" class="num">Region IV-A</th>
+                <th scope="col" class="num">Threshold, Batangas</th>
+              </tr>
+            </thead>
+            <tbody>
+              {povertyYears.map((y) => (
+                <tr>
+                  <th scope="row">{y.year}</th>
+                  <td class="num">{y.batangas.incidence}%</td>
+                  <td class="num">{y.batangas.ciLower !== null && y.batangas.ciUpper !== null ? `${y.batangas.ciLower}–${y.batangas.ciUpper}%` : '—'}</td>
+                  <td class="num">{y.region ? `${y.region.incidence}%` : '—'}</td>
+                  <td class="num">{y.batangas.threshold !== null ? formatPeso(y.batangas.threshold) : '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="small muted">
+          Provincial estimates come from a household survey, so each has a margin of error: PSA’s
+          95% interval is shown beside it, and differences between years that fall inside those
+          intervals may not be real changes. Among families, PSA puts Batangas at
+          {' '}{batangasFamilies?.incidence}% in {batangasFamilies?.year}.
+        </p>
+        <Source source={poverty.source} label="the poverty statistics" />
       </section>
 
       <section class="section" id="economy" aria-labelledby="economy-title">

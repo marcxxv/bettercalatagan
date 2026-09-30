@@ -1,3 +1,4 @@
+import { poverty } from './poverty';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
@@ -30,6 +31,7 @@ const datasets: { name: string; record: Sourced<unknown> }[] = [
   { name: 'population2024', record: population2024 },
   { name: 'populationSeries', record: populationSeries },
   { name: 'barangayPopulation2024', record: barangayPopulation2024 },
+  { name: 'poverty', record: poverty },
 ];
 
 describe('provenance envelope', () => {

@@ -1,0 +1,135 @@
+{
+  "retrievedAt": "2026-09-30T16:21:14.794Z",
+  "population": {
+    "title": "Table 2. Annual Per Capita Poverty Threshold and Poverty Incidence Among Population with Measures of Precision, by Region and Province: 2018, 2021, and 2023",
+    "url": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/1F/FY/0031F3DF020.px",
+    "rows": [
+      {
+        "place": "Batangas",
+        "year": 2018,
+        "threshold": 33068,
+        "incidence": 11.4,
+        "cv": 11.4,
+        "standardError": 1.3,
+        "ciLower": 9,
+        "ciUpper": 14
+      },
+      {
+        "place": "Batangas",
+        "year": 2021,
+        "threshold": 30828,
+        "incidence": 6.3,
+        "cv": 18.8,
+        "standardError": 1.2,
+        "ciLower": 4,
+        "ciUpper": 9
+      },
+      {
+        "place": "Batangas",
+        "year": 2023,
+        "threshold": 35380,
+        "incidence": 7.6,
+        "cv": 16.1,
+        "standardError": 1.2,
+        "ciLower": 5,
+        "ciUpper": 10
+      },
+      {
+        "place": "Region IV-A (CALABARZON)",
+        "year": 2018,
+        "threshold": 27928,
+        "incidence": 7.1,
+        "cv": 7,
+        "standardError": 0.5,
+        "ciLower": 6,
+        "ciUpper": 8
+      },
+      {
+        "place": "Region IV-A (CALABARZON)",
+        "year": 2021,
+        "threshold": 31059,
+        "incidence": 10.2,
+        "cv": 6.3,
+        "standardError": 0.6,
+        "ciLower": 9,
+        "ciUpper": 12
+      },
+      {
+        "place": "Region IV-A (CALABARZON)",
+        "year": 2023,
+        "threshold": 37096,
+        "incidence": 7.9,
+        "cv": 6.8,
+        "standardError": 0.5,
+        "ciLower": 7,
+        "ciUpper": 9
+      }
+    ]
+  },
+  "families": {
+    "title": "Table 1. Annual Per Capita Poverty Threshold and Poverty Incidence Among Families with Measures of Precision, by Region and Province: 2018, 2021, and 2023",
+    "url": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/1F/FY/0011F3DF010.px",
+    "rows": [
+      {
+        "place": "Batangas",
+        "year": 2018,
+        "threshold": 33068,
+        "incidence": 8.6,
+        "cv": 12.7,
+        "standardError": 1.1,
+        "ciLower": 6,
+        "ciUpper": 11
+      },
+      {
+        "place": "Batangas",
+        "year": 2021,
+        "threshold": 30828,
+        "incidence": 4.3,
+        "cv": 19.2,
+        "standardError": 0.8,
+        "ciLower": 3,
+        "ciUpper": 6
+      },
+      {
+        "place": "Batangas",
+        "year": 2023,
+        "threshold": 35380,
+        "incidence": 4.9,
+        "cv": 16.2,
+        "standardError": 0.8,
+        "ciLower": 3,
+        "ciUpper": 6
+      },
+      {
+        "place": "Region IV-A (CALABARZON)",
+        "year": 2018,
+        "threshold": 27928,
+        "incidence": 5.1,
+        "cv": 7.3,
+        "standardError": 0.4,
+        "ciLower": 4,
+        "ciUpper": 6
+      },
+      {
+        "place": "Region IV-A (CALABARZON)",
+        "year": 2021,
+        "threshold": 31059,
+        "incidence": 7.2,
+        "cv": 6.4,
+        "standardError": 0.5,
+        "ciLower": 6,
+        "ciUpper": 8
+      },
+      {
+        "place": "Region IV-A (CALABARZON)",
+        "year": 2023,
+        "threshold": 37096,
+        "incidence": 5.3,
+        "cv": 6.7,
+        "standardError": 0.4,
+        "ciLower": 5,
+        "ciUpper": 6
+      }
+    ]
+  }
+}

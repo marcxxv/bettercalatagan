@@ -170,6 +170,24 @@ export const DTI_CMCI_PROFILE: SourceReference = {
   locator: 'Pillar and indicator rankings only; the contact block on this page is stale and not used',
 };
 
+/** PSA OpenSTAT, full-year poverty statistics by region and province. */
+export const PSA_POVERTY_POPULATION: SourceReference = {
+  name: 'PSA OpenSTAT — Annual poverty threshold and poverty incidence among population, by region and province: 2018, 2021 and 2023',
+  publisher: 'Philippine Statistics Authority',
+  url: 'https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/0031F3DF020.px/',
+  accessedOn: '2026-10-01',
+  authority: 'primary-government',
+  locator: 'Table 2; Geolocation: Batangas and Region IV-A (CALABARZON)',
+};
+export const PSA_POVERTY_FAMILIES: SourceReference = {
+  name: 'PSA OpenSTAT — Annual poverty threshold and poverty incidence among families, by region and province: 2018, 2021 and 2023',
+  publisher: 'Philippine Statistics Authority',
+  url: 'https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1F__FY/0011F3DF010.px/',
+  accessedOn: '2026-10-01',
+  authority: 'primary-government',
+  locator: 'Table 1; Geolocation: Batangas and Region IV-A (CALABARZON)',
+};
+
 /* ---------- Holidays and national hotlines ---------- */
 
 /** Proclamation No. 1006, s. 2025: the 2026 holidays. The signed, certified copy (scanned). */

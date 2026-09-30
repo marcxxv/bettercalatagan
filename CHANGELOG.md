@@ -56,6 +56,16 @@ emergency answer now gives the MDRRMO lines.
   this document?" or "explain this page" are answered about that page. Only bound parameters and
   the corpus's own titles reach the model.
 
+### Added — Poverty in Batangas (PSA)
+- Statistics shows PSA's full-year poverty incidence and threshold for the province of Batangas,
+  with PSA's 95% intervals and the Region IV-A figure, for 2018, 2021 and 2023
+  (`scripts/poverty.mjs`, PSA OpenSTAT; new `npm run poverty:fetch`, in the weekly refresh).
+  Calatagan's own poverty estimate is published only on psa.gov.ph, which is unreachable, so
+  it stays withheld and the reason now says so.
+- Checked and recorded in SOURCES.md, not added: DBM's per-LGU NTA (its report server refused
+  connections; LBM No. 92B has regional totals only) and PhilGEPS (search needs a session; the
+  open data API needs an account behind reCAPTCHA).
+
 ### Added — What each competitiveness pillar is made of
 - Statistics now lists Calatagan's rank and score on all 50 CMCI indicators for 2024 (ten per
   pillar), from DTI's LGU profile page. `scripts/cmci.mjs` places the breakdown in the ranking year
