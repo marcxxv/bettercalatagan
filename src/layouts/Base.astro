@@ -6,6 +6,8 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import AskBar from '../components/AskBar.astro';
+import AskPanel from '../components/AskPanel.astro';
+import { ASK } from '../lib/site';
 
 interface Props {
   title: string;
@@ -72,6 +74,7 @@ const { title, description, crumbs, jsonLd, ogType, progress = false } = Astro.p
     <SiteFooter />
     <SearchDialog />
     <AskBar />
+    {ASK.endpoint && <AskPanel endpoint={ASK.endpoint} turnstileSiteKey={ASK.turnstileSiteKey} />}
 
     <script>
       import '../scripts/ui.ts';
@@ -110,7 +113,8 @@ const { title, description, crumbs, jsonLd, ogType, progress = false } = Astro.p
         transform-origin: left;
         pointer-events: none;
       }
-      body.menu-open {
+      body.menu-open,
+      body.ask-open {
         overflow: hidden;
       }
       @media (min-width: 64rem) {

@@ -151,3 +151,12 @@ export function renderResult(entry: SearchEntry, id: string): string {
       : '';
   return `<li role="option" id="${id}" aria-selected="false"><a href="${escape(entry.u)}" tabindex="-1"><span class="sr-group">${escape(entry.g)}</span><span class="sr-title">${escape(entry.t)}</span>${answer}</a></li>`;
 }
+
+/**
+ * The first row of the results when the assistant is available: ask the
+ * question instead of opening a result. Enter chooses it unless the reader
+ * moves to a result.
+ */
+export function renderAskOption(query: string, id: string): string {
+  return `<li role="option" id="${id}" class="sr-ask" aria-selected="false" data-ask-option><a href="#ask" tabindex="-1"><span class="sr-ask-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12h15"/><path d="m13.5 6 6 6-6 6"/></svg></span><span class="sr-title">Ask: “${escape(query.trim())}”</span><span class="sr-desc">An answer written from this site’s records, with its sources</span></a></li>`;
+}

@@ -2,7 +2,7 @@
  * Site-wide behaviour. Everything here is progressive enhancement: the pages
  * are complete, readable and navigable without it.
  */
-import { loadIndex, renderResult, search } from './search';
+import { loadIndex, renderAskOption, renderResult, search } from './search';
 
 const root = document.documentElement;
 const motionOK = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
@@ -290,6 +290,27 @@ for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy]')
   });
 }
 
+/* ---------- The assistant (only when the site is built with one) ---------- */
+
+const askPanel = document.querySelector<HTMLDialogElement>('#ask-panel');
+let askModule: Promise<typeof import('./ask')> | null = null;
+
+/** Open the assistant with a question, growing out of `from`. Its code is fetched the first time. */
+function ask(question: string, from: HTMLElement | null = null) {
+  askModule ??= import('./ask');
+  askModule
+    .then((module) => module.openAsk(question, from))
+    .catch(() => {
+      askModule = null;
+    });
+}
+// Warm the module when someone starts typing a question, so asking feels instant.
+if (askPanel) {
+  document.addEventListener('focusin', (event) => {
+    if ((event.target as Element).closest('[data-inline-search], #search-dialog')) askModule ??= import('./ask');
+  });
+}
+
 /* ---------- Search: combobox behaviour shared by the dialog and inline boxes ---------- */
 
 function attachSearch(input: HTMLInputElement, list: HTMLElement, status: HTMLElement | null, onGo?: () => void) {
@@ -331,15 +352,22 @@ function attachSearch(input: HTMLInputElement, list: HTMLElement, status: HTMLEl
     }
     if (mine !== seq) return;
     const results = search(index, query, list.dataset.limit ? Number(list.dataset.limit) : 12);
-    list.innerHTML = results.map((entry, i) => renderResult(entry, `${prefix}-${i}`)).join('');
+    list.innerHTML =
+      (askPanel ? renderAskOption(query, `${prefix}-ask`) : '') +
+      results.map((entry, i) => renderResult(entry, `${prefix}-${i}`)).join('');
     items = [...list.querySelectorAll<HTMLElement>('[role="option"]')];
-    list.hidden = results.length === 0;
-    input.setAttribute('aria-expanded', String(results.length > 0));
-    setActive(results.length ? 0 : -1);
+    list.hidden = items.length === 0;
+    input.setAttribute('aria-expanded', String(items.length > 0));
+    setActive(items.length ? 0 : -1);
     if (status) {
-      status.textContent = results.length
-        ? `${results.length} ${results.length === 1 ? 'result' : 'results'}. Use the arrow keys to choose, Enter to open.`
-        : `No results for “${query.trim()}”. Try a barangay, a year or a topic such as “income”.`;
+      const found = results.length
+        ? `${results.length} ${results.length === 1 ? 'result' : 'results'}`
+        : `No results for “${query.trim()}”`;
+      status.textContent = askPanel
+        ? `${found}. Press Enter to ask the assistant, or use the arrow keys to choose a result.`
+        : results.length
+          ? `${found}. Use the arrow keys to choose, Enter to open.`
+          : `${found}. Try a barangay, a year or a topic such as “income”.`;
     }
     list.dispatchEvent(new CustomEvent('search:results', { bubbles: true, detail: results.length }));
   };
@@ -357,7 +385,13 @@ function attachSearch(input: HTMLInputElement, list: HTMLElement, status: HTMLEl
       event.preventDefault();
       if (items.length) setActive((active - 1 + items.length) % items.length);
     } else if (event.key === 'Enter') {
-      const link = items[active]?.querySelector('a');
+      const option = items[active];
+      if (option?.hasAttribute('data-ask-option')) {
+        event.preventDefault();
+        askFrom();
+        return;
+      }
+      const link = option?.querySelector('a');
       if (link) {
         event.preventDefault();
         onGo?.();
@@ -369,8 +403,27 @@ function attachSearch(input: HTMLInputElement, list: HTMLElement, status: HTMLEl
     const option = (event.target as Element).closest<HTMLElement>('[role="option"]');
     if (option) setActive(items.indexOf(option));
   });
-  list.addEventListener('click', () => onGo?.());
-  return { run };
+  list.addEventListener('click', (event) => {
+    if ((event.target as Element).closest('[data-ask-option]')) {
+      event.preventDefault();
+      askFrom();
+      return;
+    }
+    onGo?.();
+  });
+
+  /** Hand the typed question to the assistant and reset this box. */
+  function askFrom() {
+    const question = input.value;
+    // Grow out of the pill the question was typed in (the dialog's field when asked from ⌘K).
+    const from = input.closest<HTMLElement>('form, .palette-field');
+    onGo?.();
+    input.value = '';
+    void run();
+    input.blur();
+    ask(question, from);
+  }
+  return { run, askFrom };
 }
 
 // The dialog
@@ -449,9 +502,10 @@ for (const box of document.querySelectorAll<HTMLElement>('[data-inline-search]')
   const list = box.querySelector<HTMLElement>('[role="listbox"]')!;
   const status = box.querySelector<HTMLElement>('[role="status"]');
   const form = box.querySelector('form');
-  const { run } = attachSearch(input, list, status);
+  const { run, askFrom } = attachSearch(input, list, status);
   form?.addEventListener('submit', (event) => {
     event.preventDefault();
+    if (askPanel && input.value.trim()) return askFrom();
     const first = list.querySelector<HTMLAnchorElement>('[role="option"] a');
     if (first) location.assign(first.href);
     else void run();

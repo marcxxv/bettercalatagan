@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import askCorpus from './scripts/lib/ask-corpus.mjs';
 
 /**
  * Canonical origin.
@@ -19,10 +20,12 @@ const site =
   process.env.SITE_URL ??
   (productionUrl ? `https://${productionUrl}` : 'http://localhost:4321');
 
-// Static output. No adapter, no server, no database.
-// See docs/adr/0002-static-astro-no-backend.md
+// Static output. No adapter, no server, no database: the assistant runs in a
+// separate Worker and reads the corpus this build writes to /ask/corpus.json.
+// See docs/adr/0002-static-astro-no-backend.md and 0007-grounded-assistant.md
 export default defineConfig({
   site,
+  integrations: [askCorpus()],
   output: 'static',
   trailingSlash: 'ignore',
   build: { format: 'directory' },

@@ -7,7 +7,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — A grounded assistant behind "Ask anything"
+See `docs/adr/0007-grounded-assistant.md`. **No data changed.**
+- **Ask, then search:** the home page box, the floating ask bar and the ⌘K dialog offer "Ask" as
+  the first option; Enter opens a conversation that grows out of the box it was asked from.
+  Instant search results stay beneath it. Answers stream in English, Filipino or Taglish, with
+  numbered citations linking to the passage's page, a list of sources, and a copy button.
+- **Knowledge from the pages themselves:** the build writes `/ask/corpus.json` (every page section
+  and every sourced answer); a Cloudflare Worker indexes it for full-text and multilingual semantic
+  search and re-indexes changed passages every 30 minutes.
+- **Checked before shown:** figures must match the cited passages; unverified officials, withheld
+  values, contact details and prompt leaks withdraw the answer. Office-holder and emergency
+  questions get fixed answers. The guard's lists are tested against the CI leak checks.
+- **Privacy:** no questions or answers stored; daily-rotating hashed rate limits; conversation kept
+  in the tab only. About and Privacy copy updated to say what is sent where.
+
 ### Fixed
+- **Government page:** a missing space in "they are Citizen's Charter service standards".
 - **Withheld list:** the entry saying no Full Disclosure Policy amount had been extracted was out of
   date since `/finances` publishes Statement of Receipts and Expenditures figures. It now covers only
   the 13 other FDP forms (142 filings), which remain indexed on `/transparency` and unextracted.

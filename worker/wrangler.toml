@@ -1,0 +1,46 @@
+# The Better Calatagan assistant. See README.md for setup and operations.
+name = "bettercalatagan-ask"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+workers_dev = true
+preview_urls = false
+
+[observability]
+enabled = true
+
+# Re-check the site's corpus (and clear expired rate-limit rows) every 30 minutes.
+[triggers]
+crons = ["*/30 * * * *"]
+
+[ai]
+binding = "AI"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bettercalatagan-ask"
+database_id = "22886706-c007-4ef9-84cd-f3dd80fbb227"
+
+[[vectorize]]
+binding = "VECTORS"
+index_name = "bettercalatagan-ask"
+# Vectorize has no local simulator: `wrangler dev` uses the real index.
+remote = true
+
+[vars]
+SITE_URL = "https://bettercalatagan.vercel.app"
+# Production, plus this project's Vercel preview and branch deployments.
+ALLOWED_ORIGINS = "https://bettercalatagan.vercel.app,https://bettercalatagan-*-marcxxv.vercel.app"
+# Tried in order until one answers. `nyo:` entries are skipped until the
+# NYO_API_KEY secret is set.
+# The Workers AI entries need no key and run on the Workers Free plan: SEA-LION is
+# tuned for Southeast Asian languages, so Filipino questions get Filipino answers.
+MODELS = "nyo:glm-5.3,nyo:glm-5.3-flash,workers-ai:@cf/aisingapore/gemma-sea-lion-v4-27b-it,workers-ai:@cf/openai/gpt-oss-120b"
+NYO_BASE_URL = "https://llm.nyolab.ai/api/public/v1"
+# Multilingual, so a question in Filipino finds the English passage that answers it.
+EMBEDDING_MODEL = "@cf/baai/bge-m3"
+DAILY_TOKEN_CAP = "1500000"
+LIMIT_IP_PER_MIN = "8"
+LIMIT_IP_PER_DAY = "80"
+LIMIT_SESSION_MESSAGES = "40"
+# NYO allows 100 requests a minute per account, shared across keys.
+LIMIT_GLOBAL_PER_MIN = "60"

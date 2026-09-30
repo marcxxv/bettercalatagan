@@ -18,6 +18,16 @@ export const SITE = {
 
 import type { IconName } from '../components/Icon.astro';
 
+/**
+ * The assistant, configured at build time. Without an endpoint the site is
+ * built exactly as before: the ask boxes are instant search, and no
+ * assistant markup is rendered or code loaded.
+ */
+export const ASK = {
+  endpoint: import.meta.env.PUBLIC_ASK_ENDPOINT?.trim().replace(/\/$/, '') || null,
+  turnstileSiteKey: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() || null,
+} as const;
+
 export interface NavItem {
   href: string;
   label: string;

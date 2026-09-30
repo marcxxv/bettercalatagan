@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
-import { SITE } from '../lib/site';
+import { ASK, SITE } from '../lib/site';
 
 const crumbs = [{ name: 'About', href: '/about' }];
 ---
@@ -26,6 +26,7 @@ const crumbs = [{ name: 'About', href: '/about' }];
         <ul>
           <li><a href="#independent">Independent</a></li>
           <li><a href="#how">How it works</a></li>
+          {ASK.endpoint && <li><a href="#assistant">The assistant</a></li>}
           <li><a href="#privacy">Privacy</a></li>
           <li><a href="#licensing">Licensing</a></li>
           <li><a href="#contribute">Corrections</a></li>
@@ -83,14 +84,60 @@ const crumbs = [{ name: 'About', href: '/about' }];
         </p>
       </section>
 
+      {ASK.endpoint && (
+        <section class="section" id="assistant" aria-labelledby="assistant-title">
+          <h2 id="assistant-title">How the assistant works</h2>
+          <p>
+            Press Enter in any “Ask” box and an AI assistant writes an answer, in English, Filipino
+            or Taglish. It is held to the site’s own standard:
+          </p>
+          <ul>
+            <li>
+              <strong>It knows only what this site publishes.</strong> Every time the site is
+              rebuilt, its pages are split into passages and indexed. The assistant is given the
+              passages that match your question and is told to answer from them alone, citing each
+              one; each citation links to the page it came from.
+            </li>
+            <li>
+              <strong>Its answers are checked before you see them.</strong> Every figure in an
+              answer must match a figure in the passages it was given. An answer that states a
+              number the site does not, names an official whose incumbency is unverified, or gives
+              a phone number or e-mail address is withdrawn and replaced, not shown with a warning.
+            </li>
+            <li>
+              <strong>Some questions are never sent to it.</strong> Who holds office today is
+              answered with the reason the site does not say, and emergencies with the national 911
+              hotline.
+            </li>
+          </ul>
+          <p>
+            It can still be wrong, as any summary can: the cited page is the authority, not the
+            answer. Search works as before, in your browser, and is listed beneath the “Ask” option.
+          </p>
+        </section>
+      )}
+
       <section class="section" id="privacy" aria-labelledby="privacy-title">
         <h2 id="privacy-title">Privacy</h2>
         <p>
           There is nothing to sign in to and nothing to track you with: no accounts, no cookies, no
-          analytics, no advertising and no third-party scripts. Pages are static files; search runs
-          in your browser against a file this site publishes, so what you type is never sent
-          anywhere.
+          analytics, no advertising{ASK.turnstileSiteKey ? '' : ' and no third-party scripts'}.
+          Pages are static files; search runs in your browser against a file this site publishes,
+          so what you type into search is never sent anywhere.
         </p>
+        {ASK.endpoint && (
+          <p>
+            A question you <em>ask</em> the assistant is different: it is sent to the assistant’s
+            service on Cloudflare and to the AI model provider that writes the answer (NYO, with
+            Cloudflare Workers AI as a fallback). Better Calatagan does not store your questions or
+            its answers, and keeps no record of who asked. To limit abuse, it counts requests
+            against a code derived from your IP address that changes daily and is deleted when the
+            count expires.
+            {ASK.turnstileSiteKey &&
+              ' The first time you ask, Cloudflare Turnstile checks that you are not an automated script; it loads only then.'}
+            {' '}The conversation is kept in your browser tab until you close it.
+          </p>
+        )}
         <p>
           The only thing the site remembers is your light or dark theme, if you choose one, stored
           in your own browser’s local storage. Clearing your browser data removes it.

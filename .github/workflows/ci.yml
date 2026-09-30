@@ -44,6 +44,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      # The assistant's Worker has its own dependencies and Workers runtime types.
+      - name: Typecheck the assistant Worker
+        working-directory: worker
+        run: npm ci && npm run typecheck
+
       # The generated dataset is committed. A build must not silently depend on
       # a dataset that differs from what is in the repository.
       - name: Generated dataset is committed and unmodified

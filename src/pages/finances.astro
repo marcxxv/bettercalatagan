@@ -214,7 +214,7 @@ const jsonLd = [
           </div>
 
           {panels.map((p, i) => (
-            <div class="panel" data-period={p.id} hidden={i !== 0}>
+            <div class="panel" data-period={p.id} data-ask-label={`Statement for ${p.label}`} hidden={i !== 0}>
               <p class="headline-text">
                 For {p.label}, Calatagan reported income of <strong>{formatPeso(p.h.income ?? 0)}</strong>{' '}
                 and operating expenditure of <strong>{formatPeso(p.h.expenditures ?? 0)}</strong>.

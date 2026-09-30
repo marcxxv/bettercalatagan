@@ -38,8 +38,10 @@ cannot check.
 
 Nine pages — including a sourced history of Calatagan and an open-data front door — and four
 machine-readable datasets, guarded by a civic-data test suite that runs on every push. Every page
-has an "Ask anything" box that answers from the published data, with the source beside the answer
-(see [ADR 0006](docs/adr/0006-editorial-redesign.md) for the design).
+has an "Ask anything" box: instant search as you type, and, on Enter, an assistant that answers
+in English, Filipino or Taglish from the site's own pages only, citing each one. Its figures are
+checked against the pages in code before they are shown (see
+[ADR 0006](docs/adr/0006-editorial-redesign.md) and [ADR 0007](docs/adr/0007-grounded-assistant.md)).
 
 | Dataset | Tier | Basis |
 | --- | --- | --- |
@@ -86,9 +88,12 @@ npm i --no-save playwright && node scripts/brand.mjs
 The DILG server omits an intermediate TLS certificate, so the scripts supply it from `certs/`
 rather than disabling verification.
 
-No backend, no database, no CMS, no authentication, no analytics, no AI. Search runs in the
-browser against a prebuilt index. The site builds to static
-HTML. See [docs/adr/](docs/adr/) for why.
+The site builds to static HTML: no CMS, no authentication, no analytics, and search runs in the
+browser against a prebuilt index. The one moving part is the assistant, a Cloudflare Worker in
+[`worker/`](worker/README.md) that the site uses only when built with `PUBLIC_ASK_ENDPOINT` (see
+[`.env.example`](.env.example)); without it every page works exactly as before. The build writes
+the assistant's knowledge, `/ask/corpus.json`, from the rendered pages, and the Worker re-indexes it
+after each deploy. See [docs/adr/](docs/adr/) for why.
 
 ## Contributing
 

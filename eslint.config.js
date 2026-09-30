@@ -4,13 +4,13 @@ import tseslint from 'typescript-eslint';
 import astro from 'eslint-plugin-astro';
 
 export default [
-  { ignores: ['dist/**', 'node_modules/**', '.astro/**', 'src/data/generated/**'] },
+  { ignores: ['dist/**', 'node_modules/**', '.astro/**', 'src/data/generated/**', 'worker/node_modules/**', 'worker/.wrangler/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...astro.configs.recommended,
   {
     // Build and data-pipeline scripts run in Node.
-    files: ['scripts/**/*.mjs', '*.config.{js,mjs,ts}'],
+    files: ['scripts/**/*.mjs', '*.config.{js,mjs,ts}', 'worker/eval/**/*.mjs'],
     languageOptions: { globals: globals.node },
   },
   {

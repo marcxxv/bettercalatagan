@@ -1,0 +1,641 @@
+---
+/**
+ * The assistant's conversation view: opened by asking from the home page box,
+ * the floating ask bar or the search dialog.
+ *
+ * A native <dialog> (focus is trapped and restored by the browser), full
+ * screen on a phone. Rendered only when the assistant is configured
+ * (PUBLIC_ASK_ENDPOINT); without it, the ask boxes stay the instant search
+ * they always were. The behaviour lives in scripts/ask.ts, which is loaded
+ * the first time someone asks.
+ */
+import Icon from './Icon.astro';
+import { NAV, SECONDARY_NAV } from '../lib/site';
+
+interface Props {
+  endpoint: string;
+  turnstileSiteKey?: string | null;
+}
+
+const { endpoint, turnstileSiteKey } = Astro.props;
+
+/** Section names for source links, so a source reads "Finances", not a page title. */
+const pages = Object.fromEntries([...NAV, ...SECONDARY_NAV].map((item) => [item.href, item.label]));
+
+const suggestions = [
+  'How many people live in Calatagan?',
+  'How much did the town spend in 2025?',
+  'When was the Cape Santiago lighthouse built?',
+  'Who is the mayor?',
+  'Ilan ang barangay sa Calatagan?',
+  'Why is the land area not published?',
+];
+---
+
+<dialog
+  id="ask-panel"
+  class="ask-panel"
+  aria-labelledby="ask-title"
+  data-endpoint={endpoint}
+  data-turnstile={turnstileSiteKey || undefined}
+  data-pages={JSON.stringify(pages)}
+>
+  <header class="ap-head">
+    <span class="ap-mark" aria-hidden="true"><Icon name="lighthouse" size="20" /></span>
+    <div class="ap-titles">
+      <h2 id="ask-title">Ask Better Calatagan</h2>
+      <p>Answers only from this site’s published, sourced records</p>
+    </div>
+    <button class="ap-btn ap-new" type="button" data-ask-new aria-label="New conversation" hidden>
+      <Icon name="plus" size="16" />
+      <span>New conversation</span>
+    </button>
+    <button class="ap-btn ap-close" type="button" aria-label="Close" data-ask-close>
+      <Icon name="close" size="18" />
+    </button>
+  </header>
+
+  <div class="ap-log" data-ask-log tabindex="-1">
+    <section class="ap-empty" data-ask-empty aria-labelledby="ask-empty-title">
+      <h3 id="ask-empty-title">What would you like to know about Calatagan?</h3>
+      <p>
+        Ask in English, Filipino or Taglish. Every answer is written from the census, the
+        municipality’s filings and the history on this site, and links to the record it rests on.
+        Where the site has no verified answer, it says so.
+      </p>
+      <div class="ap-chips">
+        {suggestions.map((s) => (
+          <button type="button" data-ask-suggest={s}>{s}</button>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <p class="visually-hidden" role="status" aria-live="polite" data-ask-status></p>
+
+  <div class="ap-compose">
+    <form data-ask-form>
+      <label for="ask-panel-input" class="visually-hidden">Ask a question about Calatagan</label>
+      <input
+        id="ask-panel-input"
+        type="text"
+        placeholder="Ask a question…"
+        autocomplete="off"
+        spellcheck="true"
+        enterkeyhint="send"
+        maxlength="600"
+      />
+      <button class="ab-icon" type="button" data-voice hidden aria-label="Ask by voice" title="Ask by voice">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>
+      </button>
+      <button class="ap-go" type="submit" aria-label="Ask" data-ask-go>
+        <Icon name="arrow-right" size="18" />
+      </button>
+      <button class="ap-go ap-stop" type="button" aria-label="Stop answering" data-ask-stop hidden>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5" fill="currentColor"/></svg>
+      </button>
+    </form>
+    <p class="ap-note">
+      Answers can be wrong: check the source each one cites. Your questions are not stored.{' '}
+      <a href="/about#assistant">How the assistant works</a>
+    </p>
+  </div>
+  <div data-ask-challenge hidden></div>
+</dialog>
+
+<style is:global>
+  .ask-panel {
+    width: min(48rem, calc(100vw - 2rem));
+    height: min(54rem, calc(100dvh - 4rem));
+    max-width: none;
+    max-height: none;
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-lg);
+    background: var(--c-bg);
+    color: var(--c-ink);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .ask-panel[open] {
+    display: flex;
+    flex-direction: column;
+    transform-origin: top left;
+  }
+  .ask-panel::backdrop {
+    background: rgb(5 13 23 / 0.55);
+    backdrop-filter: blur(3px);
+  }
+  @media (max-width: 40rem) {
+    .ask-panel {
+      width: 100vw;
+      height: 100dvh;
+      border: 0;
+      border-radius: 0;
+    }
+  }
+
+  /* ---- Header ---- */
+  .ap-head {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-3) var(--sp-3) var(--sp-5);
+    border-bottom: 1px solid var(--c-line);
+    background: var(--c-raised);
+  }
+  .ap-mark {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--c-accent-wash);
+    color: var(--c-accent);
+  }
+  .ap-titles {
+    flex: 1;
+    min-width: 0;
+  }
+  .ap-titles h2 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .ap-titles p {
+    margin: 2px 0 0;
+    font-size: var(--fs-2xs);
+    color: var(--c-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ap-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: var(--tap);
+    min-height: var(--tap);
+    padding: 0 var(--sp-3);
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--c-ink-2);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--dur-1), color var(--dur-1);
+  }
+  .ap-btn:hover {
+    background: var(--c-sunk);
+    color: var(--c-ink);
+  }
+  .ap-btn[hidden] {
+    display: none;
+  }
+  @media (max-width: 40rem) {
+    .ap-new span {
+      display: none;
+    }
+  }
+
+  /* ---- Conversation ---- */
+  .ap-log {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--sp-6) clamp(var(--sp-4), 4vw, var(--sp-7)) var(--sp-6);
+  }
+  .ap-log:focus {
+    outline: none;
+  }
+  .ap-empty {
+    max-width: 34rem;
+    margin: clamp(0rem, 6vh, 4rem) auto 0;
+    text-align: center;
+  }
+  .ap-empty[hidden] {
+    display: none;
+  }
+  .ap-empty h3 {
+    margin: 0 0 var(--sp-3);
+    font-family: var(--font-serif);
+    font-size: var(--fs-xl);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: var(--lh-snug);
+    color: var(--c-navy);
+  }
+  .ap-empty p {
+    margin: 0 auto var(--sp-5);
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+  .ap-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--sp-2);
+  }
+  .ap-chips button {
+    min-height: 36px;
+    padding: 6px var(--sp-3);
+    border: 1px solid var(--c-line-strong);
+    border-radius: 999px;
+    background: var(--c-surface);
+    color: var(--c-ink-2);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--dur-1), color var(--dur-1);
+  }
+  .ap-chips button:hover {
+    border-color: var(--c-accent);
+    color: var(--c-accent-strong);
+  }
+
+  .ap-turn + .ap-turn {
+    margin-top: var(--sp-7);
+    padding-top: var(--sp-6);
+    border-top: 1px solid var(--c-line);
+  }
+  .ap-q {
+    margin: 0 0 var(--sp-4);
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    font-weight: 400;
+    line-height: var(--lh-snug);
+    letter-spacing: -0.015em;
+    color: var(--c-navy);
+    overflow-wrap: anywhere;
+  }
+
+  .ap-working {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+  .ap-working[hidden] {
+    display: none;
+  }
+  .ap-pulse {
+    display: inline-flex;
+    gap: 4px;
+  }
+  .ap-pulse i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    opacity: 0.3;
+  }
+  .js-motion .ap-pulse i {
+    animation: ap-pulse 1.1s ease-in-out infinite;
+  }
+  .ap-pulse i:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  .ap-pulse i:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  @keyframes ap-pulse {
+    40% {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+  }
+
+  .ap-a {
+    font-size: var(--fs-base);
+    line-height: var(--lh-body);
+    color: var(--c-ink);
+    overflow-wrap: break-word;
+  }
+  .ap-a > :first-child {
+    margin-top: 0;
+  }
+  .ap-a > :last-child {
+    margin-bottom: 0;
+  }
+  .ap-a p {
+    margin: 0 0 var(--sp-3);
+  }
+  .ap-a ul,
+  .ap-a ol {
+    margin: 0 0 var(--sp-3);
+    padding-left: 1.25em;
+  }
+  .ap-a li + li {
+    margin-top: 4px;
+  }
+  .ap-a strong {
+    font-weight: 700;
+    color: var(--c-navy);
+  }
+  .ap-a h3,
+  .ap-a h4 {
+    margin: var(--sp-4) 0 var(--sp-2);
+    font-family: var(--font-sans);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+  .ap-a .table-wrap {
+    margin: 0 0 var(--sp-3);
+  }
+  .ap-a table {
+    font-size: var(--fs-sm);
+  }
+  .js-motion .ap-a.streaming > :last-child::after {
+    content: '';
+    display: inline-block;
+    width: 0.45em;
+    height: 1em;
+    margin-left: 2px;
+    vertical-align: -0.12em;
+    border-radius: 1px;
+    background: var(--c-accent);
+    animation: ap-caret 900ms steps(1) infinite;
+  }
+  @keyframes ap-caret {
+    50% {
+      opacity: 0;
+    }
+  }
+  .ap-a.withdrawn,
+  .ap-a.failed {
+    padding: var(--sp-3) var(--sp-4);
+    border-radius: var(--radius-md);
+    background: var(--c-warn-bg);
+    color: var(--c-ink);
+    font-size: var(--fs-sm);
+  }
+  .ap-a.failed {
+    background: var(--c-bg-alt);
+  }
+
+  a.cite {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.45em;
+    height: 1.45em;
+    margin: 0 1px 0 3px;
+    padding: 0 0.35em;
+    border-radius: 999px;
+    background: var(--c-accent-wash);
+    color: var(--c-accent-strong);
+    font-size: 0.7em;
+    font-weight: 700;
+    line-height: 1;
+    vertical-align: 0.2em;
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+    transition: background var(--dur-1), color var(--dur-1);
+  }
+  a.cite:hover,
+  a.cite:focus-visible {
+    background: var(--c-accent);
+    color: var(--c-bg);
+  }
+
+  .ap-sources {
+    margin-top: var(--sp-5);
+  }
+  .ap-sources[hidden] {
+    display: none;
+  }
+  .ap-sources h4 {
+    margin: 0 0 var(--sp-2);
+    font-size: var(--fs-2xs);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+  .ap-sources ol {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
+    gap: var(--sp-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ap-sources li + li {
+    margin: 0;
+  }
+  .ap-sources a {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px var(--sp-3);
+    height: 100%;
+    padding: var(--sp-3);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-md);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    text-decoration: none;
+    transition: border-color var(--dur-1), background var(--dur-1);
+  }
+  .ap-sources a:hover {
+    border-color: var(--c-accent-line);
+    background: var(--c-accent-wash);
+  }
+  .src-n {
+    grid-row: span 2;
+    display: grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: var(--c-sunk);
+    color: var(--c-ink-2);
+    font-size: var(--fs-2xs);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .src-page {
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-clay);
+  }
+  .src-section {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--c-navy);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .ap-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2);
+    margin-top: var(--sp-3);
+  }
+  .ap-actions[hidden] {
+    display: none;
+  }
+  .ap-actions button {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--c-line-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--c-ink-2);
+    font-size: var(--fs-2xs);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--dur-1), color var(--dur-1);
+  }
+  .ap-actions button.copied {
+    border-color: var(--c-ok);
+    color: var(--c-ok);
+  }
+  .ap-actions button:hover {
+    border-color: var(--c-accent);
+    color: var(--c-accent-strong);
+  }
+
+  /* ---- Composer ---- */
+  .ap-compose {
+    padding: var(--sp-3) clamp(var(--sp-3), 3vw, var(--sp-6)) max(var(--sp-3), env(safe-area-inset-bottom));
+    border-top: 1px solid var(--c-line);
+    background: var(--c-bg);
+  }
+  .ap-compose form {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    min-height: 56px;
+    padding: 6px 6px 6px 20px;
+    border: 1px solid color-mix(in srgb, var(--c-ink) 28%, transparent);
+    border-radius: 999px;
+    background: var(--c-raised);
+    transition: border-color var(--dur-1), box-shadow var(--dur-2);
+  }
+  .ap-compose form:focus-within {
+    border-color: var(--c-accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--c-accent) 18%, transparent);
+  }
+  .ap-compose input {
+    flex: 1;
+    min-width: 0;
+    height: 42px;
+    border: 0;
+    background: transparent;
+    color: var(--c-ink);
+    font-size: 1rem;
+  }
+  .ap-compose input:focus {
+    outline: none;
+  }
+  .ap-compose input::placeholder {
+    color: var(--c-muted);
+  }
+  .ap-compose .ab-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--c-ink);
+    cursor: pointer;
+  }
+  .ap-compose .ab-icon[hidden] {
+    display: none;
+  }
+  .ap-compose .ab-icon:hover {
+    background: var(--c-sunk);
+  }
+  .ap-compose .ab-icon.listening {
+    color: #fff;
+    background: #c62828;
+  }
+  .ap-go {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--go-bg);
+    color: var(--go-ink);
+    cursor: pointer;
+    transition: background var(--dur-1), transform var(--dur-2) var(--ease-out), opacity var(--dur-1);
+  }
+  .ap-go:hover {
+    background: var(--go-hover);
+  }
+  .ap-go:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .ap-go[hidden] {
+    display: none;
+  }
+  .ap-note {
+    margin: var(--sp-2) 0 0;
+    font-size: var(--fs-2xs);
+    color: var(--c-muted);
+    text-align: center;
+  }
+  .ap-note a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* The "Ask" row at the top of search results. */
+  .search-results .sr-ask a {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: var(--sp-3);
+  }
+  .sr-ask-icon {
+    grid-row: span 2;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--go-bg);
+    color: var(--go-ink);
+  }
+  .sr-ask .sr-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sr-ask .sr-desc {
+    -webkit-line-clamp: 1;
+  }
+  .search-results .sr-ask + li {
+    margin-top: var(--sp-2);
+    padding-top: var(--sp-2);
+    border-top: 1px solid var(--c-line);
+  }
+</style>

@@ -1,0 +1,19 @@
+{
+  "name": "bettercalatagan-ask",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "The Better Calatagan assistant: a Cloudflare Worker that answers from the site's own published pages.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "schema": "wrangler d1 execute bettercalatagan-ask --remote --file schema.sql",
+    "eval": "node eval/run.mjs"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260930.1",
+    "typescript": "^5.8.2",
+    "wrangler": "4.135.0"
+  }
+}

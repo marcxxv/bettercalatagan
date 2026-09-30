@@ -7,6 +7,7 @@
  * to the page that holds it.
  */
 import Icon from './Icon.astro';
+import { ASK } from '../lib/site';
 
 const suggestions = ['Population', 'Balibago', 'Income 2025', 'National Tax Allotment', 'Mayor', 'Lighthouse'];
 ---
@@ -43,7 +44,7 @@ const suggestions = ['Population', 'Balibago', 'Income 2025', 'National Tax Allo
     </div>
     <p class="palette-foot">
       <span><kbd>↑</kbd><kbd>↓</kbd> to move</span>
-      <span><kbd>Enter</kbd> to open</span>
+      <span><kbd>Enter</kbd> to {ASK.endpoint ? 'ask or open' : 'open'}</span>
       <span>Answers come only from published, sourced records.</span>
     </p>
   </div>

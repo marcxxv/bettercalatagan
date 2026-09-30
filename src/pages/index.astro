@@ -20,7 +20,7 @@ import { annualSeries, verifiedFilings } from '../data/financials';
 import { archivedDocuments } from '../data/documents';
 import { orderedCitations, timeline } from '../data/history';
 import { formatDate, formatNumber, formatPesoMillions, ordinal } from '../lib/format';
-import { NAV, SITE } from '../lib/site';
+import { ASK, NAV, SITE } from '../lib/site';
 
 const populationByCode = new Map(barangayPopulation2024.data.map((row) => [row.psgc10, row]));
 const barangayRows = [...barangays.data]
@@ -182,7 +182,7 @@ const jsonLd = [
         <h2>Nothing to sign in to. <br />Nothing tracked.</h2>
         <p>
           No accounts, no cookies, no analytics, no advertising. The site is plain pages and open
-          data — what you look up stays with you.
+          data — what you look up stays with you{ASK.endpoint ? ', and questions you ask are answered, not kept' : ''}.
         </p>
         <a class="link-arrow" href="/about#privacy">How this site works</a>
       </div>
