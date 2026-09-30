@@ -248,10 +248,12 @@ if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     ['.rail-nav ul', ':scope > li'],
     ['.dataset-rows', ':scope > .dataset-row'],
     ['.footer-directory ul', ':scope > li'],
+    // Tables: the frame hosts the highlight, so it can sit behind the rows.
+    ['.table-wrap', ':scope tbody > tr'],
   ];
   const attach = () => {
     for (const [hostSel, itemSel] of targets) {
-      for (const host of document.querySelectorAll<HTMLElement>(hostSel)) glide(host, itemSel.replace(':scope > ', ''));
+      for (const host of document.querySelectorAll<HTMLElement>(hostSel)) glide(host, itemSel.replace(':scope > ', '').replace(':scope ', ''));
     }
   };
   attach();

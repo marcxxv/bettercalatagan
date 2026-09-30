@@ -140,7 +140,7 @@ hover-intent open and a shared `.nav-morph` surface that glides between groups w
 once; `NAV` is the main sections. A new page goes in a group, not in a flat list.
 
 **Feel** (`ui.ts` `glide()`, the feel section of `global.css`): hovering items in a menu, list,
-rail or search results moves one shared `.glide` highlight rather than repainting each item. A
+table (rows, hosted by `.table-wrap`), rail or search results moves one shared `.glide` highlight rather than repainting each item. A
 new hoverable list opts in by being passed to `glide()`; do not add per-item hover backgrounds
 there. Every motion has a `prefers-reduced-motion` guard.
 

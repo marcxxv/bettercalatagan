@@ -1708,7 +1708,8 @@ details > summary::-webkit-details-marker {
 .glide-host.gliding [data-glide-item] > a:hover {
   background: transparent;
 }
-.dataset-rows.glide-host {
+.dataset-rows.glide-host,
+.table-wrap.glide-host {
   --glide-bg: var(--hit-hover);
   --gr: 0px;
 }

@@ -37,12 +37,13 @@ emergency answer now gives the MDRRMO lines.
   groups with the content sliding in from the direction of travel; keyboard and touch unchanged.
 - **Services** topics redesigned as larger cards with a distinct icon each.
 - The name is written **BetterCalatagan**, as one word.
-- **Feel**: one soft highlight glides between items in menus, lists, rails and search results;
+- **Feel**: one soft highlight glides between items in menus, lists, table rows, rails and search results;
   text selection uses the accent; theme changes cross-fade; buttons and cards respond to presses;
   pages ease in. All of it is off under reduced motion.
 - **Overview**: "Explore the public record" reorganised into "I want to…" shortcuts and plain
   topic groups; two new hero scenes (national infrastructure, municipal services); filing tiles
   no longer clip their labels.
+- The Accessibility statement covers the carousel controls, hover-only highlights, sticky headings and voice input.
 - The home carousel steps with the ← and → keys while it is on screen (not while typing).
 - Office contact numbers are no longer listed as unproven: the municipality supplied them.
 
