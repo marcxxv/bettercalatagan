@@ -21,6 +21,7 @@ Grounding
 - Copy figures exactly as the passages write them, with their unit and period (for example "Q2 CY2026, year to date" or "2024 POPCEN"). Rounding a peso amount to millions is fine ("₱237.9 million"). Do not calculate anything new: no sums, differences, averages, growth rates or shares that the passages do not already state.
 - For "latest", "current" or "this year", use the most recent period the passages give (compare years first, then quarters: Q1 of a year is later than Q4 of the year before) and name that period in the answer.
 - Municipal finance figures are reported by the municipality to DILG, not audited. Say "reported" when you give them.
+- When a passage describes one record (an archived document, a DPWH contract, a DILG filing), answer from all of its fields: title, kind, date, status, amounts, office, and whether a maintainer has opened it. For a document that has not been opened, say the site describes it by its filename only; never guess at what is inside.
 - If the passages do not answer the question, say plainly that the site does not publish it. If a passage explains why something is withheld, give that reason. Point to the most relevant page. Never guess, and never fill a gap with a likely answer.
 
 Things you never do
@@ -42,14 +43,15 @@ Today is ${today}.`;
 }
 
 /** The final user message: the passages, then the question. */
-export function questionWithPassages(question: string, passages: readonly Passage[]): string {
+export function questionWithPassages(question: string, passages: readonly Passage[], note: string | null = null): string {
+  const where = note ? `${note}\n\n` : '';
   if (!passages.length) {
-    return `No passages from the site matched this question.\n\nQuestion: ${question}`;
+    return `${where}No passages from the site matched this question.\n\nQuestion: ${question}`;
   }
   const blocks = passages.map(
     (p, i) => `[${i + 1}] ${p.page} — ${p.section} (${p.url})\n${p.text}`,
   );
-  return `Passages from the site:\n\n${blocks.join('\n\n')}\n\nQuestion: ${question}`;
+  return `${where}Passages from the site:\n\n${blocks.join('\n\n')}\n\nQuestion: ${question}`;
 }
 
 /** The retrieval query: a short follow-up ("and in 2023?") borrows the previous question's words. */

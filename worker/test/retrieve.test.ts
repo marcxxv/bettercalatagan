@@ -51,6 +51,19 @@ describe('requests', () => {
     expect(parseChat({ messages: [{ role: 'user', content: 'q' }, { role: 'assistant', content: 'a' }] })).toBeNull();
   });
 
+  it('keeps a well-formed reader context and drops anything else', () => {
+    const messages = [{ role: 'user', content: 'What is this document?' }];
+    expect(parseChat({ messages, context: { path: '/documents/', read: 'doc-20220806072203-bp44qlta' } })?.context).toEqual({
+      path: '/documents',
+      read: 'doc-20220806072203-bp44qlta',
+    });
+    expect(parseChat({ messages, context: { path: 'https://evil.example/', read: "x' OR 1=1" } })?.context).toEqual({
+      path: null,
+      read: null,
+    });
+    expect(parseChat({ messages })?.context).toEqual({ path: null, read: null });
+  });
+
   it('allows only listed origins, with * standing for one label run', () => {
     const allowed = 'https://bettercalatagan.vercel.app,https://bettercalatagan-*-marcxxv.vercel.app';
     expect(originAllowed('https://bettercalatagan.vercel.app', allowed)).toBe(true);

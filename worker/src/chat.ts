@@ -8,7 +8,7 @@ import { json, type Stream } from './http';
 import { recordUsage } from './limits';
 import { complete, ModelError } from './model';
 import { questionWithPassages, retrievalQuery, systemPrompt, type Turn } from './prompt';
-import { retrieve, type Passage } from './retrieve';
+import { focus, retrieve, withFocus, type Passage, type ReaderContext } from './retrieve';
 
 const MAX_HISTORY = 8;
 
@@ -19,6 +19,15 @@ const stripControl = (text: string) =>
 export interface ChatRequest {
   history: Turn[];
   question: string;
+  context: ReaderContext;
+}
+
+/** The page and document the question was asked from; anything malformed is simply dropped. */
+function parseContext(value: unknown): ReaderContext {
+  const c = (value ?? {}) as { path?: unknown; read?: unknown };
+  const path = typeof c.path === 'string' && /^\/[a-z0-9/-]{0,120}$/.test(c.path) ? c.path.replace(/(.)\/$/, '$1') : null;
+  const read = typeof c.read === 'string' && /^[a-z0-9-]{3,80}$/.test(c.read) ? c.read : null;
+  return { path, read };
 }
 
 /** Validate the body: an alternating conversation ending in the reader's question. */
@@ -37,7 +46,7 @@ export function parseChat(body: unknown): ChatRequest | null {
   // Keep the most recent exchanges, starting on a question.
   let history = turns.slice(0, -1).slice(-MAX_HISTORY);
   while (history[0]?.role === 'assistant') history = history.slice(1);
-  return { history, question: last.content.trim() };
+  return { history, question: last.content.trim(), context: parseContext((body as { context?: unknown }).context) };
 }
 
 const WITHDRAWN = {
@@ -54,7 +63,7 @@ function sourceList(passages: readonly Passage[]) {
 }
 
 export async function answer(env: Env, request: ChatRequest, stream: Stream, canary: string, signal: AbortSignal) {
-  const { history, question } = request;
+  const { history, question, context } = request;
   const filipino = looksFilipino(question);
   const lang = filipino ? 'fil' : 'en';
 
@@ -69,7 +78,12 @@ export async function answer(env: Env, request: ChatRequest, stream: Stream, can
     return;
   }
 
-  const passages = await retrieve(env, retrievalQuery(history, question));
+  const query = retrievalQuery(history, question);
+  const [found, focused] = await Promise.all([
+    retrieve(env, query),
+    focus(env, context, query).catch((e) => (console.warn('focus failed', String(e)), { passages: [], note: null })),
+  ]);
+  const passages = withFocus(focused.passages, found);
   await stream.send({ t: 'sources', items: sourceList(passages) });
 
   const today = new Intl.DateTimeFormat('en-PH', { timeZone: 'Asia/Manila', dateStyle: 'long' }).format(new Date());
@@ -82,7 +96,7 @@ export async function answer(env: Env, request: ChatRequest, stream: Stream, can
   let tokens = 0;
   let withdrawn: string | null = null;
   try {
-    const events = complete(env, systemPrompt(canary, today), history, questionWithPassages(question, passages), signal);
+    const events = complete(env, systemPrompt(canary, today), history, questionWithPassages(question, passages, focused.note), signal);
     for await (const event of events) {
       if (event.type === 'usage') tokens = event.tokens;
       else if (event.type === 'text') {

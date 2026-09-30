@@ -309,13 +309,18 @@ async function send(question: string) {
 
   try {
     const messages = [...historyFor(index), { role: 'user', content: question }];
+    // Where the question was asked from, so "this page" and "this document" mean something.
+    const readerContext = () => {
+      const url = new URL(location.href);
+      return { path: url.pathname, read: url.searchParams.get('read') };
+    };
     let res: Response | null = null;
     for (const renew of [false, true]) {
       res = await fetch(`${endpoint}/chat`, {
         method: 'POST',
         signal: controller.signal,
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await sessionToken(renew)}` },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({ messages, context: readerContext() }),
       });
       if (res.status !== 401) break;
     }

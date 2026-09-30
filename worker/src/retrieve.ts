@@ -11,6 +11,7 @@ import type { Env } from './env';
 
 export type Passage = Omit<Chunk, 'hash' | 'keywords'>;
 
+
 const STOP = new Set(
   (
     'a an and are as at be by can could did do does for from had has have how i in is it its me my of on or ' +
@@ -136,6 +137,77 @@ export async function retrieve(env: Env, query: string, { k = 8, budget = 11_000
     perSection.set(key, (perSection.get(key) ?? 0) + 1);
     out.push(passage);
     used += passage.text.length;
+  }
+  return out;
+}
+
+/** Where the reader is: the page they asked from, and the document open in the reader, if any. */
+export interface ReaderContext {
+  path: string | null;
+  read: string | null;
+}
+
+export interface Focus {
+  /** Passages about what the reader is looking at, most specific first. */
+  passages: Passage[];
+  /** A plain description for the model, built from the corpus, never from the request. */
+  note: string | null;
+}
+
+/**
+ * The passages for what the reader has in front of them. Paths and ids come
+ * from the request, so they are only ever used as bound query parameters,
+ * and the words shown to the model are the corpus's own titles.
+ */
+export async function focus(env: Env, ctx: ReaderContext, query: string): Promise<Focus> {
+  const passages: Passage[] = [];
+  let page: string | null = null;
+  let doc: string | null = null;
+  if (ctx.read) {
+    const row = await env.DB.prepare('SELECT id, url, page, section, text FROM chunks WHERE url LIKE ?1 LIMIT 1')
+      .bind(`%?read=${ctx.read}`)
+      .first<Passage>();
+    if (row) {
+      passages.push(row);
+      doc = row.section;
+    }
+  }
+  if (ctx.path) {
+    const match = ftsQuery(query);
+    const on = `(c.url = ?1 OR c.url LIKE ?2)`;
+    const { results } = match
+      ? await env.DB.prepare(
+          `SELECT c.id, c.url, c.page, c.section, c.text FROM chunks_fts f JOIN chunks c ON c.id = f.id
+           WHERE chunks_fts MATCH ?3 AND ${on} ORDER BY bm25(chunks_fts, 0.0, 2.5, 1.0) LIMIT 3`,
+        )
+          .bind(ctx.path, `${ctx.path}#%`, match)
+          .all<Passage>()
+      : { results: [] as Passage[] };
+    // Nothing on the page matched the words: its opening passage still says what the page is.
+    const rows = results.length
+      ? results
+      : (
+          await env.DB.prepare(`SELECT c.id, c.url, c.page, c.section, c.text FROM chunks c WHERE ${on} LIMIT 1`)
+            .bind(ctx.path, `${ctx.path}#%`)
+            .all<Passage>()
+        ).results;
+    passages.push(...rows);
+    page = rows[0]?.page ?? null;
+  }
+  const note = page || doc
+    ? `The reader asked this from ${page ? `the page “${page}”` : 'the site'}${doc ? `, with the document “${doc}” open` : ''}. “This page”, “this document”, “here” and similar words refer to that.`
+    : null;
+  return { passages, note };
+}
+
+/** Merge focus passages into the retrieved ones: focus first, no duplicates, at most `k`. */
+export function withFocus(focused: readonly Passage[], retrieved: readonly Passage[], k = 10): Passage[] {
+  const seen = new Set<string>();
+  const out: Passage[] = [];
+  for (const p of [...focused, ...retrieved]) {
+    if (seen.has(p.id) || out.length >= k) continue;
+    seen.add(p.id);
+    out.push(p);
   }
   return out;
 }

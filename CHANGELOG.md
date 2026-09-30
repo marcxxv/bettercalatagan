@@ -47,6 +47,15 @@ emergency answer now gives the MDRRMO lines.
 - The home carousel steps with the ← and → keys while it is on screen (not while typing).
 - Office contact numbers are no longer listed as unproven: the municipality supplied them.
 
+### Changed — The assistant knows where you are and what each record says
+- Every archived document, DPWH contract and DILG filing is now its own passage in the
+  assistant's knowledge, with every field the site shows (kind, date, file, capture, status,
+  amounts, office, and what a maintainer found inside, if opened). A question about one record
+  finds that record, not just the list it sits in.
+- Questions carry the page they were asked from and the document open in the reader, so "what is
+  this document?" or "explain this page" are answered about that page. Only bound parameters and
+  the corpus's own titles reach the model.
+
 ### Security and privacy
 - The document reader's `/wayback/` pass-through now serves only captures of calatagan.gov.ph,
   and its responses carry a sandboxing Content-Security-Policy, so the site's address cannot be

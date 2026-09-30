@@ -191,6 +191,10 @@ from.
   rows, plus sourced answers from `/search.json`. It skips `aria-hidden`, `hidden`, nav, forms and
   `data-ask-skip`; a `hidden` region with `data-ask-label="…"` (e.g. one quarter's panel) is kept
   as its own passage. New pages are picked up automatically; mark decoration `aria-hidden`.
+  `recordPassages()` adds one passage per archived document, DPWH contract and DILG filing from
+  `src/data/generated/`; a new record dataset should be added there too.
+- **Reader context:** `/chat` takes `context: { path, read }` (the page, and `?read=` document);
+  `focus()` in `retrieve.ts` puts that page's and document's passages first.
 - **Worker** (`worker/`): hybrid retrieval (D1 FTS5 + bge-m3 in Vectorize, RRF), models NYO
   `glm-5.3` → Workers AI SEA-LION → `gpt-oss-120b`, re-indexes changed passages every 30 min.
 - **Guard** (`worker/src/guard.ts`, `numbers.ts`): figures must round from the passages; the

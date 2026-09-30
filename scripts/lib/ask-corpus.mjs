@@ -300,6 +300,84 @@ export function indexPassages(entries) {
   return passages;
 }
 
+const GENERATED = new URL('../../src/data/generated/', import.meta.url);
+const peso = (n) => (typeof n === 'number' ? `₱${n.toLocaleString('en-US', { maximumFractionDigits: 2 })}` : null);
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const SCOPE = {
+  calatagan: 'located in Calatagan (counted in the site’s totals)',
+  road: 'national road work passing through Calatagan (listed, not counted)',
+  shared: 'a package shared with other towns (listed, not counted)',
+};
+
+/**
+ * One passage per record: every archived document, DPWH contract and DILG
+ * filing. Lists on the pages group records many to a passage, so a question
+ * about one document found the list but not the line; a passage of its own,
+ * carrying every field the site shows, lets the assistant answer about that
+ * record exactly and link straight to it. Only fields the site publishes.
+ */
+export async function recordPassages(dir = GENERATED) {
+  const load = async (name) => JSON.parse(await readFile(new URL(name, dir), 'utf8'));
+  const [archive, dpwh, fdp] = await Promise.all([
+    load('archived-documents.json'),
+    load('dpwh-projects.json'),
+    load('fdp-filings.json'),
+  ]);
+  const passages = [];
+
+  for (const d of archive.documents) {
+    const when = d.publishedYear ? `${d.publishedMonth ? `${MONTHS[d.publishedMonth - 1]} ` : ''}${d.publishedYear}` : 'undated';
+    const lines = [
+      `Archived document from the former municipal website calatagan.gov.ph: “${d.title}”.`,
+      `Kind: ${d.kind.replace(/-/g, ' ')}. Published: ${when}. File: ${d.filename} (${d.fileType.toUpperCase()}${d.byteLength ? `, ${Math.round(d.byteLength / 1024)} KB` : ''}).`,
+      `Captured by the Internet Archive on ${d.capturedAt}. It is a historical record, not the municipality’s current position.`,
+      d.inspected
+        ? `Opened and checked by a maintainer on ${d.inspected.inspectedOn}${d.inspected.pages ? ` (${d.inspected.pages} pages)` : ''}: ${d.inspected.summary}`
+        : 'Not yet opened by a maintainer: it is described by its filename only, and the site does not summarise its contents.',
+    ];
+    passages.push({ url: `/documents?read=${d.id}`, page: 'Archived documents', section: d.title, text: lines.join('\n'), keywords: d.filename.replace(/[._-]+/g, ' ') });
+  }
+
+  for (const p of dpwh.projects) {
+    if (!SCOPE[p.scope]) continue;
+    const money = [
+      p.budget != null && `contract budget ${peso(p.budget)}`,
+      p.abc != null && `approved budget for the contract ${peso(p.abc)}`,
+    ].filter(Boolean);
+    const lines = [
+      `DPWH contract ${p.contractId} (${p.infraYear}): ${p.description}`,
+      `Status: ${p.status}${typeof p.progress === 'number' ? `, ${p.progress}% complete` : ''}.${money.length ? ` Amounts: ${money.join('; ')}.` : ''}`,
+      [
+        p.category && `Category: ${p.category}.`,
+        p.implementingOffice && `Implementing office: ${p.implementingOffice}.`,
+        p.contractor && `Contractor: ${p.contractor}.`,
+        p.bidders != null && `Bidders: ${p.bidders}.`,
+        p.startDate && `Start: ${p.startDate}.`,
+        p.completionDate && `Completion: ${p.completionDate}.`,
+        p.barangays?.length && `Barangays named: ${p.barangays.join(', ')}.`,
+      ]
+        .filter(Boolean)
+        .join(' '),
+      `Placement: ${SCOPE[p.scope]}. Source: DPWH contract records via BetterGov.ph.`,
+    ];
+    passages.push({ url: `/infrastructure#contract-${p.contractId}`, page: 'National infrastructure (DPWH)', section: `Contract ${p.contractId}`, text: lines.filter(Boolean).join('\n') });
+  }
+
+  for (const f of fdp.records) {
+    const period = f.documentPeriod?.quarter ? `Q${f.documentPeriod.quarter} ${f.documentPeriod.year}` : `${f.documentPeriod?.year ?? ''}`;
+    const lines = [
+      `Full Disclosure Policy filing on the DILG portal: ${f.formLabel}, ${period}.`,
+      `Availability: ${f.availability === 'available' ? 'downloadable from DILG' : f.availability === 'missing-from-source' ? 'no longer listed on the DILG portal' : f.availability}. File type: ${(f.fileType ?? '').toUpperCase()}. Filed ${f.formCadence ?? ''}.`,
+      f.postingLocations?.length ? `Posted at: ${f.postingLocations.join(', ')}.` : '',
+      f.formSlug === 'statement-of-receipts-and-expenditures'
+        ? 'Its figures are on the Finances page, traced to the worksheet cell.'
+        : 'The site links this filing but does not publish figures from it.',
+    ];
+    passages.push({ url: `/transparency?read=${f.id}`, page: 'Transparency (Full Disclosure Policy)', section: `${f.formLabel}, ${period}`, text: lines.filter(Boolean).join('\n') });
+  }
+  return passages;
+}
+
 /** Give every passage a stable id and a content hash; the corpus version is the hash of them all. */
 export function finalise(passages, { site, generatedAt }) {
   const seen = new Map();
@@ -333,6 +411,7 @@ export async function buildCorpus(distDir, { site }) {
   }
   const index = JSON.parse(await readFile(join(distDir, 'search.json'), 'utf8'));
   passages.push(...indexPassages(index));
+  passages.push(...(await recordPassages()));
   const corpus = finalise(passages, { site, generatedAt: new Date().toISOString() });
   await mkdir(join(distDir, 'ask'), { recursive: true });
   await writeFile(join(distDir, 'ask', 'corpus.json'), JSON.stringify(corpus));
