@@ -27,10 +27,10 @@ import Icon from './Icon.astro';
       spellcheck="false"
     />
     <button class="ab-icon" type="button" data-voice hidden aria-label="Ask by voice" title="Ask by voice">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>
     </button>
     <button class="ab-go" type="submit" aria-label="Search">
-      <Icon name="arrow-right" size="18" />
+      <Icon name="arrow-right" size="17" />
     </button>
   </form>
 </div>
@@ -42,7 +42,7 @@ import Icon from './Icon.astro';
     bottom: clamp(0.75rem, 2vw, 1.5rem);
     z-index: 35;
     display: none;
-    width: min(56rem, calc(100vw - 1.5rem));
+    width: min(28rem, calc(100vw - 1.5rem));
     transform: translateX(-50%);
     transition:
       opacity var(--dur-2) ease,
@@ -63,16 +63,14 @@ import Icon from './Icon.astro';
   .ask-bar form {
     display: flex;
     align-items: center;
-    gap: var(--sp-2);
-    min-height: 72px;
-    padding: 10px 12px 10px 30px;
-    border: 1px solid color-mix(in srgb, var(--c-ink) 22%, transparent);
+    gap: 2px;
+    height: 56px;
+    padding: 0 10px 0 22px;
+    border: 1px solid color-mix(in srgb, var(--c-ink) 28%, transparent);
     border-radius: 999px;
-    background: color-mix(in srgb, var(--c-raised) 96%, transparent);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 18px 50px -18px rgb(11 18 32 / 0.28), 0 2px 8px rgb(11 18 32 / 0.05);
-    transition: border-color var(--dur-1), box-shadow var(--dur-2);
+    background: var(--c-raised);
+    box-shadow: 0 12px 32px -14px rgb(11 18 32 / 0.25);
+    transition: border-color var(--dur-1);
   }
   .ask-bar form:focus-within {
     border-color: var(--c-ink);
@@ -81,11 +79,11 @@ import Icon from './Icon.astro';
   .ask-bar input {
     flex: 1;
     min-width: 0;
-    min-height: 48px;
+    height: 40px;
     border: 0;
     background: transparent;
     color: var(--c-ink);
-    font-size: 1.125rem;
+    font-size: 1rem;
     letter-spacing: -0.01em;
   }
   .ask-bar input:focus {
@@ -97,8 +95,8 @@ import Icon from './Icon.astro';
   .ab-icon {
     display: grid;
     place-items: center;
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     border: 0;
     border-radius: 50%;
     background: transparent;
@@ -126,8 +124,8 @@ import Icon from './Icon.astro';
     display: grid;
     place-items: center;
     flex: none;
-    width: 50px;
-    height: 50px;
+    width: 34px;
+    height: 34px;
     border: 0;
     border-radius: 50%;
     background: #0b2a6b;

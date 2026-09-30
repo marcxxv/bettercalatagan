@@ -1196,6 +1196,15 @@ details > summary::-webkit-details-marker {
 
 /* ---------- Motion ---------- */
 
+/* Ambient animation stops when it is off-screen, hidden, or the tab is in the background. */
+.offscreen,
+.offscreen *,
+.page-hidden *,
+.scene:not(.active),
+.scene:not(.active) * {
+  animation-play-state: paused !important;
+}
+
 /*
  * Reveal on scroll. Content is only hidden once ui.ts has marked the document
  * (`.js-motion`), so without JavaScript — or with reduced motion — everything

@@ -64,7 +64,7 @@ const paths = Array.from({ length: lines }, (_, i) => ({
         <rect width={W} height={H} fill="url(#contour-fade)" />
       </mask>
     </defs>
-    <g mask="url(#contour-mask)">
+    <g>
       {[0, 1, 2].map((layer) => (
         <g class={`drift drift-${layer}`}>
           {paths
@@ -106,6 +106,7 @@ const paths = Array.from({ length: lines }, (_, i) => ({
   }
   .drift {
     animation: drift linear infinite;
+    will-change: transform;
   }
   .drift-0 {
     animation-duration: 90s;

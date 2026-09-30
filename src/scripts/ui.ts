@@ -182,6 +182,18 @@ if (motionOK && 'IntersectionObserver' in window) {
   }
 }
 
+/* ---------- Pause ambient animation that is off-screen ---------- */
+
+if ('IntersectionObserver' in window) {
+  const pauser = new IntersectionObserver((entries) => {
+    for (const e of entries) e.target.classList.toggle('offscreen', !e.isIntersecting);
+  });
+  for (const el of document.querySelectorAll('.contours, .hc-stage, .f-visual, .pulse')) pauser.observe(el);
+}
+document.addEventListener('visibilitychange', () =>
+  root.classList.toggle('page-hidden', document.hidden),
+);
+
 /* ---------- Chart tooltips ---------- */
 
 const tip = document.createElement('div');
@@ -216,7 +228,10 @@ document.addEventListener('pointerover', (event) => {
   const target = (event.target as Element).closest<HTMLElement>('[data-tip]');
   if (target) showTip(target, event.clientX, event.clientY);
 });
+let tipFrame = 0;
 document.addEventListener('pointermove', (event) => {
+  if (tipFrame) return;
+  tipFrame = requestAnimationFrame(() => (tipFrame = 0));
   const target = (event.target as Element).closest<HTMLElement>('[data-tip]');
   if (target) showTip(target, event.clientX, event.clientY);
   else hideTip();
@@ -335,7 +350,11 @@ function attachSearch(input: HTMLInputElement, list: HTMLElement, status: HTMLEl
     list.dispatchEvent(new CustomEvent('search:results', { bubbles: true, detail: results.length }));
   };
 
-  input.addEventListener('input', run);
+  let debounce = 0;
+  input.addEventListener('input', () => {
+    window.clearTimeout(debounce);
+    debounce = window.setTimeout(run, 90);
+  });
   input.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
