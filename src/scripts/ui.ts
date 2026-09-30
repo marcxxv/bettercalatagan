@@ -712,7 +712,7 @@ for (const box of document.querySelectorAll<HTMLElement>('[data-inline-search]')
     }
   });
   input.addEventListener('focus', () => {
-    if (list.children.length) {
+    if (list.querySelector('[role="option"]')) {
       list.hidden = false;
       input.setAttribute('aria-expanded', 'true');
     }
