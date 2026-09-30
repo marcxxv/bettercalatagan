@@ -151,6 +151,9 @@ const scenes = [
         spellcheck="false"
         data-prompt-target
       />
+      <button class="ab-icon" type="button" data-voice hidden aria-label="Ask by voice" title="Ask by voice">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>
+      </button>
       <button class="ask-go" type="submit" aria-label="Search">
         <Icon name="arrow-right" size="20" />
       </button>
@@ -368,7 +371,7 @@ const scenes = [
     border-radius: 999px;
     background: var(--c-raised);
     box-shadow: var(--shadow-bar);
-    border: 1px solid var(--c-line);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 18%, transparent);
     transition: box-shadow var(--dur-2), border-color var(--dur-2);
   }
   .hc-ask form:focus-within {
@@ -393,6 +396,27 @@ const scenes = [
   .hc-ask input:focus {
     outline: none;
   }
+  .ab-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--c-ink);
+    cursor: pointer;
+  }
+  .ab-icon[hidden] {
+    display: none;
+  }
+  .ab-icon:hover {
+    background: var(--c-sunk);
+  }
+  .ab-icon:global(.listening) {
+    color: #fff;
+    background: #c62828;
+  }
   .ask-go {
     display: grid;
     place-items: center;
@@ -401,10 +425,14 @@ const scenes = [
     height: 52px;
     border: 0;
     border-radius: 50%;
-    background: var(--c-accent);
-    color: var(--c-bg);
+    background: #0b2a6b;
+    color: #fff;
     cursor: pointer;
     transition: transform var(--dur-2) var(--ease-out), background var(--dur-1);
+  }
+  :global([data-theme='dark']) .ask-go {
+    background: var(--c-accent);
+    color: var(--c-bg);
   }
   .ask-go:hover {
     background: var(--c-accent-strong);

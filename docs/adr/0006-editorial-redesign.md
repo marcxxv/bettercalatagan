@@ -54,11 +54,13 @@ JavaScript every page is complete and every list is shown in full.
 columns and bars that grow into view, count-up figures, a manifesto that lights word by word.
 Everything stops under `prefers-reduced-motion`, and the carousel never auto-advances then.
 
-**Mark.** A stressed, serif-weighted "C" drawn as the curve of the bay, with a single gold point
-at its southern tip for the Cape Santiago light, in a navy rounded square. Still never a circle,
-shield, wreath or seal. `scripts/brand.mjs` renders the favicon, app icons and one Open Graph
-image per section from the vector mark and the site's own fonts; share images carry titles only,
-never figures, so they cannot drift out of date.
+**Mark.** An emblem in the BetterGov.ph family: a royal-blue Philippine sun with split flag rays, the
+Cape Santiago lighthouse (tapered tower, base band, bracketed gallery, lantern and dome, after
+the real light) standing on a sweeping white cape with the sea curling below, and "BETTER
+CALATAGAN" arched along the lower left. One colour, so it reproduces anywhere. Sources:
+`public/logo.svg` (with lettering) and `public/logo-mark.svg`. `scripts/brand.mjs` renders the
+favicon, app icons and one Open Graph image per section from the mark; share images carry titles
+only, never figures, so they cannot drift out of date.
 
 ### What did not change
 

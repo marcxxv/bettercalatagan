@@ -4,7 +4,7 @@
   "description": "An independent civic guide to Calatagan, Batangas — every public figure traced to its source. Not an official government website.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fbfbfa",
+  "background_color": "#ffffff",
   "theme_color": "#fbfbfa",
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },

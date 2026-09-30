@@ -1,33 +1,20 @@
 ---
 /**
- * The Better Calatagan mark.
- *
- * A stressed, serif-weighted "C" drawn as the curve of Calatagan's bay, with a
- * single gold point at its southern tip: the Cape Santiago light. Set in a
- * rounded square — not a circle, shield or wreath — so it can never be taken
- * for a seal or any government insignia.
- *
- * The same geometry is used for public/favicon.svg and, via
- * scripts/brand.mjs, for every raster icon and share image.
+ * The Better Calatagan emblem mark: the Cape Santiago lighthouse on the cape,
+ * before the Philippine sun, drawn in the BetterGov.ph family style. The
+ * vector source is public/logo-mark.svg (full lockup: public/logo.svg); the
+ * raster icons and share images are rendered from it by scripts/brand.mjs.
  */
+import raw from '../../public/logo-mark.svg?raw';
+
 interface Props {
   size?: number;
   title?: string;
 }
 const { size = 32, title } = Astro.props;
+const svg = raw
+  .replace('<svg ', `<svg class="mark" width="${size}" height="${size}" focusable="false" ${title ? `role="img" aria-label="${title}"` : 'aria-hidden="true"'} `)
+  .trim();
 ---
 
-<svg
-  class="mark"
-  width={size}
-  height={size}
-  viewBox="0 0 32 32"
-  role={title ? 'img' : undefined}
-  aria-hidden={title ? undefined : 'true'}
-  focusable="false"
->
-  {title && <title>{title}</title>}
-  <rect width="32" height="32" rx="7.5" fill="#1b3c8c" />
-  <path d="M22.60 9.96A9.4 9.4 0 1 0 22.60 22.04L20.99 20.73A6.0 6.0 0 1 1 20.99 11.27Z" fill="#fbfbfa" />
-  <circle cx="24.8" cy="24.54" r="2.05" fill="#e2aa2f" />
-</svg>
+<Fragment set:html={svg} />

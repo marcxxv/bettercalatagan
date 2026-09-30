@@ -14,8 +14,8 @@ patterns shared across the Better LGU portals. **No data changed.**
   with its optical-size axis) and Public Sans for interface; one navy accent; full dark mode with a
   light / dark / system switch. Every text pairing measured at WCAG 2.2 AA; axe-core clean on every
   page in both themes; no horizontal scroll at 320 px.
-- **New mark:** a serif "C" drawn as the curve of the bay with a gold point for the Cape Santiago
-  light. New favicon, Apple touch and web-app icons, `site.webmanifest`, and one Open Graph share
+- **New emblem:** the Cape Santiago lighthouse on the cape, before the Philippine sun, drawn in
+  the BetterGov.ph family style (`public/logo.svg`, `public/logo-mark.svg`). New favicon, Apple touch and web-app icons, `site.webmanifest`, and one Open Graph share
   image per section, all rendered by `scripts/brand.mjs`.
 - **Ask anything:** "Kumusta, Calatagan" home page with a question box; a floating ask bar on
   every page; a ⌘K / Ctrl K search dialog. Facts answer inline with their source, from a

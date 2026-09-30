@@ -30,20 +30,24 @@ const pub = join(root, 'public');
 const font = async (file) =>
   `data:font/woff2;base64,${(await readFile(join(pub, 'fonts', file))).toString('base64')}`;
 
-const BLUE = '#1b3c8c';
+const BLUE = '#1a3aa8';
 const PAPER = '#fbfbfa';
-const GOLD = '#e2aa2f';
 const INK = '#0b1220';
 
-const C_PATH = 'M22.60 9.96A9.4 9.4 0 1 0 22.60 22.04L20.99 20.73A6.0 6.0 0 1 1 20.99 11.27Z';
+const MARK = await readFile(join(pub, 'logo-mark.svg'), 'utf8');
+const MARK_REV = await readFile(join(pub, 'logo-mark-reversed.svg'), 'utf8');
 
-/** The mark; `bleed` fills the square edge to edge (for platforms that mask icons). */
-const mark = (size, { bleed = false, scale = 1 } = {}) => {
-  const s = 32 / scale;
-  const o = (s - 32) / 2;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="${-o} ${-o} ${s} ${s}">
-    <rect x="${-o}" y="${-o}" width="${s}" height="${s}" rx="${bleed ? 0 : 7.5 / scale}" fill="${BLUE}"/>
-    <path d="${C_PATH}" fill="${PAPER}"/><circle cx="24.8" cy="24.54" r="2.05" fill="${GOLD}"/></svg>`;
+/**
+ * The emblem mark at `size`. `tile` sets a background square (icons);
+ * `bleed` fills it edge to edge for platforms that mask icons; `scale` is how
+ * much of the tile the mark occupies.
+ */
+const mark = (size, { tile = null, bleed = false, scale = 1, reversed = false } = {}) => {
+  const inner = (reversed ? MARK_REV : MARK).replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+  const s = 384 / scale;
+  const o = (s - 384) / 2;
+  const bg = tile ? `<rect x="${56 - o}" y="${-8 - o}" width="${s}" height="${s}" rx="${bleed ? 0 : s * 0.2}" fill="${tile}"/>` : '';
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="${56 - o} ${-8 - o} ${s} ${s}">${bg}${inner}</svg>`;
 };
 
 const fontFaces = `
@@ -96,11 +100,11 @@ const ogHtml = ({ eyebrow, title }) => `<!doctype html><html><head><meta charset
   h1 { margin-top: 18px; font-family: 'Source Serif 4'; font-weight: 400; font-size: ${title.length > 42 ? 70 : 84}px;
     line-height: 1.02; letter-spacing: -0.04em; max-width: 900px; }
   .foot { margin-top: 34px; display: flex; justify-content: space-between; font-size: 21px; color: #4a5160; }
-  .ghost { position: absolute; right: -90px; top: -60px; opacity: 0.07; }
+  .ghost { position: absolute; right: -40px; top: -30px; opacity: 0.08; }
 </style></head><body><div class="panel">${contours(1156, 586)}
-  <div class="ghost">${mark(420).replace(`fill="${BLUE}"`, 'fill="transparent"').replace(`fill="${PAPER}"`, `fill="${BLUE}"`).replace(`fill="${GOLD}"`, 'fill="transparent"')}</div>
+  <div class="ghost">${mark(430)}</div>
   <div class="inner">
-    <div class="lockup">${mark(52)}Better Calatagan</div>
+    <div class="lockup">${mark(64)}Better Calatagan</div>
     <p class="eyebrow">${eyebrow}</p>
     <h1>${title}</h1>
     <div class="foot"><span>An independent civic guide · Not an official government website</span><span>Every figure, sourced</span></div>
@@ -138,12 +142,12 @@ async function renderSvg(svg, size) {
 
 // Icons
 const icoEntries = [];
-for (const size of [16, 32, 48]) icoEntries.push({ size, data: await renderSvg(mark(size), size) });
+for (const size of [16, 32, 48]) icoEntries.push({ size, data: await renderSvg(mark(size, { tile: '#ffffff', scale: 1.08 }), size) });
 await writeFile(join(pub, 'favicon.ico'), ico(icoEntries));
-await writeFile(join(pub, 'apple-touch-icon.png'), await renderSvg(mark(180, { bleed: true, scale: 0.86 }), 180));
-await writeFile(join(pub, 'icon-192.png'), await renderSvg(mark(192), 192));
-await writeFile(join(pub, 'icon-512.png'), await renderSvg(mark(512), 512));
-await writeFile(join(pub, 'icon-maskable-512.png'), await renderSvg(mark(512, { bleed: true, scale: 0.7 }), 512));
+await writeFile(join(pub, 'apple-touch-icon.png'), await renderSvg(mark(180, { tile: '#ffffff', bleed: true, scale: 0.84 }), 180));
+await writeFile(join(pub, 'icon-192.png'), await renderSvg(mark(192, { tile: '#ffffff', scale: 0.92 }), 192));
+await writeFile(join(pub, 'icon-512.png'), await renderSvg(mark(512, { tile: '#ffffff', scale: 0.92 }), 512));
+await writeFile(join(pub, 'icon-maskable-512.png'), await renderSvg(mark(512, { tile: '#ffffff', bleed: true, scale: 0.7 }), 512));
 
 // Share images
 await mkdir(join(pub, 'og'), { recursive: true });

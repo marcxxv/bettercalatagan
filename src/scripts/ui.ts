@@ -469,3 +469,41 @@ for (const box of document.querySelectorAll<HTMLElement>('[data-inline-search]')
     }
   });
 }
+
+/* ---------- Voice input for the ask boxes (where the browser supports it) ---------- */
+
+type Recognition = {
+  lang: string;
+  interimResults: boolean;
+  start(): void;
+  stop(): void;
+  onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
+  onend: (() => void) | null;
+};
+const SpeechAPI = (window as unknown as { SpeechRecognition?: new () => Recognition; webkitSpeechRecognition?: new () => Recognition })
+  .SpeechRecognition ?? (window as unknown as { webkitSpeechRecognition?: new () => Recognition }).webkitSpeechRecognition;
+if (SpeechAPI) {
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-voice]')) {
+    const input = button.closest('form')?.querySelector('input');
+    if (!input) continue;
+    button.hidden = false;
+    let rec: Recognition | null = null;
+    button.addEventListener('click', () => {
+      if (rec) return rec.stop();
+      rec = new SpeechAPI();
+      rec.lang = 'en-PH';
+      rec.interimResults = true;
+      button.classList.add('listening');
+      rec.onresult = (e) => {
+        input.value = Array.from(e.results, (r) => r[0].transcript).join('');
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      };
+      rec.onend = () => {
+        button.classList.remove('listening');
+        rec = null;
+        input.focus();
+      };
+      rec.start();
+    });
+  }
+}
