@@ -7,6 +7,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+- **Withheld list:** the entry saying no Full Disclosure Policy amount had been extracted was out of
+  date since `/finances` publishes Statement of Receipts and Expenditures figures. It now covers only
+  the 13 other FDP forms (142 filings), which remain indexed on `/transparency` and unextracted.
+
 ### Changed — Editorial, answer-first redesign
 See `docs/adr/0006-editorial-redesign.md`. Modelled on America.gov's professionalism and on the
 patterns shared across the Better LGU portals. **No data changed.**
