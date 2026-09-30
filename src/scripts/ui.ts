@@ -55,14 +55,12 @@ for (const button of document.querySelectorAll<HTMLButtonElement>('[data-theme-t
 /* ---------- Header state ---------- */
 
 const header = document.querySelector<HTMLElement>('.site-header');
-const toTop = document.querySelector<HTMLElement>('.to-top');
 const progress = document.querySelector<HTMLElement>('[data-progress]');
 let ticking = false;
 function onScroll() {
   ticking = false;
   const y = window.scrollY;
   header?.classList.toggle('scrolled', y > 8);
-  toTop?.classList.toggle('show', y > 900);
   if (progress) {
     const max = document.documentElement.scrollHeight - window.innerHeight;
     progress.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max) : 0})`;
@@ -79,10 +77,6 @@ window.addEventListener(
   { passive: true },
 );
 onScroll();
-toTop?.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: motionOK ? 'smooth' : 'auto' });
-  document.getElementById('main')?.focus({ preventScroll: true });
-});
 
 // Close the mobile menu on Escape or when a link inside it is followed.
 const menu = document.querySelector<HTMLDetailsElement>('.nav-menu');

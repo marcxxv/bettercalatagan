@@ -6,7 +6,6 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import AskBar from '../components/AskBar.astro';
-import Icon from '../components/Icon.astro';
 
 interface Props {
   title: string;
@@ -73,9 +72,6 @@ const { title, description, crumbs, jsonLd, ogType, progress = false } = Astro.p
     <SiteFooter />
     <SearchDialog />
     <AskBar />
-    <button class="to-top" type="button" aria-label="Back to top">
-      <Icon name="arrow-right" />
-    </button>
 
     <script>
       import '../scripts/ui.ts';
@@ -113,47 +109,6 @@ const { title, description, crumbs, jsonLd, ogType, progress = false } = Astro.p
         transform: scaleX(0);
         transform-origin: left;
         pointer-events: none;
-      }
-      .to-top {
-        position: fixed;
-        right: clamp(1rem, 3vw, 2rem);
-        bottom: clamp(0.9rem, 2vw, 1.6rem);
-        z-index: 30;
-        display: grid;
-        place-items: center;
-        width: 48px;
-        height: 48px;
-        border: 1px solid var(--c-line-strong);
-        border-radius: 50%;
-        background: var(--c-raised);
-        color: var(--c-navy);
-        box-shadow: var(--shadow-md);
-        cursor: pointer;
-        opacity: 0;
-        transform: translateY(12px);
-        pointer-events: none;
-        transition:
-          opacity var(--dur-2) ease,
-          transform var(--dur-2) var(--ease-out),
-          border-color var(--dur-1);
-      }
-      .to-top .icon {
-        transform: rotate(-90deg);
-      }
-      .to-top.show {
-        opacity: 1;
-        transform: none;
-        pointer-events: auto;
-      }
-      /* The ask bar owns the bottom of narrow screens. */
-      @media (max-width: 64rem) {
-        .to-top {
-          display: none;
-        }
-      }
-      .to-top:hover {
-        border-color: var(--c-accent);
-        color: var(--c-accent);
       }
       body.menu-open {
         overflow: hidden;
