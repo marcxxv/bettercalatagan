@@ -37,4 +37,5 @@ exports rather than a live API, which also means published data cannot silently 
 citation.
 
 If the project later needs genuinely dynamic behaviour, this decision should be revisited in a new
-ADR rather than eroded.
+ADR rather than eroded. *Update: [0007](0007-in-site-document-reader.md) adds host-level
+pass-through rewrites so documents can be read in place; no server code, no storage.*

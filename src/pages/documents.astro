@@ -6,6 +6,7 @@ import Icon from '../components/Icon.astro';
 import { archivedDocuments, documentKinds, documentYears, documentsSource } from '../data/documents';
 import { KIND_LABELS } from '../data/schemas/documents';
 import { formatDate, formatNumber } from '../lib/format';
+import { archiveReadAttrs } from '../lib/viewer';
 
 const docs = archivedDocuments.documents;
 
@@ -23,6 +24,7 @@ const rows = docs.map((doc) => ({
   kindLabel: KIND_LABELS[doc.kind],
   size: sizeLabel(doc.byteLength),
   search: `${doc.title} ${doc.filename} ${KIND_LABELS[doc.kind]}`.toLowerCase(),
+  read: archiveReadAttrs(doc),
 }));
 const inspectedCount = docs.filter((doc) => doc.inspected).length;
 const kindMax = Math.max(1, ...documentKinds.map((k) => k.count));
@@ -173,10 +175,20 @@ const crumbs = [{ name: 'Archive', href: '/documents' }];
               </p>
             </div>
             <p class="get">
-              <a class="button small" href={doc.archiveUrl} rel="noopener noreferrer nofollow">
-                Open copy<span class="visually-hidden"> of {doc.title} on the Wayback Machine</span>
-                <Icon name="external" size="15" />
-              </a>
+              {doc.read ? (
+                <>
+                  <a class="button small primary" href={doc.archiveUrl} rel="noopener noreferrer nofollow" {...doc.read}>
+                    <Icon name="eye" size="16" /> Read<span class="visually-hidden"> {doc.title}</span>
+                  </a>
+                  <a class="button small icon-only" href={doc.read['data-read']} download={doc.filename} title="Download" aria-label={`Download ${doc.title}`}>
+                    <Icon name="download" size="16" />
+                  </a>
+                </>
+              ) : (
+                <a class="button small" href={doc.archiveUrl} rel="noopener noreferrer nofollow" title="Older Word format: it opens in Word or LibreOffice, not in the browser">
+                  <Icon name="download" size="16" /> Get file<span class="visually-hidden"> {doc.title} from the Wayback Machine</span>
+                </a>
+              )}
             </p>
           </li>
         ))}
@@ -402,6 +414,8 @@ const crumbs = [{ name: 'Archive', href: '/documents' }];
     font-size: 0.72rem;
   }
   .get {
+    display: flex;
+    gap: var(--sp-2);
     margin: 0;
     grid-column: 2;
   }

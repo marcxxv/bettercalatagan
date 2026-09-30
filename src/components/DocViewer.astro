@@ -1,0 +1,622 @@
+---
+/**
+ * The in-site document reader for PDF, XLSX and DOCX.
+ *
+ * Any element carrying the attributes from `readAttrs()` (lib/viewer.ts)
+ * opens it: `data-read` is the same-origin file path, `data-type` the format,
+ * plus title, meta, the original source URL and an id for a shareable
+ * ?read= link. Renderers load only when a document is opened.
+ */
+import Icon from './Icon.astro';
+---
+
+<dialog id="doc-viewer" class="viewer" aria-labelledby="viewer-title">
+  <header class="v-bar">
+    <div class="v-title">
+      <span class="v-icon" aria-hidden="true"><Icon name="file" size="18" /></span>
+      <div class="v-titles">
+        <h2 id="viewer-title" data-v-title>Document</h2>
+        <p class="v-meta" data-v-meta></p>
+      </div>
+    </div>
+    <div class="v-tools" role="toolbar" aria-label="Reader controls">
+      <div class="v-group v-pages">
+        <button type="button" data-v-prev aria-label="Previous page"><Icon name="chevron-down" size="18" class="up" /></button>
+        <label class="v-page">
+          <span class="visually-hidden">Page</span>
+          <input type="text" inputmode="numeric" data-v-page value="1" aria-label="Page number" />
+          <span class="v-of">of <span data-v-count>–</span></span>
+        </label>
+        <button type="button" data-v-next aria-label="Next page"><Icon name="chevron-down" size="18" /></button>
+      </div>
+      <div class="v-group v-zoom">
+        <button type="button" data-v-zoom-out aria-label="Zoom out">−</button>
+        <button type="button" class="v-zoom-level" data-v-fit aria-label="Fit to width" title="Fit to width"><span data-v-zoom>Fit</span></button>
+        <button type="button" data-v-zoom-in aria-label="Zoom in">+</button>
+      </div>
+      <a class="v-btn" data-v-download download rel="noopener" aria-label="Download the file" title="Download">
+        <Icon name="download" size="18" />
+      </a>
+      <a class="v-btn" data-v-original rel="noopener noreferrer nofollow" target="_blank" aria-label="Open the original source" title="Open the original source">
+        <Icon name="external" size="18" />
+      </a>
+      <form method="dialog">
+        <button class="v-close" type="submit" aria-label="Close reader"><Icon name="close" size="20" /></button>
+      </form>
+    </div>
+  </header>
+  <div class="v-sheets" data-v-sheets role="tablist" aria-label="Sheets" hidden></div>
+
+  <div class="v-stage" data-v-stage tabindex="0" aria-label="Document pages">
+    <div class="v-state" data-v-loading>
+      <div class="v-spinner" aria-hidden="true"></div>
+      <p><strong>Opening document…</strong> <span data-v-progress></span></p>
+      <p class="v-small">Fetching the file from <span data-v-source>the Internet Archive</span>.</p>
+    </div>
+    <div class="v-state" data-v-error hidden>
+      <span class="v-err-icon" aria-hidden="true"><Icon name="alert" size="26" /></span>
+      <p><strong>This document could not be displayed here.</strong></p>
+      <p class="v-small" data-v-error-text>The source may be busy, or the file is not readable here.</p>
+      <p><a class="button primary" data-v-error-link target="_blank" rel="noopener noreferrer nofollow">Open the original <Icon name="external" size="16" /></a></p>
+    </div>
+    <div class="v-pages-wrap" data-v-pages></div>
+  </div>
+  <p class="v-foot">
+    Shown straight from <span data-v-source>the Internet Archive</span>, unaltered; nothing is
+    stored on this site. Download or open the original from the bar above.
+  </p>
+</dialog>
+
+<script>
+  import '../scripts/viewer.ts';
+</script>
+
+<style is:global>
+  .viewer {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--c-bg);
+    color: var(--c-ink);
+  }
+  .viewer[open] {
+    display: flex;
+    flex-direction: column;
+    animation: viewer-in 260ms var(--ease-out);
+  }
+  .viewer::backdrop {
+    background: rgb(5 8 13 / 0.6);
+  }
+  @keyframes viewer-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+  @media (min-width: 64rem) {
+    .viewer {
+      width: min(76rem, calc(100vw - 4rem));
+      height: calc(100dvh - 3rem);
+      margin: auto;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+  }
+  .v-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3) var(--sp-4);
+    padding: var(--sp-3) var(--sp-4) var(--sp-3) var(--sp-5);
+    border-bottom: 1px solid var(--c-line);
+    background: var(--c-raised);
+  }
+  .v-title {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    min-width: 0;
+    flex: 1 1 18rem;
+  }
+  .v-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--c-clay-wash);
+    color: var(--c-clay);
+  }
+  .v-titles {
+    min-width: 0;
+  }
+  .v-titles h2 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--fs-base);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .v-meta {
+    margin: 0;
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .v-tools {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+  .v-tools form {
+    margin: 0;
+  }
+  .v-group {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 2px;
+    border: 1px solid var(--c-line);
+    border-radius: 999px;
+    background: var(--c-bg-alt);
+  }
+  .v-group button,
+  .v-btn,
+  .v-close {
+    display: grid;
+    place-items: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--c-ink);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .v-group button:hover,
+  .v-btn:hover,
+  .v-close:hover {
+    background: var(--c-sunk);
+  }
+  .v-group button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .v-pages .up {
+    transform: rotate(180deg);
+  }
+  .v-page {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 6px;
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+  .v-page input {
+    width: 2.6em;
+    height: 28px;
+    border: 1px solid var(--c-line-strong);
+    border-radius: 8px;
+    background: var(--c-surface);
+    color: var(--c-ink);
+    font: inherit;
+    font-weight: 600;
+    text-align: center;
+  }
+  .v-zoom-level {
+    min-width: 58px !important;
+    font-size: var(--fs-sm) !important;
+    font-variant-numeric: tabular-nums;
+  }
+  .v-btn,
+  .v-close {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--c-line);
+  }
+  .v-close {
+    background: var(--c-ink);
+    color: var(--c-bg);
+    border-color: var(--c-ink);
+  }
+  .v-close:hover {
+    background: var(--c-ink);
+    opacity: 0.85;
+  }
+  @media (max-width: 40rem) {
+    .v-zoom,
+    .v-btn[data-v-original] {
+      display: none;
+    }
+    .v-tools {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  .v-stage {
+    position: relative;
+    flex: 1;
+    overflow: auto;
+    overscroll-behavior: contain;
+    background:
+      radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--c-ink) 7%, transparent) 1px, transparent 0) 0 0 / 18px 18px,
+      var(--c-bg-alt);
+  }
+  .v-stage:focus-visible {
+    outline: none;
+  }
+  .v-pages-wrap {
+    display: grid;
+    justify-items: center;
+    gap: var(--sp-5);
+    padding: var(--sp-6) var(--sp-4) var(--sp-8);
+  }
+  .v-page-box {
+    position: relative;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.08),
+      0 12px 32px -12px rgb(11 18 32 / 0.3);
+    overflow: hidden;
+  }
+  .v-page-box canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .v-page-box::after {
+    content: attr(data-page);
+    position: absolute;
+    right: 10px;
+    bottom: 8px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgb(11 18 32 / 0.6);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity var(--dur-2);
+  }
+  .v-page-box:hover::after {
+    opacity: 1;
+  }
+  .v-page-box:not(.drawn) {
+    background:
+      linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.6) 50%, transparent 70%) -200% 0 / 200% 100% no-repeat,
+      #f1f1ee;
+    animation: v-shimmer 1.4s linear infinite;
+  }
+  @keyframes v-shimmer {
+    to {
+      background-position: 200% 0, 0 0;
+    }
+  }
+  /* PDF.js text layer: invisible, selectable text over each page. */
+  .v-page-box .textLayer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-align: initial;
+    opacity: 1;
+    forced-color-adjust: none;
+    transform-origin: 0 0;
+    z-index: 1;
+  }
+  .v-page-box .textLayer :is(span, br) {
+    color: transparent;
+    position: absolute;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0 0;
+  }
+  .v-page-box .textLayer ::selection {
+    background: rgb(27 60 140 / 0.3);
+  }
+  .v-page-box .textLayer .endOfContent {
+    display: block;
+    position: absolute;
+    inset: 100% 0 0;
+    z-index: 0;
+    cursor: default;
+    user-select: none;
+  }
+  .v-state {
+    display: grid;
+    justify-items: center;
+    gap: var(--sp-2);
+    padding: var(--sp-9) var(--sp-4);
+    text-align: center;
+  }
+  .v-state[hidden] {
+    display: none;
+  }
+  .v-state p {
+    margin: 0;
+  }
+  .v-small {
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+    max-width: 44ch;
+  }
+  .v-spinner {
+    width: 36px;
+    height: 36px;
+    margin-bottom: var(--sp-2);
+    border: 3px solid var(--c-line);
+    border-top-color: var(--c-accent);
+    border-radius: 50%;
+    animation: v-spin 0.9s linear infinite;
+  }
+  @keyframes v-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .v-err-icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--c-warn-bg);
+    color: var(--c-warn);
+  }
+  @media (max-width: 40rem) {
+    .v-foot {
+      display: none;
+    }
+  }
+  .v-foot {
+    margin: 0;
+    padding: var(--sp-2) var(--sp-5);
+    border-top: 1px solid var(--c-line);
+    background: var(--c-raised);
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+    text-align: center;
+  }
+  .viewer:not([data-type='pdf']) .v-pages {
+    display: none;
+  }
+  .v-sheets {
+    display: flex;
+    gap: 4px;
+    padding: var(--sp-2) var(--sp-4) 0;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--c-line);
+    background: var(--c-raised);
+    scrollbar-width: thin;
+  }
+  .v-sheets[hidden] {
+    display: none;
+  }
+  .v-sheets button {
+    flex: none;
+    padding: 8px 14px;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    background: transparent;
+    color: var(--c-muted);
+    font: inherit;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .v-sheets button:hover {
+    color: var(--c-ink);
+  }
+  .v-sheets button[aria-selected='true'] {
+    background: var(--c-bg-alt);
+    border-color: var(--c-line);
+    color: var(--c-ink);
+    margin-bottom: -1px;
+  }
+
+  /* Spreadsheets: a paper-white grid with sticky row and column headers. */
+  .viewer[data-type='xlsx'] .v-stage {
+    background: #fff;
+  }
+  .viewer[data-type='xlsx'] .v-pages-wrap {
+    display: block;
+    padding: 0;
+  }
+  .xl-wrap {
+    display: inline-block;
+    min-width: 100%;
+    background: #fff;
+    color: #1b1f24;
+  }
+  .xl {
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    width: max-content;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.35;
+  }
+  .xl col.xl-rh {
+    width: 46px;
+  }
+  .xl th,
+  .xl td {
+    padding: 4px 8px;
+    border-right: 1px solid #e3e5e8;
+    border-bottom: 1px solid #e3e5e8;
+    text-align: left;
+    vertical-align: top;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .xl td.w {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .xl td.n {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .xl td.b {
+    font-weight: 700;
+  }
+  .xl td.i {
+    font-style: italic;
+  }
+  .xl td[data-align='center'],
+  .xl td[data-align='centerContinuous'] {
+    text-align: center;
+  }
+  .xl td[data-align='right'] {
+    text-align: right;
+  }
+  .xl td[data-align='left'] {
+    text-align: left;
+  }
+  .xl thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #f3f4f6;
+    color: #5b6470;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .xl tbody th {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: #f3f4f6;
+    color: #5b6470;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .xl thead .xl-corner {
+    left: 0;
+    z-index: 3;
+  }
+  .xl tbody tr:hover td {
+    background: #f5f8ff;
+  }
+  .xl-empty {
+    padding: var(--sp-8);
+    color: #5b6470;
+    text-align: center;
+  }
+
+  /* Word documents: a single paper page. */
+  .dx-page {
+    width: min(100%, 816px);
+    padding: clamp(24px, 6vw, 72px);
+    background: #fff;
+    color: #1b1f24;
+    border-radius: 4px;
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.08),
+      0 12px 32px -12px rgb(11 18 32 / 0.3);
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+  .dx-page :is(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-sans);
+    color: #0b1220;
+    margin: 1.1em 0 0.4em;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .dx-page h1 {
+    font-size: 1.75em;
+  }
+  .dx-page h2 {
+    font-size: 1.4em;
+  }
+  .dx-page h3 {
+    font-size: 1.2em;
+  }
+  .dx-page :is(h4, h5, h6) {
+    font-size: 1.05em;
+  }
+  .dx-page > :first-child {
+    margin-top: 0;
+  }
+  .dx-page p {
+    margin: 0 0 0.6em;
+  }
+  .dx-page p.blank {
+    min-height: 0.8em;
+  }
+  .dx-page p.li {
+    padding-left: 1.4em;
+    text-indent: -1em;
+  }
+  .dx-page p.li::before {
+    content: '•';
+    display: inline-block;
+    width: 1em;
+    text-indent: 0;
+  }
+  .dx-page [data-align='center'] {
+    text-align: center;
+  }
+  .dx-page [data-align='right'] {
+    text-align: right;
+  }
+  .dx-page [data-align='justify'] {
+    text-align: justify;
+  }
+  .dx-page img {
+    max-width: 100%;
+    height: auto;
+  }
+  .dx-table-wrap {
+    overflow-x: auto;
+    margin: 0 0 1em;
+  }
+  .dx-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .dx-table td {
+    padding: 6px 8px;
+    border: 1px solid #c9ced6;
+    vertical-align: top;
+  }
+  .dx-table td p {
+    margin: 0;
+  }
+  body.viewer-open {
+    overflow: hidden;
+  }
+  body.viewer-open .ask-bar {
+    display: none !important;
+  }
+
+</style>

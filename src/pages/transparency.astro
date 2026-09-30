@@ -7,6 +7,7 @@ import { fdpDataset, fdpSource, fdpSummary, formatBytes } from '../data/fdp';
 import { formatPeriod } from '../data/schemas/fdp';
 import { formatDate, formatNumber } from '../lib/format';
 import { SITE } from '../lib/site';
+import { fdpReadAttrs } from '../lib/viewer';
 
 const records = fdpDataset.records;
 
@@ -23,6 +24,7 @@ const rows = records.map((record) => ({
   postingLabel: record.postingPeriod ? formatPeriod(record.postingPeriod) : null,
   sizeLabel: formatBytes(record.byteLength),
   search: [record.formLabel, formatPeriod(record.documentPeriod), record.id].join(' ').toLowerCase(),
+  read: fdpReadAttrs(record, formatPeriod(record.documentPeriod)),
 }));
 
 const firstYear = Math.min(...fdpSummary.years);
@@ -286,16 +288,22 @@ const jsonLd = [
               </p>
             </div>
             <p class="get">
-              <a class:list={['button', 'small', { primary: row.availability === 'available' }]} href={row.downloadUrl} rel="noopener noreferrer nofollow">
-                {row.availability === 'available' ? (
-                  <><Icon name="download" size="16" /> Download</>
-                ) : (
-                  <>Try DILG link</>
-                )}
-                <span class="visually-hidden">
-                  {' '}{row.formLabel}, {row.periodLabel}, from DILG
-                </span>
-              </a>
+              {row.read ? (
+                <>
+                  <a class="button small primary" href={row.downloadUrl} rel="noopener noreferrer nofollow" {...row.read}>
+                    <Icon name="eye" size="16" /> Read
+                    <span class="visually-hidden"> {row.formLabel}, {row.periodLabel}</span>
+                  </a>
+                  <a class="button small icon-only" href={row.read['data-read']} download={row.read['data-filename']} title="Download" aria-label={`Download ${row.formLabel}, ${row.periodLabel}`}>
+                    <Icon name="download" size="16" />
+                  </a>
+                </>
+              ) : (
+                <a class="button small" href={row.downloadUrl} rel="noopener noreferrer nofollow">
+                  Try DILG link
+                  <span class="visually-hidden"> for {row.formLabel}, {row.periodLabel}</span>
+                </a>
+              )}
             </p>
             <details class="filing-more">
               <summary>
@@ -573,6 +581,8 @@ const jsonLd = [
     color: var(--c-warn);
   }
   .get {
+    display: flex;
+    gap: var(--sp-2);
     margin: 0;
     grid-column: 2;
   }

@@ -1,4 +1,5 @@
 ---
+import { fdpReadAttrs } from '../lib/viewer';
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Source from '../components/Source.astro';
@@ -309,8 +310,8 @@ const jsonLd = [
                 includes the earlier quarters of CY{p.year}.
                 {p.record && (
                   <>
-                    {' '}<a href={p.record.downloadUrl} rel="noopener noreferrer nofollow">
-                      Download the original {p.label} filing from DILG<span aria-hidden="true"> ↗</span>
+                    {' '}<a href={p.record.downloadUrl} rel="noopener noreferrer nofollow" {...fdpReadAttrs(p.record, p.label)}>
+                      Read the original {p.label} filing from DILG
                     </a>
                   </>
                 )}
@@ -384,9 +385,8 @@ const jsonLd = [
                         <td class="num">{formatNumber(row.expenditures ?? 0)}</td>
                         <td>
                           {record ? (
-                            <a href={record.downloadUrl} rel="noopener noreferrer nofollow">
-                              DILG<span class="visually-hidden"> filing for CY{row.year}</span>
-                              <span aria-hidden="true"> ↗</span>
+                            <a href={record.downloadUrl} rel="noopener noreferrer nofollow" {...fdpReadAttrs(record, `CY${row.year}`)}>
+                              Read<span class="visually-hidden"> the DILG filing for CY{row.year}</span>
                             </a>
                           ) : (
                             '—'
@@ -477,9 +477,8 @@ const jsonLd = [
                     </td>
                     <td>
                       {record ? (
-                        <a href={record.downloadUrl} rel="noopener noreferrer nofollow">
-                          DILG<span class="visually-hidden"> filing for {label}</span>
-                          <span aria-hidden="true"> ↗</span>
+                        <a href={record.downloadUrl} rel="noopener noreferrer nofollow" {...fdpReadAttrs(record, label)}>
+                          Read<span class="visually-hidden"> the DILG filing for {label}</span>
                         </a>
                       ) : (
                         '—'

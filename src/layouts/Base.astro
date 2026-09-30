@@ -6,6 +6,7 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import AskBar from '../components/AskBar.astro';
+import DocViewer from '../components/DocViewer.astro';
 
 interface Props {
   title: string;
@@ -72,6 +73,7 @@ const { title, description, crumbs, jsonLd, ogType, progress = false } = Astro.p
     <SiteFooter />
     <SearchDialog />
     <AskBar />
+    <DocViewer />
 
     <script>
       import '../scripts/ui.ts';

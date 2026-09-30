@@ -7,6 +7,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Read documents on the site
+See `docs/adr/0007-in-site-document-reader.md`. **No data changed.**
+- **Reader:** every archived PDF (227) and DOCX, and every retrievable DILG filing (132 XLSX),
+  now opens in a full-screen reader instead of sending readers off-site. PDFs render page by page
+  with selectable text, page jump, zoom and keyboard shortcuts; spreadsheets keep their sheets,
+  merged headers and the filing's own number formats; Word files keep headings, lists, tables and
+  images. Download and "open the original" stay one click away.
+- **Where:** `/documents`, `/government` (office documents), `/transparency` (every filing) and
+  `/finances` (the source filing behind each period and year). A `?read=<id>` link opens a document
+  directly.
+- **How:** same-origin pass-through rewrites to the Internet Archive and the DILG portal
+  (`vercel.json`); nothing is stored here. The four legacy `.doc` forms keep a download link.
+
 ### Fixed
 - **Withheld list:** the entry saying no Full Disclosure Policy amount had been extracted was out of
   date since `/finances` publishes Statement of Receipts and Expenditures figures. It now covers only

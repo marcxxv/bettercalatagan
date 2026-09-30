@@ -479,6 +479,13 @@ textarea {
   padding: 0 var(--sp-3);
   font-size: var(--fs-xs);
 }
+.button.icon-only {
+  width: var(--tap);
+  padding: 0;
+}
+.button.small.icon-only {
+  width: 36px;
+}
 .button .arrow {
   transition: transform var(--dur-2) var(--ease-out);
 }

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "description": "Better Calatagan \u2014 an independent civic-information portal for the Municipality of Calatagan, Batangas.",
+  "description": "Better Calatagan — an independent civic-information portal for the Municipality of Calatagan, Batangas.",
   "license": "MIT",
   "engines": {
     "node": ">=22.12.0"
@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "astro": "^7.3.4",
+    "fflate": "^0.8.3",
+    "pdfjs-dist": "^6.3.289",
     "zod": "^3.24.2"
   },
   "devDependencies": {
