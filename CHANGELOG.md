@@ -7,6 +7,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Lighter source cards
+- **Source cards** (`Source.astro`) are now one quiet attribution block at reading width
+  (46rem) instead of a full-width table: publisher and status on one line, the dates as one
+  sentence ("Reported 30 September 2026, not yet confirmed · Updated quarterly"), the caveat inline
+  with a small warning icon instead of a filled box, and "Method and sources" as a small toggle
+  that now also holds the note. Free-text `asOf` values ("Executive orders in force") read as
+  written instead of "Data as of …". Tier-2 caveats stay visible.
+
 ### Added — Credits
 - **About → Credits:** names the site's design references (the BetterGov.ph family of Better LGU
   portals, whose emblem style ours follows, and America.gov's editorial layout), states that

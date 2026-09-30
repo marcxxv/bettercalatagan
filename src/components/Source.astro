@@ -1,11 +1,12 @@
 ---
 /**
- * Provenance for one civic record.
+ * Provenance for one civic record, as one quiet line of attribution.
  *
- * Always visible: what the record is, where it comes from (linked), when it
- * was last verified, and any caveat. One click away: the method and the full
- * list of sources with their locators and checksums. A primary source is never
- * more than one interaction from the figure it supports.
+ * Always visible: who published it (linked), its status, the dates in a
+ * single sentence, and any caveat (tier 2 requires the caveat to be shown).
+ * One click away: the note, the method and the full list of sources with
+ * their locators and checksums. A primary source is never more than one
+ * interaction from the figure it supports.
  */
 import type { DataSource } from '../data/types/provenance';
 import Freshness from './Freshness.astro';
@@ -26,176 +27,194 @@ interface Props {
 const { source, label = 'this data', showNote = true } = Astro.props;
 const [primary, ...others] = source.sources;
 const agency = agencyOf(primary.publisher);
+
+const checked = formatDate(source.lastVerified);
 const verification =
   source.verification === 'verified'
-    ? 'Verified'
+    ? `Verified ${checked}`
     : source.verification === 'reported'
-      ? 'Reported, not yet confirmed'
-      : 'Unverified';
+      ? `Reported ${checked}, not yet confirmed`
+      : `Unverified, last checked ${checked}`;
+const REFRESH: Record<DataSource['expectedRefresh'], string> = {
+  quarterly: 'Updated quarterly',
+  annual: 'Updated yearly',
+  'per-census': 'Updated each census',
+  'per-election': 'Updated each election',
+  'per-issuance': 'Updated with each issuance',
+  irregular: 'Updated as sources change',
+  none: 'Updated only when corrected',
+};
+// asOf is a date for most records, or a phrase ("Executive orders in force")
+// where the data describes a state rather than a day.
+const asOf = source.asOf
+  ? /^\d{4}-\d{2}(-\d{2})?$/.test(source.asOf)
+    ? `Data as of ${formatDate(source.asOf)}`
+    : source.asOf
+  : null;
+const facts = [asOf, verification, REFRESH[source.expectedRefresh]].filter(Boolean);
+const hasMore = Boolean((showNote && source.note) || source.methodology || source.sources.length);
 ---
 
-<div class="provenance" role="group" aria-label={`Source for ${label}`}>
-  <div class="prov-head">
-    {agency ? <AgencyBadge agency={agency} size="2.5rem" /> : <span class="prov-icon"><Icon name="shield" size="18" /></span>}
-    <div class="prov-who">
+<aside class="provenance" aria-label={`Source for ${label}`}>
+  <span class="prov-mark">
+    {agency ? <AgencyBadge agency={agency} size="2rem" /> : <span class="prov-icon"><Icon name="shield" size="16" /></span>}
+  </span>
+
+  <div class="prov-body">
+    <p class="prov-line">
       <span class="prov-key">Source</span>
-      <span class="prov-pub">
-        <a href={primary.url} rel="noopener noreferrer nofollow">{primary.publisher}</a>
-        {others.length > 0 && <span class="muted"> and {others.length} more</span>}
-      </span>
-    </div>
-    <Freshness source={source} />
-  </div>
+      <a class="prov-pub" href={primary.url} rel="noopener noreferrer nofollow">{primary.publisher}</a>
+      {others.length > 0 && <span class="prov-more-count">+{others.length} more</span>}
+      <span class="prov-status"><Freshness source={source} /></span>
+    </p>
 
-  <dl class="prov-meta">
-    {source.asOf && (
-      <div>
-        <dt>Data as of</dt>
-        <dd>{formatDate(source.asOf)}</dd>
-      </div>
+    <p class="prov-facts">
+      {facts.map((fact, i) => (
+        <>
+          {i > 0 && <span class="sep" aria-hidden="true">·</span>}
+          <span>{fact}</span>
+        </>
+      ))}
+    </p>
+
+    {source.caveat && (
+      <p class="prov-caveat">
+        <Icon name="alert" size="15" />
+        <span><span class="visually-hidden">Caveat: </span>{source.caveat}</span>
+      </p>
     )}
-    <div>
-      <dt>{verification}</dt>
-      <dd><time datetime={source.lastVerified}>{formatDate(source.lastVerified)}</time></dd>
-    </div>
-    <div>
-      <dt>Refreshed</dt>
-      <dd>{source.expectedRefresh === 'none' ? 'Only when corrected' : (([c, ...rest]) => c.toUpperCase() + rest.join(''))(source.expectedRefresh.replace('-', ' '))}</dd>
-    </div>
-  </dl>
 
-  {source.caveat && (
-    <p class="prov-caveat"><Icon name="alert" size="16" /><span><strong>Caveat.</strong> {source.caveat}</span></p>
-  )}
-  {showNote && source.note && <p class="prov-note">{source.note}</p>}
-
-  <details class="prov-more">
-    <summary>
-      <span>Method and sources<span class="visually-hidden"> for {label}</span></span>
-      <Icon name="chevron-down" size="16" />
-    </summary>
-    <div class="prov-body">
-      {source.methodology && <p>{source.methodology}</p>}
-      <ol class="prov-sources">
-        {source.sources.map((reference) => (
-          <li>
-            <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a>
-            <span class="ref-meta">
-              {[reference.publisher, reference.locator, `Accessed ${formatDate(reference.accessedOn)}`].filter(Boolean).join(' · ')}
-            </span>
-            {reference.sha256 && <span class="hash">SHA-256 {reference.sha256}</span>}
-          </li>
-        ))}
-      </ol>
-      <p class="prov-foot"><a href="/sources">About our sources</a></p>
-    </div>
-  </details>
-</div>
+    {hasMore && (
+      <details class="prov-more">
+        <summary>
+          Method and sources<span class="visually-hidden"> for {label}</span>
+          <Icon name="chevron-down" size="14" />
+        </summary>
+        <div class="prov-detail">
+          {showNote && source.note && <p>{source.note}</p>}
+          {source.methodology && <p>{source.methodology}</p>}
+          <ol class="prov-sources">
+            {source.sources.map((reference) => (
+              <li>
+                <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a>
+                <span class="ref-meta">
+                  {[reference.publisher, reference.locator, `Accessed ${formatDate(reference.accessedOn)}`].filter(Boolean).join(' · ')}
+                </span>
+                {reference.sha256 && <span class="hash">SHA-256 {reference.sha256}</span>}
+              </li>
+            ))}
+          </ol>
+          <p class="prov-foot"><a href="/sources">About our sources</a></p>
+        </div>
+      </details>
+    )}
+  </div>
+</aside>
 
 <style>
   .provenance {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--sp-3);
+    max-width: 46rem;
     margin-block: var(--sp-5) var(--sp-6);
+    padding: var(--sp-4) var(--sp-5);
     border: 1px solid var(--c-line);
     border-radius: var(--radius-lg);
     background: var(--c-surface);
     font-size: var(--fs-sm);
-    overflow: hidden;
+    line-height: 1.5;
   }
-  .prov-head {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-3);
-    padding: var(--sp-4) var(--sp-5);
+  .prov-mark {
+    padding-top: 1px;
   }
   .prov-icon {
     display: grid;
     place-items: center;
-    flex: none;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 50%;
     background: var(--c-accent-wash);
     color: var(--c-accent);
   }
-  .prov-who {
-    display: grid;
-    gap: 1px;
+  .prov-body {
     min-width: 0;
-    margin-right: auto;
+  }
+  .prov-body > p {
+    margin: 0;
+  }
+
+  .prov-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px var(--sp-2);
+    min-height: 2rem;
   }
   .prov-key {
-    font-size: var(--fs-xs);
     color: var(--c-muted);
   }
   .prov-pub {
     font-weight: 600;
-    overflow-wrap: anywhere;
-  }
-  .prov-pub a {
     color: var(--c-ink);
     text-decoration-color: var(--c-line-strong);
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
   }
-  .prov-pub a:hover {
+  .prov-pub:hover {
     color: var(--c-accent);
   }
-  .prov-meta {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-    margin: 0;
-    border-top: 1px solid var(--c-line);
-  }
-  .prov-meta > div {
-    padding: var(--sp-3) var(--sp-5);
-    border-right: 1px solid var(--c-line);
-  }
-  .prov-meta > div:last-child {
-    border-right: 0;
-  }
-  .prov-meta dt {
-    font-size: var(--fs-xs);
+  .prov-more-count {
     color: var(--c-muted);
+    font-size: var(--fs-xs);
   }
-  .prov-meta dd {
-    margin: 2px 0 0;
-    font-weight: 600;
+  .prov-status {
+    margin-left: auto;
   }
+
+  .prov-facts {
+    color: var(--c-muted);
+    font-size: var(--fs-xs);
+  }
+  .prov-facts .sep {
+    margin-inline: 0.5em;
+  }
+
   .prov-caveat {
     display: flex;
     gap: var(--sp-2);
     align-items: flex-start;
-    margin: 0 var(--sp-4) var(--sp-4);
-    padding: var(--sp-3) var(--sp-4);
-    border-radius: var(--radius-md);
-    background: var(--c-warn-bg);
-    color: var(--c-ink);
+    margin-top: var(--sp-3) !important;
+    color: var(--c-ink-2);
+    font-size: var(--fs-xs);
+    line-height: 1.55;
   }
   .prov-caveat :global(.icon) {
+    flex: none;
     margin-top: 2px;
     color: var(--c-warn);
   }
-  .prov-note {
-    margin: 0;
-    padding: var(--sp-3) var(--sp-5) var(--sp-4);
-    border-top: 1px solid var(--c-line);
-    color: var(--c-ink-2);
-    line-height: 1.6;
-  }
+
   .prov-more {
-    border-top: 1px solid var(--c-line);
-    background: var(--c-bg-alt);
+    margin-top: var(--sp-3);
   }
   .prov-more > summary {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--sp-2);
-    min-height: var(--tap);
-    padding: 0 var(--sp-5);
-    color: var(--c-ink);
+    gap: 6px;
+    min-height: 32px;
+    color: var(--c-accent);
+    font-size: var(--fs-xs);
     font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+  .prov-more > summary::-webkit-details-marker {
+    display: none;
   }
   .prov-more > summary:hover {
-    color: var(--c-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .prov-more > summary :global(.icon) {
     transition: transform var(--dur-2) var(--ease-out);
@@ -203,13 +222,21 @@ const verification =
   .prov-more[open] > summary :global(.icon) {
     transform: rotate(180deg);
   }
-  .prov-body {
-    padding: 0 var(--sp-5) var(--sp-4);
+  .prov-detail {
+    display: grid;
+    gap: var(--sp-3);
+    margin-top: var(--sp-2);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--c-line);
     color: var(--c-ink-2);
+  }
+  .prov-detail p {
+    margin: 0;
   }
   .prov-sources {
     display: grid;
     gap: var(--sp-3);
+    margin: 0;
     padding-left: 1.2em;
   }
   .prov-sources li + li {
@@ -227,16 +254,20 @@ const verification =
     color: var(--c-muted);
     overflow-wrap: anywhere;
   }
-  .prov-foot {
-    margin: 0;
-  }
+
   @media (max-width: 40rem) {
-    .prov-head {
-      flex-wrap: wrap;
+    .provenance {
+      padding: var(--sp-4);
     }
-    .prov-meta > div {
-      border-right: 0;
-      border-bottom: 1px solid var(--c-line);
+    .prov-facts span:not(.sep) {
+      display: block;
+    }
+    .prov-facts .sep {
+      display: none;
+    }
+    .prov-status {
+      flex-basis: 100%;
+      margin: var(--sp-1) 0 0;
     }
   }
 </style>
