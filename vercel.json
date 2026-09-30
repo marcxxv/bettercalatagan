@@ -67,7 +67,7 @@
   ],
   "rewrites": [
     {
-      "source": "/wayback/:ts(\\d{14}id_)/:target(https?\\://(?:www\\.)?calatagan\\.gov\\.ph(?:\\:80)?/.*)",
+      "source": "/wayback/:ts(\\d{14}id_)/:target(https?\\://?(?:www\\.)?calatagan\\.gov\\.ph(?:\\:80)?/.*)",
       "destination": "https://web.archive.org/web/:ts/:target"
     },
     {
