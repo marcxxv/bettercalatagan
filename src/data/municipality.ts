@@ -102,9 +102,9 @@ export const WITHHELD: readonly { fact: string; reason: string }[] = [
       'Not yet retrieved from a primary source. PSA OpenSTAT carries poverty tables; they have not been fetched or reviewed.',
   },
   {
-    fact: 'Financial figures from Full Disclosure Policy filings',
+    fact: 'Financial figures from Full Disclosure Policy filings other than the Statement of Receipts and Expenditures',
     reason:
-      'The transparency section indexes the filings and links to each DILG original. No amount has been extracted from a spreadsheet or restated, because extraction has not yet been reviewed for accuracy.',
+      'The Finances page publishes figures from the 14 quarterly Statements of Receipts and Expenditures, each traced to its spreadsheet cell and reconciled. The other 13 forms (142 filings, including the Statement of Cash Flow, Statement of Indebtedness, 20% development fund, disaster fund, trust fund and special education fund utilization reports, bid results and the annual budget report) are only indexed on the transparency section with links to each DILG original. No amount from them has been extracted or restated, because no extraction of those forms has been built or reviewed for accuracy.',
   },
   {
     fact: 'COA audit figures and findings, and planning-document facts',
