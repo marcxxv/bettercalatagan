@@ -56,6 +56,11 @@ emergency answer now gives the MDRRMO lines.
   this document?" or "explain this page" are answered about that page. Only bound parameters and
   the corpus's own titles reach the model.
 
+### Changed — Source cards
+- Every source is now a small chip (publisher, verified date, status dot) that opens in place to
+  the status, dates, note, method and every source. Tier 2 caveats stay visible on the chip as
+  one line, in full once opened.
+
 ### Security and privacy
 - The document reader's `/wayback/` pass-through now serves only captures of calatagan.gov.ph,
   and its responses carry a sandboxing Content-Security-Policy, so the site's address cannot be

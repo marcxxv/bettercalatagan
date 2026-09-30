@@ -1,12 +1,11 @@
 ---
 /**
- * Provenance for one civic record, as one quiet line of attribution.
+ * Provenance for one civic record, as a small chip that opens in place.
  *
- * Always visible: who published it (linked), its status, the dates in a
- * single sentence, and any caveat (tier 2 requires the caveat to be shown).
- * One click away: the note, the method and the full list of sources with
- * their locators and checksums. A primary source is never more than one
- * interaction from the figure it supports.
+ * Always visible: who published it, whether it was verified and when, and,
+ * for tier 2, the caveat (one line, in full once opened). One click opens
+ * the status, dates, note, method and every source with its locator and
+ * checksum, so a primary source is never more than one interaction away.
  */
 import type { DataSource } from '../data/types/provenance';
 import Freshness from './Freshness.astro';
@@ -51,142 +50,156 @@ const asOf = source.asOf
     ? `Data as of ${formatDate(source.asOf)}`
     : source.asOf
   : null;
-const facts = [asOf, verification, REFRESH[source.expectedRefresh]].filter(Boolean);
-const hasMore = Boolean((showNote && source.note) || source.methodology || source.sources.length);
+const TONES: Record<DataSource['status'], string> = {
+  current: 'ok',
+  'latest-official': 'ok',
+  historical: 'neutral',
+  archived: 'warn',
+  draft: 'warn',
+  unverified: 'warn',
+};
+const tone = source.verification === 'verified' ? TONES[source.status] : 'warn';
 ---
 
-<aside class="provenance" aria-label={`Source for ${label}`}>
-  <span class="prov-mark">
-    {agency ? <AgencyBadge agency={agency} size="2rem" /> : <span class="prov-icon"><Icon name="shield" size="16" /></span>}
-  </span>
-
-  <div class="prov-body">
-    <p class="prov-line">
-      <span class="prov-key">Source</span>
-      <a class="prov-pub" href={primary.url} rel="noopener noreferrer nofollow">{primary.publisher}</a>
-      {others.length > 0 && <span class="prov-more-count">+{others.length} more</span>}
-      <span class="prov-status"><Freshness source={source} /></span>
-    </p>
-
-    <p class="prov-facts">
-      {facts.map((fact, i) => (
-        <>
-          {i > 0 && <span class="sep" aria-hidden="true">·</span>}
-          <span>{fact}</span>
-        </>
-      ))}
-    </p>
-
+<details class="provenance" aria-label={`Source for ${label}`}>
+  <summary class="prov-chip">
+    <span class="prov-mark" aria-hidden="true">
+      {agency ? <AgencyBadge agency={agency} size="1.4rem" /> : <span class="prov-icon"><Icon name="shield" size="12" /></span>}
+    </span>
+    <span class="prov-key">Source</span>
+    <span class="prov-pub">{primary.publisher}</span>
+    {others.length > 0 && <span class="prov-count">+{others.length}</span>}
+    <span class={`prov-state ${tone}`}><span class="dot" aria-hidden="true"></span>{verification}</span>
+    <span class="visually-hidden">: show method and sources for {label}</span>
+    <Icon name="chevron-down" size="14" class="prov-chev" />
     {source.caveat && (
-      <p class="prov-caveat">
-        <Icon name="alert" size="15" />
-        <span><span class="visually-hidden">Caveat: </span>{source.caveat}</span>
-      </p>
+      <span class="prov-caveat"><Icon name="alert" size="13" /><span><span class="visually-hidden">Caveat: </span>{source.caveat}</span></span>
     )}
-
-    {hasMore && (
-      <details class="prov-more">
-        <summary>
-          Method and sources<span class="visually-hidden"> for {label}</span>
-          <Icon name="chevron-down" size="14" />
-        </summary>
-        <div class="prov-detail">
-          {showNote && source.note && <p>{source.note}</p>}
-          {source.methodology && <p>{source.methodology}</p>}
-          <ol class="prov-sources">
-            {source.sources.map((reference) => (
-              <li>
-                <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a>
-                <span class="ref-meta">
-                  {[reference.publisher, reference.locator, `Accessed ${formatDate(reference.accessedOn)}`].filter(Boolean).join(' · ')}
-                </span>
-                {reference.sha256 && <span class="hash">SHA-256 {reference.sha256}</span>}
-              </li>
-            ))}
-          </ol>
-          <p class="prov-foot"><a href="/sources">About our sources</a></p>
-        </div>
-      </details>
-    )}
+  </summary>
+  <div class="prov-detail">
+    <p class="prov-status-line"><Freshness source={source} /></p>
+    <dl class="prov-facts">
+      {asOf && <div><dt>Data</dt><dd>{asOf}</dd></div>}
+      <div><dt>Checked</dt><dd>{verification}</dd></div>
+      <div><dt>Refresh</dt><dd>{REFRESH[source.expectedRefresh]}</dd></div>
+    </dl>
+    {showNote && source.note && <p>{source.note}</p>}
+    {source.methodology && <p>{source.methodology}</p>}
+    <ol class="prov-sources">
+      {source.sources.map((reference) => (
+        <li>
+          <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a>
+          <span class="ref-meta">
+            {[reference.publisher, reference.locator, `Accessed ${formatDate(reference.accessedOn)}`].filter(Boolean).join(' · ')}
+          </span>
+          {reference.sha256 && <span class="hash">SHA-256 {reference.sha256}</span>}
+        </li>
+      ))}
+    </ol>
+    <p class="prov-foot"><a href="/sources">About our sources</a></p>
   </div>
-</aside>
+</details>
 
 <style>
   .provenance {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: var(--sp-3);
-    max-width: 46rem;
-    margin-block: var(--sp-5) var(--sp-6);
-    padding: var(--sp-4) var(--sp-5);
+    width: fit-content;
+    max-width: min(46rem, 100%);
+    margin-block: var(--sp-4) var(--sp-6);
     border: 1px solid var(--c-line);
-    border-radius: var(--radius-lg);
+    border-radius: 999px;
     background: var(--c-surface);
-    font-size: var(--fs-sm);
+    font-size: var(--fs-xs);
     line-height: 1.5;
+    transition:
+      border-color var(--dur-2) var(--ease-out),
+      box-shadow var(--dur-2) var(--ease-out);
+  }
+  .provenance:has(.prov-caveat) {
+    border-radius: var(--radius-lg);
+  }
+  .provenance:hover {
+    border-color: var(--c-line-strong);
+  }
+  .provenance[open] {
+    width: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm, none);
+  }
+  .prov-chip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px var(--sp-2);
+    min-height: 36px;
+    padding: 4px var(--sp-3) 4px 6px;
+    color: var(--c-muted);
+    cursor: pointer;
+    list-style: none;
+    border-radius: inherit;
+  }
+  .prov-chip::-webkit-details-marker {
+    display: none;
+  }
+  .prov-chip:focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 2px;
   }
   .prov-mark {
-    padding-top: 1px;
+    display: inline-flex;
   }
   .prov-icon {
     display: grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
+    width: 1.4rem;
+    height: 1.4rem;
     border-radius: 50%;
     background: var(--c-accent-wash);
     color: var(--c-accent);
   }
-  .prov-body {
-    min-width: 0;
-  }
-  .prov-body > p {
-    margin: 0;
-  }
-
-  .prov-line {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 2px var(--sp-2);
-    min-height: 2rem;
-  }
-  .prov-key {
-    color: var(--c-muted);
-  }
   .prov-pub {
     font-weight: 600;
     color: var(--c-ink);
-    text-decoration-color: var(--c-line-strong);
-    text-underline-offset: 3px;
-    overflow-wrap: anywhere;
   }
-  .prov-pub:hover {
-    color: var(--c-accent);
-  }
-  .prov-more-count {
+  .prov-count {
     color: var(--c-muted);
-    font-size: var(--fs-xs);
   }
-  .prov-status {
+  .prov-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+  .prov-state::before {
+    content: '·';
+    margin-right: 0.25em;
+    color: var(--c-line-strong);
+  }
+  .prov-state .dot {
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background: var(--c-muted);
+  }
+  .prov-state.ok .dot {
+    background: var(--c-ok);
+  }
+  .prov-state.warn .dot {
+    background: var(--c-warn);
+  }
+  .prov-chip :global(.prov-chev) {
     margin-left: auto;
+    color: var(--c-accent);
+    transition: transform var(--dur-2) var(--ease-out);
   }
-
-  .prov-facts {
-    color: var(--c-muted);
-    font-size: var(--fs-xs);
+  .provenance[open] .prov-chip :global(.prov-chev) {
+    transform: rotate(180deg);
   }
-  .prov-facts .sep {
-    margin-inline: 0.5em;
-  }
-
   .prov-caveat {
     display: flex;
-    gap: var(--sp-2);
+    flex-basis: 100%;
+    gap: 6px;
     align-items: flex-start;
-    margin-top: var(--sp-3) !important;
+    padding: 0 var(--sp-2) 4px calc(1.4rem + var(--sp-2));
     color: var(--c-ink-2);
-    font-size: var(--fs-xs);
     line-height: 1.55;
   }
   .prov-caveat :global(.icon) {
@@ -194,44 +207,47 @@ const hasMore = Boolean((showNote && source.note) || source.methodology || sourc
     margin-top: 2px;
     color: var(--c-warn);
   }
-
-  .prov-more {
-    margin-top: var(--sp-3);
-  }
-  .prov-more > summary {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    min-height: 32px;
-    color: var(--c-accent);
-    font-size: var(--fs-xs);
-    font-weight: 600;
-    cursor: pointer;
-    list-style: none;
-  }
-  .prov-more > summary::-webkit-details-marker {
-    display: none;
-  }
-  .prov-more > summary:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .prov-more > summary :global(.icon) {
-    transition: transform var(--dur-2) var(--ease-out);
-  }
-  .prov-more[open] > summary :global(.icon) {
-    transform: rotate(180deg);
+  .provenance:not([open]) .prov-caveat > span {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .prov-detail {
     display: grid;
     gap: var(--sp-3);
-    margin-top: var(--sp-2);
+    margin: 0 var(--sp-4) var(--sp-4);
     padding-top: var(--sp-3);
     border-top: 1px solid var(--c-line);
     color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+    animation: prov-in var(--dur-2) var(--ease-out);
+  }
+  @keyframes prov-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
   }
   .prov-detail p {
     margin: 0;
+  }
+  .prov-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-6);
+    margin: 0;
+  }
+  .prov-facts dt {
+    color: var(--c-muted);
+    font-size: var(--fs-2xs, 0.7rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .prov-facts dd {
+    margin: 0;
+    color: var(--c-ink);
   }
   .prov-sources {
     display: grid;
@@ -254,20 +270,27 @@ const hasMore = Boolean((showNote && source.note) || source.methodology || sourc
     color: var(--c-muted);
     overflow-wrap: anywhere;
   }
-
+  .prov-foot {
+    font-size: var(--fs-xs);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .prov-detail {
+      animation: none;
+    }
+  }
   @media (max-width: 40rem) {
-    .provenance {
-      padding: var(--sp-4);
-    }
-    .prov-facts span:not(.sep) {
-      display: block;
-    }
-    .prov-facts .sep {
+    .prov-state::before {
       display: none;
     }
-    .prov-status {
-      flex-basis: 100%;
-      margin: var(--sp-1) 0 0;
+    .provenance {
+      width: auto;
+      border-radius: var(--radius-lg);
+    }
+    .prov-caveat {
+      padding-left: 2px;
+    }
+    .provenance:not([open]) .prov-caveat > span {
+      -webkit-line-clamp: 2;
     }
   }
 </style>
