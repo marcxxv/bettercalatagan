@@ -416,6 +416,20 @@ const scenes = [
 
     root.querySelector('[data-prev]')?.addEventListener('click', () => (show(index - 1), schedule()));
     root.querySelector('[data-next]')?.addEventListener('click', () => (show(index + 1), schedule()));
+    // Arrow keys step the scenes while the carousel is on screen, unless the reader is typing
+    // or another control (a dialog, a menu, a slider) owns the arrows.
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      const target = event.target as HTMLElement | null;
+      if (target?.closest('input, textarea, select, [contenteditable], [role="listbox"], [role="slider"], [role="tablist"], dialog[open]')) return;
+      if (document.querySelector('dialog[open]')) return;
+      const box = root.getBoundingClientRect();
+      if (box.bottom < 80 || box.top > innerHeight - 80) return;
+      event.preventDefault();
+      show(index + (event.key === 'ArrowRight' ? 1 : -1));
+      schedule();
+    });
     toggle?.addEventListener('click', () => setPlaying(!playing));
     root.addEventListener('pointerenter', () => ((hold = true), schedule()));
     root.addEventListener('pointerleave', () => ((hold = false), schedule()));

@@ -30,6 +30,7 @@ emergency answer now gives the MDRRMO lines.
 - **Overview**: "Explore the public record" reorganised into "I want to…" shortcuts and plain
   topic groups; two new hero scenes (national infrastructure, municipal services); filing tiles
   no longer clip their labels.
+- The home carousel steps with the ← and → keys while it is on screen (not while typing).
 - Office contact numbers are no longer listed as unproven: the municipality supplied them.
 
 ### Fixed
