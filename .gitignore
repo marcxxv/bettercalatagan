@@ -6,6 +6,7 @@ dist/
 .env
 .env.*
 !.env.example
+.vercel/
 
 # The generated FDP dataset and its staging snapshot ARE committed on purpose:
 # they are the auditable record of what the DILG portal returned and when.
