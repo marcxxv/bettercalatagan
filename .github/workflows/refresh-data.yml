@@ -1,0 +1,98 @@
+name: Refresh data
+
+# Weekly: re-read every source, gate on the full check, and open a pull
+# request only when something substantive changed. The pull request IS the
+# review step of stage → review → promote (docs/adr/0004): nothing reaches the
+# site until a person has read the report and merged it.
+on:
+  schedule:
+    - cron: '17 1 * * 1' # Mondays 09:17 Philippine time
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Re-read sources and propose changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Each source is independent: one portal being down must not stop the
+      # others. Failures are reported in the pull request, never swallowed.
+      - name: DILG Full Disclosure Policy Portal (stage, promote)
+        id: fdp
+        continue-on-error: true
+        run: npm run fdp:stage && npm run fdp:promote
+
+      - name: Statements of Receipts and Expenditures (extract, reconcile)
+        id: sre
+        if: steps.fdp.outcome == 'success'
+        continue-on-error: true
+        run: npm run fdp:extract
+
+      - name: PSA OpenSTAT census
+        id: psa
+        continue-on-error: true
+        run: npm run psa:fetch
+
+      - name: Internet Archive index of the former municipal website
+        id: archive
+        continue-on-error: true
+        run: npm run archive:index
+
+      # The same gate as every pull request: schemas, provenance rules,
+      # reconciliation, never-shrink snapshots, and a clean build.
+      - name: Full check
+        run: npm run check
+
+      - name: Change report
+        id: report
+        env:
+          FDP: ${{ steps.fdp.outcome }}
+          SRE: ${{ steps.sre.outcome }}
+          PSA: ${{ steps.psa.outcome }}
+          ARCHIVE: ${{ steps.archive.outcome }}
+        run: |
+          set -euo pipefail
+          node scripts/data-report.mjs --github > "$RUNNER_TEMP/report.md"
+          {
+            echo
+            echo "### Source runs"
+            echo
+            echo "| Source | Outcome |"
+            echo "| --- | --- |"
+            echo "| DILG FDP portal | $FDP |"
+            echo "| SRE extraction | $SRE |"
+            echo "| PSA OpenSTAT | $PSA |"
+            echo "| Internet Archive | $ARCHIVE |"
+          } >> "$RUNNER_TEMP/report.md"
+          cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open or update the review pull request
+        if: steps.report.outputs.substantive == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: data/refresh
+          delete-branch: true
+          title: 'Data refresh: changes at the sources'
+          body-path: ${{ runner.temp }}/report.md
+          commit-message: 'Refresh generated datasets from their sources'
+          add-paths: |
+            src/data/generated
+            data/staging
+          labels: data

@@ -7,6 +7,17 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Data pipelines and project memory
+- **Scheduled refresh** (`.github/workflows/refresh-data.yml`): every Monday, each source is
+  re-read independently, the full check gates the result, and a pull request opens only when
+  something substantive changed. The pull request body is a plain-language change report
+  (`scripts/data-report.mjs`, also `npm run data:report`) that ignores retrieval timestamps and
+  lists records added, removed and changed, field by field, plus each source's outcome.
+- `npm run data:refresh` and `npm run archive:index` scripts; `docs/data-pipelines.md` runbook.
+- **AGENTS.md** (with **CLAUDE.md** importing it, and `.github/copilot-instructions.md`): the
+  project's working memory for AI agents and new contributors — non-negotiables, stack, data flow,
+  UI system, reader, SEO, verification steps, gotchas and recipes.
+
 ### Added — Search and answer-engine visibility
 - Every page now declares a `WebPage` tied to one publisher `Organization` (with logo) and the
   `WebSite`; `/data` is a `DataCatalog` of all five datasets and `/documents` a `Dataset`, so each

@@ -69,12 +69,15 @@ npm run test       # civic-data guardrails
 npm run check      # typecheck + lint + test + build
 ```
 
-Refreshing the DILG filing index (stage, review the diff, then promote):
+Refreshing the data (every source, then a plain-language report of what changed):
 
 ```bash
-npm run fdp:stage      # fetch the listing, probe every download, write data/staging/
-npm run fdp:promote    # merge into src/data/generated/ without deleting anything
+npm run data:refresh   # DILG filings (stage + promote), SRE extraction, PSA census, archive index
+npm run data:report    # what changed, ignoring retrieval timestamps
 ```
+
+A scheduled workflow does the same every Monday and opens a pull request only when a source
+actually changed; merging it is the review step. See [docs/data-pipelines.md](docs/data-pipelines.md).
 
 Regenerating the favicon, app icons and share images (only when the mark, fonts or a page title
 change; the outputs are committed):
@@ -87,10 +90,14 @@ The DILG server omits an intermediate TLS certificate, so the scripts supply it 
 rather than disabling verification.
 
 No backend, no database, no CMS, no authentication, no analytics, no AI. Search runs in the
-browser against a prebuilt index. The site builds to static
-HTML. See [docs/adr/](docs/adr/) for why.
+browser against a prebuilt index. The site builds to static HTML. Documents open in an in-site
+reader through host-level pass-through rewrites to the Internet Archive and DILG; nothing is
+stored. See [docs/adr/](docs/adr/) for why.
 
 ## Contributing
+
+Working with an AI coding agent? Start with [AGENTS.md](AGENTS.md) (also loaded by Claude Code via
+[CLAUDE.md](CLAUDE.md)); the data runbook is [docs/data-pipelines.md](docs/data-pipelines.md).
 
 Corrections are welcome, especially from people in Calatagan. The one firm rule: **every civic
 fact needs a source.** An unsourced correction will be declined even if it is right, because the
