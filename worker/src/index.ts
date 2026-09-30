@@ -1,5 +1,5 @@
 /**
- * The Better Calatagan assistant.
+ * The BetterCalatagan assistant.
  *
  *   GET  /health        corpus version and passage count
  *   POST /session       { turnstileToken? } → { token, expiresIn }

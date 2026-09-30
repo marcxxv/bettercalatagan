@@ -1,8 +1,9 @@
 ---
 /**
- * A list of documents from the former municipal website, each opening in the
- * reader, with its kind, year and capture date. Used wherever archived
- * documents are grouped by topic (legislation, procurement, barangays).
+ * Documents from the former municipal website, as a compact dataset: one row
+ * each, with its kind, year, capture date and size, and icon actions to read
+ * it on the site or download it. Used wherever archived documents are grouped
+ * by topic (legislation, procurement).
  */
 import Icon from './Icon.astro';
 import type { ArchivedDocument } from '../data/schemas/documents';
@@ -17,41 +18,51 @@ interface Props {
 }
 
 const { documents, id, showKind = true } = Astro.props;
+const cols = showKind
+  ? 'minmax(0, 1fr) 11rem 4.5rem 7rem 5.5rem'
+  : 'minmax(0, 1fr) 4.5rem 7.5rem 7rem 5.5rem';
 ---
 
-<ul class="records" id={id}>
-  {documents.map((doc) => {
-    const read = archiveReadAttrs(doc);
-    return (
-      <li
-        class="record"
-        data-item
-        data-year={String(doc.publishedYear ?? '')}
-        data-kind={doc.kind}
-        data-search={`${doc.title} ${doc.filename} ${doc.publishedYear ?? ''}`.toLowerCase()}
-      >
-        <span class="record-icon" aria-hidden="true"><Icon name="file" size="20" /></span>
-        <div>
-          <h3>{doc.title}</h3>
-          <p class="record-tags">
-            {showKind && <span class="chip">{KIND_LABELS[doc.kind]}</span>}
-            {doc.publishedYear && <span class="chip clay">{doc.publishedYear}</span>}
-            <span>Archived {doc.capturedAt}</span>
-            <span>{doc.fileType.toUpperCase()}{doc.byteLength ? ` · ${sizeLabel(doc.byteLength)}` : ''}</span>
-          </p>
-        </div>
-        <p class="record-side">
-          {read ? (
-            <a class="button small primary" href={doc.archiveUrl} rel="noopener noreferrer nofollow" {...read}>
-              <Icon name="eye" size="16" /> Read<span class="visually-hidden"> {doc.title}</span>
+<div class="dataset" style={`--cols: ${cols}`}>
+  <div class="dataset-head" aria-hidden="true">
+    <span>Document</span>
+    {showKind && <span>Kind</span>}
+    <span>Year</span>
+    {showKind ? <span>File</span> : <><span>Archived</span><span>File</span></>}
+    <span class="num">Open</span>
+  </div>
+  <ul class="dataset-rows" id={id}>
+    {documents.map((doc) => {
+      const read = archiveReadAttrs(doc);
+      const file = `${doc.fileType.toUpperCase()}${doc.byteLength ? ` · ${sizeLabel(doc.byteLength)}` : ''}`;
+      return (
+        <li
+          class="dataset-row"
+          data-item
+          data-year={String(doc.publishedYear ?? '')}
+          data-kind={doc.kind}
+          data-search={`${doc.title} ${doc.filename} ${doc.publishedYear ?? ''}`.toLowerCase()}
+        >
+          <div class="cell main">
+            <p class="row-title">{doc.title}</p>
+            {showKind && <p class="row-sub">Archived {doc.capturedAt}</p>}
+          </div>
+          {showKind && <span class="cell"><span class="cell-label">Kind</span>{KIND_LABELS[doc.kind]}</span>}
+          <span class="cell"><span class="cell-label">Year</span>{doc.publishedYear ?? '—'}</span>
+          {!showKind && <span class="cell muted"><span class="cell-label">Archived</span>{doc.capturedAt}</span>}
+          <span class="cell muted"><span class="cell-label">File</span>{file}</span>
+          <span class="cell row-actions">
+            {read && (
+              <a class="icon-action primary" href={doc.archiveUrl} rel="noopener noreferrer nofollow" title="Read on this site" {...read}>
+                <Icon name="eye" size="17" /><span class="visually-hidden">Read {doc.title}</span>
+              </a>
+            )}
+            <a class="icon-action" href={doc.archiveUrl} rel="noopener noreferrer nofollow" title="Open the archived original">
+              <Icon name="external" size="16" /><span class="visually-hidden">Open the archived original of {doc.title}</span>
             </a>
-          ) : (
-            <a class="button small" href={doc.archiveUrl} rel="noopener noreferrer nofollow">
-              <Icon name="download" size="16" /> Get file<span class="visually-hidden"> {doc.title}</span>
-            </a>
-          )}
-        </p>
-      </li>
-    );
-  })}
-</ul>
+          </span>
+        </li>
+      );
+    })}
+  </ul>
+</div>

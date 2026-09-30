@@ -6,14 +6,14 @@
  */
 
 export const SITE = {
-  name: 'Better Calatagan',
+  name: 'BetterCalatagan',
   shortDescription: 'An independent civic guide to Calatagan, Batangas',
   description:
     'An independent civic guide to Calatagan, Batangas: population and barangays, municipal finances, Full Disclosure filings, history and archived documents — every figure traced to its government source.',
   locale: 'en_PH',
   repository: 'https://github.com/marcxxv/bettercalatagan',
   independence:
-    'Better Calatagan is an independent civic project. It is not affiliated with, endorsed by, or operated by the Municipality of Calatagan or any government agency.',
+    'BetterCalatagan is an independent civic project. It is not affiliated with, endorsed by, or operated by the Municipality of Calatagan or any government agency.',
 } as const;
 
 import type { IconName } from '../components/Icon.astro';

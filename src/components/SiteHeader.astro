@@ -55,9 +55,9 @@ const groupCurrent = (items: readonly { href: string }[]) => items.some((item) =
 
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand" href="/" aria-label="Better Calatagan — home">
+    <a class="brand" href="/" aria-label="BetterCalatagan — home">
       <Mark size={44} />
-      <span class="wordmark">Better Calatagan</span>
+      <span class="wordmark">BetterCalatagan</span>
     </a>
 
     <nav class="primary" aria-label="Primary">
@@ -94,6 +94,8 @@ const groupCurrent = (items: readonly { href: string }[]) => items.some((item) =
           </li>
         ))}
       </ul>
+      <!-- One surface that glides between menus on pointer devices (scripts/ui.ts). -->
+      <span class="nav-morph" aria-hidden="true"><span class="morph-caret"></span></span>
     </nav>
 
     <div class="actions">
@@ -340,6 +342,7 @@ const groupCurrent = (items: readonly { href: string }[]) => items.some((item) =
 
   .primary {
     display: none;
+    position: relative;
   }
   @media (min-width: 72rem) {
     .primary {
@@ -410,7 +413,7 @@ const groupCurrent = (items: readonly { href: string }[]) => items.some((item) =
   }
   .drop-panel {
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 12px);
     left: 50%;
     z-index: 40;
     width: 22rem;
@@ -422,6 +425,85 @@ const groupCurrent = (items: readonly { href: string }[]) => items.some((item) =
     transform: translateX(-50%);
     animation: drop-in 200ms var(--ease-out);
   }
+  /* ---- The morphing surface (pointer devices, JS on) ----
+     In morph mode each group's own panel loses its chrome and the shared
+     .nav-morph draws the card behind it, animating between groups. */
+  .nav-morph {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 39;
+    width: var(--mw, 0px);
+    height: var(--mh, 0px);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-raised);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transform: translate(var(--mx, 0px), var(--my, 0px)) scale(0.97);
+    transform-origin: var(--mo, 50%) 0;
+    pointer-events: none;
+    transition:
+      transform 340ms cubic-bezier(0.22, 1, 0.36, 1),
+      width 340ms cubic-bezier(0.22, 1, 0.36, 1),
+      height 340ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 160ms ease;
+  }
+  .primary:global(.morph-open) .nav-morph {
+    opacity: 1;
+    transform: translate(var(--mx, 0px), var(--my, 0px)) scale(1);
+  }
+  .primary:global(.morph-instant) .nav-morph {
+    transition: opacity 160ms ease, transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .morph-caret {
+    position: absolute;
+    top: -6px;
+    left: var(--caret, 50%);
+    width: 12px;
+    height: 12px;
+    border-top: 1px solid var(--c-line);
+    border-left: 1px solid var(--c-line);
+    border-radius: 3px 0 0 0;
+    background: var(--c-raised);
+    transform: translateX(-50%) rotate(45deg);
+    transition: left 340ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .primary:global(.morph-mode) .drop-panel {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    animation: none;
+  }
+  .primary:global(.morph-mode:not(.morph-open)) .drop-panel {
+    opacity: 0;
+    transition: opacity 140ms ease;
+  }
+  .primary:global(.morph-mode) .drop-panel > * {
+    animation: drop-content 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .primary:global([data-dir='right']) .drop-panel > * {
+    --from: 28px;
+  }
+  .primary:global([data-dir='left']) .drop-panel > * {
+    --from: -28px;
+  }
+  @keyframes drop-content {
+    from {
+      opacity: 0;
+      transform: translateX(var(--from, 0px));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-morph,
+    .morph-caret {
+      transition: opacity 120ms ease;
+    }
+    .primary:global(.morph-mode) .drop-panel > * {
+      animation: none;
+    }
+  }
+
   /* An invisible bridge over the gap, so moving down to the panel keeps it open. */
   .drop-panel::before {
     content: '';

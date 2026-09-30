@@ -119,3 +119,52 @@ export const hotlinesSource: DataSource = {
   expectedRefresh: 'irregular',
   methodology: 'Each number is the one fixed by the executive order that established the hotline, read from the Supreme Court E-Library’s copy of the order.',
 };
+
+/* ---------- Local emergency hotlines (ADR 0010) ---------- */
+
+export interface LocalHotline {
+  office: string;
+  what: string;
+  numbers: readonly string[];
+}
+
+/**
+ * Calatagan's emergency hotlines, as the municipality's "Updated Calatagan
+ * Emergency Hotlines" poster lists them. Numbers are copied as printed; the
+ * poster's "043) 419 0300" is read as "(043) 419 0300". The MDRRMO's e-mail
+ * address, also on the poster, is not published (personal webmail domains
+ * stay withheld site-wide).
+ */
+export const localHotlines: readonly LocalHotline[] = [
+  { office: 'MDRRMO', what: 'Municipal Disaster Risk Reduction and Management Office: rescue, ambulance and disaster response', numbers: ['0909 456 5818', '(043) 419 7510'] },
+  { office: 'PNP', what: 'Philippine National Police, Calatagan', numbers: ['0917 337 5190'] },
+  { office: 'BFP', what: 'Bureau of Fire Protection, Calatagan', numbers: ['0926 408 4359'] },
+  { office: 'RHU', what: 'Rural Health Unit (Municipal Health Office)', numbers: ['0930 816 8484'] },
+  { office: 'PCG', what: 'Philippine Coast Guard', numbers: ['0995 581 9450'] },
+  { office: 'Medicare', what: 'Medicare hospital', numbers: ['0917 817 9508', '(043) 419 0300'] },
+  { office: 'BATELEC', what: 'Batangas electric cooperative: outages and power emergencies', numbers: ['(043) 430 3010', '0917 683 7210'] },
+];
+
+export const localHotlinesSource: DataSource = {
+  sources: [
+    {
+      name: 'Updated Calatagan Emergency Hotlines (poster, Municipality of Calatagan / MDRRMO)',
+      publisher: 'Municipality of Calatagan, on Facebook',
+      url: 'https://www.facebook.com/photo.php?fbid=2083003158524040&id=325085174315856&set=a.325088370982203',
+      accessedOn: '2026-09-30',
+      authority: 'social-media',
+      locator:
+        'Requested 2026-09-30; Facebook’s login wall prevented this project from reading the post. The poster’s content was supplied and attested by the maintainer.',
+    },
+  ],
+  asOf: 'As posted by the municipality (undated poster)',
+  lastVerified: '2026-09-30',
+  verification: 'reported',
+  status: 'current',
+  tier: 2,
+  expectedRefresh: 'irregular',
+  attestation:
+    'The maintainer supplied the municipality’s emergency hotlines poster on 30 September 2026 and attests that it is the municipality’s current published list.',
+  caveat:
+    'Local numbers come from a poster the municipality published on social media, not from a government website, and numbers change. In a life-threatening emergency call 911 first. Tell us if a number no longer works.',
+};

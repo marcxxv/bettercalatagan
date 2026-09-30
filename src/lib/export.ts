@@ -13,14 +13,14 @@ export const API_VERSION = '1.0.0';
 
 export const LICENSE = {
   compilation:
-    'CC BY 4.0 — applies to this compilation (selection, arrangement, identifiers, extraction and provenance metadata) by Better Calatagan.',
+    'CC BY 4.0 — applies to this compilation (selection, arrangement, identifiers, extraction and provenance metadata) by BetterCalatagan.',
   source_documents:
     'NOT covered by the above. Cited government documents remain the works of their issuing agencies under Philippine law and are not relicensed here. Obtain them from the issuing agency and observe its terms.',
-  attribution: 'Better Calatagan (bettercalatagan.org)',
+  attribution: 'BetterCalatagan (bettercalatagan.org)',
 } as const;
 
 export const DISCLAIMER =
-  'Better Calatagan is an independent civic project. It is not the official website of the Municipality of Calatagan and is not affiliated with, endorsed by, or operated by any government agency.';
+  'BetterCalatagan is an independent civic project. It is not the official website of the Municipality of Calatagan and is not affiliated with, endorsed by, or operated by any government agency.';
 
 /** Strips a DataSource down to what a consumer needs to reproduce a citation. */
 function describeSource(source: DataSource) {

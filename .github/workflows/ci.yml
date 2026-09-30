@@ -74,7 +74,7 @@ jobs:
           }
           # 2022 municipal contact details, read from an archived document but
           # never republished as current.
-          check "(043)"            "2022 archived phone numbers"
+          check "419-0150"         "stale CMCI municipal hall number"
           check "mayorsoffice1011" "2022 archived e-mail address"
           check "@gmail.com"       "2022 archived e-mail addresses"
           check "@yahoo.com"       "2022 archived e-mail addresses"

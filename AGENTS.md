@@ -135,13 +135,20 @@ looks like an official government site.
 
 **Navigation** (ADR 0009) follows the Better LGU portals: `NAV_GROUPS` in `site.ts` (Services ·
 Government · Statistics · Transparency · About) drives the header dropdowns (native `<details>`,
-hover-to-open with a mouse, click/keyboard otherwise), the mobile menu, the footer directory,
+hover-intent open and a shared `.nav-morph` surface that glides between groups with a mouse; click/keyboard otherwise), the mobile menu, the footer directory,
 `sitemap.xml`, `/sitemap`, `llms.txt`, the search index and the assistant. `PAGES` is every page
 once; `NAV` is the main sections. A new page goes in a group, not in a flat list.
 
-**Shared list styles** in `global.css`: `.records`/`.record` (+ `-icon`, `-tags`, `-side`,
-`-amount`, `-more`), `.section-block`, `.aside-card`, `.group-head`. `ArchiveList.astro` renders
-archived documents with reader links anywhere.
+**Lists are datasets** (`global.css`): `.dataset` (set `--cols`) › `.dataset-head` (sticky under
+the masthead) › `ul.dataset-rows` › `li.dataset-row` with `.cell.main` (`.row-title` clamped to two
+lines, `.row-sub`, `details.row-more`), `.cell` (with a `.cell-label`, visible on phones only),
+`.num`, `.row-actions` (`.icon-action`, `.primary`). `.dataset-group` rows divide a list (months).
+Never go back to tall per-item cards. `ArchiveList.astro` renders archived documents this way.
+**Tables** never scroll vertically inside their frame; `ui.ts` adds `.fits` when a table fits its
+width so its `thead` sticks to the page. Selects are `appearance: none` (Safari). Also shared:
+`.section-block`, `.aside-card`, `.group-head`.
+
+**Name:** the site is **BetterCalatagan**, one word, everywhere.
 
 **Components** (`src/components/`): `SiteHeader`, `SiteFooter` (giant wordmark), `PageHeader`
 (rounded panel with eyebrow, icon, lede, aside slot), `HeroCarousel` (home scenes, hero ask

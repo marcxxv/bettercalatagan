@@ -61,32 +61,31 @@ const description = `Regular holidays and special days for ${HOLIDAY_YEAR} as th
       <Icon name="calendar" size="18" /> <span data-next-text></span>
     </p>
 
-    {months.map(({ month, label, days }) => (
-      <section class="month" aria-labelledby={`m-${month}`}>
-        <h2 id={`m-${month}`}>{label}</h2>
-        <ul class="records">
-          {days.map((h) => (
-            <li class="record holiday" data-date={h.date}>
-              <span class="date" aria-hidden="true">
-                <span class="d-num">{format(h.date, { day: 'numeric' })}</span>
-                <span class="d-day">{format(h.date, { weekday: 'short' })}</span>
-              </span>
-              <div>
-                <h3>{h.name}</h3>
-                <p class="record-tags">
-                  <span class:list={['chip', KIND[h.kind].tone]}><span class="dot"></span>{KIND[h.kind].label}</span>
-                  <time datetime={h.date}>{format(h.date, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</time>
-                  {h.note && <span>{h.note}</span>}
-                </p>
-              </div>
-              <p class="record-side small">
-                <a href={h.source.url} rel="noopener nofollow">{h.proclamation}</a>
-              </p>
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))}
+    <div class="dataset" style="--cols: 7.5rem minmax(0, 1fr) 13rem 12rem">
+      <div class="dataset-head" aria-hidden="true">
+        <span>Date</span><span>Holiday</span><span>Type</span><span>Declared by</span>
+      </div>
+      <ul class="dataset-rows">
+        {months.map(({ month, label, days }) => (
+          <>
+            <li class="dataset-group" id={`m-${month}`}>{label}</li>
+            {days.map((h) => (
+              <li class="dataset-row holiday" data-date={h.date}>
+                <span class="cell date">
+                  <time datetime={h.date}><strong>{format(h.date, { day: 'numeric', month: 'short' })}</strong> {format(h.date, { weekday: 'short' })}</time>
+                </span>
+                <div class="cell main">
+                  <p class="row-title">{h.name}</p>
+                  {h.note && <p class="row-sub">{h.note}</p>}
+                </div>
+                <span class="cell"><span class="cell-label">Type</span><span class:list={['chip', KIND[h.kind].tone]}><span class="dot"></span>{KIND[h.kind].label}</span></span>
+                <span class="cell muted"><span class="cell-label">Declared by</span><a href={h.source.url} rel="noopener nofollow">{h.proclamation}</a></span>
+              </li>
+            ))}
+          </>
+        ))}
+      </ul>
+    </div>
 
     <section class="section-block" id="anniversary" aria-labelledby="anniversary-title">
       <p class="eyebrow">Calatagan’s own days</p>
@@ -123,7 +122,7 @@ const description = `Regular holidays and special days for ${HOLIDAY_YEAR} as th
   const banner = document.querySelector<HTMLElement>('[data-next]');
   if (next && banner) {
     next.classList.add('upcoming');
-    const name = next.querySelector('h3')?.textContent ?? '';
+    const name = next.querySelector('.row-title')?.textContent ?? '';
     const when = next.querySelector('time')?.textContent ?? '';
     banner.querySelector('[data-next-text]')!.textContent = `${next.dataset.date === today ? 'Today' : 'Next'}: ${name}, ${when}`;
     banner.hidden = false;
@@ -145,58 +144,23 @@ const description = `Regular holidays and special days for ${HOLIDAY_YEAR} as th
   .next[hidden] {
     display: none;
   }
-  .month {
-    margin-top: var(--sp-7);
-  }
-  .month:first-of-type {
-    margin-top: 0;
-  }
-  .month h2 {
-    margin: 0 0 var(--sp-3);
-    font-size: var(--fs-lg);
-  }
   .date {
-    display: grid;
-    place-items: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 12px;
-    background: var(--c-sunk);
+    font-variant-numeric: tabular-nums;
     color: var(--c-ink);
-    line-height: 1;
-    grid-row: span 2;
   }
-  .d-num {
-    font-family: var(--font-serif);
-    font-size: 1.35rem;
-  }
-  .d-day {
-    font-size: 0.66rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--c-muted);
-  }
-  @media (min-width: 48rem) {
-    .date {
-      grid-row: auto;
-    }
+  .date strong {
+    font-weight: 700;
   }
   /* Past dates step back without losing contrast: a muted date tile, a label. */
   .holiday:global(.past) {
     background: var(--c-bg-alt);
   }
-  .holiday:global(.past) .date {
-    background: transparent;
-    border: 1px solid var(--c-line-strong);
-  }
-  .holiday:global(.past) h3::after {
+  .holiday:global(.past) .row-title::after {
     content: ' · past';
     font-weight: 500;
     color: var(--c-muted);
   }
   .holiday:global(.upcoming) {
-    border-color: var(--c-accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent) 18%, transparent);
+    background: var(--c-accent-wash);
   }
 </style>

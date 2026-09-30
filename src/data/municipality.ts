@@ -92,9 +92,9 @@ export const WITHHELD: readonly { fact: string; reason: string }[] = [
       'Election results for May 2025 are available from a civic-tech derivative of COMELEC data, but results are not the same as present incumbency, and no COMELEC or DILG primary source has been read. Scheduled for a later phase.',
   },
   {
-    fact: 'Municipal office contact details',
+    fact: 'Municipal office contact details (other than emergency hotlines)',
     reason:
-      'The telephone number, e-mail address and postal address published on the DTI CMCI profile sit in the same LGU-submitted record whose income class, mayor and website fields are all demonstrably out of date. Treated as unverified until confirmed against a current source.',
+      'The telephone number, e-mail address and postal address published on the DTI CMCI profile sit in the same LGU-submitted record whose income class, mayor and website fields are all demonstrably out of date. Treated as unverified until confirmed against a current source. Emergency hotlines are published from the municipality’s own current list (see Hotlines).',
   },
   {
     fact: 'Poverty incidence and other social statistics',

@@ -139,7 +139,7 @@ const jsonLd = [
       <p class="eyebrow">Index</p>
       <h2 id="index-title">Every archived document</h2>
 
-      <form class="toolbar sticky" data-filter="doc-list" data-noun="documents" role="search" aria-label="Filter documents" style="--filter-cols: 2" hidden>
+      <form class="toolbar" data-filter="doc-list" data-noun="documents" role="search" aria-label="Filter documents" style="--filter-cols: 2" hidden>
         <p class="field search">
           <label for="d-search">Search</label>
           <input type="search" id="d-search" name="q" placeholder="Title or filename" autocomplete="off" />
@@ -172,53 +172,51 @@ const jsonLd = [
         <ul class="active-filters" data-pills-for="doc-list" aria-label="Active filters"></ul>
       </div>
 
-      <ul class="docs" id="doc-list">
-        {rows.map((doc) => (
-          <li class="doc" data-item data-kind={doc.kind} data-year={doc.publishedYear ? String(doc.publishedYear) : ''} data-search={doc.search}>
-            <span class="d-type" aria-hidden="true">{doc.fileType.toUpperCase()}</span>
-            <div class="doc-main">
-              <h3>{doc.title}</h3>
-              <p class="tags">
-                <span class="chip">{doc.kindLabel}</span>
-                {doc.status === 'superseded' ? (
-                  <span class="chip warn">Superseded</span>
-                ) : (
-                  <span class="chip clay">Archived</span>
-                )}
-                {doc.publishedYear && <span class="chip">Published {doc.publishedYear}</span>}
-                {doc.inspected && <span class="chip ok"><Icon name="check" size="12" /> Opened and checked</span>}
-                {doc.size && <span class="file-meta">{doc.size}</span>}
-              </p>
-              {doc.inspected && (
-                <p class="inspected">
-                  Opened {formatDate(doc.inspected.inspectedOn)} ({doc.inspected.pages}
-                  {doc.inspected.pages === 1 ? ' page' : ' pages'}): {doc.inspected.summary}
+      <div class="dataset" style="--cols: minmax(0, 1fr) 11rem 4.5rem 6.5rem 5.5rem">
+        <div class="dataset-head" aria-hidden="true">
+          <span>Document</span><span>Kind</span><span>Year</span><span>File</span><span class="num">Open</span>
+        </div>
+        <ul class="dataset-rows" id="doc-list">
+          {rows.map((doc) => (
+            <li class="dataset-row" data-item data-kind={doc.kind} data-year={doc.publishedYear ? String(doc.publishedYear) : ''} data-search={doc.search}>
+              <div class="cell main">
+                <p class="row-title" title={doc.title}>{doc.title}</p>
+                <p class="row-sub">
+                  {doc.status === 'superseded' ? <span class="chip warn">Superseded</span> : <span>Archived {doc.capturedAt.slice(0, 10)}</span>}
+                  {doc.inspected && <span class="chip ok"><Icon name="check" size="12" /> Opened and checked</span>}
                 </p>
-              )}
-              <p class="hint">
-                Captured {formatDate(doc.capturedAt.slice(0, 10))} · original address{' '}
-                <code>{doc.originalUrl}</code> (dead)
-              </p>
-            </div>
-            <p class="get">
-              {doc.read ? (
-                <>
-                  <a class="button small primary" href={doc.archiveUrl} rel="noopener noreferrer nofollow" {...doc.read}>
-                    <Icon name="eye" size="16" /> Read<span class="visually-hidden"> {doc.title}</span>
+                <details class="row-more">
+                  <summary>Details</summary>
+                  <dl>
+                    {doc.inspected && <><dt>Opened</dt><dd>{formatDate(doc.inspected.inspectedOn)} ({doc.inspected.pages} {doc.inspected.pages === 1 ? 'page' : 'pages'}): {doc.inspected.summary}</dd></>}
+                    <dt>Captured</dt><dd>{formatDate(doc.capturedAt.slice(0, 10))}</dd>
+                    <dt>Original address</dt><dd><code>{doc.originalUrl}</code> (dead)</dd>
+                  </dl>
+                </details>
+              </div>
+              <span class="cell"><span class="cell-label">Kind</span>{doc.kindLabel}</span>
+              <span class="cell"><span class="cell-label">Year</span>{doc.publishedYear ?? '—'}</span>
+              <span class="cell muted"><span class="cell-label">File</span>{doc.fileType.toUpperCase()}{doc.size ? ` · ${doc.size}` : ''}</span>
+              <span class="cell row-actions">
+                {doc.read ? (
+                  <>
+                    <a class="icon-action primary" href={doc.archiveUrl} rel="noopener noreferrer nofollow" title="Read on this site" {...doc.read}>
+                      <Icon name="eye" size="17" /><span class="visually-hidden">Read {doc.title}</span>
+                    </a>
+                    <a class="icon-action" href={doc.read['data-read']} download={doc.filename} title="Download">
+                      <Icon name="download" size="16" /><span class="visually-hidden">Download {doc.title}</span>
+                    </a>
+                  </>
+                ) : (
+                  <a class="icon-action" href={doc.archiveUrl} rel="noopener noreferrer nofollow" title="Older Word format: opens in Word or LibreOffice">
+                    <Icon name="download" size="16" /><span class="visually-hidden">Get {doc.title} from the Wayback Machine</span>
                   </a>
-                  <a class="button small icon-only" href={doc.read['data-read']} download={doc.filename} title="Download" aria-label={`Download ${doc.title}`}>
-                    <Icon name="download" size="16" />
-                  </a>
-                </>
-              ) : (
-                <a class="button small" href={doc.archiveUrl} rel="noopener noreferrer nofollow" title="Older Word format: it opens in Word or LibreOffice, not in the browser">
-                  <Icon name="download" size="16" /> Get file<span class="visually-hidden"> {doc.title} from the Wayback Machine</span>
-                </a>
-              )}
-            </p>
-          </li>
-        ))}
-      </ul>
+                )}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div class="empty-state" data-empty-for="doc-list" hidden>
         <Icon name="search" size="28" />

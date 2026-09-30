@@ -103,6 +103,7 @@ export const dataSourceSchema = z
     methodology: z.string().trim().min(1).optional(),
     caveat: z.string().trim().min(1).optional(),
     note: z.string().trim().min(1).optional(),
+    attestation: z.string().trim().min(20).optional(),
   })
   // Tier 1 is the "publish without qualification" tier. It must be verified.
   .refine(
@@ -136,6 +137,11 @@ export const dataSourceSchema = z
     (value) =>
       value.tier >= 3 ||
       value.sources.some((source) => AUTHORITY_RANK[source.authority] <= 4) ||
+      // ADR 0010: an official account's post, attested by the maintainer, may
+      // carry current contact numbers at tier 2 (never tier 1).
+      (value.tier === 2 &&
+        Boolean(value.attestation) &&
+        value.sources.some((source) => source.authority === 'social-media')) ||
       (value.status === 'archived' &&
         value.sources.some((source) => source.authority === 'archived-official')),
     'published records need at least one source of authority "civic-tech-derivative" or stronger, unless the record is an archived one attested by a web archive',

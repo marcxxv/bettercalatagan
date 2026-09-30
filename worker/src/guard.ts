@@ -24,7 +24,7 @@ export const UNVERIFIED_OFFICIALS = ['Puno', 'Zarraga', 'Palacio', 'Pantoja', 'A
  * Values the site deliberately withholds. Must match the list in
  * .github/workflows/ci.yml ("Check withheld data did not leak").
  */
-export const WITHHELD_VALUES = ['(043)', 'mayorsoffice1011', '@gmail.com', '@yahoo.com', '64,234', '14,267'] as const;
+export const WITHHELD_VALUES = ['419-0150', 'mayorsoffice1011', '@gmail.com', '@yahoo.com', '64,234', '14,267'] as const;
 
 export const MAX_QUESTION = 600;
 
@@ -66,16 +66,17 @@ export function fixedAnswer(intent: Intent, filipino: boolean): { text: string; 
     case 'officials':
       return {
         text: filipino
-          ? 'Hindi inilalathala ng Better Calatagan kung sino ang kasalukuyang nanunungkulan. **Ang resulta ng halalan ay hindi patunay kung sino ang nasa puwesto ngayon**, at wala pang pangunahing talaan (COMELEC o DILG) na makukumpirma ito. Nasa pahina ng Pamahalaan ang buong paliwanag at kung saan maaaring magtanong.'
-          : 'Better Calatagan does not publish who currently holds office. **An election result is not proof of who is in office today**, and no primary record (COMELEC or DILG) is yet available to confirm it. The Government page explains why, and where to ask instead.',
+          ? 'Hindi inilalathala ng BetterCalatagan kung sino ang kasalukuyang nanunungkulan. **Ang resulta ng halalan ay hindi patunay kung sino ang nasa puwesto ngayon**, at wala pang pangunahing talaan (COMELEC o DILG) na makukumpirma ito. Nasa pahina ng Pamahalaan ang buong paliwanag at kung saan maaaring magtanong.'
+          : 'BetterCalatagan does not publish who currently holds office. **An election result is not proof of who is in office today**, and no primary record (COMELEC or DILG) is yet available to confirm it. The Government page explains why, and where to ask instead.',
         url: '/government#officials',
       };
     case 'emergency':
+      // Numbers must match src/data/calendar.ts (localHotlines); a test checks it.
       return {
         text: filipino
-          ? 'Kung may emerhensiya, **tumawag sa 911**, ang pambansang emergency hotline ng Pilipinas. Hindi naglalathala ang site na ito ng mga lokal na hotline dahil hindi pa ito makumpirma mula sa kasalukuyang pinagmulan.'
-          : 'In an emergency, **call 911**, the Philippines’ national emergency hotline. This site does not publish local hotlines, because it cannot yet confirm them from a current source.',
-        url: '/government#contacts',
+          ? 'Kung may emerhensiya, **tumawag sa 911**, ang pambansang emergency hotline. Sa Calatagan, ang **MDRRMO** ay nasa **0909 456 5818** o **(043) 419 7510**. Nasa pahina ng Hotlines ang PNP, BFP, RHU, Coast Guard at iba pa.'
+          : 'In an emergency, **call 911**, the national emergency hotline. In Calatagan, the **MDRRMO** is on **0909 456 5818** or **(043) 419 7510**. The Hotlines page lists the police, fire, health, Coast Guard and other local numbers.',
+        url: '/hotlines',
       };
     case 'too-long':
       return { text: `Please keep your question under ${MAX_QUESTION} characters.` };
@@ -97,11 +98,19 @@ export function looksFilipino(text: string): boolean {
   return (text.match(FILIPINO)?.length ?? 0) >= 2;
 }
 
-const CONTACT = [
-  /[\w.+-]+@[\w-]+\.[\w.]+/, // e-mail address
-  /(?:\+?63|\b0)\s?9\d{2}[\s-]?\d{3}[\s-]?\d{4}\b/, // mobile number
-  /\(\s?0?\d{2,3}\s?\)\s?\d{3}[\s-]?\d{4}/, // landline with area code
+const EMAIL = /[\w.+-]+@[\w-]+\.[\w.]+/;
+const PHONES = [
+  /(?:\+?63|\b0)\s?9\d{2}[\s-]?\d{3}[\s-]?\d{4}\b/g, // mobile number
+  /\(\s?0?\d{2,3}\s?\)\s?\d{3}[\s-]?\d{4}/g, // landline with area code
 ];
+const digitsOf = (text: string) => text.replace(/\D/g, '').replace(/^63/, '0');
+
+/** Every phone number written in `text`, as bare digits (for matching answers to passages). */
+export function phoneNumbers(text: string): Set<string> {
+  const out = new Set<string>();
+  for (const re of PHONES) for (const m of text.matchAll(re)) out.add(digitsOf(m[0]));
+  return out;
+}
 
 export type Verdict = { ok: true; emit: string } | { ok: false; reason: string };
 
@@ -119,6 +128,8 @@ export class OutputGuard {
   constructor(
     private readonly pool: readonly Figure[],
     private readonly canary: string,
+    /** Phone numbers the site itself publishes (hotlines); any other number is withdrawn. */
+    private readonly publishedPhones: ReadonlySet<string> = new Set(),
   ) {}
 
   push(delta: string): Verdict {
@@ -169,7 +180,8 @@ export class OutputGuard {
     if (this.canary && head.includes(this.canary)) return 'canary';
     if (OFFICIAL_NAME.test(head)) return 'official-name';
     for (const value of WITHHELD_VALUES) if (head.includes(value)) return 'withheld-value';
-    if (CONTACT.some((re) => re.test(head))) return 'contact-detail';
+    if (EMAIL.test(head)) return 'contact-detail';
+    for (const number of phoneNumbers(head)) if (!this.publishedPhones.has(number)) return 'contact-detail';
     // Figures are read from the whole text so scale words after the cut are seen.
     const bad = unsupported(this.text, this.pool, final ? Infinity : cut);
     if (bad.length) return `unsupported-figure:${bad.map((f) => f.raw).join(',')}`;

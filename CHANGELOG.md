@@ -7,6 +7,27 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Local emergency hotlines
+See `docs/adr/0010-local-hotlines-by-attestation.md`. MDRRMO (0909 456 5818, (043) 419 7510), PNP,
+BFP, RHU, Coast Guard, Medicare and BATELEC numbers, from the municipality's emergency hotlines
+poster, published at tier 2 on the maintainer's attestation. 911 stays first. The assistant's
+emergency answer now gives the MDRRMO lines.
+
+### Changed — Lists, menus and the name
+- **One list pattern everywhere** (Services, Infrastructure, Procurement, Legislation, Archive,
+  Disclosures, Holidays, barangay projects): a framed dataset with aligned columns, a column
+  header that stays in view while scrolling, dense rows with two-line titles and icon actions,
+  details on expand. DPWH rows lead with the work itself, not the programme boilerplate.
+- **Tables** show every row (no scroll inside a scroll); their header row sticks to the page.
+- **Filters** look the same on every page and in every browser (Safari drew native selects).
+- **Navigation** menus open on hover with intent, and one surface glides and resizes between
+  groups with the content sliding in from the direction of travel; keyboard and touch unchanged.
+- **Services** topics redesigned as larger cards with a distinct icon each.
+- The name is written **BetterCalatagan**, as one word.
+
+### Fixed
+- History: the contents rail stuck under the masthead ("Chapters" hidden when scrolling).
+
 ### Added — The Better LGU structure, sourced
 See `docs/adr/0009-better-lgu-information-architecture.md`. The hero is unchanged.
 - **Navigation** grouped as the Better LGU portals group theirs: Services · Government ·

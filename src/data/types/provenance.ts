@@ -1,5 +1,5 @@
 /**
- * Provenance and readiness types for Better Calatagan civic data.
+ * Provenance and readiness types for BetterCalatagan civic data.
  *
  * Every civic fact published by this project carries a `DataSource`. The rules
  * encoded here are enforced by `src/data/civic-data.test.ts`, not by convention.
@@ -119,6 +119,12 @@ export interface DataSource {
   caveat?: string;
   /** Maintainer notes. Not rendered. */
   note?: string;
+  /**
+   * A maintainer's written attestation, for the one case where the record of
+   * a fact is an official account's social-media post (ADR 0010). Shown to the
+   * reader with the caveat.
+   */
+  attestation?: string;
 }
 
 /** A civic record bundled with its provenance. */

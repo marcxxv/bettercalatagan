@@ -3,7 +3,7 @@
  * answer through the output guard, and withdraw it if the guard objects.
  */
 import type { Env } from './env';
-import { figurePool, fixedAnswer, looksFilipino, MAX_QUESTION, OutputGuard, screen } from './guard';
+import { figurePool, fixedAnswer, looksFilipino, MAX_QUESTION, OutputGuard, phoneNumbers, screen } from './guard';
 import { json, type Stream } from './http';
 import { recordUsage } from './limits';
 import { complete, ModelError } from './model';
@@ -62,7 +62,7 @@ export async function answer(env: Env, request: ChatRequest, stream: Stream, can
   if (intent) {
     const fixed = fixedAnswer(intent, filipino);
     if (fixed.url) {
-      await stream.send({ t: 'sources', items: [{ n: 1, page: 'Better Calatagan', section: 'Read more', url: fixed.url }] });
+      await stream.send({ t: 'sources', items: [{ n: 1, page: 'BetterCalatagan', section: 'Read more', url: fixed.url }] });
     }
     await stream.send({ t: 'delta', text: fixed.text });
     await stream.send({ t: 'done', grounded: true });
@@ -76,6 +76,7 @@ export async function answer(env: Env, request: ChatRequest, stream: Stream, can
   const guard = new OutputGuard(
     figurePool(...passages.map((p) => p.text), question, ...history.map((t) => t.content), today),
     canary,
+    phoneNumbers(passages.map((p) => p.text).join('\n')),
   );
 
   let tokens = 0;

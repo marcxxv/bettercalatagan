@@ -19,9 +19,9 @@ import { formatDate, formatNumber, formatPeso, formatPesoMillions, ordinal } fro
 import { offices, SERVICE_CATEGORIES } from '../data/services';
 import { inCalatagan, totalBudget } from '../data/infrastructure';
 import { latestCmci } from '../data/competitiveness';
-import { holidays, hotlines, HOLIDAY_YEAR } from '../data/calendar';
+import { holidays, hotlines, HOLIDAY_YEAR, localHotlines } from '../data/calendar';
 import { barangayPages } from './barangay-pages';
-import { dpwhTitle } from './dpwh-text';
+import { dpwhHeadline } from './dpwh-text';
 import { PAGES } from './site';
 
 export interface SearchEntry {
@@ -272,7 +272,7 @@ export function buildSearchIndex(): SearchEntry[] {
   });
   for (const p of inCalatagan) {
     entries.push({
-      t: ((d) => (d.length > 140 ? `${d.slice(0, 137)}…` : d))(dpwhTitle(p.description)),
+      t: ((d) => (d.length > 140 ? `${d.slice(0, 137)}…` : d))(dpwhHeadline(p.description).headline),
       g: 'Projects',
       u: `/infrastructure#contract-${p.contractId}`,
       d: [p.infraYear, p.status, p.budget !== null ? formatPeso(p.budget) : null].filter(Boolean).join(' · '),
@@ -309,6 +309,17 @@ export function buildSearchIndex(): SearchEntry[] {
       a: `Call ${line.number}`,
       s: line.source.name.split(' — ')[0],
       k: 'hotline emergency number call police fire ambulance complaint',
+    });
+  }
+
+  for (const line of localHotlines) {
+    entries.push({
+      t: `${line.office} hotline, Calatagan`,
+      g: 'Answers',
+      u: '/hotlines#local',
+      a: line.numbers.join(' · '),
+      s: 'Municipality of Calatagan emergency hotlines poster',
+      k: `hotline emergency number ${line.what.toLowerCase()} tawag`,
     });
   }
 

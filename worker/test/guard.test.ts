@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { localHotlines } from '../../src/data/calendar';
 import { describe, expect, it } from 'vitest';
 import {
   figurePool,
@@ -90,7 +91,8 @@ describe('OutputGuard', () => {
   it('withdraws names of officials, withheld values, contact details and the canary', () => {
     const cases = [
       ['The mayor is Juan Palacio.', 'official-name'],
-      ['Call (043) 123 4567 for help.', 'withheld-value'],
+      ['Call (043) 123 4567 for help.', 'contact-detail'],
+      ['The old hall number was 419-0150.', 'withheld-value'],
       ['Text 0917 123 4567 today.', 'contact-detail'],
       ['Write to office@example.ph today.', 'contact-detail'],
       ['The code is BC-canary of course.', 'canary'],
@@ -100,10 +102,26 @@ describe('OutputGuard', () => {
     }
   });
 
+  it('allows a phone number only when the site itself publishes it', () => {
+    const published = new Set(['09094565818', '0434197510']);
+    const pool2 = figurePool('MDRRMO 0909 456 5818 or (043) 419 7510');
+    const ok = run(new OutputGuard(pool2, 'BC-canary', published), words('Call the MDRRMO on 0909 456 5818 or (043) 419 7510 now.'));
+    expect(ok.reason).toBeNull();
+    const bad = run(new OutputGuard(pool2, 'BC-canary', published), words('Call 0917 000 1111 for the MDRRMO today.'));
+    expect(bad.reason).toMatch(/^contact-detail/);
+  });
+
   it('rewrites other citation styles to the site’s', () => {
     expect(normaliseCitations('Built in 1890【1†L9-L10】【2】 and [^3] and [4, 5].')).toBe(
       'Built in 1890[1][2] and [3] and [4][5].',
     );
+  });
+});
+
+describe('the fixed emergency answer', () => {
+  it('quotes the MDRRMO numbers the site publishes', () => {
+    const mdrrmo = localHotlines.find((h) => h.office === 'MDRRMO')!;
+    for (const lang of [false, true]) for (const n of mdrrmo.numbers) expect(fixedAnswer('emergency', lang).text).toContain(n);
   });
 });
 

@@ -6,7 +6,7 @@ import Icon from '../../components/Icon.astro';
 import { barangayPages, type BarangayPage } from '../../lib/barangay-pages';
 import { barangayPopulation2024, outsideHouseholds } from '../../data/population';
 import { infrastructureSource } from '../../data/infrastructure';
-import { dpwhTitle } from '../../lib/dpwh-text';
+import { dpwhHeadline, dpwhTitle } from '../../lib/dpwh-text';
 import { formatDate, formatNumber, formatPeso, formatPesoMillions } from '../../lib/format';
 
 /** One barangay: its census counts, where it ranks, and the national projects DPWH places in it. */
@@ -93,24 +93,24 @@ const description = `${b.name}, a barangay of Calatagan, Batangas: ${b.census ? 
             {b.projects.length === 1 ? 'One DPWH contract names' : `${b.projects.length} DPWH contracts name`} {b.name} in
             {b.projects.length === 1 ? ' its' : ' their'} description, with contract budgets of {formatPesoMillions(b.projectBudget)} in total.
           </p>
-          <ul class="records">
-            {b.projects.map((p) => (
-              <li class="record">
-                <span class:list={['record-icon', { ok: p.status === 'Completed' }]} aria-hidden="true">
-                  <Icon name={p.status === 'Completed' ? 'check' : 'clock'} size="20" />
-                </span>
-                <div>
-                  <h3><a href={`/infrastructure#contract-${p.contractId}`}>{dpwhTitle(p.description)}</a></h3>
-                  <p class="record-tags">
-                    <span class="chip">{p.infraYear}</span>
-                    <span>{p.status}</span>
-                    {p.category && <span>{p.category}</span>}
-                  </p>
-                </div>
-                <p class="record-side">{p.budget !== null && <span class="record-amount">{formatPeso(p.budget)}</span>}</p>
-              </li>
-            ))}
-          </ul>
+          <div class="dataset" style="--cols: minmax(0, 1fr) 4rem 8.5rem 9rem">
+            <div class="dataset-head" aria-hidden="true">
+              <span>Project</span><span>Year</span><span>Status</span><span class="num">Contract budget</span>
+            </div>
+            <ul class="dataset-rows">
+              {b.projects.map((p) => (
+                <li class="dataset-row">
+                  <div class="cell main">
+                    <p class="row-title" title={dpwhTitle(p.description)}><a href={`/infrastructure#contract-${p.contractId}`}>{dpwhHeadline(p.description).headline}</a></p>
+                    <p class="row-sub">{p.category && <span>{p.category.split(':')[0]}</span>}<span>{p.contractId}</span></p>
+                  </div>
+                  <span class="cell"><span class="cell-label">Year</span>{p.infraYear}</span>
+                  <span class="cell"><span class="cell-label">Status</span>{p.status}</span>
+                  <span class="cell num"><span class="cell-label">Budget</span>{p.budget !== null ? <span class="row-amount">{formatPeso(p.budget)}</span> : '—'}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
           <Source source={infrastructureSource} label="these projects" />
         </>
       ) : (
@@ -139,13 +139,5 @@ const description = `${b.name}, a barangay of Calatagan, Batangas: ${b.census ? 
     padding-top: var(--sp-5);
     border-top: 1px solid var(--c-line);
     font-weight: 600;
-  }
-  .record h3 a {
-    color: inherit;
-    text-decoration: none;
-  }
-  .record h3 a:hover {
-    color: var(--c-accent);
-    text-decoration: underline;
   }
 </style>

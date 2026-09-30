@@ -116,29 +116,110 @@ for (const drop of drops) {
 document.addEventListener('click', (event) => {
   for (const drop of drops) if (drop.open && !drop.contains(event.target as Node)) drop.open = false;
 });
-// With a mouse or trackpad, a group opens on hover and closes shortly after the
-// pointer leaves (the delay forgives a diagonal move toward the panel). Touch
-// and keyboard keep the click-to-open disclosure.
-if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  let closing = 0;
+// With a mouse or trackpad the menus behave like a product site's: hover
+// intent before the first open, instant switching between groups, and one
+// surface (.nav-morph) that glides and resizes to fit each group, with the
+// content sliding in from the side the pointer came from. Touch and keyboard
+// keep the plain click-to-open disclosure.
+const primary = document.querySelector<HTMLElement>('nav.primary');
+const morph = primary?.querySelector<HTMLElement>('.nav-morph');
+if (primary && morph && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  primary.classList.add('morph-mode');
+  let current: HTMLDetailsElement | null = null;
+  let openTimer = 0;
+  let closeTimer = 0;
+
+  const place = (drop: HTMLDetailsElement, instant: boolean) => {
+    const panel = drop.querySelector<HTMLElement>('.drop-panel');
+    const summary = drop.querySelector('summary');
+    if (!panel || !summary) return;
+    const box = primary.getBoundingClientRect();
+    const p = panel.getBoundingClientRect();
+    const s = summary.getBoundingClientRect();
+    primary.classList.toggle('morph-instant', instant);
+    morph.style.setProperty('--mx', `${p.left - box.left}px`);
+    morph.style.setProperty('--my', `${p.top - box.top}px`);
+    morph.style.setProperty('--mw', `${p.width}px`);
+    morph.style.setProperty('--mh', `${p.height}px`);
+    morph.style.setProperty('--caret', `${s.left + s.width / 2 - p.left}px`);
+    morph.style.setProperty('--mo', `${s.left + s.width / 2 - p.left}px`);
+    primary.classList.add('morph-open');
+  };
+
+  const show = (drop: HTMLDetailsElement) => {
+    const from = current ? drops.indexOf(current) : -1;
+    const to = drops.indexOf(drop);
+    primary.dataset.dir = from < 0 ? 'none' : to > from ? 'right' : 'left';
+    const instant = !current;
+    current = drop;
+    drop.open = true; // closes the others via the toggle listener above
+    place(drop, instant);
+  };
+  // Close by fading the surface and the content together, then closing the menu.
+  const hide = () => {
+    const closing = current;
+    current = null;
+    primary.classList.remove('morph-open');
+    delete primary.dataset.dir;
+    window.setTimeout(() => {
+      if (closing && current !== closing) closing.removeAttribute('open');
+    }, 170);
+  };
+
   for (const drop of drops) {
     drop.addEventListener('pointerenter', (event) => {
       if (event.pointerType !== 'mouse') return;
-      window.clearTimeout(closing);
-      drop.open = true;
-    });
-    // The pointer already opened it; a click on the label should not close it again.
-    drop.querySelector('summary')?.addEventListener('click', (event) => {
-      if ((event as PointerEvent).pointerType === 'mouse' && drop.open) event.preventDefault();
+      window.clearTimeout(closeTimer);
+      window.clearTimeout(openTimer);
+      // Hover intent: a pause before the first open, none when moving between menus.
+      openTimer = window.setTimeout(() => show(drop), current ? 0 : 80);
     });
     drop.addEventListener('pointerleave', (event) => {
       if (event.pointerType !== 'mouse') return;
-      window.clearTimeout(closing);
-      closing = window.setTimeout(() => {
-        if (!drop.contains(document.activeElement)) drop.open = false;
-      }, 180);
+      window.clearTimeout(openTimer);
+      closeTimer = window.setTimeout(() => {
+        if (!primary.contains(document.activeElement) || !current?.contains(document.activeElement)) hide();
+      }, 220);
+    });
+    // A click on a label the pointer already opened keeps it open.
+    drop.querySelector('summary')?.addEventListener('click', (event) => {
+      if ((event as PointerEvent).pointerType === 'mouse' && drop.open) event.preventDefault();
+    });
+    // Keyboard or click opening: follow it with the surface too.
+    drop.addEventListener('toggle', () => {
+      if (drop.open && current !== drop) show(drop);
+      if (!drop.open && current === drop) {
+        current = null;
+        primary.classList.remove('morph-open');
+      }
     });
   }
+  window.addEventListener('resize', () => current && place(current, true));
+}
+
+/* ---------- Tables: keep the header row in view ---------- */
+
+// A table narrower than its frame needs no scroll box of its own; without one,
+// its sticky header can hold to the page while the reader scrolls. Wide tables
+// keep scrolling inside their frame, header pinned there.
+const wraps = [...document.querySelectorAll<HTMLElement>('.table-wrap')];
+const fit = () => {
+  for (const wrap of wraps) {
+    const table = wrap.querySelector('table');
+    if (!table) continue;
+    wrap.classList.remove('fits');
+    wrap.classList.toggle('fits', table.scrollWidth <= wrap.clientWidth + 1);
+  }
+};
+if (wraps.length) {
+  fit();
+  let fitFrame = 0;
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(fitFrame);
+    fitFrame = requestAnimationFrame(fit);
+  });
+  // Tables inside closed <details> measure as zero wide until opened.
+  document.addEventListener('toggle', fit, true);
 }
 
 /* ---------- Manila clock in the utility bar ---------- */

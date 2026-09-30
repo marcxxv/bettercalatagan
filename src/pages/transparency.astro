@@ -208,7 +208,7 @@ const jsonLd = [
       <p class="eyebrow">Index</p>
       <h2 id="filings-title">Filings</h2>
 
-      <form class="toolbar sticky" data-filter="filing-list" data-noun="filings" role="search" aria-label="Filter filings" style="--filter-cols: 4" hidden>
+      <form class="toolbar" data-filter="filing-list" data-noun="filings" role="search" aria-label="Filter filings" style="--filter-cols: 4" hidden>
         <p class="field search">
           <label for="f-search">Search</label>
           <input type="search" id="f-search" name="q" placeholder="Form name, period or id" autocomplete="off" />
@@ -257,117 +257,65 @@ const jsonLd = [
         <ul class="active-filters" data-pills-for="filing-list" aria-label="Active filters"></ul>
       </div>
 
-      <ul class="filings" id="filing-list">
-        {rows.map((row) => (
-          <li
-            class="filing"
-            data-item
-            data-year={String(row.documentPeriod.year)}
-            data-quarter={String(row.documentPeriod.quarter ?? 'annual')}
-            data-form={row.formSlug}
-            data-availability={row.availability}
-            data-search={row.search}
-          >
-            <span class:list={['f-icon', row.availability === 'available' ? 'ok' : 'bad']} aria-hidden="true">
-              <Icon name={row.availability === 'available' ? 'file' : 'alert'} size="20" />
-            </span>
-            <div class="filing-main">
-              <h3>{row.formLabel}</h3>
-              <p class="tags">
-                <span class="chip">{row.periodLabel}</span>
-                <span class:list={['chip', row.availability === 'available' ? 'ok' : 'warn']}>
-                  <span class="dot"></span>
-                  {AVAILABILITY_LABEL[row.availability] ?? row.availability}
-                </span>
-                {row.fileType && (
-                  <span class="file-meta">
-                    {row.fileType.toUpperCase()}
-                    {row.sizeLabel && <> · {row.sizeLabel}</>}
-                  </span>
-                )}
-              </p>
-            </div>
-            <p class="get">
-              {row.read ? (
-                <>
-                  <a class="button small primary" href={row.downloadUrl} rel="noopener noreferrer nofollow" {...row.read}>
-                    <Icon name="eye" size="16" /> Read
-                    <span class="visually-hidden"> {row.formLabel}, {row.periodLabel}</span>
+      <div class="dataset" style="--cols: minmax(0, 1fr) 9rem 11rem 7rem 5.5rem">
+        <div class="dataset-head" aria-hidden="true">
+          <span>Filing</span><span>Period</span><span>Availability</span><span>File</span><span class="num">Open</span>
+        </div>
+        <ul class="dataset-rows" id="filing-list">
+          {rows.map((row) => (
+            <li
+              class="dataset-row"
+              data-item
+              data-year={String(row.documentPeriod.year)}
+              data-quarter={String(row.documentPeriod.quarter ?? 'annual')}
+              data-form={row.formSlug}
+              data-availability={row.availability}
+              data-search={row.search}
+            >
+              <div class="cell main">
+                <p class="row-title">{row.formLabel}</p>
+                <details class="row-more">
+                  <summary>Details<span class="visually-hidden"> for {row.formLabel}, {row.periodLabel}</span></summary>
+                  <dl>
+                    <dt>Data period</dt><dd>{row.periodLabel} — the period the document reports on</dd>
+                    {row.postingLabel && <><dt>Posting period</dt><dd>{row.postingLabel} — when the LGU posted it</dd></>}
+                    <dt>Retrieved</dt><dd>{formatDate(row.retrievedAt.slice(0, 10))} — when we last asked the portal</dd>
+                    <dt>Verified</dt><dd>{formatDate(fdpSource.lastVerified)} — when a maintainer last checked</dd>
+                    {row.postingLocations.length > 0 && <><dt>Posted at</dt><dd>{row.postingLocations.join(', ')}</dd></>}
+                    <dt>Reference</dt><dd><code>{row.id}</code> · DILG document {row.fdppId}</dd>
+                    {row.contentSha256 && <><dt>Fingerprint</dt><dd><code class="hash">{row.contentSha256}</code></dd></>}
+                    {row.availability !== 'available' && (
+                      <><dt>Status</dt><dd>The DILG link returned an error when we last checked{row.lastKnownGoodAt && <> (last downloaded {formatDate(row.lastKnownGoodAt.slice(0, 10))})</>}.</dd></>
+                    )}
+                  </dl>
+                </details>
+              </div>
+              <span class="cell"><span class="cell-label">Period</span>{row.periodLabel}</span>
+              <span class="cell">
+                <span class="cell-label">Availability</span>
+                <span class:list={['chip', row.availability === 'available' ? 'ok' : 'warn']}><span class="dot"></span>{AVAILABILITY_LABEL[row.availability] ?? row.availability}</span>
+              </span>
+              <span class="cell muted"><span class="cell-label">File</span>{row.fileType ? `${row.fileType.toUpperCase()}${row.sizeLabel ? ` · ${row.sizeLabel}` : ''}` : '—'}</span>
+              <span class="cell row-actions">
+                {row.read ? (
+                  <>
+                    <a class="icon-action primary" href={row.downloadUrl} rel="noopener noreferrer nofollow" title="Read on this site" {...row.read}>
+                      <Icon name="eye" size="17" /><span class="visually-hidden">Read {row.formLabel}, {row.periodLabel}</span>
+                    </a>
+                    <a class="icon-action" href={row.read['data-read']} download={row.read['data-filename']} title="Download">
+                      <Icon name="download" size="16" /><span class="visually-hidden">Download {row.formLabel}, {row.periodLabel}</span>
+                    </a>
+                  </>
+                ) : (
+                  <a class="icon-action" href={row.downloadUrl} rel="noopener noreferrer nofollow" title="Try the DILG link">
+                    <Icon name="external" size="16" /><span class="visually-hidden">Try the DILG link for {row.formLabel}, {row.periodLabel}</span>
                   </a>
-                  <a class="button small icon-only" href={row.read['data-read']} download={row.read['data-filename']} title="Download" aria-label={`Download ${row.formLabel}, ${row.periodLabel}`}>
-                    <Icon name="download" size="16" />
-                  </a>
-                </>
-              ) : (
-                <a class="button small" href={row.downloadUrl} rel="noopener noreferrer nofollow">
-                  Try DILG link
-                  <span class="visually-hidden"> for {row.formLabel}, {row.periodLabel}</span>
-                </a>
-              )}
-            </p>
-            <details class="filing-more">
-              <summary>
-                Details<span class="visually-hidden"> for {row.formLabel}, {row.periodLabel}</span>
-              </summary>
-              <dl>
-                <div>
-                  <dt>Data period</dt>
-                  <dd>{row.periodLabel} <span class="hint">— the period the document reports on</span></dd>
-                </div>
-                {row.postingLabel && (
-                  <div>
-                    <dt>Posting period</dt>
-                    <dd>{row.postingLabel} <span class="hint">— when the LGU posted it</span></dd>
-                  </div>
                 )}
-                <div>
-                  <dt>Retrieved</dt>
-                  <dd>
-                    {formatDate(row.retrievedAt.slice(0, 10))}
-                    <span class="hint">— when we last asked the portal</span>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Verified</dt>
-                  <dd>
-                    {formatDate(fdpSource.lastVerified)}
-                    <span class="hint">— when a maintainer last checked</span>
-                  </dd>
-                </div>
-                {row.postingLocations.length > 0 && (
-                  <div>
-                    <dt>Posted at</dt>
-                    <dd>{row.postingLocations.join(', ')}</dd>
-                  </div>
-                )}
-                <div>
-                  <dt>Reference</dt>
-                  <dd>
-                    <code>{row.id}</code> <span class="hint">— our id; DILG document {row.fdppId}</span>
-                  </dd>
-                </div>
-                {row.contentSha256 && (
-                  <div>
-                    <dt>Content fingerprint</dt>
-                    <dd><code class="hash">{row.contentSha256}</code></dd>
-                  </div>
-                )}
-                {row.availability !== 'available' && (
-                  <div>
-                    <dt>Status</dt>
-                    <dd>
-                      The DILG link returned an error when we last checked
-                      {row.lastKnownGoodAt && (
-                        <> (last downloaded {formatDate(row.lastKnownGoodAt.slice(0, 10))})</>
-                      )}.
-                    </dd>
-                  </div>
-                )}
-              </dl>
-            </details>
-          </li>
-        ))}
-      </ul>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div class="empty-state" data-empty-for="filing-list" hidden>
         <Icon name="search" size="28" />

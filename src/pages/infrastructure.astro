@@ -19,7 +19,7 @@ import {
 import { barangayPages } from '../lib/barangay-pages';
 import { formatDate, formatNumber, formatPeso, formatPesoMillions } from '../lib/format';
 import { SITE } from '../lib/site';
-import { dpwhTitle } from '../lib/dpwh-text';
+import { dpwhHeadline, dpwhTitle } from '../lib/dpwh-text';
 
 /**
  * National infrastructure in Calatagan: every DPWH contract whose own
@@ -161,7 +161,7 @@ const jsonLd = [
       <p class="eyebrow">Every contract</p>
       <h2 id="projects-title">Projects</h2>
 
-      <form class="toolbar sticky" data-filter="project-list" data-noun="projects" role="search" aria-label="Filter projects" style="--filter-cols: 4" hidden>
+      <form class="toolbar" data-filter="project-list" data-noun="projects" role="search" aria-label="Filter projects" style="--filter-cols: 4" hidden>
         <p class="field search">
           <label for="p-search">Search</label>
           <input type="search" id="p-search" name="q" placeholder="Barangay, school, contractor or contract ID" autocomplete="off" />
@@ -206,54 +206,62 @@ const jsonLd = [
         <ul class="active-filters" data-pills-for="project-list" aria-label="Active filters"></ul>
       </div>
 
-      <ul class="records" id="project-list">
-        {inCalatagan.map((p) => (
-          <li
-            class="record"
-            id={`contract-${p.contractId}`}
-            data-item
-            data-year={String(p.infraYear ?? '')}
-            data-status={slugOf(p.status)}
-            data-category={slugOf(p.category ?? 'Other')}
-            data-barangay={p.barangays.length === 1 ? barangayName.get(p.barangays[0])?.slug : p.barangays.length ? 'multiple' : ''}
-            data-search={search(p)}
-          >
-            <span class:list={['record-icon', { ok: p.status === 'Completed' }]} aria-hidden="true">
-              <Icon name={p.status === 'Completed' ? 'check' : 'clock'} size="20" />
-            </span>
-            <div>
-              <h3>{dpwhTitle(p.description)}</h3>
-              <p class="record-tags">
-                <span class:list={['chip', statusTone(p.status)]}><span class="dot"></span>{p.status}{p.progress !== null && p.status !== 'Completed' ? ` · ${p.progress}%` : ''}</span>
-                {p.infraYear && <span class="chip">{p.infraYear}</span>}
-                {p.category && <span>{p.category}</span>}
-                {p.barangays.map((code) => {
-                  const b = barangayName.get(code);
-                  return b ? <a href={`/barangays/${b.slug}`}>{b.name}</a> : null;
-                })}
-              </p>
-            </div>
-            <p class="record-side">
-              {p.budget !== null ? <span class="record-amount">{formatPeso(p.budget)}</span> : <span class="muted">No budget listed</span>}
-            </p>
-            <details class="record-more">
-              <summary>Contract details</summary>
-              <dl>
-                <dt>Contract ID</dt><dd><code>{p.contractId}</code></dd>
-                {p.contractor && <><dt>Contractor</dt><dd>{p.contractor}</dd></>}
-                {p.bidders !== null && <><dt>Bidders</dt><dd>{p.bidders}</dd></>}
-                {p.abc !== null && <><dt>Approved budget (ABC)</dt><dd>{formatPeso(p.abc)}</dd></>}
-                {p.startDate && <><dt>Start</dt><dd>{formatDate(p.startDate)}</dd></>}
-                {p.completionDate && <><dt>Completion</dt><dd>{formatDate(p.completionDate)}</dd></>}
-                {p.sourceOfFunds && <><dt>Source of funds</dt><dd>{p.sourceOfFunds}</dd></>}
-                {p.implementingOffice && <><dt>Implementing office</dt><dd>DPWH {p.implementingOffice}</dd></>}
-                <dt>Record</dt>
-                <dd><a href={`https://transparency.bettergov.ph/dpwh/${p.contractId}`} rel="noopener nofollow">This contract on BetterGov Transparency</a></dd>
-              </dl>
-            </details>
-          </li>
-        ))}
-      </ul>
+      <div class="dataset" style="--cols: minmax(0, 1fr) 4rem 9.5rem 9rem">
+        <div class="dataset-head" aria-hidden="true">
+          <span>Project</span><span>Year</span><span>Status</span><span class="num">Contract budget</span>
+        </div>
+        <ul class="dataset-rows" id="project-list">
+          {inCalatagan.map((p) => (
+            <li
+              class="dataset-row"
+              id={`contract-${p.contractId}`}
+              data-item
+              data-year={String(p.infraYear ?? '')}
+              data-status={slugOf(p.status)}
+              data-category={slugOf(p.category ?? 'Other')}
+              data-barangay={p.barangays.length === 1 ? barangayName.get(p.barangays[0])?.slug : p.barangays.length ? 'multiple' : ''}
+              data-search={search(p)}
+            >
+              <div class="cell main">
+                <p class="row-title" title={dpwhTitle(p.description)}>{dpwhHeadline(p.description).headline}</p>
+                <p class="row-sub">
+                  {p.barangays.map((code) => {
+                    const b = barangayName.get(code);
+                    return b ? <a href={`/barangays/${b.slug}`}>{b.name}</a> : null;
+                  })}
+                  {p.category && <span>{p.category.split(':')[0]}</span>}
+                  <span>{p.contractId}</span>
+                </p>
+                <details class="row-more">
+                  <summary>Contract details</summary>
+                  <dl>
+                    <dt>Full description</dt><dd>{dpwhTitle(p.description)}</dd>
+                    {p.category && <><dt>Type</dt><dd>{p.category}</dd></>}
+                    {p.contractor && <><dt>Contractor</dt><dd>{p.contractor}</dd></>}
+                    {p.bidders !== null && <><dt>Bidders</dt><dd>{p.bidders}</dd></>}
+                    {p.abc !== null && <><dt>Approved budget (ABC)</dt><dd>{formatPeso(p.abc)}</dd></>}
+                    {p.startDate && <><dt>Start</dt><dd>{formatDate(p.startDate)}</dd></>}
+                    {p.completionDate && <><dt>Completion</dt><dd>{formatDate(p.completionDate)}</dd></>}
+                    {p.sourceOfFunds && <><dt>Source of funds</dt><dd>{p.sourceOfFunds}</dd></>}
+                    {p.implementingOffice && <><dt>Implementing office</dt><dd>DPWH {p.implementingOffice}</dd></>}
+                    <dt>Record</dt>
+                    <dd><a href={`https://transparency.bettergov.ph/dpwh/${p.contractId}`} rel="noopener nofollow">This contract on BetterGov Transparency</a></dd>
+                  </dl>
+                </details>
+              </div>
+              <span class="cell"><span class="cell-label">Year</span>{p.infraYear ?? '—'}</span>
+              <span class="cell">
+                <span class="cell-label">Status</span>
+                <span class:list={['chip', statusTone(p.status)]}><span class="dot"></span>{p.status}{p.progress !== null && p.status !== 'Completed' && p.progress > 0 ? ` · ${p.progress}%` : ''}</span>
+              </span>
+              <span class="cell num">
+                <span class="cell-label">Budget</span>
+                {p.budget !== null ? <span class="row-amount">{formatPeso(p.budget)}</span> : <span class="muted">Not yet listed</span>}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
       <div class="empty-state" data-empty-for="project-list" hidden>
         <p>No project matches those filters.</p>
       </div>
@@ -299,18 +307,24 @@ const jsonLd = [
             <h3>Packages shared with other municipalities</h3>
             <p>{sharedPackages.length} {sharedPackages.length === 1 ? 'contract' : 'contracts'} · one budget covering sites in more than one town</p>
           </div>
-          <ul class="records">
-            {sharedPackages.map((p) => (
-              <li class="record">
-                <span class="record-icon warn" aria-hidden="true"><Icon name="layers" size="20" /></span>
-                <div>
-                  <h3>{dpwhTitle(p.description)}</h3>
-                  <p class="record-tags"><span class="chip">{p.infraYear}</span><span>{p.status}</span><code>{p.contractId}</code></p>
-                </div>
-                <p class="record-side">{p.budget !== null && <span class="record-amount">{formatPeso(p.budget)}</span>}</p>
-              </li>
-            ))}
-          </ul>
+          <div class="dataset" style="--cols: minmax(0, 1fr) 4rem 8rem 9rem">
+            <div class="dataset-head" aria-hidden="true">
+              <span>Contract</span><span>Year</span><span>Status</span><span class="num">Contract budget</span>
+            </div>
+            <ul class="dataset-rows">
+              {sharedPackages.map((p) => (
+                <li class="dataset-row">
+                  <div class="cell main">
+                    <p class="row-title" title={dpwhTitle(p.description)}>{dpwhHeadline(p.description).headline}</p>
+                    <p class="row-sub"><span>{p.contractId}</span></p>
+                  </div>
+                  <span class="cell"><span class="cell-label">Year</span>{p.infraYear}</span>
+                  <span class="cell"><span class="cell-label">Status</span>{p.status}</span>
+                  <span class="cell num"><span class="cell-label">Budget</span>{p.budget !== null ? <span class="row-amount">{formatPeso(p.budget)}</span> : '—'}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </>
       )}
       <p class="small muted">

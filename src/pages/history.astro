@@ -250,7 +250,10 @@ const jsonLd = [
     }
     .toc {
       position: sticky;
-      top: var(--sp-5);
+      /* Below the sticky masthead, as every other rail on the site. */
+      top: calc(var(--header-h) + var(--sp-5));
+      max-height: calc(100dvh - var(--header-h) - var(--sp-7));
+      overflow-y: auto;
       align-self: start;
     }
   }

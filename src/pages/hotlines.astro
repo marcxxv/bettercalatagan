@@ -2,9 +2,7 @@
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Source from '../components/Source.astro';
-import Icon from '../components/Icon.astro';
-import { hotlines, hotlinesSource } from '../data/calendar';
-import { offices } from '../data/services';
+import { hotlines, hotlinesSource, localHotlines, localHotlinesSource } from '../data/calendar';
 
 /**
  * Hotlines, held to the site's standard: only numbers fixed by law are
@@ -17,7 +15,6 @@ const crumbs = [
   { name: 'Services', href: '/services' },
   { name: 'Hotlines', href: '/hotlines' },
 ];
-const mdrrmo = offices.find((office) => office.slug === 'disaster')!;
 const description = 'Emergency and complaint hotlines for Calatagan, Batangas: the national numbers set by executive order, and why local numbers are not listed.';
 ---
 
@@ -26,7 +23,7 @@ const description = 'Emergency and complaint hotlines for Calatagan, Batangas: t
     eyebrow="Services"
     icon="alert"
     title="Emergency hotlines"
-    lede="In an emergency, call 911. It is the Philippines’ nationwide emergency number, set by executive order, and it works from any phone."
+    lede="In an emergency, call 911: the Philippines’ nationwide emergency number, set by executive order, free from any phone. Calatagan’s own emergency lines are listed below."
     {crumbs}
   />
 
@@ -46,23 +43,80 @@ const description = 'Emergency and complaint hotlines for Calatagan, Batangas: t
       ))}
     </ul>
 
-    <div class="callout clay">
-      <p class="callout-title"><Icon name="alert" size="18" /> Why local numbers are not listed</p>
-      <p>
-        Numbers for the municipal hall, the {mdrrmo.short}, the police and the fire station circulate
-        online, but the only records this project can find are years out of date and cannot be
-        confirmed. A wrong emergency number costs time when time matters most, so none is published
-        until a current primary source is found. The {mdrrmo.name} listed emergency response and an
-        ambulance as round-the-clock services in its 2022 charter (<a href="/services#disaster">see
-        services</a>). <a href="/sources#withheld">What else is withheld, and why</a>.
-      </p>
-    </div>
-
     <Source source={hotlinesSource} label="these numbers" />
+
+    <section class="section-block" id="local" aria-labelledby="local-title">
+      <p class="eyebrow">In Calatagan</p>
+      <h2 id="local-title">Local emergency hotlines</h2>
+      <p class="lede">The municipality’s own list of emergency numbers. Tap a number to call it.</p>
+      <ul class="local">
+        {localHotlines.map((line) => (
+          <li class:list={['local-line', { lead: line.office === 'MDRRMO' }]}>
+            <p class="local-office">{line.office}</p>
+            <p class="local-what">{line.what}</p>
+            <p class="local-numbers">
+              {line.numbers.map((n) => <a href={`tel:${n.replace(/[^\d+]/g, '')}`}>{n}</a>)}
+            </p>
+          </li>
+        ))}
+      </ul>
+      <Source source={localHotlinesSource} label="the local numbers" />
+    </section>
   </div>
 </Base>
 
 <style>
+  .local {
+    list-style: none;
+    margin: var(--sp-4) 0 var(--sp-5);
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
+    gap: var(--sp-3);
+  }
+  .local > li + li {
+    margin: 0;
+  }
+  .local-line {
+    display: grid;
+    align-content: start;
+    gap: 2px;
+    padding: var(--sp-4) var(--sp-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+  }
+  .local-line.lead {
+    border-color: var(--c-accent-line);
+    background: var(--c-accent-wash);
+  }
+  .local-office {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    color: var(--c-navy);
+  }
+  .local-what {
+    margin: 0 0 var(--sp-2);
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .local-numbers {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+  }
+  .local-numbers a {
+    font-size: var(--fs-md);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--c-ink);
+    text-decoration: none;
+  }
+  .local-numbers a:hover {
+    color: var(--c-accent);
+    text-decoration: underline;
+  }
   .lines {
     list-style: none;
     margin: 0 0 var(--sp-6);
