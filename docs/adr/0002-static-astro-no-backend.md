@@ -25,7 +25,9 @@ Tailwind was considered and **not** adopted: the shell is small enough that plai
 properties is less machinery for the same result, and one fewer dependency to audit.
 
 Client-side search (fuse.js over a prebuilt index) is the intended approach when search is needed.
-Not yet, because there is not yet enough to search.
+Not yet, because there is not yet enough to search. *Update: search shipped in
+[0006](0006-editorial-redesign.md) as a prebuilt index with a small deterministic matcher, no
+dependency.*
 
 ## Consequences
 

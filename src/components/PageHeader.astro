@@ -1,88 +1,190 @@
 ---
 /**
- * The opening of every inner page: where you are, what the page is, and — in
- * the `meta` slot — how current it is.
+ * The opening of every inner page: a rounded panel the masthead floats over,
+ * with where you are, what the page is, and — in the `meta` slot — how current
+ * it is. An `aside` slot holds key figures.
  */
 import type { Crumb } from './Seo.astro';
+import Contours from './Contours.astro';
+import Icon, { type IconName } from './Icon.astro';
 
 interface Props {
   title: string;
   eyebrow?: string;
   lede?: string;
   crumbs?: Crumb[];
+  icon?: IconName;
 }
 
-const { title, eyebrow, lede, crumbs = [] } = Astro.props;
+const { title, eyebrow, lede, crumbs = [], icon } = Astro.props;
 const hasMeta = Astro.slots.has('meta');
+const hasAside = Astro.slots.has('aside');
 ---
 
-<header class="page-header">
-  <div class="container">
-    {crumbs.length > 0 && (
-      <nav class="crumbs" aria-label="Breadcrumb">
-        <ol>
-          <li><a href="/">Overview</a></li>
-          {crumbs.map((crumb, index) =>
-            index === crumbs.length - 1 ? (
-              <li aria-current="page">{crumb.name}</li>
-            ) : (
-              <li><a href={crumb.href}>{crumb.name}</a></li>
-            ),
-          )}
-        </ol>
-      </nav>
-    )}
-    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-    <h1>{title}</h1>
-    {lede && <p class="lede">{lede}</p>}
-    <slot />
-    {hasMeta && (
-      <div class="page-meta">
-        <slot name="meta" />
+<header class="page-header on-band">
+  <div class="panel">
+    <Contours lines={12} focus={0.78} />
+    <div class:list={['ph-inner', { 'has-aside': hasAside }]}>
+      <div class="ph-main">
+        {crumbs.length > 0 && (
+          <nav class="crumbs" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="/">Home</a></li>
+              {crumbs.map((crumb, index) =>
+                index === crumbs.length - 1 ? (
+                  <li aria-current="page">{crumb.name}</li>
+                ) : (
+                  <li><a href={crumb.href}>{crumb.name}</a></li>
+                ),
+              )}
+            </ol>
+          </nav>
+        )}
+        {eyebrow && (
+          <p class="ph-eyebrow">
+            {icon && <span class="ph-icon"><Icon name={icon} size="16" /></span>}
+            {eyebrow}
+          </p>
+        )}
+        <h1>{title}</h1>
+        {lede && <p class="ph-lede">{lede}</p>}
+        <slot />
+        {hasMeta && (
+          <div class="page-meta">
+            <slot name="meta" />
+          </div>
+        )}
       </div>
-    )}
+      {hasAside && (
+        <div class="ph-aside">
+          <slot name="aside" />
+        </div>
+      )}
+    </div>
   </div>
 </header>
 
 <style>
   .page-header {
-    padding-block: var(--sp-6) var(--sp-6);
-    border-bottom: var(--border);
-    background: var(--c-surface);
+    padding-inline: calc(var(--gutter) * 0.75);
+  }
+  .panel {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    max-width: calc(var(--w-wide) + var(--gutter) * 1.5);
+    margin-inline: auto;
+    border-radius: var(--radius-2xl);
+    background: linear-gradient(180deg, var(--c-panel) 0%, var(--c-panel-2) 100%);
+    color: var(--c-band-ink);
+    padding: calc(var(--header-h) + var(--sp-6)) calc(var(--gutter) * 1.25) var(--sp-8);
   }
   @media (min-width: 48rem) {
-    .page-header {
-      padding-block: var(--sp-7) var(--sp-7);
+    .panel {
+      padding-bottom: var(--sp-9);
+    }
+  }
+  .ph-inner {
+    position: relative;
+    display: grid;
+    gap: var(--sp-6);
+    max-width: var(--w-wide);
+    margin-inline: auto;
+  }
+  @media (min-width: 64rem) {
+    .ph-inner.has-aside {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      align-items: end;
+      gap: var(--sp-8);
     }
   }
   .page-header h1 {
-    max-width: 22ch;
+    color: var(--c-band-ink);
+    font-size: var(--fs-3xl);
+    font-weight: 400;
+    letter-spacing: var(--track-display);
+    line-height: 1.02;
+    max-width: 18ch;
+    margin: 0;
+    animation: rise 800ms var(--ease-out) both;
+  }
+  .ph-lede {
+    max-width: 60ch;
+    margin: var(--sp-5) 0 0;
+    font-size: var(--fs-md);
+    line-height: 1.55;
+    color: var(--c-band-muted);
+    animation: rise 800ms 80ms var(--ease-out) both;
+  }
+  .ph-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--c-band-muted);
+  }
+  .ph-icon {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    color: var(--c-bg);
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
   }
   .crumbs ol {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--sp-1);
+    align-items: center;
+    gap: var(--sp-1) var(--sp-2);
     list-style: none;
     padding: 0;
-    margin: 0 0 var(--sp-4);
+    margin: 0 0 var(--sp-6);
     font-size: var(--fs-sm);
-    color: var(--c-muted);
+    color: var(--c-band-muted);
   }
   .crumbs li + li {
     margin-top: 0;
   }
   .crumbs li + li::before {
     content: '/';
-    margin-right: var(--sp-1);
-    color: var(--c-line);
+    margin-right: var(--sp-2);
+    opacity: 0.5;
   }
   .crumbs a {
-    color: var(--c-muted);
+    color: var(--c-band-muted);
+    text-decoration: none;
+  }
+  .crumbs a:hover {
+    color: var(--c-band-ink);
+    text-decoration: underline;
+  }
+  .crumbs [aria-current] {
+    color: var(--c-band-ink);
+    font-weight: 600;
   }
   .page-meta {
     display: flex;
     flex-wrap: wrap;
     gap: var(--sp-2);
     margin-top: var(--sp-5);
+  }
+  .ph-aside {
+    animation: rise 800ms 160ms var(--ease-out) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .page-header h1,
+    .ph-lede,
+    .ph-aside {
+      animation: none;
+    }
   }
 </style>

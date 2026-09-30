@@ -1,119 +1,222 @@
 ---
 import Mark from './Mark.astro';
-import { NAV, SECONDARY_NAV, SITE } from '../lib/site';
+import { NAV, SITE } from '../lib/site';
+import { barangayPopulation2024 } from '../data/population';
+import { fdpSource } from '../data/fdp';
+import { financialsSource } from '../data/financials';
+import { formatDate } from '../lib/format';
 
 const year = new Date().getUTCFullYear();
+
+// The most recent date a maintainer checked any published dataset.
+const lastChecked = [barangayPopulation2024.source.lastVerified, fdpSource.lastVerified, financialsSource.lastVerified]
+  .sort()
+  .at(-1)!;
+
+const links = [
+  ...NAV.filter((item) => item.href !== '/'),
+  { href: '/about', label: 'About' },
+  { href: '/data', label: 'Open data' },
+];
+
+/** One side of a laurel: pointed leaves in pairs along a curved stem. */
+const stem = 'M30 94 C 12 76, 8 44, 22 8';
+const leaves = Array.from({ length: 8 }, (_, i) => {
+  const t = 0.1 + (i / 7) * 0.82;
+  // Point on the stem's cubic Bézier.
+  const [x0, y0, x1, y1, x2, y2, x3, y3] = [30, 94, 12, 76, 8, 44, 22, 8];
+  const u = 1 - t;
+  const x = u ** 3 * x0 + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t ** 3 * x3;
+  const y = u ** 3 * y0 + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t ** 3 * y3;
+  const scale = 1 - i * 0.05;
+  return { x, y, scale };
+});
+const leaf = 'M0 0 C 3 -4, 3 -10, 0 -14 C -3 -10, -3 -4, 0 0 Z';
 ---
 
 <footer class="site-footer">
-  <div class="container footer-grid">
-    <div class="footer-about">
-      <a class="footer-brand" href="/">
-        <Mark size={28} />
-        <span>Better Calatagan</span>
-      </a>
-      <p class="statement">{SITE.independence}</p>
-      <p class="small muted">
-        Every figure on this site links to the government document it came from. Where the two
-        differ, the original document is authoritative.
-      </p>
-    </div>
+  <nav class="big-links" aria-label="Footer">
+    <ul>
+      {links.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+    </ul>
+  </nav>
 
-    <nav class="footer-nav" aria-label="Footer">
-      <h2 class="footer-heading">Sections</h2>
-      <ul>
-        {NAV.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
-      </ul>
-    </nav>
+  <p class="wordmark" aria-hidden="true">Better Calatagan</p>
 
-    <div class="footer-nav">
-      <h2 class="footer-heading">Project</h2>
-      <ul>
-        {SECONDARY_NAV.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
-        <li><a href={SITE.repository}>Source code</a></li>
-        <li><a href={`${SITE.repository}/issues/new/choose`}>Report a correction</a></li>
-      </ul>
-    </div>
+  <div class="credits">
+    <p class="credit left">
+      <span class="credit-mark"><Mark size={30} /></span>
+      <span>Part of the <a href="https://bettergov.ph" rel="noopener">BetterGov.ph</a> Better LGU community</span>
+    </p>
+    <p class="credit center">
+      <svg class="laurel" viewBox="0 0 44 100" aria-hidden="true" focusable="false">
+        <path d={stem} fill="none" stroke="currentColor" stroke-width="1.6" />
+        {leaves.map((l) => (
+          <>
+            <path d={leaf} transform={`translate(${l.x} ${l.y}) rotate(-58) scale(${l.scale})`} />
+            <path d={leaf} transform={`translate(${l.x} ${l.y}) rotate(38) scale(${l.scale})`} />
+          </>
+        ))}
+      </svg>
+      <span>Every figure, traced to its source</span>
+      <svg class="laurel flip" viewBox="0 0 44 100" aria-hidden="true" focusable="false">
+        <path d={stem} fill="none" stroke="currentColor" stroke-width="1.6" />
+        {leaves.map((l) => (
+          <>
+            <path d={leaf} transform={`translate(${l.x} ${l.y}) rotate(-58) scale(${l.scale})`} />
+            <path d={leaf} transform={`translate(${l.x} ${l.y}) rotate(38) scale(${l.scale})`} />
+          </>
+        ))}
+      </svg>
+    </p>
+    <p class="credit right">
+      <span>Built by volunteers in the Philippines · <span class="cost">Cost to the people: <strong>₱0</strong></span></span>
+    </p>
   </div>
 
-  <div class="container footer-legal">
-    <p>
-      © {year} Better Calatagan contributors. Code under MIT; this project’s own compilation under
-      CC BY 4.0. Government documents cited here remain the works of their issuing agencies and are
-      not relicensed. <a href="/about#licensing">Licensing</a>
+  <div class="fine">
+    <ul class="fine-links">
+      <li><a href="/about#licensing">Licensing</a></li>
+      <li><a href="/about#privacy">Privacy: no tracking</a></li>
+      <li><a href={SITE.repository}>Source code</a></li>
+      <li><a href={`${SITE.repository}/issues/new/choose`}>Report a correction</a></li>
+      <li>Data last verified <time datetime={lastChecked}>{formatDate(lastChecked)}</time></li>
+    </ul>
+    <p class="legal">
+      {SITE.independence} © {year} Better Calatagan contributors. Code under MIT; this project’s own
+      compilation under CC BY 4.0. Government documents cited here remain the works of their issuing
+      agencies and are not relicensed.
     </p>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    margin-top: var(--sp-9);
-    background: var(--c-sunk);
-    border-top: var(--border);
+    margin-top: var(--section-y);
+    padding: var(--sp-8) var(--gutter) calc(var(--sp-10) + 2rem);
+    border-top: 1px solid var(--c-line);
+    background: var(--c-bg);
+    color: var(--c-ink-2);
+    text-align: center;
+    overflow: hidden;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li + li {
+    margin-top: 0;
+  }
+
+  .big-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 clamp(1rem, 0.5rem + 1.5vw, 2rem);
+    max-width: 60rem;
+    margin-inline: auto;
+  }
+  .big-links a {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 1.1rem + 2vw, 2.75rem);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.3;
+    color: var(--c-ink);
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size var(--dur-2) var(--ease-out), color var(--dur-1);
+  }
+  .big-links a:hover {
+    background-size: 100% 1px;
+    color: var(--c-accent);
+  }
+
+  .wordmark {
+    margin: clamp(2.5rem, 1rem + 5vw, 5rem) 0 var(--sp-6);
+    font-family: var(--font-serif);
+    font-size: 14.2vw;
+    font-weight: 400;
+    letter-spacing: -0.05em;
+    line-height: 0.95;
+    white-space: nowrap;
+    color: var(--c-ink);
+    user-select: none;
+  }
+
+  .credits {
+    display: grid;
+    gap: var(--sp-4);
+    align-items: center;
+    max-width: var(--w-wide);
+    margin: 0 auto var(--sp-6);
+    font-size: var(--fs-sm);
+    color: var(--c-ink);
+  }
+  @media (min-width: 64rem) {
+    .credits {
+      grid-template-columns: 1fr auto 1fr;
+    }
+    .credit.left {
+      justify-content: flex-start;
+      text-align: left;
+    }
+    .credit.right {
+      justify-content: flex-end;
+      text-align: right;
+    }
+  }
+  .credit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-3);
+    margin: 0;
+  }
+  .credit a {
+    color: var(--c-ink);
+  }
+  .center {
+    font-weight: 600;
+  }
+  .laurel {
+    width: 24px;
+    height: 54px;
+    fill: var(--c-ink);
+    color: var(--c-ink);
+  }
+  .laurel.flip {
+    transform: scaleX(-1);
+  }
+  .cost strong {
+    color: var(--c-teal);
+  }
+
+  .fine {
+    max-width: 62rem;
+    margin-inline: auto;
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .fine-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--sp-2) var(--sp-5);
+    margin-bottom: var(--sp-4);
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
   }
-  .footer-grid {
-    display: grid;
-    gap: var(--sp-6);
-    padding-block: var(--sp-7) var(--sp-6);
-  }
-  @media (min-width: 48rem) {
-    .footer-grid {
-      grid-template-columns: 2fr 1fr 1fr;
-    }
-  }
-  .footer-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sp-2);
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    font-weight: 650;
-    color: var(--c-navy);
-    text-decoration: none;
-    margin-bottom: var(--sp-3);
-  }
-  .statement {
+  .fine-links a {
     color: var(--c-ink);
-    max-width: 52ch;
-  }
-  .footer-heading {
-    font-family: var(--font-sans);
-    font-size: var(--fs-xs);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--c-muted);
-    margin: 0 0 var(--sp-3);
-  }
-  .footer-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .footer-nav li + li {
-    margin-top: 0;
-  }
-  .footer-nav a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 36px;
-    color: var(--c-ink-2);
     text-decoration: none;
   }
-  .footer-nav a:hover {
-    color: var(--c-accent-strong);
+  .fine-links a:hover {
     text-decoration: underline;
   }
-  .footer-legal {
-    border-top: var(--border);
-    padding-block: var(--sp-4) var(--sp-6);
-    font-size: var(--fs-xs);
-    color: var(--c-muted);
-  }
-  .footer-legal p {
-    margin: 0;
-    max-width: 90ch;
+  .legal {
+    margin: 0 auto;
+    max-width: 80ch;
   }
 </style>

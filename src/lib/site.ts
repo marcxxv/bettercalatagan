@@ -16,11 +16,14 @@ export const SITE = {
     'Better Calatagan is an independent civic project. It is not affiliated with, endorsed by, or operated by the Municipality of Calatagan or any government agency.',
 } as const;
 
+import type { IconName } from '../components/Icon.astro';
+
 export interface NavItem {
   href: string;
   label: string;
   /** One line shown in the mobile menu and on the homepage. */
   blurb: string;
+  icon: IconName;
 }
 
 /**
@@ -32,18 +35,18 @@ export interface NavItem {
  * says plainly that those documents are historical.
  */
 export const NAV: readonly NavItem[] = [
-  { href: '/', label: 'Overview', blurb: 'Population, barangays and the municipality at a glance' },
-  { href: '/history', label: 'History', blurb: 'From 15th-century burial sites to the modern town' },
-  { href: '/government', label: 'Government', blurb: 'Officials and offices — and what we cannot yet verify' },
-  { href: '/finances', label: 'Finances', blurb: 'Income and spending, from the municipality’s own quarterly statements' },
-  { href: '/transparency', label: 'Disclosures', blurb: 'Every Full Disclosure Policy filing, with links to DILG' },
-  { href: '/documents', label: 'Archive', blurb: 'Documents saved from the municipality’s former website' },
-  { href: '/sources', label: 'Sources', blurb: 'Where every figure comes from, and what is withheld' },
+  { href: '/', label: 'Overview', blurb: 'Population, barangays and the municipality at a glance', icon: 'people' },
+  { href: '/history', label: 'History', blurb: 'From 15th-century burial sites to the modern town', icon: 'book' },
+  { href: '/government', label: 'Government', blurb: 'Officials and offices — and what we cannot yet verify', icon: 'landmark' },
+  { href: '/finances', label: 'Finances', blurb: 'Income and spending, from the municipality’s own quarterly statements', icon: 'coins' },
+  { href: '/transparency', label: 'Disclosures', blurb: 'Every Full Disclosure Policy filing, with links to DILG', icon: 'file' },
+  { href: '/documents', label: 'Archive', blurb: 'Documents saved from the municipality’s former website', icon: 'archive' },
+  { href: '/sources', label: 'Sources', blurb: 'Where every figure comes from, and what is withheld', icon: 'shield' },
 ];
 
 export const SECONDARY_NAV: readonly NavItem[] = [
-  { href: '/about', label: 'About', blurb: 'What this project is and how it works' },
-  { href: '/data/index.json', label: 'Open data', blurb: 'Machine-readable datasets with provenance' },
+  { href: '/about', label: 'About', blurb: 'What this project is and how it works', icon: 'info' },
+  { href: '/data', label: 'Open data', blurb: 'Machine-readable datasets with provenance', icon: 'database' },
 ];
 
 /** True when `href` is the current section. */

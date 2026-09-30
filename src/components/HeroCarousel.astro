@@ -1,0 +1,696 @@
+---
+/**
+ * The home page's ask box, set over a rotating card of "scenes", in the manner
+ * of America.gov's hero. Where that site uses photographs, this one draws its
+ * scenes from its own published data — the lighthouse from the history, the
+ * barangays at their census size, the latest full year's income, the filings
+ * index — so the imagery says nothing the records do not.
+ *
+ * Each scene changes the example question in the ask box. The carousel pauses
+ * on hover or focus, has visible pause/previous/next controls, and does not
+ * advance at all under prefers-reduced-motion.
+ */
+import Icon from './Icon.astro';
+import { barangays } from '../data/barangays';
+import { barangayPopulation2024, population2024 } from '../data/population';
+import { annualSeries } from '../data/financials';
+import { fdpDataset, fdpSummary } from '../data/fdp';
+import { archivedDocuments } from '../data/documents';
+import { timeline } from '../data/history';
+import { formatPeriod } from '../data/schemas/fdp';
+import { formatNumber, formatPesoMillions } from '../lib/format';
+
+const W = 800;
+const H = 450;
+
+// ---- Scene 1: the lighthouse -------------------------------------------------
+const built = timeline.find((t) => /lighthouse is built/i.test(t.event));
+let seed = 3;
+const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+const stars = Array.from({ length: 46 }, () => ({ x: rand() * W, y: rand() * 200, r: 0.4 + rand() * 1.1, o: 0.3 + rand() * 0.6 }));
+const wave = (y: number, amp: number, k: number, phase: number) => {
+  let d = '';
+  for (let x = 0; x <= W * 2; x += 16) d += `${x ? 'L' : 'M'}${x} ${(y + amp * Math.sin((x / W) * Math.PI * 2 * k + phase)).toFixed(1)}`;
+  return d;
+};
+const waves = [312, 326, 344, 366, 392, 422].map((y, i) => ({ d: wave(y, 2 + i * 0.9, 3 + (i % 3), i * 1.3), i }));
+
+// ---- Scene 2: barangays as circles ------------------------------------------
+const popByCode = new Map(barangayPopulation2024.data.map((b) => [b.psgc10, b.totalPopulation]));
+const maxPop = Math.max(...barangayPopulation2024.data.map((b) => b.totalPopulation));
+const circles: { x: number; y: number; r: number; name: string; pop: number }[] = [];
+{
+  const items = barangays.data
+    .map((b) => ({ name: b.name, pop: popByCode.get(b.psgc10) ?? 0 }))
+    .sort((a, b) => b.pop - a.pop);
+  const cx = 530;
+  const cy = 220;
+  for (const item of items) {
+    const r = 10 + 44 * Math.sqrt(item.pop / maxPop);
+    // Walk out along a spiral until the circle fits.
+    for (let t = 0; t < 4000; t += 1) {
+      const a = t * 0.35;
+      const d = 2.2 * a;
+      const x = cx + d * Math.cos(a) * 1.35;
+      const y = cy + d * Math.sin(a);
+      const fits =
+        x - r > 300 &&
+        x + r < W - 16 &&
+        y - r > 16 &&
+        y + r < H - 16 &&
+        circles.every((c) => Math.hypot(c.x - x, c.y - y) > c.r + r + 4);
+      if (fits) {
+        circles.push({ x, y, r, name: item.name, pop: item.pop });
+        break;
+      }
+    }
+  }
+}
+
+// ---- Scene 3: where the money came from -------------------------------------
+const lastYear = annualSeries().at(-1);
+const money = lastYear
+  ? (() => {
+      const income = lastYear.income ?? 0;
+      const nta = lastYear.nationalTaxAllotment ?? 0;
+      const local = lastYear.localSources ?? 0;
+      const other = Math.max(0, income - nta - local);
+      const parts = [
+        { label: 'National Tax Allotment', value: nta, color: '#9db7f2' },
+        { label: 'Raised locally', value: local, color: '#e2aa2f' },
+        { label: 'Other', value: other, color: '#5fd0c3' },
+      ].filter((p) => p.value > 0);
+      const R = 120;
+      const C = 2 * Math.PI * R;
+      let off = 0;
+      return {
+        year: lastYear.year,
+        income,
+        parts: parts.map((p) => {
+          const len = income ? (p.value / income) * C : 0;
+          const arc = { ...p, len, off, share: income ? Math.round((p.value / income) * 100) : 0 };
+          off += len;
+          return arc;
+        }),
+        R,
+        C,
+      };
+    })()
+  : null;
+
+// ---- Scene 4: the filings mosaic --------------------------------------------
+const tiles = fdpDataset.records.slice(0, 36).map((r) => ({
+  label: r.formLabel,
+  period: formatPeriod(r.documentPeriod),
+  type: (r.fileType ?? 'file').toUpperCase(),
+}));
+const rows = [tiles.slice(0, 12), tiles.slice(12, 24), tiles.slice(24, 36)];
+
+const scenes = [
+  {
+    id: 'lighthouse',
+    prompt: 'Try ‘When was the lighthouse built?’',
+    caption: built ? `Cape Santiago lighthouse · ${built.when}` : 'Cape Santiago lighthouse',
+    href: '/history',
+  },
+  {
+    id: 'people',
+    prompt: 'Try ‘How many people live in Calatagan?’',
+    caption: `${formatNumber(population2024.data.population)} people in ${barangays.data.length} barangays · ${population2024.data.census}`,
+    href: '/#barangays',
+  },
+  {
+    id: 'money',
+    prompt: money ? `Try ‘How much did the town spend in ${money.year}?’` : 'Try ‘Income’',
+    caption: money ? `${formatPesoMillions(money.income)} income in CY${money.year} · reported to DILG` : 'Municipal finances',
+    href: '/finances',
+  },
+  {
+    id: 'records',
+    prompt: 'Try ‘Annual budget report’',
+    caption: `${formatNumber(fdpSummary.total)} disclosure filings · ${formatNumber(archivedDocuments.documentCount)} archived documents`,
+    href: '/transparency',
+  },
+];
+---
+
+<div class="hc" data-carousel>
+  <div class="hc-ask" data-inline-search data-hero-ask>
+    <form role="search" aria-label="Ask about Calatagan">
+      <label for="ask-input" class="visually-hidden">Ask about Calatagan</label>
+      <input
+        id="ask-input"
+        type="text"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-controls="ask-results"
+        aria-describedby="ask-status"
+        placeholder={scenes[0].prompt}
+        autocomplete="off"
+        spellcheck="false"
+        data-prompt-target
+      />
+      <button class="ask-go" type="submit" aria-label="Search">
+        <Icon name="arrow-right" size="20" />
+      </button>
+    </form>
+    <ul id="ask-results" class="search-results ask-results" role="listbox" aria-label="Answers" data-limit="7" hidden></ul>
+    <p id="ask-status" class="visually-hidden" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="hc-stage" aria-roledescription="carousel" aria-label="Calatagan in pictures drawn from its data">
+    {scenes.map((scene, i) => (
+      <figure
+        class:list={['scene', `scene-${scene.id}`, { active: i === 0 }]}
+        data-scene
+        data-prompt={scene.prompt}
+        aria-roledescription="slide"
+        aria-label={`${i + 1} of ${scenes.length}: ${scene.caption}`}
+        aria-hidden={i === 0 ? undefined : 'true'}
+      >
+        {scene.id === 'lighthouse' && (
+          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#0c1a3c" />
+                <stop offset="0.5" stop-color="#2b4777" />
+                <stop offset="0.86" stop-color="#d9a06d" />
+                <stop offset="1" stop-color="#f1c68e" />
+              </linearGradient>
+              <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#23406e" />
+                <stop offset="1" stop-color="#081530" />
+              </linearGradient>
+              <radialGradient id="glow">
+                <stop offset="0" stop-color="#ffe3a3" stop-opacity="0.95" />
+                <stop offset="1" stop-color="#ffe3a3" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="beam" x1="1" y1="0" x2="0" y2="0">
+                <stop offset="0" stop-color="#ffe3a3" stop-opacity="0.55" />
+                <stop offset="1" stop-color="#ffe3a3" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <rect width={W} height="306" fill="url(#sky)" />
+            {stars.map((s) => <circle cx={s.x} cy={s.y} r={s.r} fill="#fff" opacity={s.o} class="star" />)}
+            <circle cx="230" cy="304" r="38" fill="#f7d9a4" opacity="0.9" />
+            <rect y="300" width={W} height="150" fill="url(#sea)" />
+            <g class="glimmer">
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <rect x={206 + (i % 3) * 14} y={312 + i * 12} width={20 - i * 2} height="2" rx="1" fill="#f7d9a4" opacity={0.5 - i * 0.06} />
+              ))}
+            </g>
+            <g class="swell">
+              {waves.map((w) => <path d={w.d} fill="none" stroke="#9db7f2" stroke-opacity={0.18 + w.i * 0.03} stroke-width="1.2" />)}
+            </g>
+            <path d="M470 302 C 540 296, 590 268, 650 262 C 700 258, 740 250, 800 246 L 800 304 Z" fill="#081229" />
+            <g class="beam-g">
+              <path d="M676 186 L 330 120 L 330 214 Z" fill="url(#beam)" />
+            </g>
+            <path d="M668 262 L 672 196 L 680 196 L 684 262 Z" fill="#e9edf5" />
+            <rect x="669" y="222" width="14" height="5" fill="#b4502c" />
+            <rect x="666" y="192" width="20" height="5" rx="1" fill="#0b1220" />
+            <rect x="670" y="180" width="12" height="12" rx="2" fill="#ffe3a3" />
+            <path d="M668 180 L 676 170 L 684 180 Z" fill="#0b1220" />
+            <circle cx="676" cy="186" r="34" fill="url(#glow)" class="lamp" />
+          </svg>
+        )}
+
+        {scene.id === 'people' && (
+          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <radialGradient id="pbg" cx="0.7" cy="0.4" r="0.9">
+                <stop offset="0" stop-color="#1c3a78" />
+                <stop offset="1" stop-color="#081229" />
+              </radialGradient>
+            </defs>
+            <rect width={W} height={H} fill="url(#pbg)" />
+            {circles.map((c, i) => (
+              <g class="bubble" style={`--d:${(i % 7) * 0.6}s`}>
+                <circle cx={c.x} cy={c.y} r={c.r} fill="#9db7f2" fill-opacity={0.12 + 0.28 * (c.pop / maxPop)} stroke="#c3d3f7" stroke-opacity="0.45" />
+                {c.r > 34 && (
+                  <text x={c.x} y={c.y + 4} text-anchor="middle" fill="#eef1f5" font-size="11" font-family="Public Sans, sans-serif" font-weight="600">
+                    {c.name.replace(' (Pob.)', '')}
+                  </text>
+                )}
+              </g>
+            ))}
+            <text x="44" y="210" fill="#fbfbfa" font-family="Source Serif 4, Georgia, serif" font-size="92" letter-spacing="-4">{formatNumber(population2024.data.population)}</text>
+            <text x="48" y="248" fill="#c3d3f7" font-family="Public Sans, sans-serif" font-size="18">people, {barangays.data.length} barangays</text>
+          </svg>
+        )}
+
+        {scene.id === 'money' && money && (
+          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <rect width={W} height={H} fill="#f3eee4" />
+            <g transform="translate(560 225) rotate(-90)">
+              <circle r={money.R} fill="none" stroke="#e4dccd" stroke-width="44" />
+              {money.parts.map((p) => (
+                <circle
+                  r={money.R}
+                  fill="none"
+                  stroke={p.color === '#9db7f2' ? '#1b3c8c' : p.color === '#e2aa2f' ? '#d79f22' : '#0f8a80'}
+                  stroke-width="44"
+                  stroke-dasharray={`${Math.max(0, p.len - 3)} ${money.C}`}
+                  stroke-dashoffset={-p.off}
+                  class="arc"
+                />
+              ))}
+            </g>
+            <text x="560" y="222" text-anchor="middle" fill="#0b1220" font-family="Source Serif 4, Georgia, serif" font-size="40" letter-spacing="-1.5">{formatPesoMillions(money.income)}</text>
+            <text x="560" y="250" text-anchor="middle" fill="#4a5160" font-family="Public Sans, sans-serif" font-size="15">income, CY{money.year}</text>
+            {money.parts.map((p, i) => (
+              <g transform={`translate(52 ${150 + i * 64})`}>
+                <rect width="14" height="14" rx="3" y="-12" fill={p.color === '#9db7f2' ? '#1b3c8c' : p.color === '#e2aa2f' ? '#d79f22' : '#0f8a80'} />
+                <text x="26" fill="#0b1220" font-family="Source Serif 4, Georgia, serif" font-size="34" letter-spacing="-1">{p.share}%</text>
+                <text x="26" y="24" fill="#4a5160" font-family="Public Sans, sans-serif" font-size="15">{p.label}</text>
+              </g>
+            ))}
+          </svg>
+        )}
+
+        {scene.id === 'records' && (
+          <div class="mosaic" aria-hidden="true">
+            {rows.map((row, ri) => (
+              <div class={`m-row m-row-${ri}`}>
+                {[...row, ...row].map((t) => (
+                  <div class="m-card">
+                    <span class="m-type">{t.type}</span>
+                    <span class="m-label">{t.label}</span>
+                    <span class="m-period">{t.period}</span>
+                    <span class="m-lines"><i></i><i></i><i></i></span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <figcaption>
+          <a href={scene.href} tabindex={i === 0 ? undefined : '-1'}>{scene.caption}<span aria-hidden="true"> →</span></a>
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+
+  <div class="hc-controls js-flex" role="group" aria-label="Slideshow controls">
+    <button type="button" data-prev aria-label="Previous scene"><Icon name="arrow-right" size="16" class="flip" /></button>
+    <button type="button" data-toggle aria-label="Pause slideshow" aria-pressed="false">
+      <span class="i-pause" aria-hidden="true"></span>
+    </button>
+    <button type="button" data-next aria-label="Next scene"><Icon name="arrow-right" size="16" /></button>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-carousel]');
+  if (root) {
+    const scenes = [...root.querySelectorAll<HTMLElement>('[data-scene]')];
+    const input = root.querySelector<HTMLInputElement>('[data-prompt-target]');
+    const toggle = root.querySelector<HTMLButtonElement>('[data-toggle]');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let playing = !reduce;
+    let hold = false;
+    let timer = 0;
+
+    const show = (next: number) => {
+      index = (next + scenes.length) % scenes.length;
+      scenes.forEach((scene, i) => {
+        const on = i === index;
+        scene.classList.toggle('active', on);
+        if (on) scene.removeAttribute('aria-hidden');
+        else scene.setAttribute('aria-hidden', 'true');
+        scene.querySelector('figcaption a')?.setAttribute('tabindex', on ? '0' : '-1');
+      });
+      if (input) input.placeholder = scenes[index].dataset.prompt ?? '';
+    };
+    const schedule = () => {
+      window.clearTimeout(timer);
+      if (playing && !hold) timer = window.setTimeout(() => (show(index + 1), schedule()), 6500);
+    };
+    const setPlaying = (value: boolean) => {
+      playing = value;
+      toggle?.setAttribute('aria-pressed', String(!value));
+      toggle?.setAttribute('aria-label', value ? 'Pause slideshow' : 'Play slideshow');
+      root.classList.toggle('paused', !value);
+      schedule();
+    };
+
+    root.querySelector('[data-prev]')?.addEventListener('click', () => (show(index - 1), schedule()));
+    root.querySelector('[data-next]')?.addEventListener('click', () => (show(index + 1), schedule()));
+    toggle?.addEventListener('click', () => setPlaying(!playing));
+    root.addEventListener('pointerenter', () => ((hold = true), schedule()));
+    root.addEventListener('pointerleave', () => ((hold = false), schedule()));
+    root.addEventListener('focusin', () => ((hold = true), schedule()));
+    root.addEventListener('focusout', () => ((hold = false), schedule()));
+    setPlaying(playing);
+  }
+</script>
+
+<style>
+  .hc {
+    position: relative;
+    width: min(64rem, 100%);
+    margin-inline: auto;
+  }
+  .hc-ask {
+    position: relative;
+    z-index: 3;
+    width: min(46rem, calc(100% - 2rem));
+    margin: 0 auto -38px;
+  }
+  .hc-ask form {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: 8px 8px 8px var(--sp-6);
+    border-radius: 999px;
+    background: var(--c-raised);
+    box-shadow: var(--shadow-bar);
+    border: 1px solid var(--c-line);
+    transition: box-shadow var(--dur-2), border-color var(--dur-2);
+  }
+  .hc-ask form:focus-within {
+    border-color: var(--c-accent);
+    box-shadow:
+      var(--shadow-bar),
+      0 0 0 4px color-mix(in srgb, var(--c-accent) 20%, transparent);
+  }
+  .hc-ask input {
+    flex: 1;
+    min-width: 0;
+    min-height: 56px;
+    border: 0;
+    background: transparent;
+    color: var(--c-ink);
+    font-size: var(--fs-md);
+  }
+  .hc-ask input::placeholder {
+    color: var(--c-muted);
+    transition: opacity var(--dur-2);
+  }
+  .hc-ask input:focus {
+    outline: none;
+  }
+  .ask-go {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--c-accent);
+    color: var(--c-bg);
+    cursor: pointer;
+    transition: transform var(--dur-2) var(--ease-out), background var(--dur-1);
+  }
+  .ask-go:hover {
+    background: var(--c-accent-strong);
+    transform: translateX(2px);
+  }
+  .ask-results {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 10px);
+    z-index: 10;
+    max-height: min(26rem, 60vh);
+    overflow-y: auto;
+    padding: var(--sp-2);
+    border-radius: var(--radius-lg);
+    background: var(--c-raised);
+    border: 1px solid var(--c-line);
+    box-shadow: var(--shadow-lg);
+    text-align: left;
+  }
+  @media (max-width: 40rem) {
+    .hc-ask {
+      width: 100%;
+      margin-bottom: var(--sp-4);
+    }
+    .hc-ask form {
+      padding-left: var(--sp-4);
+    }
+    .hc-ask input {
+      font-size: var(--fs-base);
+      min-height: 48px;
+    }
+    .ask-go {
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  .hc-stage {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    background: #0c1a3c;
+    box-shadow: var(--shadow-lg);
+  }
+  @media (max-width: 40rem) {
+    .hc-stage {
+      aspect-ratio: 4 / 5;
+    }
+  }
+  .scene {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    transform: scale(1.03);
+    transition:
+      opacity 900ms var(--ease-out),
+      transform 1400ms var(--ease-out);
+  }
+  .scene.active {
+    opacity: 1;
+    transform: none;
+    z-index: 1;
+  }
+  .scene > svg {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+  }
+  .scene figcaption {
+    position: absolute;
+    left: var(--sp-5);
+    bottom: var(--sp-5);
+    z-index: 2;
+  }
+  .scene figcaption a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    min-height: 36px;
+    padding: 0 var(--sp-4);
+    border-radius: 999px;
+    background: rgb(11 18 32 / 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #fff;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .scene figcaption a:hover {
+    background: rgb(11 18 32 / 0.75);
+  }
+
+  /* Motion inside scenes */
+  .swell {
+    animation: swell 26s linear infinite;
+  }
+  @keyframes swell {
+    to {
+      transform: translateX(-800px);
+    }
+  }
+  .beam-g {
+    transform-origin: 676px 186px;
+    animation: sweep 7s var(--ease-in-out) infinite alternate;
+  }
+  @keyframes sweep {
+    from {
+      transform: rotate(-9deg);
+    }
+    to {
+      transform: rotate(7deg);
+    }
+  }
+  .lamp {
+    animation: lamp 3.5s ease-in-out infinite alternate;
+  }
+  @keyframes lamp {
+    from {
+      opacity: 0.65;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .star {
+    animation: twinkle 4s ease-in-out infinite alternate;
+  }
+  .star:nth-of-type(3n) {
+    animation-delay: 1.3s;
+  }
+  .star:nth-of-type(4n) {
+    animation-delay: 2.1s;
+  }
+  @keyframes twinkle {
+    to {
+      opacity: 0.15;
+    }
+  }
+  .bubble {
+    animation: bob 7s ease-in-out infinite alternate;
+    animation-delay: var(--d);
+  }
+  @keyframes bob {
+    to {
+      transform: translateY(-6px);
+    }
+  }
+  .scene-money .arc {
+    transition: stroke-dasharray 1400ms var(--ease-out);
+  }
+
+  .mosaic {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    gap: 16px;
+    background: #0b1220;
+    transform: rotate(-6deg) scale(1.2);
+  }
+  .m-row {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    animation: marquee 60s linear infinite;
+  }
+  .m-row-1 {
+    animation-direction: reverse;
+    animation-duration: 75s;
+  }
+  .m-row-2 {
+    animation-duration: 90s;
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .m-card {
+    display: grid;
+    gap: 6px;
+    align-content: start;
+    width: 220px;
+    height: 128px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #fbfbfa;
+    color: #0b1220;
+    box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.6);
+  }
+  .m-row-1 .m-card {
+    background: #e8edf8;
+  }
+  .m-type {
+    justify-self: start;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: #1b3c8c;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+  .m-label {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .m-period {
+    font-size: 11px;
+    color: #5d6472;
+  }
+  .m-lines {
+    display: grid;
+    gap: 4px;
+    margin-top: auto;
+  }
+  .m-lines i {
+    height: 3px;
+    border-radius: 2px;
+    background: #d9dce3;
+  }
+  .m-lines i:nth-child(2) {
+    width: 80%;
+  }
+  .m-lines i:nth-child(3) {
+    width: 55%;
+  }
+
+  .hc-controls {
+    display: none;
+    justify-content: center;
+    gap: var(--sp-2);
+    margin-top: var(--sp-4);
+  }
+  :global(.js) .hc-controls {
+    display: flex;
+  }
+  .hc-controls button {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--c-line-strong);
+    border-radius: 50%;
+    background: var(--c-surface);
+    color: var(--c-ink);
+    cursor: pointer;
+    transition: border-color var(--dur-1);
+  }
+  .hc-controls button:hover {
+    border-color: var(--c-ink);
+  }
+  .hc-controls :global(.flip) {
+    transform: scaleX(-1);
+  }
+  .i-pause {
+    width: 10px;
+    height: 12px;
+    border-inline: 3px solid currentColor;
+  }
+  :global(.paused) .i-pause {
+    width: 0;
+    height: 0;
+    border-inline: 0;
+    border-block: 6px solid transparent;
+    border-left: 10px solid currentColor;
+    margin-left: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .swell,
+    .beam-g,
+    .lamp,
+    .star,
+    .bubble,
+    .m-row {
+      animation: none;
+    }
+  }
+</style>

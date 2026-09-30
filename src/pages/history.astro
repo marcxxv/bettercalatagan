@@ -66,9 +66,10 @@ const jsonLd = [
 ];
 ---
 
-<Base title={title} description={description} crumbs={crumbs} jsonLd={jsonLd} ogType="article">
+<Base title={title} description={description} crumbs={crumbs} jsonLd={jsonLd} ogType="article" progress>
   <PageHeader
     eyebrow="History"
+    icon="book"
     title="Calatagan, from the record"
     lede="A trading coast six centuries ago, a sugar estate for most of the nineteenth, a lighthouse for ships bound for Manila, and a town that was merged into Balayan and then separated from it again. This is what the documents show — and where they fall silent."
     crumbs={crumbs}
@@ -81,8 +82,8 @@ const jsonLd = [
     <p class="small muted researched">Sources consulted on {researched}.</p>
   </PageHeader>
 
-  <div class="container history">
-    <nav class="toc" aria-labelledby="toc-title">
+  <div class="container wide history">
+    <nav class="toc" aria-labelledby="toc-title" data-spy>
       <h2 id="toc-title" class="toc-title">Chapters</h2>
       <ol>
         {chapters.map((chapter) => (
@@ -283,8 +284,13 @@ const jsonLd = [
     font-size: var(--fs-sm);
   }
   .toc a:hover {
-    color: var(--c-accent-strong);
-    border-left-color: var(--c-clay);
+    color: var(--c-ink);
+    border-left-color: var(--c-line-strong);
+  }
+  .toc a[aria-current='true'] {
+    color: var(--c-ink);
+    font-weight: 700;
+    border-left-color: var(--c-accent);
   }
   @media (max-width: 63.99rem) {
     .toc ol {
@@ -322,10 +328,13 @@ const jsonLd = [
     font-size: var(--fs-2xl);
     margin-bottom: var(--sp-5);
   }
+  .chapter-no {
+    font-variant-numeric: tabular-nums;
+  }
   .claim {
     font-family: var(--font-serif);
-    font-size: var(--fs-md);
-    line-height: 1.65;
+    font-size: clamp(1.125rem, 1.05rem + 0.35vw, 1.3rem);
+    line-height: 1.7;
     color: var(--c-ink);
   }
   .claim + .claim {
@@ -395,12 +404,14 @@ const jsonLd = [
     height: 0.75rem;
     border-radius: 50%;
     background: var(--c-bg);
-    border: 2px solid var(--c-clay);
+    border: 2px solid var(--c-accent);
   }
   .when {
     font-family: var(--font-serif);
-    font-weight: 600;
-    color: var(--c-navy);
+    font-size: var(--fs-md);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--c-ink);
     margin: 0;
   }
   .event {

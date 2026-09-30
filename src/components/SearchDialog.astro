@@ -1,0 +1,257 @@
+---
+/**
+ * Site search, opened with the header button, Ctrl/⌘ K, or "/".
+ *
+ * A native <dialog> (focus is trapped and restored by the browser) holding an
+ * ARIA combobox. Facts answer inline, with their source; everything else links
+ * to the page that holds it.
+ */
+import Icon from './Icon.astro';
+
+const suggestions = ['Population', 'Balibago', 'Income 2025', 'National Tax Allotment', 'Mayor', 'Lighthouse'];
+---
+
+<dialog id="search-dialog" class="palette" aria-labelledby="search-dialog-title">
+  <div class="palette-box">
+    <h2 id="search-dialog-title" class="visually-hidden">Search Better Calatagan</h2>
+    <div class="palette-field">
+      <Icon name="search" size="22" />
+      <input
+        type="text"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-controls="palette-results"
+        aria-describedby="palette-status"
+        placeholder="Search figures, barangays, filings, history…"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <form method="dialog">
+        <button class="esc" type="submit" aria-label="Close search">Esc</button>
+      </form>
+    </div>
+    <p id="palette-status" class="palette-status" role="status" aria-live="polite"></p>
+    <ul id="palette-results" class="search-results" role="listbox" aria-label="Search results" hidden></ul>
+    <div class="palette-suggest">
+      <p class="suggest-title">Try</p>
+      <div class="suggest-chips">
+        {suggestions.map((s) => (
+          <button type="button" data-suggest={s}>{s}</button>
+        ))}
+      </div>
+    </div>
+    <p class="palette-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> to move</span>
+      <span><kbd>Enter</kbd> to open</span>
+      <span>Answers come only from published, sourced records.</span>
+    </p>
+  </div>
+</dialog>
+
+<style is:global>
+  .palette {
+    width: min(44rem, calc(100vw - 2rem));
+    max-height: min(40rem, calc(100dvh - 4rem));
+    margin: 8vh auto auto;
+    padding: 0;
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--radius-lg);
+    background: var(--c-raised);
+    color: var(--c-ink);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .palette[open] {
+    display: flex;
+    animation: palette-in 220ms var(--ease-out);
+  }
+  .palette::backdrop {
+    background: rgb(5 13 23 / 0.55);
+    backdrop-filter: blur(3px);
+  }
+  @keyframes palette-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.985);
+    }
+  }
+  .palette-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
+  }
+  .palette-field {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4) var(--sp-3) var(--sp-5);
+    border-bottom: 1px solid var(--c-line);
+    color: var(--c-muted);
+  }
+  .palette-field input {
+    flex: 1;
+    min-width: 0;
+    min-height: 52px;
+    border: 0;
+    background: transparent;
+    color: var(--c-ink);
+    font-size: var(--fs-md);
+  }
+  .palette-field input:focus {
+    outline: none;
+  }
+  .palette-field form {
+    margin: 0;
+  }
+  .esc {
+    padding: 4px 8px;
+    border: 1px solid var(--c-line-strong);
+    border-radius: 6px;
+    background: var(--c-bg-alt);
+    color: var(--c-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .palette-status {
+    margin: 0;
+    padding: 0 var(--sp-5);
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .palette-status:not(:empty) {
+    padding-block: var(--sp-2) 0;
+  }
+  .palette .search-results {
+    overflow-y: auto;
+    padding: var(--sp-2);
+  }
+  .palette-suggest {
+    padding: var(--sp-4) var(--sp-5);
+  }
+  .palette-suggest[hidden] {
+    display: none;
+  }
+  .suggest-title {
+    margin: 0 0 var(--sp-2);
+    font-size: var(--fs-2xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+  .suggest-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+  .suggest-chips button,
+  [data-suggest] {
+    min-height: 34px;
+    padding: 0 var(--sp-3);
+    border: 1px solid var(--c-line-strong);
+    border-radius: 999px;
+    background: var(--c-surface);
+    color: var(--c-ink-2);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--dur-1), color var(--dur-1), background var(--dur-1);
+  }
+  .suggest-chips button:hover,
+  [data-suggest]:hover {
+    border-color: var(--c-accent);
+    color: var(--c-accent-strong);
+  }
+  .palette-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-5);
+    margin: auto 0 0;
+    padding: var(--sp-3) var(--sp-5);
+    border-top: 1px solid var(--c-line);
+    background: var(--c-bg-alt);
+    font-size: var(--fs-2xs);
+    color: var(--c-muted);
+  }
+  .palette-foot span:last-child {
+    margin-left: auto;
+  }
+  @media (max-width: 40rem) {
+    .palette-foot span:last-child {
+      margin-left: 0;
+    }
+  }
+  .palette-foot kbd,
+  .search-results kbd {
+    display: inline-block;
+    min-width: 1.4em;
+    margin-right: 2px;
+    padding: 0 4px;
+    border: 1px solid var(--c-line-strong);
+    border-radius: 4px;
+    background: var(--c-surface);
+    font-family: var(--font-sans);
+    text-align: center;
+  }
+
+  /* Result rows: shared by the dialog and the homepage search. */
+  .search-results {
+    list-style: none;
+    margin: 0;
+  }
+  .search-results[hidden] {
+    display: none;
+  }
+  .search-results li + li {
+    margin-top: 2px;
+  }
+  .search-results a {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;
+    padding: var(--sp-3) var(--sp-4);
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    color: var(--c-ink);
+    text-decoration: none;
+  }
+  .search-results [aria-selected='true'] a {
+    background: var(--c-accent-wash);
+    border-color: var(--c-accent-line);
+  }
+  .sr-group {
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-clay);
+  }
+  .sr-title {
+    font-weight: 700;
+    color: var(--c-navy);
+  }
+  .sr-answer {
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+    font-weight: 600;
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .sr-source,
+  .sr-desc {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .sr-source::before {
+    content: '✓ ';
+    color: var(--c-ok);
+    font-weight: 800;
+  }
+</style>

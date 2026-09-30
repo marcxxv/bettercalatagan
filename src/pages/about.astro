@@ -13,14 +13,27 @@ const crumbs = [{ name: 'About', href: '/about' }];
 >
   <PageHeader
     eyebrow="About"
+    icon="info"
     title="An independent civic guide"
     lede="Better Calatagan collects public information about the Municipality of Calatagan, Batangas from government sources, and shows for every figure where it came from and how well it has been checked."
     {crumbs}
   />
 
-  <div class="container page-body">
-    <div class="prose">
-      <section class="section" aria-labelledby="independent-title">
+  <div class="container wide with-rail page-body">
+    <aside class="rail">
+      <nav class="rail-nav" aria-labelledby="toc-label" data-spy>
+        <p class="rail-title" id="toc-label">On this page</p>
+        <ul>
+          <li><a href="#independent">Independent</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#privacy">Privacy</a></li>
+          <li><a href="#licensing">Licensing</a></li>
+          <li><a href="#contribute">Corrections</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="prose content">
+      <section class="section" id="independent" aria-labelledby="independent-title">
         <h2 id="independent-title">Independent, and not the municipality</h2>
         <p class="statement">{SITE.independence}</p>
         <p>
@@ -35,7 +48,7 @@ const crumbs = [{ name: 'About', href: '/about' }];
         </p>
       </section>
 
-      <section class="section" aria-labelledby="how-title">
+      <section class="section" id="how" aria-labelledby="how-title">
         <h2 id="how-title">How it works</h2>
         <p>
           Most civic portals publish a number. This one publishes a number and the evidence behind
@@ -70,6 +83,20 @@ const crumbs = [{ name: 'About', href: '/about' }];
         </p>
       </section>
 
+      <section class="section" id="privacy" aria-labelledby="privacy-title">
+        <h2 id="privacy-title">Privacy</h2>
+        <p>
+          There is nothing to sign in to and nothing to track you with: no accounts, no cookies, no
+          analytics, no advertising and no third-party scripts. Pages are static files; search runs
+          in your browser against a file this site publishes, so what you type is never sent
+          anywhere.
+        </p>
+        <p>
+          The only thing the site remembers is your light or dark theme, if you choose one, stored
+          in your own browser’s local storage. Clearing your browser data removes it.
+        </p>
+      </section>
+
       <section class="section" id="licensing" aria-labelledby="licensing-title">
         <h2 id="licensing-title">Licensing</h2>
         <p>Three different things, three different answers:</p>
@@ -95,11 +122,11 @@ const crumbs = [{ name: 'About', href: '/about' }];
         </dl>
         <p class="small muted">
           Full terms are in the <a href={`${SITE.repository}/blob/main/LICENSES.md`}>repository</a>.
-          The typeface is Source Serif 4, under the SIL Open Font License.
+          The typefaces are Source Serif 4 and Public Sans, both under the SIL Open Font License.
         </p>
       </section>
 
-      <section class="section" aria-labelledby="contribute-title">
+      <section class="section" id="contribute" aria-labelledby="contribute-title">
         <h2 id="contribute-title">Corrections and contributions</h2>
         <p>
           Corrections are welcome, especially from people in Calatagan. The one firm rule: every
@@ -117,14 +144,18 @@ const crumbs = [{ name: 'About', href: '/about' }];
 
 <style>
   .page-body {
-    padding-block: var(--sp-6) var(--sp-8);
+    padding-block: var(--sp-7) var(--sp-8);
+  }
+  .section {
+    padding-block: 0 var(--sp-7);
   }
   .statement {
     font-family: var(--font-serif);
-    font-size: var(--fs-md);
-    line-height: 1.5;
-    padding-left: var(--sp-4);
-    border-left: 3px solid var(--c-clay);
+    font-size: var(--fs-lg);
+    line-height: 1.4;
+    letter-spacing: -0.015em;
+    padding-left: var(--sp-5);
+    border-left: 3px solid var(--c-accent);
     color: var(--c-ink);
   }
   .section li + li {

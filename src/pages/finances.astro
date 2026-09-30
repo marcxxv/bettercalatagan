@@ -2,6 +2,10 @@
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Source from '../components/Source.astro';
+import Icon from '../components/Icon.astro';
+import Donut from '../components/Donut.astro';
+import ColumnChart from '../components/ColumnChart.astro';
+import LineChart from '../components/LineChart.astro';
 import {
   annualSeries,
   filingRecord,
@@ -13,6 +17,7 @@ import {
   sreDataset,
   verifiedFilings,
 } from '../data/financials';
+import type { SreFiling } from '../data/schemas/sre';
 import { formatNumber, formatPeso, formatPesoMillions } from '../lib/format';
 import { SITE } from '../lib/site';
 
@@ -24,12 +29,9 @@ const pesoExact = new Intl.NumberFormat('en-PH', {
 
 const latest = latestFiling;
 const latestHeadline = latest ? headline(latest) : null;
-const period = latest ? `Q${latest.documentPeriod.quarter} CY${latest.documentPeriod.year}` : '';
-const sectors = latest ? sectorSpending(latest) : [];
-const sectorMax = Math.max(1, ...sectors.map((s) => s.value));
-const sectorTotal = sectors.reduce((sum, s) => sum + s.value, 0);
+const periodOf = (f: SreFiling) => `Q${f.documentPeriod.quarter} CY${f.documentPeriod.year}`;
+const period = latest ? periodOf(latest) : '';
 const years = annualSeries();
-const latestRecord = latest ? filingRecord(latest.filingId) : undefined;
 const totalChecks = verifiedFilings.reduce((sum, f) => sum + f.reconciliation.total, 0);
 const oldest = verifiedFilings[verifiedFilings.length - 1];
 
@@ -37,24 +39,44 @@ const oldest = verifiedFilings[verifiedFilings.length - 1];
  * Income composition, drawn only when the parts add exactly to the reported
  * total — a chart must never imply a split the filing does not state.
  */
-const composition = (() => {
-  if (!latestHeadline) return null;
-  const { income, localSources, externalSources, nationalTaxAllotment } = latestHeadline;
+function composition(filing: SreFiling) {
+  const { income, localSources, externalSources, nationalTaxAllotment } = headline(filing);
   if (income === null || localSources === null || externalSources === null || nationalTaxAllotment === null)
     return null;
   if (localSources + externalSources !== income || nationalTaxAllotment > externalSources) return null;
-  const parts = [
-    { key: 'nta', label: 'National Tax Allotment', value: nationalTaxAllotment },
-    { key: 'other-ext', label: 'Other national and external sources', value: externalSources - nationalTaxAllotment },
-    { key: 'local', label: 'Raised locally (taxes, fees, receipts)', value: localSources },
-  ].filter((p) => p.value > 0);
-  return parts.map((p) => ({ ...p, share: (p.value / income) * 100 }));
-})();
+  return [
+    { key: 'nta', label: 'National Tax Allotment', value: nationalTaxAllotment, color: 'var(--c-s1)' },
+    {
+      key: 'other-ext',
+      label: 'Other national and external sources',
+      value: externalSources - nationalTaxAllotment,
+      color: 'var(--c-s5)',
+    },
+    { key: 'local', label: 'Raised locally (taxes, fees, receipts)', value: localSources, color: 'var(--c-s3)' },
+  ]
+    .filter((p) => p.value > 0)
+    .map((p) => ({ ...p, share: (p.value / income) * 100 }));
+}
 
-const externalShare =
-  latestHeadline?.income && latestHeadline.externalSources !== null
-    ? Math.round((latestHeadline.externalSources / latestHeadline.income) * 100)
-    : null;
+/** Everything one period's panel shows. */
+const panels = verifiedFilings.map((filing) => {
+  const h = headline(filing);
+  const sectors = sectorSpending(filing);
+  const sectorTotal = sectors.reduce((sum, s) => sum + s.value, 0);
+  return {
+    id: filing.filingId,
+    label: periodOf(filing),
+    quarter: filing.documentPeriod.quarter,
+    year: filing.documentPeriod.year,
+    h,
+    parts: composition(filing),
+    sectors,
+    sectorTotal,
+    sectorMax: Math.max(1, ...sectors.map((s) => s.value)),
+    externalShare: h.income && h.externalSources !== null ? Math.round((h.externalSources / h.income) * 100) : null,
+    record: filingRecord(filing.filingId),
+  };
+});
 
 /** Income composition of the latest filing, in the Total column. */
 const incomeRows = latest
@@ -79,6 +101,22 @@ const incomeRows = latest
       .map((key) => itemOf(latest, key))
       .filter((item) => item !== undefined)
   : [];
+
+// Year-to-date income by quarter, one line per calendar year.
+const calendarYears = [...new Set(verifiedFilings.map((f) => f.documentPeriod.year))].sort();
+const yearColors = ['var(--c-s5)', 'var(--c-s4)', 'var(--c-s2)', 'var(--c-s1)', 'var(--c-s3)'];
+const ytdSeries = calendarYears.map((year, i) => ({
+  name: `CY${year}`,
+  color: yearColors[(yearColors.length - calendarYears.length + i + yearColors.length) % yearColors.length],
+  values: [1, 2, 3, 4].map((q) => {
+    const f = verifiedFilings.find((x) => x.documentPeriod.year === year && x.documentPeriod.quarter === q);
+    return f ? headline(f).income : null;
+  }),
+}));
+
+const localShare = years.map((y) =>
+  y.income && y.localSources !== null ? Math.round((y.localSources / y.income) * 1000) / 10 : null,
+);
 
 const crumbs = [{ name: 'Finances', href: '/finances' }];
 const description = `Calatagan municipal income and spending as reported to DILG: ${verifiedFilings.length} quarterly statements, every figure traced to its cell in the original filing.`;
@@ -113,197 +151,334 @@ const jsonLd = [
 <Base title="Calatagan municipal finances" {description} {crumbs} {jsonLd}>
   <PageHeader
     eyebrow="Finances"
+    icon="coins"
     title="What the municipality reports it receives and spends"
     lede="Every quarter the municipality files a Statement of Receipts and Expenditures with the Department of the Interior and Local Government. These are the figures from those filings — each traced to the cell it came from, and checked against the filing’s own totals."
     {crumbs}
-  />
-
-  <div class="container page-body">
-    {latest && latestHeadline && (
-      <section class="section" aria-labelledby="latest-title">
-        <p class="eyebrow">Latest filing</p>
-        <h2 id="latest-title">Year to date, {period}</h2>
-        <p class="prose headline-text">
-          Calatagan reported income of <strong>{formatPeso(latestHeadline.income ?? 0)}</strong> and
-          operating expenditure of <strong>{formatPeso(latestHeadline.expenditures ?? 0)}</strong>.
-          {externalShare !== null && (
-            <>
-              {' '}Of that income, <strong>{externalShare}%</strong> came from the national
-              government rather than from local taxes and fees.
-            </>
-          )}
-        </p>
-
-        <dl class="stat-grid">
-          <div>
-            <dt>Total income</dt>
-            <dd class="figure">{formatPesoMillions(latestHeadline.income ?? 0)}</dd>
-            <dd class="exact">{pesoExact.format(latestHeadline.income ?? 0)}</dd>
-          </div>
-          <div>
-            <dt>Raised locally</dt>
-            <dd class="figure">{formatPesoMillions(latestHeadline.localSources ?? 0)}</dd>
-            <dd class="exact">{pesoExact.format(latestHeadline.localSources ?? 0)}</dd>
-          </div>
-          <div>
-            <dt>National Tax Allotment</dt>
-            <dd class="figure">{formatPesoMillions(latestHeadline.nationalTaxAllotment ?? 0)}</dd>
-            <dd class="exact">{pesoExact.format(latestHeadline.nationalTaxAllotment ?? 0)}</dd>
-          </div>
-          <div>
-            <dt>Operating expenditure</dt>
-            <dd class="figure">{formatPesoMillions(latestHeadline.expenditures ?? 0)}</dd>
-            <dd class="exact">{pesoExact.format(latestHeadline.expenditures ?? 0)}</dd>
-          </div>
-          <div>
-            <dt>Cash balance, end of period</dt>
-            <dd class="figure">{formatPesoMillions(latestHeadline.cashBalanceEnd ?? 0)}</dd>
-            <dd class="exact">{pesoExact.format(latestHeadline.cashBalanceEnd ?? 0)}</dd>
-          </div>
-        </dl>
-
-        {composition && (
-          <figure class="composition">
-            <figcaption>Where {period} income came from</figcaption>
-            <div class="stack-bar" aria-hidden="true">
-              {composition.map((part) => (
-                <span class={`seg seg-${part.key}`} style={`width:${part.share.toFixed(2)}%`}></span>
-              ))}
-            </div>
-            <ul class="legend">
-              {composition.map((part) => (
-                <li>
-                  <span class={`swatch seg-${part.key}`} aria-hidden="true"></span>
-                  <span class="legend-label">{part.label}</span>
-                  <span class="legend-value num">
-                    {part.share > 0 && part.share < 0.5 ? '<1' : part.share.toFixed(0)}% · {formatPeso(part.value)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </figure>
-        )}
-
-        <p class="small muted">
-          Figures are cumulative within the calendar year: a Q{latest.documentPeriod.quarter} figure
-          already includes the earlier quarters of CY{latest.documentPeriod.year}.
-          {latestRecord && (
-            <>
-              {' '}<a href={latestRecord.downloadUrl} rel="noopener noreferrer nofollow">
-                Download the original filing from DILG<span aria-hidden="true"> ↗</span>
-              </a>
-            </>
-          )}
-        </p>
-
-        <Source source={financialsSource} label="these figures" />
-      </section>
+  >
+    <Fragment slot="meta">
+      <span class="chip ok"><Icon name="check" size="14" /> {formatNumber(totalChecks)} checks passed</span>
+      <span class="chip navy">{verifiedFilings.length} quarters on file</span>
+      <span class="chip">Reported, not audited</span>
+    </Fragment>
+    {latestHeadline && (
+      <dl slot="aside" class="hero-figs">
+        <div>
+          <dt>Income, {period} YTD</dt>
+          <dd class="figure">{formatPesoMillions(latestHeadline.income ?? 0)}</dd>
+        </div>
+        <div>
+          <dt>Operating expenditure</dt>
+          <dd class="figure">{formatPesoMillions(latestHeadline.expenditures ?? 0)}</dd>
+        </div>
+        <div>
+          <dt>Cash balance, end of period</dt>
+          <dd class="figure">{formatPesoMillions(latestHeadline.cashBalanceEnd ?? 0)}</dd>
+        </div>
+      </dl>
     )}
+  </PageHeader>
 
-    <section class="section" aria-labelledby="income-title">
-      <p class="eyebrow">Income</p>
-      <h2 id="income-title">Where the money comes from</h2>
-      <p class="prose">
-        Like most Philippine municipalities, Calatagan is funded mainly by its share of national
-        taxes. The table shows the latest filing in full; every row names the worksheet cell it was
-        read from.
-      </p>
-      <div class="table-wrap" role="region" aria-labelledby="income-caption" tabindex="0">
-        <table class="line-items sticky-first">
-          <caption id="income-caption">
-            Income, {period}, in pesos
-            <span class="scroll-hint">Scroll sideways to see every column.</span>
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col">Line item</th>
-              <th scope="col" class="num">General Fund</th>
-              <th scope="col" class="num">SEF</th>
-              <th scope="col" class="num">Total</th>
-              <th scope="col">Cell</th>
-            </tr>
-          </thead>
-          <tbody>
-            {incomeRows.map((item) => (
-              <tr class={`level-${item.level}`}>
-                <th scope="row">{item.label}</th>
-                <td class="num">{item.generalFund ? formatNumber(item.generalFund.value) : '—'}</td>
-                <td class="num">{item.sef ? formatNumber(item.sef.value) : '—'}</td>
-                <td class="num">{item.total ? formatNumber(item.total.value) : '—'}</td>
-                <td><code>{item.total?.cell ?? '—'}</code></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <p class="small muted prose">
-        SEF is the Special Education Fund, a separate levy on real property that may only be spent
-        on education. It is reported alongside the General Fund but is not interchangeable with it.
-      </p>
-    </section>
+  <div class="container wide with-rail page-body">
+    <aside class="rail">
+      <nav class="rail-nav" aria-labelledby="fin-toc" data-spy>
+        <p class="rail-title" id="fin-toc">On this page</p>
+        <ul>
+          <li><a href="#snapshot">Snapshot by period</a></li>
+          <li><a href="#trend">Trend</a></li>
+          <li><a href="#income">Income line items</a></li>
+          <li><a href="#quarters">Every quarter</a></li>
+          <li><a href="#method">Method</a></li>
+        </ul>
+      </nav>
+    </aside>
 
-    <section class="section" aria-labelledby="spending-title">
-      <p class="eyebrow">Spending</p>
-      <h2 id="spending-title">Where it goes</h2>
-      <p class="prose">Operating expenditure by sector, {period}, largest first.</p>
-      <ol class="sectors">
-        {sectors.map((sector) => (
-          <li>
-            <div class="sector-head">
-              <span class="sector-label">{sector.label}</span>
-              <span class="amount num">
-                {formatPeso(sector.value)}
-                {sectorTotal > 0 && (
-                  <span class="share"> · {Math.round((sector.value / sectorTotal) * 100)}%</span>
+    <div class="content">
+      {panels.length > 0 && (
+        <section class="block" id="snapshot" aria-labelledby="snapshot-title">
+          <div class="snap-head">
+            <div>
+              <p class="eyebrow">Snapshot</p>
+              <h2 id="snapshot-title">Year to date, by period</h2>
+            </div>
+            <p class="field period-picker js-flex">
+              <label for="period">Filing period</label>
+              <select id="period" data-period-select>
+                {panels.map((p, i) => (
+                  <option value={p.id} selected={i === 0}>
+                    {p.label}{p.quarter === 4 ? ' · full year' : ' · year to date'}
+                  </option>
+                ))}
+              </select>
+            </p>
+          </div>
+
+          {panels.map((p, i) => (
+            <div class="panel" data-period={p.id} hidden={i !== 0}>
+              <p class="headline-text">
+                For {p.label}, Calatagan reported income of <strong>{formatPeso(p.h.income ?? 0)}</strong>{' '}
+                and operating expenditure of <strong>{formatPeso(p.h.expenditures ?? 0)}</strong>.
+                {p.externalShare !== null && (
+                  <>
+                    {' '}Of that income, <strong>{p.externalShare}%</strong> came from the national
+                    government rather than from local taxes and fees.
+                  </>
                 )}
-              </span>
-            </div>
-            <div class="bar" aria-hidden="true">
-              <span style={`width:${Math.max(0.5, (sector.value / sectorMax) * 100)}%`}></span>
-            </div>
-            <div class="cell-ref">Cell <code>{sector.cell ?? '—'}</code></div>
-          </li>
-        ))}
-      </ol>
-    </section>
+              </p>
 
-    {years.length > 1 && (
-      <section class="section" aria-labelledby="years-title">
-        <p class="eyebrow">Trend</p>
-        <h2 id="years-title">Full years</h2>
+              <dl class="stat-row">
+                <div class="stat">
+                  <dt>Total income</dt>
+                  <dd class="figure">{formatPesoMillions(p.h.income ?? 0)}</dd>
+                  <dd class="stat-note">{pesoExact.format(p.h.income ?? 0)}</dd>
+                </div>
+                <div class="stat">
+                  <dt>Raised locally</dt>
+                  <dd class="figure">{formatPesoMillions(p.h.localSources ?? 0)}</dd>
+                  <dd class="stat-note">{pesoExact.format(p.h.localSources ?? 0)}</dd>
+                </div>
+                <div class="stat">
+                  <dt>National Tax Allotment</dt>
+                  <dd class="figure">{formatPesoMillions(p.h.nationalTaxAllotment ?? 0)}</dd>
+                  <dd class="stat-note">{pesoExact.format(p.h.nationalTaxAllotment ?? 0)}</dd>
+                </div>
+                <div class="stat">
+                  <dt>Operating expenditure</dt>
+                  <dd class="figure">{formatPesoMillions(p.h.expenditures ?? 0)}</dd>
+                  <dd class="stat-note">{pesoExact.format(p.h.expenditures ?? 0)}</dd>
+                </div>
+              </dl>
+
+              <div class="viz-grid">
+                {p.parts && (
+                  <figure class="card viz composition">
+                    <figcaption>Where {p.label} income came from</figcaption>
+                    <div class="comp-body">
+                      <Donut
+                        parts={p.parts}
+                        centerLabel="Total income"
+                        centerValue={formatPesoMillions(p.h.income ?? 0)}
+                        size={200}
+                      />
+                      <ul class="comp-legend">
+                        {p.parts.map((part) => (
+                          <li>
+                            <span class="swatch" style={`background:${part.color}`}></span>
+                            <span class="cl-label">{part.label}</span>
+                            <span class="cl-share figure">
+                              {part.share > 0 && part.share < 0.5 ? '<1' : part.share.toFixed(0)}%
+                            </span>
+                            <span class="cl-value num">{formatPeso(part.value)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </figure>
+                )}
+
+                <figure class="card viz" id={i === 0 ? 'spending' : undefined}>
+                  <figcaption>Operating expenditure by sector, largest first</figcaption>
+                  <ol class="sectors" data-animate>
+                    {p.sectors.map((sector, si) => (
+                      <li>
+                        <div class="sector-head">
+                          <span class="sector-label">{sector.label}</span>
+                          <span class="amount num">
+                            {sector.value >= 100_000 ? formatPesoMillions(sector.value) : formatPeso(sector.value)}
+                            {p.sectorTotal > 0 && (
+                              <span class="share"> · {Math.round((sector.value / p.sectorTotal) * 100)}%</span>
+                            )}
+                          </span>
+                        </div>
+                        <div class="bar" aria-hidden="true">
+                          <span
+                            data-grow
+                            style={`width:${Math.max(0.5, (sector.value / p.sectorMax) * 100)}%;--reveal-delay:${si * 70}ms`}
+                            data-tip={`${sector.label}|${formatPeso(sector.value)}|Cell ${sector.cell ?? '—'}`}
+                          ></span>
+                        </div>
+                        <div class="cell-ref">Cell <code>{sector.cell ?? '—'}</code></div>
+                      </li>
+                    ))}
+                  </ol>
+                </figure>
+              </div>
+
+              <p class="small muted">
+                Figures are cumulative within the calendar year: a Q{p.quarter} figure already
+                includes the earlier quarters of CY{p.year}.
+                {p.record && (
+                  <>
+                    {' '}<a href={p.record.downloadUrl} rel="noopener noreferrer nofollow">
+                      Download the original {p.label} filing from DILG<span aria-hidden="true"> ↗</span>
+                    </a>
+                  </>
+                )}
+              </p>
+            </div>
+          ))}
+
+          <Source source={financialsSource} label="these figures" />
+        </section>
+      )}
+
+      {years.length > 1 && (
+        <section class="block" id="trend" aria-labelledby="years-title">
+          <p class="eyebrow">Trend</p>
+          <h2 id="years-title">Full years and the year so far</h2>
+          <p class="prose">
+            Fourth-quarter filings report the whole calendar year, so the first chart compares annual
+            totals. The second follows income through each year, quarter by quarter.
+          </p>
+          <div class="viz-grid">
+            <div class="card viz">
+              <ColumnChart
+                caption="Full-year income and operating expenditure"
+                categories={years.map((y) => `CY${y.year}`)}
+                series={[
+                  { name: 'Income', color: 'var(--c-s1)', values: years.map((y) => y.income) },
+                  { name: 'Operating expenditure', color: 'var(--c-s2)', values: years.map((y) => y.expenditures) },
+                  { name: 'Raised locally', color: 'var(--c-s3)', values: years.map((y) => y.localSources) },
+                ]}
+                format="peso-m"
+                notes={localShare.map((s) => (s === null ? '' : `Raised locally: ${s}% of income`))}
+              />
+            </div>
+            <div class="card viz">
+              <LineChart
+                caption="Income, year to date, by quarter"
+                categories={['Q1', 'Q2', 'Q3', 'Q4']}
+                series={ytdSeries}
+                format="peso-m"
+              />
+            </div>
+          </div>
+
+          <details class="data-table">
+            <summary>View annual totals as a table</summary>
+            <div class="table-wrap" role="region" aria-labelledby="years-caption" tabindex="0">
+              <table class="sticky-first">
+                <caption id="years-caption">
+                  Annual totals from fourth-quarter filings, in pesos
+                  <span class="scroll-hint">Scroll sideways to see every column.</span>
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Year</th>
+                    <th scope="col" class="num">Income</th>
+                    <th scope="col" class="num">Raised locally</th>
+                    <th scope="col" class="num">National Tax Allotment</th>
+                    <th scope="col" class="num">Operating expenditure</th>
+                    <th scope="col">Filing</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {years.map((row) => {
+                    const record = filingRecord(row.filing.filingId);
+                    return (
+                      <tr>
+                        <th scope="row">CY{row.year}</th>
+                        <td class="num">{formatNumber(row.income ?? 0)}</td>
+                        <td class="num">{formatNumber(row.localSources ?? 0)}</td>
+                        <td class="num">{formatNumber(row.nationalTaxAllotment ?? 0)}</td>
+                        <td class="num">{formatNumber(row.expenditures ?? 0)}</td>
+                        <td>
+                          {record ? (
+                            <a href={record.downloadUrl} rel="noopener noreferrer nofollow">
+                              DILG<span class="visually-hidden"> filing for CY{row.year}</span>
+                              <span aria-hidden="true"> ↗</span>
+                            </a>
+                          ) : (
+                            '—'
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </section>
+      )}
+
+      <section class="block" id="income" aria-labelledby="income-title">
+        <p class="eyebrow">Income</p>
+        <h2 id="income-title">Where the money comes from</h2>
         <p class="prose">
-          Fourth-quarter filings report the whole calendar year, so these rows are annual totals.
+          Like most Philippine municipalities, Calatagan is funded mainly by its share of national
+          taxes. The table shows the latest filing ({period}) in full; every row names the worksheet
+          cell it was read from.
         </p>
-        <div class="table-wrap" role="region" aria-labelledby="years-caption" tabindex="0">
-          <table class="sticky-first">
-            <caption id="years-caption">
-              Annual totals from fourth-quarter filings, in pesos
+        <div class="table-wrap" role="region" aria-labelledby="income-caption" tabindex="0">
+          <table class="line-items sticky-first">
+            <caption id="income-caption">
+              Income, {period}, in pesos
               <span class="scroll-hint">Scroll sideways to see every column.</span>
             </caption>
             <thead>
               <tr>
-                <th scope="col">Year</th>
-                <th scope="col" class="num">Income</th>
-                <th scope="col" class="num">Raised locally</th>
-                <th scope="col" class="num">National Tax Allotment</th>
-                <th scope="col" class="num">Operating expenditure</th>
-                <th scope="col">Filing</th>
+                <th scope="col">Line item</th>
+                <th scope="col" class="num">General Fund</th>
+                <th scope="col" class="num">SEF</th>
+                <th scope="col" class="num">Total</th>
+                <th scope="col">Cell</th>
               </tr>
             </thead>
             <tbody>
-              {years.map((row) => {
-                const record = filingRecord(row.filing.filingId);
+              {incomeRows.map((item) => (
+                <tr class={`level-${item.level}`}>
+                  <th scope="row">{item.label}</th>
+                  <td class="num">{item.generalFund ? formatNumber(item.generalFund.value) : '—'}</td>
+                  <td class="num">{item.sef ? formatNumber(item.sef.value) : '—'}</td>
+                  <td class="num">{item.total ? formatNumber(item.total.value) : '—'}</td>
+                  <td><code>{item.total?.cell ?? '—'}</code></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="small muted prose">
+          SEF is the Special Education Fund, a separate levy on real property that may only be spent
+          on education. It is reported alongside the General Fund but is not interchangeable with it.
+        </p>
+      </section>
+
+      <section class="block" id="quarters" aria-labelledby="quarters-title">
+        <p class="eyebrow">Every filing</p>
+        <h2 id="quarters-title">Every quarter on file</h2>
+        <div class="table-wrap" role="region" aria-labelledby="quarters-caption" tabindex="0">
+          <table class="sticky-first">
+            <caption id="quarters-caption">
+              {verifiedFilings.length} verified quarterly statements, cumulative year to date, in pesos
+              <span class="scroll-hint">Scroll sideways to see every column.</span>
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Period</th>
+                <th scope="col" class="num">Income</th>
+                <th scope="col" class="num">Operating expenditure</th>
+                <th scope="col" class="num">Checks passed</th>
+                <th scope="col">Original</th>
+              </tr>
+            </thead>
+            <tbody>
+              {verifiedFilings.map((filing) => {
+                const figures = headline(filing);
+                const record = filingRecord(filing.filingId);
+                const label = periodOf(filing);
                 return (
                   <tr>
-                    <th scope="row">CY{row.year}</th>
-                    <td class="num">{formatNumber(row.income ?? 0)}</td>
-                    <td class="num">{formatNumber(row.localSources ?? 0)}</td>
-                    <td class="num">{formatNumber(row.nationalTaxAllotment ?? 0)}</td>
-                    <td class="num">{formatNumber(row.expenditures ?? 0)}</td>
+                    <th scope="row">{label}</th>
+                    <td class="num">{formatNumber(figures.income ?? 0)}</td>
+                    <td class="num">{formatNumber(figures.expenditures ?? 0)}</td>
+                    <td class="num">
+                      <span class="pass"><Icon name="check" size="14" /> {filing.reconciliation.passed}/{filing.reconciliation.total}</span>
+                    </td>
                     <td>
                       {record ? (
                         <a href={record.downloadUrl} rel="noopener noreferrer nofollow">
-                          DILG<span class="visually-hidden"> filing for CY{row.year}</span>
+                          DILG<span class="visually-hidden"> filing for {label}</span>
                           <span aria-hidden="true"> ↗</span>
                         </a>
                       ) : (
@@ -317,218 +492,199 @@ const jsonLd = [
           </table>
         </div>
       </section>
-    )}
 
-    <section class="section" aria-labelledby="quarters-title">
-      <p class="eyebrow">Every filing</p>
-      <h2 id="quarters-title">Every quarter on file</h2>
-      <div class="table-wrap" role="region" aria-labelledby="quarters-caption" tabindex="0">
-        <table class="sticky-first">
-          <caption id="quarters-caption">
-            {verifiedFilings.length} verified quarterly statements, cumulative year to date, in pesos
-            <span class="scroll-hint">Scroll sideways to see every column.</span>
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col">Period</th>
-              <th scope="col" class="num">Income</th>
-              <th scope="col" class="num">Operating expenditure</th>
-              <th scope="col" class="num">Checks passed</th>
-              <th scope="col">Original</th>
-            </tr>
-          </thead>
-          <tbody>
-            {verifiedFilings.map((filing) => {
-              const figures = headline(filing);
-              const record = filingRecord(filing.filingId);
-              const label = `Q${filing.documentPeriod.quarter} CY${filing.documentPeriod.year}`;
-              return (
-                <tr>
-                  <th scope="row">{label}</th>
-                  <td class="num">{formatNumber(figures.income ?? 0)}</td>
-                  <td class="num">{formatNumber(figures.expenditures ?? 0)}</td>
-                  <td class="num">
-                    {filing.reconciliation.passed}/{filing.reconciliation.total}
-                  </td>
-                  <td>
-                    {record ? (
-                      <a href={record.downloadUrl} rel="noopener noreferrer nofollow">
-                        DILG<span class="visually-hidden"> filing for {label}</span>
-                        <span aria-hidden="true"> ↗</span>
-                      </a>
-                    ) : (
-                      '—'
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="section prose" aria-labelledby="method-title">
-      <p class="eyebrow">Method</p>
-      <h2 id="method-title">How these figures were checked</h2>
-      <p>
-        Each filing asserts a number of things about itself: that the General Fund and Special
-        Education Fund columns add to the total column, that tax and non-tax revenue add to local
-        sources, that the sectoral spending lines add to total expenditure, and so on. Every one of
-        those identities is recomputed from the extracted values.
-      </p>
-      <p>
-        Across <strong>{verifiedFilings.length}</strong> quarters,
-        <strong> {formatNumber(totalChecks)}</strong> checks were recomputed and
-        <strong> all passed</strong>. A filing whose own arithmetic did not hold would be excluded
-        from this page rather than shown with a warning.
-        {sreDataset.extractedCount > verifiedFilings.length && (
-          <>
-            {' '}{sreDataset.extractedCount - verifiedFilings.length} of{' '}
-            {sreDataset.extractedCount} extracted filings are currently held back on that basis.
-          </>
-        )}
-      </p>
-      <div class="callout">
+      <section class="block prose" id="method" aria-labelledby="method-title">
+        <p class="eyebrow">Method</p>
+        <h2 id="method-title">How these figures were checked</h2>
         <p>
-          <strong>An SRE is not an audit.</strong> These are the municipality’s own reported figures,
-          filed with DILG. The Commission on Audit publishes separate audited statements which this
-          project has not yet been able to obtain — see <a href="/sources#withheld">Sources</a>.
+          Each filing asserts a number of things about itself: that the General Fund and Special
+          Education Fund columns add to the total column, that tax and non-tax revenue add to local
+          sources, that the sectoral spending lines add to total expenditure, and so on. Every one of
+          those identities is recomputed from the extracted values.
         </p>
-      </div>
-    </section>
+        <p>
+          Across <strong>{verifiedFilings.length}</strong> quarters,
+          <strong> {formatNumber(totalChecks)}</strong> checks were recomputed and
+          <strong> all passed</strong>. A filing whose own arithmetic did not hold would be excluded
+          from this page rather than shown with a warning.
+          {sreDataset.extractedCount > verifiedFilings.length && (
+            <>
+              {' '}{sreDataset.extractedCount - verifiedFilings.length} of{' '}
+              {sreDataset.extractedCount} extracted filings are currently held back on that basis.
+            </>
+          )}
+        </p>
+        <div class="callout warn">
+          <p class="callout-title"><Icon name="alert" size="18" /> An SRE is not an audit</p>
+          <p>
+            These are the municipality’s own reported figures, filed with DILG. The Commission on
+            Audit publishes separate audited statements which this project has not yet been able to
+            obtain — see <a href="/sources#withheld">Sources</a>.
+          </p>
+        </div>
+      </section>
+    </div>
   </div>
+
+  <script>
+    // Period switcher: show one pre-rendered panel at a time.
+    const select = document.querySelector<HTMLSelectElement>('[data-period-select]');
+    const panels = [...document.querySelectorAll<HTMLElement>('[data-period]')];
+    if (select && panels.length) {
+      const show = (id: string) => {
+        for (const panel of panels) {
+          const on = panel.dataset.period === id;
+          panel.hidden = !on;
+          if (on) {
+            for (const el of panel.querySelectorAll('[data-animate], [data-grow]')) {
+              el.classList.remove('is-in');
+              requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('is-in')));
+            }
+          }
+        }
+      };
+      select.addEventListener('change', () => show(select.value));
+    }
+  </script>
 </Base>
 
 <style>
-  .page-body {
-    padding-block: var(--sp-6) var(--sp-8);
-  }
-  .headline-text {
-    font-family: var(--font-serif);
-    font-size: var(--fs-md);
-    line-height: 1.55;
-  }
-
-  .stat-grid {
+  .hero-figs {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
     gap: var(--sp-3);
-    margin: var(--sp-5) 0;
-  }
-  .stat-grid > div {
-    padding: var(--sp-4);
-    background: var(--c-surface);
-    border: var(--border);
-    border-top: 3px solid var(--c-navy);
-    border-radius: var(--radius-md);
-  }
-  .stat-grid dt {
-    min-height: 2.6em;
-    font-size: var(--fs-xs);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--c-muted);
-  }
-  .stat-grid dd {
     margin: 0;
   }
-  .stat-grid .figure {
+  .hero-figs > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    padding: var(--sp-4) var(--sp-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(6px);
+  }
+  .hero-figs dt {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    color: var(--c-band-muted);
+  }
+  .hero-figs dd {
+    margin: 0;
     font-family: var(--font-serif);
     font-size: var(--fs-xl);
     font-weight: 600;
-    color: var(--c-navy);
-    margin-top: var(--sp-1);
+    color: var(--c-band-ink);
   }
-  .exact {
-    font-size: var(--fs-xs);
-    color: var(--c-muted);
-    font-variant-numeric: tabular-nums;
+  .page-body {
+    padding-block: var(--sp-7) var(--sp-9);
   }
-
-  .composition {
-    margin: var(--sp-5) 0;
-    max-width: 48rem;
+  .block + .block {
+    margin-top: var(--sp-9);
+    padding-top: var(--sp-7);
+    border-top: 1px solid var(--c-line);
   }
-  .composition figcaption {
-    font-weight: 650;
-    margin-bottom: var(--sp-2);
+  .block > h2 {
+    margin-top: 0;
   }
-  .stack-bar {
+  .snap-head {
     display: flex;
-    height: 14px;
-    border-radius: 3px;
-    overflow: hidden;
-    background: var(--c-sunk);
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    margin-bottom: var(--sp-4);
   }
-  .stack-bar .seg + .seg {
-    border-left: 2px solid var(--c-bg);
-  }
-  .seg-nta {
-    background: var(--c-navy);
-  }
-  .seg-other-ext {
-    background: var(--c-accent);
-  }
-  .seg-local {
-    background: var(--c-clay);
-  }
-  .legend {
-    list-style: none;
-    padding: 0;
-    margin: var(--sp-3) 0 0;
-    display: grid;
-    gap: var(--sp-2);
-    font-size: var(--fs-sm);
-  }
-  .legend li {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: var(--sp-2);
+  .snap-head h2 {
     margin: 0;
   }
-  .legend-value {
-    grid-column: 2;
-    color: var(--c-ink-2);
+  .period-picker {
+    display: none;
+    min-width: 16rem;
   }
-  @media (min-width: 40rem) {
-    .legend li {
-      grid-template-columns: auto 1fr auto;
+  :global(.js) .period-picker {
+    display: flex;
+  }
+  .panel[hidden] {
+    display: none;
+  }
+  .headline-text {
+    max-width: 64ch;
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+    line-height: 1.6;
+  }
+  .stat-row {
+    margin-block: var(--sp-5);
+  }
+  .stat .figure {
+    font-size: var(--fs-xl);
+  }
+  .viz-grid {
+    display: grid;
+    gap: var(--sp-4);
+    margin-block: var(--sp-5);
+  }
+  @media (min-width: 80rem) {
+    .viz-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    .legend-value {
-      grid-column: 3;
-    }
   }
-  .swatch {
-    width: 0.8rem;
-    height: 0.8rem;
-    margin-top: 0.3em;
-    border-radius: 2px;
+  .viz {
+    margin: 0;
+    padding: var(--sp-5);
   }
-
-  .line-items tr.level-0 th,
-  .line-items tr.level-0 td {
+  .viz > figcaption,
+  .viz :global(figcaption) {
     font-weight: 700;
+    margin-bottom: var(--sp-4);
   }
-  .line-items tr.level-1 th {
-    font-weight: 650;
+  .comp-body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-5);
   }
-  .line-items tr.level-2 th {
-    padding-left: var(--sp-5);
-    font-weight: 500;
+  .comp-legend {
+    flex: 1 1 14rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--sp-3);
+    font-size: var(--fs-sm);
   }
-  .line-items tr.level-3 th {
-    padding-left: var(--sp-7);
-    font-weight: 400;
-    color: var(--c-ink-2);
+  .comp-legend li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    column-gap: var(--sp-3);
+    align-items: center;
+    margin: 0;
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--c-line);
+  }
+  .comp-legend li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .cl-share {
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    color: var(--c-navy);
+  }
+  .cl-value {
+    grid-column: 2 / -1;
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
   }
 
   .sectors {
     list-style: none;
     padding: 0;
-    margin: var(--sp-4) 0 0;
-    max-width: 48rem;
+    margin: 0;
   }
   .sectors li {
     margin: 0 0 var(--sp-4);
@@ -546,24 +702,55 @@ const jsonLd = [
   }
   .amount {
     white-space: nowrap;
+    font-weight: 700;
   }
   .share {
     color: var(--c-muted);
+    font-weight: 500;
   }
   .bar {
-    height: 8px;
+    height: 10px;
     background: var(--c-sunk);
-    border-radius: 2px;
+    border-radius: 999px;
     overflow: hidden;
   }
   .bar span {
     display: block;
     height: 100%;
-    background: var(--c-accent);
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--c-s2), var(--c-s1));
   }
   .cell-ref {
     margin-top: 2px;
-    font-size: var(--fs-xs);
+    font-size: var(--fs-2xs);
     color: var(--c-muted);
+  }
+  .cell-ref code {
+    font-size: 0.95em;
+  }
+
+  .line-items tr.level-0 th,
+  .line-items tr.level-0 td {
+    font-weight: 800;
+    background: var(--c-bg-alt);
+  }
+  .line-items tr.level-1 th {
+    font-weight: 700;
+  }
+  .line-items tr.level-2 th {
+    padding-left: var(--sp-6);
+    font-weight: 500;
+  }
+  .line-items tr.level-3 th {
+    padding-left: var(--sp-8);
+    font-weight: 400;
+    color: var(--c-ink-2);
+  }
+  .pass {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    color: var(--c-ok);
+    font-weight: 700;
   }
 </style>

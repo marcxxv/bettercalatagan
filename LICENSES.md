@@ -45,3 +45,11 @@ Copies of Calatagan material circulate on Scribd, Studocu and similar sites. Tho
 no evidence of authenticity, completeness or adoption status, and the hosts' own terms are not a
 licence granted by the issuing agency. This project does not cite them as authority and does not
 mirror from them.
+
+## Typefaces
+
+The site self-hosts two typefaces, both under the SIL Open Font License 1.1, with their licence
+texts alongside the font files in `public/fonts/`:
+
+- **Source Serif 4** (Adobe) — `OFL-source-serif-4.txt`
+- **Public Sans** (U.S. Web Design System) — `OFL-public-sans.txt`

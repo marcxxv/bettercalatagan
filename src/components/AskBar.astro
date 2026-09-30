@@ -1,0 +1,142 @@
+---
+/**
+ * The floating "Ask anything…" bar, present on every page as on America.gov.
+ *
+ * It searches the same index as the search dialog and answers facts inline,
+ * each with its source. It needs JavaScript, so it is not rendered visible
+ * without it; it steps aside while a page's own ask box is on screen.
+ */
+import Icon from './Icon.astro';
+---
+
+<div class="ask-bar" data-ask-bar data-inline-search>
+  <ul id="askbar-results" class="search-results askbar-results" role="listbox" aria-label="Answers" data-limit="6" hidden></ul>
+  <p id="askbar-status" class="visually-hidden" role="status" aria-live="polite"></p>
+  <form role="search" aria-label="Ask about Calatagan">
+    <label for="askbar-input" class="visually-hidden">Ask anything about Calatagan</label>
+    <input
+      id="askbar-input"
+      type="text"
+      role="combobox"
+      aria-autocomplete="list"
+      aria-expanded="false"
+      aria-controls="askbar-results"
+      aria-describedby="askbar-status"
+      placeholder="Ask anything…"
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <kbd class="ab-kbd" aria-hidden="true">/</kbd>
+    <button class="ab-go" type="submit" aria-label="Search">
+      <Icon name="arrow-right" size="18" />
+    </button>
+  </form>
+</div>
+
+<style>
+  .ask-bar {
+    position: fixed;
+    left: 50%;
+    bottom: clamp(0.75rem, 2vw, 1.5rem);
+    z-index: 35;
+    display: none;
+    width: min(42rem, calc(100vw - 1.5rem));
+    transform: translateX(-50%);
+    transition:
+      opacity var(--dur-2) ease,
+      transform var(--dur-2) var(--ease-out);
+  }
+  :global(.js) .ask-bar {
+    display: block;
+  }
+  :global(body.menu-open) .ask-bar,
+  :global(body.palette-open) .ask-bar {
+    display: none;
+  }
+  .ask-bar.away {
+    opacity: 0;
+    transform: translate(-50%, 24px);
+    pointer-events: none;
+  }
+  .ask-bar form {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: 6px 6px 6px var(--sp-5);
+    border: 1px solid var(--c-line-strong);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--c-raised) 94%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--shadow-bar);
+    transition: border-color var(--dur-1), box-shadow var(--dur-2);
+  }
+  .ask-bar form:focus-within {
+    border-color: var(--c-accent);
+    box-shadow:
+      var(--shadow-bar),
+      0 0 0 3px color-mix(in srgb, var(--c-accent) 22%, transparent);
+  }
+  .ask-bar input {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    border: 0;
+    background: transparent;
+    color: var(--c-ink);
+    font-size: var(--fs-base);
+  }
+  .ask-bar input:focus {
+    outline: none;
+  }
+  .ask-bar input::placeholder {
+    color: var(--c-muted);
+  }
+  .ab-kbd {
+    display: inline-grid;
+    place-items: center;
+    min-width: 24px;
+    height: 24px;
+    border: 1px solid var(--c-line-strong);
+    border-radius: 6px;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--c-muted);
+  }
+  @media (hover: none) {
+    .ab-kbd {
+      display: none;
+    }
+  }
+  .ab-go {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--c-accent);
+    color: var(--c-bg);
+    cursor: pointer;
+    transition: transform var(--dur-2) var(--ease-out), background var(--dur-1);
+  }
+  .ab-go:hover {
+    background: var(--c-accent-strong);
+    transform: translateX(2px);
+  }
+  .askbar-results {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(100% + 10px);
+    max-height: min(26rem, 60vh);
+    overflow-y: auto;
+    padding: var(--sp-2);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-raised);
+    box-shadow: var(--shadow-lg);
+  }
+</style>

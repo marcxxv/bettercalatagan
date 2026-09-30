@@ -31,7 +31,11 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const canonical = new URL(path, origin).toString();
 const isHome = path === '/';
 const fullTitle = isHome ? `${SITE.name} — ${SITE.shortDescription}` : `${title} — ${SITE.name}`;
-const ogImage = new URL('/og.png', origin).toString();
+// One share image per section (rendered by scripts/brand.mjs); the home image
+// stands in for everything else.
+const OG_PAGES = new Set(['history', 'government', 'finances', 'transparency', 'documents', 'sources', 'about', 'data']);
+const section = path.split('/')[1] ?? '';
+const ogImage = new URL(OG_PAGES.has(section) ? `/og/${section}.png` : '/og.png', origin).toString();
 
 const structured: Record<string, unknown>[] = [];
 
@@ -92,8 +96,9 @@ const serialise = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u00
 <meta property="og:image:height" content="630" />
 <meta
   property="og:image:alt"
-  content="Better Calatagan — an independent civic guide to Calatagan, Batangas"
+  content={`Better Calatagan — ${isHome ? 'an independent civic guide to Calatagan, Batangas' : title}`}
 />
+<meta name="twitter:image:alt" content={`Better Calatagan — ${isHome ? 'an independent civic guide to Calatagan, Batangas' : title}`} />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={isHome ? SITE.name : title} />
 <meta name="twitter:description" content={description} />

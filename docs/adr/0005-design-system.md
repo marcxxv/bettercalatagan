@@ -1,6 +1,6 @@
 # 0005 — A coastal, editorial design system
 
-**Status:** Accepted · 2026-09-25
+**Status:** Accepted · 2026-09-25 · Superseded in part by [0006](0006-editorial-redesign.md)
 
 ## Context
 

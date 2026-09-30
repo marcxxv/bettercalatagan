@@ -7,6 +7,31 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Editorial, answer-first redesign
+See `docs/adr/0006-editorial-redesign.md`. Modelled on America.gov's professionalism and on the
+patterns shared across the Better LGU portals. **No data changed.**
+- **New look:** near-white canvas, rounded panels, a high-contrast display serif (Source Serif 4
+  with its optical-size axis) and Public Sans for interface; one navy accent; full dark mode with a
+  light / dark / system switch. Every text pairing measured at WCAG 2.2 AA; axe-core clean on every
+  page in both themes; no horizontal scroll at 320 px.
+- **New mark:** a serif "C" drawn as the curve of the bay with a gold point for the Cape Santiago
+  light. New favicon, Apple touch and web-app icons, `site.webmanifest`, and one Open Graph share
+  image per section, all rendered by `scripts/brand.mjs`.
+- **Ask anything:** "Kumusta, Calatagan" home page with a question box; a floating ask bar on
+  every page; a ⌘K / Ctrl K search dialog. Facts answer inline with their source, from a
+  build-time index (`/search.json`); questions about withheld facts are answered with the reason.
+- **Home:** a carousel of scenes drawn from the data (the lighthouse, the barangays at census size,
+  the year's income, the filings mosaic); a scroll-lit manifesto; feature rows; "at a glance"
+  figures; a census column chart; a sortable, searchable barangay table with share-of-total bars
+  and persons per household.
+- **Finances:** a period switcher across all 14 quarterly statements, an income donut, animated
+  sector bars, full-year and year-to-date charts, with the tables kept one click away.
+- **Disclosures and Archive:** a form × year coverage heatmap whose cells filter the list; filters
+  mirrored into the URL so a filtered view can be shared; removable filter pills.
+- **Government, Sources, About, History:** sticky "On this page" rails with scroll-spy; a reading
+  progress bar on the history; withheld facts shown as cards; a new Privacy section.
+- **New pages:** `/data` (the open-data front door) and a 404 page.
+
 ### Added — History
 - **`/history`** — Calatagan from the fifteenth-century burials at Kay Tomas and Pulong Bakaw,
   through the Roxas hacienda and the Cape Santiago lighthouse, to the 1903 merger into Balayan and

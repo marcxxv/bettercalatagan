@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Source from '../components/Source.astro';
+import Icon from '../components/Icon.astro';
 import { archivedDocuments, documentKinds, documentYears, documentsSource } from '../data/documents';
 import { KIND_LABELS } from '../data/schemas/documents';
 import { formatDate, formatNumber } from '../lib/format';
@@ -25,6 +26,9 @@ const rows = docs.map((doc) => ({
 }));
 const inspectedCount = docs.filter((doc) => doc.inspected).length;
 const kindMax = Math.max(1, ...documentKinds.map((k) => k.count));
+const superseded = docs.filter((doc) => doc.status === 'superseded').length;
+const years = docs.map((d) => d.publishedYear).filter((y): y is number => y !== null);
+const span = years.length ? `${Math.min(...years)}–${Math.max(...years)}` : '—';
 
 const crumbs = [{ name: 'Archive', href: '/documents' }];
 ---
@@ -36,84 +40,81 @@ const crumbs = [{ name: 'Archive', href: '/documents' }];
 >
   <PageHeader
     eyebrow="Archive"
+    icon="archive"
     title="Documents from the former municipal website"
     lede="What calatagan.gov.ph published is still public record. This indexes every document the Internet Archive still holds, with a link to each one — as a historical record, not as the municipality’s current position."
     {crumbs}
-  />
+  >
+    <dl slot="aside" class="aside-stats">
+      <div><dt>Documents</dt><dd class="figure">{formatNumber(archivedDocuments.documentCount)}</dd></div>
+      <div><dt>Published</dt><dd class="figure">{span}</dd></div>
+      <div><dt>Opened &amp; checked</dt><dd class="figure">{inspectedCount}</dd></div>
+    </dl>
+  </PageHeader>
 
-  <div class="container page-body">
-    <div class="callout warn">
-      <p class="callout-title">The municipality’s website is offline</p>
-      <p>
-        <code>calatagan.gov.ph</code> no longer resolves — the domain is still delegated to
-        government nameservers, but it has no address record, and the Internet Archive holds no
-        capture after 2025.
-      </p>
-    </div>
-
-    <div class="prose">
-      <p>
-        <strong>These are historical documents.</strong> None of them should be read as the
-        municipality’s current position, current fees, or current procedure. Some are clearly
-        expired — a land use plan for 2001–2010, for instance. Others may or may not still reflect
-        practice; without a live official source there is no way to tell, and this site will not
-        pretend otherwise.
-      </p>
-      <p>
-        Most entries are described by the filename the municipality chose. Where a maintainer has
-        actually opened a document ({inspectedCount} so far), what was found inside is noted on the
-        entry — the difference between “we know what this is” and “this is what the file was
-        called” is worth keeping visible.
-      </p>
+  <div class="container wide page-body">
+    <div class="lead-grid">
+      <div class="callout warn offline">
+        <p class="callout-title"><Icon name="alert" size="18" /> The municipality’s website is offline</p>
+        <p>
+          <code>calatagan.gov.ph</code> no longer resolves — the domain is still delegated to
+          government nameservers, but it has no address record, and the Internet Archive holds no
+          capture after 2025.
+        </p>
+      </div>
+      <div class="prose">
+        <p>
+          <strong>These are historical documents.</strong> None of them should be read as the
+          municipality’s current position, current fees, or current procedure. Some are clearly
+          expired — a land use plan for 2001–2010, for instance. Others may or may not still reflect
+          practice; without a live official source there is no way to tell, and this site will not
+          pretend otherwise.
+        </p>
+        <p>
+          Most entries are described by the filename the municipality chose. Where a maintainer has
+          actually opened a document ({inspectedCount} so far), what was found inside is noted on the
+          entry — the difference between “we know what this is” and “this is what the file was
+          called” is worth keeping visible.
+        </p>
+      </div>
     </div>
 
     <Source source={documentsSource} label="this archive" />
 
-    <section class="section" aria-labelledby="kinds-title">
-      <h2 id="kinds-title">What is here</h2>
-      <div class="table-wrap narrow" role="region" aria-labelledby="kinds-caption" tabindex="0">
-        <table class="kinds">
-          <caption id="kinds-caption">
-            {formatNumber(archivedDocuments.documentCount)} archived documents by kind
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col">Kind</th>
-              <th scope="col" class="num">Documents</th>
-            </tr>
-          </thead>
-          <tbody>
-            {documentKinds.map(({ kind, count }) => (
-              <tr>
-                <th scope="row">{kindLabel(kind)}</th>
-                <td class="num">
-                  {formatNumber(count)}
-                  <span
-                    class="bar"
-                    aria-hidden="true"
-                    style={`--w:${((count / kindMax) * 100).toFixed(1)}%`}
-                  ></span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <section class="section-block" aria-labelledby="kinds-title">
+      <p class="eyebrow">What is here</p>
+      <h2 id="kinds-title">{formatNumber(archivedDocuments.documentCount)} documents by kind</h2>
+      <p class="muted js-block">Select a kind to list just those documents.</p>
+      <ul class="kinds" data-animate>
+        {documentKinds.map(({ kind, count }, i) => (
+          <li>
+            <button
+              type="button"
+              class="kind"
+              data-set-filter={`kind=${kind}`}
+              data-for="doc-list"
+              aria-pressed="false"
+            >
+              <span class="k-label">{kindLabel(kind)}</span>
+              <span class="k-bar" aria-hidden="true">
+                <span data-grow style={`width:${((count / kindMax) * 100).toFixed(1)}%;--reveal-delay:${i * 50}ms`}></span>
+              </span>
+              <span class="k-count num">{formatNumber(count)}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+      {superseded > 0 && <p class="small muted">{superseded} are marked superseded by a later document.</p>}
     </section>
 
-    <section class="section" aria-labelledby="index-title">
-      <h2 id="index-title">The index</h2>
+    <section class="section-block" id="index" aria-labelledby="index-title">
+      <p class="eyebrow">Index</p>
+      <h2 id="index-title">Every archived document</h2>
 
-      <form class="filters" role="search" aria-label="Filter documents" style="--filter-cols: 2">
-        <p class="field">
+      <form class="toolbar sticky" data-filter="doc-list" data-noun="documents" role="search" aria-label="Filter documents" style="--filter-cols: 2" hidden>
+        <p class="field search">
           <label for="d-search">Search</label>
-          <input
-            type="search"
-            id="d-search"
-            name="search"
-            placeholder="Title or filename"
-            autocomplete="off"
-          />
+          <input type="search" id="d-search" name="q" placeholder="Title or filename" autocomplete="off" />
         </p>
         <p class="field">
           <label for="d-kind">Kind</label>
@@ -128,21 +129,25 @@ const crumbs = [{ name: 'Archive', href: '/documents' }];
           <label for="d-year">Published</label>
           <select id="d-year" name="year">
             <option value="">Any year</option>
-            {documentYears.map((year) => <option value={year}>{year}</option>)}
+            {documentYears.map((year) => <option value={String(year)}>{year}</option>)}
           </select>
         </p>
         <p class="field">
-          <button class="button" type="reset">Clear filters</button>
+          <button class="button" type="reset">Reset</button>
         </p>
       </form>
 
-      <p class="result-count" id="doc-count" role="status" aria-live="polite">
-        Showing all {formatNumber(rows.length)} documents.
-      </p>
+      <div class="result-bar">
+        <p class="result-count" data-count-for="doc-list" role="status" aria-live="polite">
+          Showing all <strong>{formatNumber(rows.length)}</strong> documents
+        </p>
+        <ul class="active-filters" data-pills-for="doc-list" aria-label="Active filters"></ul>
+      </div>
 
       <ul class="docs" id="doc-list">
         {rows.map((doc) => (
-          <li class="doc" data-kind={doc.kind} data-year={doc.publishedYear ?? ''} data-search={doc.search}>
+          <li class="doc" data-item data-kind={doc.kind} data-year={doc.publishedYear ? String(doc.publishedYear) : ''} data-search={doc.search}>
+            <span class="d-type" aria-hidden="true">{doc.fileType.toUpperCase()}</span>
             <div class="doc-main">
               <h3>{doc.title}</h3>
               <p class="tags">
@@ -153,11 +158,8 @@ const crumbs = [{ name: 'Archive', href: '/documents' }];
                   <span class="chip clay">Archived</span>
                 )}
                 {doc.publishedYear && <span class="chip">Published {doc.publishedYear}</span>}
-                {doc.inspected && <span class="chip accent">Opened and checked</span>}
-                <span class="file-meta">
-                  {doc.fileType.toUpperCase()}
-                  {doc.size && ` · ${doc.size}`}
-                </span>
+                {doc.inspected && <span class="chip ok"><Icon name="check" size="12" /> Opened and checked</span>}
+                {doc.size && <span class="file-meta">{doc.size}</span>}
               </p>
               {doc.inspected && (
                 <p class="inspected">
@@ -171,108 +173,202 @@ const crumbs = [{ name: 'Archive', href: '/documents' }];
               </p>
             </div>
             <p class="get">
-              <a class="button" href={doc.archiveUrl} rel="noopener noreferrer nofollow">
+              <a class="button small" href={doc.archiveUrl} rel="noopener noreferrer nofollow">
                 Open copy<span class="visually-hidden"> of {doc.title} on the Wayback Machine</span>
-                <span aria-hidden="true">&nbsp;↗</span>
+                <Icon name="external" size="15" />
               </a>
             </p>
           </li>
         ))}
       </ul>
 
-      <p class="empty" id="doc-empty" hidden>No documents match these filters.</p>
+      <div class="empty-state" data-empty-for="doc-list" hidden>
+        <Icon name="search" size="28" />
+        <strong>No documents match these filters.</strong>
+        <span>Remove a filter above, or reset to see all {formatNumber(rows.length)}.</span>
+      </div>
     </section>
   </div>
 
-  <script is:inline>
-    (function () {
-      const form = document.querySelector('.filters');
-      const list = document.getElementById('doc-list');
-      const count = document.getElementById('doc-count');
-      const empty = document.getElementById('doc-empty');
-      if (!form || !list || !count || !empty) return;
-      const items = Array.from(list.querySelectorAll('.doc'));
-      const total = items.length;
-
-      function apply() {
-        const data = new FormData(form);
-        const search = String(data.get('search') || '').trim().toLowerCase();
-        const kind = String(data.get('kind') || '');
-        const year = String(data.get('year') || '');
-        let shown = 0;
-        for (const item of items) {
-          const ok =
-            (!kind || item.dataset.kind === kind) &&
-            (!year || item.dataset.year === year) &&
-            (!search || (item.dataset.search || '').includes(search));
-          item.hidden = !ok;
-          if (ok) shown += 1;
-        }
-        empty.hidden = shown !== 0;
-        count.textContent =
-          shown === total
-            ? 'Showing all ' + total + ' documents.'
-            : 'Showing ' + shown + ' of ' + total + ' documents.';
-      }
-
-      form.addEventListener('input', apply);
-      form.addEventListener('change', apply);
-      form.addEventListener('reset', function () { setTimeout(apply, 0); });
-      form.addEventListener('submit', function (e) { e.preventDefault(); apply(); });
-    })();
+  <script>
+    import '../scripts/filter.ts';
   </script>
 </Base>
 
 <style>
   .page-body {
-    padding-block: var(--sp-6) var(--sp-8);
+    padding-block: var(--sp-7) var(--sp-9);
   }
-  .callout {
+  .aside-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-3);
+    margin: 0;
+  }
+  .aside-stats > div {
+    padding: var(--sp-4);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    box-shadow: var(--shadow-sm);
+  }
+  .aside-stats dt {
+    font-size: var(--fs-2xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-band-muted);
+  }
+  .aside-stats dd {
+    margin: var(--sp-1) 0 0;
+    font-family: var(--font-serif);
+    font-size: var(--fs-xl);
+    font-weight: 600;
+    color: var(--c-band-ink);
+  }
+  .lead-grid {
+    display: grid;
+    gap: var(--sp-5);
+  }
+  @media (min-width: 64rem) {
+    .lead-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      align-items: start;
+      gap: var(--sp-7);
+    }
+  }
+  .offline {
+    margin: 0;
+  }
+  .section-block {
+    margin-top: var(--sp-9);
+    scroll-margin-top: calc(var(--header-h) + var(--sp-4));
+  }
+  .section-block > h2 {
     margin-top: 0;
   }
-  .narrow {
-    max-width: 32rem;
+  .js-block {
+    display: none;
   }
-  .kinds td.num {
-    vertical-align: top;
-  }
-  .bar {
+  :global(.js) .js-block {
     display: block;
-    height: 4px;
-    margin: var(--sp-1) 0 0 auto;
-    width: var(--w);
-    max-width: 8rem;
-    background: var(--c-clay);
-    border-radius: 2px;
-    opacity: 0.6;
+  }
+  .kinds {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-4) 0 var(--sp-2);
+    display: grid;
+    gap: var(--sp-2);
+    max-width: 52rem;
+  }
+  .kinds li {
+    margin: 0;
+  }
+  .kind {
+    display: grid;
+    grid-template-columns: minmax(8rem, 14rem) 1fr 3.5rem;
+    align-items: center;
+    gap: var(--sp-4);
+    width: 100%;
+    min-height: 44px;
+    padding: var(--sp-1) var(--sp-3);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--c-ink);
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--dur-1), border-color var(--dur-1);
+  }
+  :global(html:not(.js)) .kind {
+    cursor: default;
+  }
+  .kind:hover {
+    background: var(--c-bg-alt);
+    border-color: var(--c-line);
+  }
+  .kind[aria-pressed='true'] {
+    background: var(--c-accent-wash);
+    border-color: var(--c-accent-line);
+  }
+  .k-label {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+  .k-bar {
+    height: 12px;
+    border-radius: 999px;
+    background: var(--c-sunk);
+    overflow: hidden;
+  }
+  .k-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--c-s4), var(--c-s3));
+  }
+  .k-count {
+    text-align: right;
+    font-weight: 800;
+    color: var(--c-navy);
+  }
+  @media (max-width: 30rem) {
+    .kind {
+      grid-template-columns: 1fr 3rem;
+    }
+    .k-bar {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
   }
 
   .docs {
     list-style: none;
     padding: 0;
     margin: 0;
-    border-top: var(--border);
+    display: grid;
+    gap: var(--sp-3);
   }
   .doc {
     display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
     gap: var(--sp-3) var(--sp-4);
-    padding: var(--sp-4) 0;
+    padding: var(--sp-4) var(--sp-5);
     margin: 0;
-    border-bottom: var(--border);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    transition: border-color var(--dur-1), box-shadow var(--dur-1);
+  }
+  .doc:hover {
+    border-color: var(--c-accent-line);
+    box-shadow: var(--shadow-sm);
   }
   .doc[hidden] {
     display: none;
   }
   @media (min-width: 48rem) {
     .doc {
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: start;
     }
+  }
+  .d-type {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 56px;
+    border-radius: 6px 14px 6px 6px;
+    background: var(--c-clay-wash);
+    color: var(--c-clay);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
   }
   .doc h3 {
     font-family: var(--font-sans);
     font-size: var(--fs-base);
-    font-weight: 650;
+    font-weight: 700;
     color: var(--c-ink);
     line-height: 1.35;
     margin: 0 0 var(--sp-2);
@@ -290,8 +386,10 @@ const crumbs = [{ name: 'Archive', href: '/documents' }];
   }
   .inspected {
     margin: 0 0 var(--sp-2);
-    padding-left: var(--sp-3);
-    border-left: 3px solid var(--c-accent);
+    padding: var(--sp-2) var(--sp-3);
+    border-left: 3px solid var(--c-ok);
+    background: var(--c-ok-wash);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     font-size: var(--fs-sm);
     max-width: var(--w-prose);
   }
@@ -306,9 +404,11 @@ const crumbs = [{ name: 'Archive', href: '/documents' }];
   }
   .get {
     margin: 0;
+    grid-column: 2;
   }
-  .empty {
-    color: var(--c-muted);
-    padding: var(--sp-5) 0;
+  @media (min-width: 48rem) {
+    .get {
+      grid-column: auto;
+    }
   }
 </style>

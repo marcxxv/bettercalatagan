@@ -1,0 +1,14 @@
+{
+  "name": "Better Calatagan",
+  "short_name": "Calatagan",
+  "description": "An independent civic guide to Calatagan, Batangas — every public figure traced to its source. Not an official government website.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfbfa",
+  "theme_color": "#fbfbfa",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

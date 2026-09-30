@@ -1,35 +1,65 @@
 ---
 /**
- * Site header.
+ * Site header: a one-line independence notice, then the masthead.
  *
- * Two navigation renderings share one <nav> landmark: an inline list for wide
- * screens and a native <details> menu for narrow ones. The one not in use is
- * display:none, which also removes it from the accessibility tree, so screen
- * readers only ever meet one list. No JavaScript is involved.
+ * The notice takes the place of the "An official website of the United
+ * States government" line on federal sites and says the opposite, plainly,
+ * with a disclosure explaining how to tell.
+ *
+ * The masthead floats over the top of each page's opening panel and becomes a
+ * frosted bar once the page scrolls. Navigation works without JavaScript: an
+ * inline list on wide screens and a native <details> menu everywhere else.
  */
 import Mark from './Mark.astro';
-import { NAV, isCurrent } from '../lib/site';
+import Icon from './Icon.astro';
+import { NAV, SECONDARY_NAV, SITE, isCurrent } from '../lib/site';
 
 const pathname = Astro.url.pathname;
 ---
 
-<header class="site-header">
-  <div class="independence">
-    <div class="container independence-inner">
-      <p><strong>Independent civic project.</strong> Not affiliated with the Municipality of Calatagan.</p>
-      <a href="/about">About this site</a>
+<div class="gov-banner">
+  <details class="how-to-tell">
+    <summary>
+      <span class="tell-long">An independent civic project — not an official government website</span>
+      <span class="tell-short" aria-hidden="true">Independent project · not a government site</span>
+      <span class="tell-i" aria-hidden="true"><Icon name="info" size="14" /></span>
+      <span class="visually-hidden">How to tell</span>
+    </summary>
+    <div class="tell-panel">
+      <div>
+        <span class="tell-icon"><Icon name="landmark" /></span>
+        <p>
+          <strong>No seal, no .gov.ph address.</strong> Official municipal websites use a government
+          domain and the municipal seal. This site uses neither, by design.
+        </p>
+      </div>
+      <div>
+        <span class="tell-icon"><Icon name="shield" /></span>
+        <p>
+          <strong>Every figure is sourced.</strong> Each number links to the government document it
+          came from. Where they differ, the original document is authoritative.
+        </p>
+      </div>
+      <div>
+        <span class="tell-icon"><Icon name="code" /></span>
+        <p>
+          <strong>Open and volunteer-built.</strong> Part of the BetterGov.ph Better LGU community.
+          <a href="/about">About this project</a>
+        </p>
+      </div>
     </div>
-  </div>
-  <div class="container header-inner">
-    <a class="brand" href="/">
+  </details>
+  <span class="clock" data-ph-clock aria-hidden="true" hidden></span>
+</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="Better Calatagan — home">
       <Mark size={34} />
-      <span class="brand-text">
-        <span class="brand-name">Better Calatagan</span>
-        <span class="brand-tag">Civic data · Batangas</span>
-      </span>
+      <span class="wordmark">Better Calatagan</span>
     </a>
 
-    <nav aria-label="Primary">
+    <nav class="primary" aria-label="Primary">
       <ul class="nav-inline">
         {NAV.map((item) => (
           <li>
@@ -39,216 +69,451 @@ const pathname = Astro.url.pathname;
           </li>
         ))}
       </ul>
+    </nav>
+
+    <div class="actions">
+      <button class="icon-button js-only" type="button" data-open-search aria-haspopup="dialog" aria-label="Search (Ctrl K)" title="Search">
+        <Icon name="search" size="19" />
+      </button>
+      <button class="icon-button js-only theme-toggle" type="button" data-theme-toggle aria-label="Change theme">
+        <span class="t-system"><Icon name="monitor" size="19" /></span>
+        <span class="t-light"><Icon name="sun" size="19" /></span>
+        <span class="t-dark"><Icon name="moon" size="19" /></span>
+      </button>
 
       <details class="nav-menu">
         <summary>
-          <span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
-          Menu
+          <span class="menu-word">Menu</span>
+          <span class="burger" aria-hidden="true"><span></span><span></span></span>
         </summary>
-        <ul>
-          {NAV.map((item) => (
-            <li>
-              <a href={item.href} aria-current={isCurrent(item.href, pathname) ? 'page' : undefined}>
-                <span class="menu-label">{item.label}</span>
-                <span class="menu-blurb">{item.blurb}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div class="menu-sheet">
+          <nav class="menu-inner" aria-label="Menu">
+            <ul class="menu-list">
+              {NAV.map((item) => (
+                <li>
+                  <a href={item.href} aria-current={isCurrent(item.href, pathname) ? 'page' : undefined}>
+                    <span class="menu-label">{item.label}</span>
+                    <span class="menu-blurb">{item.blurb}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <ul class="menu-secondary">
+              {SECONDARY_NAV.map((item) => (
+                <li><a href={item.href}>{item.label}</a></li>
+              ))}
+              <li><a href={SITE.repository}>Source code</a></li>
+              <li><a href={`${SITE.repository}/issues/new/choose`}>Report a correction</a></li>
+            </ul>
+            <p class="menu-theme js-only">
+              <button type="button" class="button small" data-theme-toggle aria-label="Change theme">
+                <span class="t-system"><Icon name="monitor" size="16" /> System theme</span>
+                <span class="t-light"><Icon name="sun" size="16" /> Light theme</span>
+                <span class="t-dark"><Icon name="moon" size="16" /> Dark theme</span>
+              </button>
+            </p>
+          </nav>
+        </div>
       </details>
-    </nav>
+    </div>
   </div>
 </header>
 
 <style>
-  .independence {
-    background: var(--c-sunk);
-    border-bottom: var(--border);
-    font-size: var(--fs-xs);
-    color: var(--c-ink-2);
-  }
-  .independence-inner {
+  /* ---------- Independence notice ---------- */
+  .gov-banner {
+    position: relative;
+    z-index: 25;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    gap: var(--sp-1) var(--sp-4);
-    padding-block: var(--sp-2);
+    min-height: 34px;
+    padding: 6px var(--gutter);
+    background: var(--c-bg);
+    color: var(--c-muted);
+    font-size: var(--fs-xs);
+    text-align: center;
   }
-  .independence p {
+  .how-to-tell > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    min-height: 24px;
+    border-radius: 999px;
+  }
+  .how-to-tell > summary:hover {
+    color: var(--c-ink);
+  }
+  .tell-short {
+    display: none;
+  }
+  @media (max-width: 40rem) {
+    .tell-long {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .tell-short {
+      display: inline;
+    }
+  }
+  .tell-i {
+    display: inline-grid;
+    place-items: center;
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+  .how-to-tell[open] .tell-i {
+    transform: rotate(180deg);
+    color: var(--c-accent);
+  }
+  .tell-panel {
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    top: calc(100% + 4px);
+    z-index: 40;
+    display: grid;
+    gap: var(--sp-5);
+    padding: var(--sp-6);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-xl);
+    background: var(--c-raised);
+    box-shadow: var(--shadow-lg);
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+    text-align: left;
+    animation: drop var(--dur-2) var(--ease-out);
+  }
+  @keyframes drop {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+  @media (min-width: 48rem) {
+    .tell-panel {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 64rem;
+      margin-inline: auto;
+    }
+  }
+  .tell-panel > div {
+    display: flex;
+    gap: var(--sp-3);
+    align-items: flex-start;
+  }
+  .tell-panel p {
     margin: 0;
   }
-  .independence a {
-    font-weight: 650;
-    white-space: nowrap;
+  .tell-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--c-accent-wash);
+    color: var(--c-accent);
+  }
+  .tell-panel strong {
+    display: block;
+    color: var(--c-ink);
+    margin-bottom: 2px;
+  }
+  .clock {
+    position: absolute;
+    right: var(--gutter);
+    top: 50%;
+    transform: translateY(-50%);
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 64rem) {
+    .clock {
+      display: none;
+    }
   }
 
+  /* ---------- Masthead ---------- */
   .site-header {
-    background: var(--c-surface);
-    border-bottom: var(--border);
-    position: relative;
-    z-index: 5;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    /* Float over the opening panel of each page. */
+    margin-bottom: calc(-1 * var(--header-h));
+    padding-inline: calc(var(--gutter) * 0.75);
+    transition:
+      background var(--dur-2) ease,
+      box-shadow var(--dur-2) ease;
+  }
+  :global(.site-header.scrolled) {
+    background: color-mix(in srgb, var(--c-bg) 82%, transparent);
+    backdrop-filter: saturate(1.6) blur(18px);
+    -webkit-backdrop-filter: saturate(1.6) blur(18px);
+    box-shadow: 0 1px 0 var(--c-line);
   }
   .header-inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: var(--sp-4);
-    min-height: 4.25rem;
+    min-height: var(--header-h);
+    max-width: var(--w-wide);
+    margin-inline: auto;
+    padding-inline: calc(var(--gutter) * 1.25);
   }
 
   .brand {
     display: inline-flex;
     align-items: center;
     gap: var(--sp-3);
-    color: var(--c-navy);
+    color: var(--c-ink);
     text-decoration: none;
     min-height: var(--tap);
+    margin-right: auto;
+    flex: none;
   }
-  .brand-text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
+  .brand :global(svg) {
+    border-radius: 8px;
+    transition: transform var(--dur-3) var(--ease-out);
   }
-  .brand-name {
+  .brand:hover :global(svg) {
+    transform: rotate(-6deg);
+  }
+  .wordmark {
     font-family: var(--font-serif);
-    font-size: 1.2rem;
-    font-weight: 650;
-    letter-spacing: -0.01em;
+    font-size: 1.45rem;
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    line-height: 1;
   }
-  .brand-tag {
-    font-size: 0.7rem;
-    font-weight: 650;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--c-muted);
-    margin-top: 3px;
+  @media (max-width: 24rem) {
+    .wordmark {
+      font-size: 1.2rem;
+    }
   }
 
-  nav ul {
+  ul {
     list-style: none;
     margin: 0;
     padding: 0;
   }
-  nav li + li {
+  li + li {
     margin-top: 0;
   }
 
-  /* Wide screens: inline list. */
-  .nav-inline {
+  .primary {
     display: none;
   }
-  @media (min-width: 64rem) {
-    .nav-inline {
-      display: flex;
-      gap: var(--sp-1);
+  @media (min-width: 72rem) {
+    .primary {
+      display: block;
     }
-    .nav-menu {
-      display: none;
-    }
+  }
+  .nav-inline {
+    display: flex;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--c-surface) 70%, transparent);
+    border: 1px solid var(--c-line);
   }
   .nav-inline a {
     display: inline-flex;
     align-items: center;
-    min-height: var(--tap);
-    padding: 0 var(--sp-3);
-    border-radius: var(--radius-sm);
+    min-height: 36px;
+    padding: 0 var(--sp-4);
+    border-radius: 999px;
     color: var(--c-ink-2);
     font-size: var(--fs-sm);
-    font-weight: 600;
+    font-weight: 500;
     text-decoration: none;
-    position: relative;
+    transition: color var(--dur-1), background var(--dur-1);
   }
   .nav-inline a:hover {
-    color: var(--c-navy);
+    color: var(--c-ink);
     background: var(--c-sunk);
   }
   .nav-inline a[aria-current='page'] {
-    color: var(--c-navy);
-  }
-  .nav-inline a[aria-current='page']::after {
-    content: '';
-    position: absolute;
-    left: var(--sp-3);
-    right: var(--sp-3);
-    bottom: 6px;
-    height: 2px;
-    background: var(--c-clay);
-    border-radius: 2px;
+    color: var(--c-bg);
+    background: var(--c-ink);
   }
 
-  /* Narrow screens: disclosure menu. */
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+  .js-only {
+    display: none;
+  }
+  :global(.js) .js-only {
+    display: inline-flex;
+  }
+  .icon-button {
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--c-line);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--c-surface) 70%, transparent);
+    color: var(--c-ink);
+    cursor: pointer;
+    transition: background var(--dur-1), border-color var(--dur-1);
+  }
+  .icon-button:hover {
+    border-color: var(--c-ink);
+    background: var(--c-surface);
+  }
+  [data-theme-toggle] > span {
+    display: none;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+  [data-theme-toggle]:not([data-state]) .t-system,
+  [data-theme-toggle][data-state='system'] .t-system,
+  [data-theme-toggle][data-state='light'] .t-light,
+  [data-theme-toggle][data-state='dark'] .t-dark {
+    display: inline-flex;
+  }
+  .menu-theme {
+    margin: var(--sp-5) 0 0;
+  }
+  :global(.js) .menu-theme.js-only {
+    display: block;
+  }
+  .nav-menu:not([open]) .menu-sheet {
+    display: none;
+  }
+
+  /* Phones: a tighter masthead; the theme switch moves into the menu. */
+  @media (max-width: 40rem) {
+    .site-header {
+      padding-inline: var(--gutter);
+    }
+    .header-inner {
+      padding-inline: 0;
+      gap: var(--sp-2);
+    }
+    .wordmark {
+      font-size: 1.25rem;
+    }
+    .theme-toggle {
+      display: none !important;
+    }
+  }
+  @media (max-width: 23rem) {
+    .brand {
+      gap: var(--sp-2);
+    }
+    .menu-word {
+      display: none;
+    }
+    .nav-menu > summary {
+      padding: 0 var(--sp-3);
+    }
+  }
+
+  /* ---------- Menu ---------- */
+  @media (min-width: 72rem) {
+    .nav-menu {
+      display: none;
+    }
+  }
   .nav-menu > summary {
     display: inline-flex;
     align-items: center;
     gap: var(--sp-2);
-    min-height: var(--tap);
-    padding: 0 var(--sp-4);
-    border: 1px solid var(--c-control);
-    border-radius: var(--radius-sm);
+    min-height: 44px;
+    padding: 0 var(--sp-5);
+    border-radius: 999px;
+    background: var(--c-accent);
+    color: var(--c-bg);
     font-size: var(--fs-sm);
-    font-weight: 650;
-    color: var(--c-navy);
-    background: var(--c-surface);
+    font-weight: 600;
+    transition: background var(--dur-1);
   }
-  .menu-icon {
+  .nav-menu > summary:hover {
+    background: var(--c-accent-strong);
+  }
+  .burger {
     display: inline-flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
   }
-  .menu-icon span {
+  .burger span {
     display: block;
-    width: 16px;
-    height: 2px;
+    width: 14px;
+    height: 1.5px;
     background: currentColor;
     border-radius: 1px;
+    transition: transform var(--dur-2) var(--ease-out);
   }
-  .nav-menu[open] > summary {
-    background: var(--c-sunk);
+  .nav-menu[open] .burger span:nth-child(1) {
+    transform: translateY(2.75px) rotate(45deg);
   }
-  .nav-menu:not([open]) > ul {
-    display: none;
+  .nav-menu[open] .burger span:nth-child(2) {
+    transform: translateY(-2.75px) rotate(-45deg);
   }
-  .nav-menu > ul {
+  .menu-sheet {
     position: absolute;
     left: 0;
     right: 0;
     top: 100%;
-    background: var(--c-surface);
-    border-bottom: var(--border);
-    box-shadow: var(--shadow-md);
-    padding: var(--sp-2) var(--gutter) var(--sp-4);
+    height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--c-bg);
+    border-top: 1px solid var(--c-line);
+    animation: sheet-in var(--dur-2) var(--ease-out);
   }
-  .nav-menu a {
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+  .menu-inner {
+    max-width: 44rem;
+    margin-inline: auto;
+    padding: var(--sp-6) var(--gutter) var(--sp-9);
+  }
+  .menu-list a {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: var(--sp-3) var(--sp-2);
-    border-bottom: var(--border);
+    padding: var(--sp-3) 0;
+    border-bottom: 1px solid var(--c-line);
     text-decoration: none;
     color: var(--c-ink);
   }
-  .nav-menu li:last-child a {
-    border-bottom: 0;
-  }
   .menu-label {
     font-family: var(--font-serif);
-    font-size: var(--fs-md);
-    font-weight: 600;
-    color: var(--c-navy);
+    font-size: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    transition: color var(--dur-1);
+  }
+  .menu-list a:hover .menu-label,
+  .menu-list a[aria-current='page'] .menu-label {
+    color: var(--c-accent);
   }
   .menu-blurb {
     font-size: var(--fs-sm);
     color: var(--c-muted);
   }
-  .nav-menu a[aria-current='page'] .menu-label::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    margin-right: 8px;
-    vertical-align: middle;
-    border-radius: 50%;
-    background: var(--c-clay);
+  .menu-secondary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-5);
+    padding-top: var(--sp-5);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+  .menu-secondary a {
+    color: var(--c-ink);
   }
 </style>

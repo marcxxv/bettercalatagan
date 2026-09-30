@@ -36,7 +36,10 @@ cannot check.
 
 ## Current status
 
-Eight pages — including a sourced history of Calatagan — and four machine-readable datasets, guarded by a civic-data test suite that runs on every push.
+Nine pages — including a sourced history of Calatagan and an open-data front door — and four
+machine-readable datasets, guarded by a civic-data test suite that runs on every push. Every page
+has an "Ask anything" box that answers from the published data, with the source beside the answer
+(see [ADR 0006](docs/adr/0006-editorial-redesign.md) for the design).
 
 | Dataset | Tier | Basis |
 | --- | --- | --- |
@@ -73,10 +76,18 @@ npm run fdp:stage      # fetch the listing, probe every download, write data/sta
 npm run fdp:promote    # merge into src/data/generated/ without deleting anything
 ```
 
+Regenerating the favicon, app icons and share images (only when the mark, fonts or a page title
+change; the outputs are committed):
+
+```bash
+npm i --no-save playwright && node scripts/brand.mjs
+```
+
 The DILG server omits an intermediate TLS certificate, so the scripts supply it from `certs/`
 rather than disabling verification.
 
-No backend, no database, no CMS, no authentication, no analytics, no AI. The site builds to static
+No backend, no database, no CMS, no authentication, no analytics, no AI. Search runs in the
+browser against a prebuilt index. The site builds to static
 HTML. See [docs/adr/](docs/adr/) for why.
 
 ## Contributing

@@ -4,6 +4,9 @@ import '../styles/global.css';
 import Seo, { type Crumb } from '../components/Seo.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import SearchDialog from '../components/SearchDialog.astro';
+import AskBar from '../components/AskBar.astro';
+import Icon from '../components/Icon.astro';
 
 interface Props {
   title: string;
@@ -11,9 +14,11 @@ interface Props {
   crumbs?: Crumb[];
   jsonLd?: Record<string, unknown>[];
   ogType?: 'website' | 'article';
+  /** Show a reading-progress bar under the header (long-form pages). */
+  progress?: boolean;
 }
 
-const { title, description, crumbs, jsonLd, ogType } = Astro.props;
+const { title, description, crumbs, jsonLd, ogType, progress = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -21,10 +26,32 @@ const { title, description, crumbs, jsonLd, ogType } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#12304a" />
+    <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0f17" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+    <!--
+      Apply a saved theme before first paint, so a reader who chose dark never
+      sees a flash of light. Tiny, synchronous, and harmless if storage is off.
+    -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      try {
+        const t = localStorage.getItem('bc-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch {
+        /* storage unavailable: follow the system theme */
+      }
+    </script>
     <link
       rel="preload"
-      href="/fonts/source-serif-4-latin-wght.woff2"
+      href="/fonts/public-sans-latin-wght.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/source-serif-4-latin-opsz.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -32,36 +59,109 @@ const { title, description, crumbs, jsonLd, ogType } = Astro.props;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap.xml" />
     <Seo title={title} description={description} crumbs={crumbs} jsonLd={jsonLd} ogType={ogType} />
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">Skip to main content</a>
     <SiteHeader />
+    {progress && <div class="progress" data-progress aria-hidden="true"></div>}
     <main id="main" tabindex="-1">
       <slot />
     </main>
     <SiteFooter />
+    <SearchDialog />
+    <AskBar />
+    <button class="to-top" type="button" aria-label="Back to top">
+      <Icon name="arrow-right" />
+    </button>
+
+    <script>
+      import '../scripts/ui.ts';
+    </script>
 
     <style is:global>
       .skip-link {
         position: absolute;
-        left: var(--sp-2);
+        left: var(--sp-3);
         top: -100px;
-        z-index: 20;
+        z-index: 100;
         padding: var(--sp-3) var(--sp-4);
-        background: var(--c-navy);
-        color: var(--c-on-navy);
-        font-weight: 700;
+        background: var(--c-ink);
+        color: var(--c-bg);
+        font-weight: 800;
         border-radius: var(--radius-sm);
         text-decoration: none;
+        box-shadow: var(--shadow-lg);
       }
       .skip-link:focus {
-        top: var(--sp-2);
-        color: var(--c-on-navy);
+        top: var(--sp-3);
+        color: var(--c-bg);
       }
       main:focus {
         outline: none;
+      }
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 40;
+        height: 3px;
+        background: var(--c-accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        pointer-events: none;
+      }
+      .to-top {
+        position: fixed;
+        right: clamp(1rem, 3vw, 2rem);
+        bottom: clamp(0.9rem, 2vw, 1.6rem);
+        z-index: 30;
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        border: 1px solid var(--c-line-strong);
+        border-radius: 50%;
+        background: var(--c-raised);
+        color: var(--c-navy);
+        box-shadow: var(--shadow-md);
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(12px);
+        pointer-events: none;
+        transition:
+          opacity var(--dur-2) ease,
+          transform var(--dur-2) var(--ease-out),
+          border-color var(--dur-1);
+      }
+      .to-top .icon {
+        transform: rotate(-90deg);
+      }
+      .to-top.show {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+      }
+      /* The ask bar owns the bottom of narrow screens. */
+      @media (max-width: 64rem) {
+        .to-top {
+          display: none;
+        }
+      }
+      .to-top:hover {
+        border-color: var(--c-accent);
+        color: var(--c-accent);
+      }
+      body.menu-open {
+        overflow: hidden;
+      }
+      @media (min-width: 64rem) {
+        body.menu-open {
+          overflow: auto;
+        }
       }
     </style>
   </body>

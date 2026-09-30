@@ -29,19 +29,25 @@ const crumbs = [{ name: 'Government', href: '/government' }];
 >
   <PageHeader
     eyebrow="Government"
+    icon="landmark"
     title="Who governs Calatagan — and what we can prove"
     lede="Who holds office and how to reach each office are what residents ask for most. They are also the two things this project cannot yet establish to its evidence standard, so this page sets out the gap instead of filling it with a plausible guess."
     {crumbs}
   />
 
-  <div class="container page-body">
-    <nav class="on-page" aria-label="On this page">
-      <a href="#officials">Elected officials</a>
-      <a href="#contacts">Offices and contacts</a>
-      <a href="#archive">What the archive holds</a>
-      <a href="#reach">Reaching the municipality today</a>
-    </nav>
-
+  <div class="container wide with-rail page-body">
+    <aside class="rail">
+      <nav class="rail-nav" aria-labelledby="toc-label" data-spy>
+        <p class="rail-title" id="toc-label">On this page</p>
+        <ul>
+          <li><a href="#officials">Elected officials</a></li>
+          <li><a href="#contacts">Offices and contacts</a></li>
+          <li><a href="#archive">What the archive holds</a></li>
+          <li><a href="#reach">Reaching the municipality</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content">
     <section class="section prose" id="officials" aria-labelledby="officials-title">
       <h2 id="officials-title">Elected officials</h2>
       <p>
@@ -169,33 +175,16 @@ const crumbs = [{ name: 'Government', href: '/government' }];
         to a source that is current than to one of its own that might not be.
       </p>
     </section>
+    </div>
   </div>
 </Base>
 
 <style>
   .page-body {
-    padding-block: var(--sp-6) var(--sp-8);
+    padding-block: var(--sp-7) var(--sp-8);
   }
-  .on-page {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2);
-    margin-bottom: var(--sp-6);
-  }
-  .on-page a {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--tap);
-    padding: 0 var(--sp-4);
-    border: var(--border);
-    border-radius: 999px;
-    background: var(--c-surface);
-    font-size: var(--fs-sm);
-    font-weight: 600;
-    text-decoration: none;
-  }
-  .on-page a:hover {
-    border-color: var(--c-accent);
+  .section {
+    padding-block: 0 var(--sp-8);
   }
   .section {
     scroll-margin-top: var(--sp-5);

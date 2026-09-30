@@ -1,0 +1,120 @@
+---
+/**
+ * A donut chart of parts of a whole. Decorative to assistive technology; the
+ * legend beside it states every value and share as text.
+ */
+interface Part {
+  label: string;
+  value: number;
+  color: string;
+}
+interface Props {
+  parts: Part[];
+  centerLabel: string;
+  centerValue: string;
+  size?: number;
+}
+const { parts, centerLabel, centerValue, size = 220 } = Astro.props;
+const total = parts.reduce((sum, p) => sum + p.value, 0);
+const r = 42;
+const C = 2 * Math.PI * r;
+const gap = parts.length > 1 ? 0.6 : 0;
+let offset = 0;
+const arcs = parts.map((p) => {
+  const len = total > 0 ? (p.value / total) * C : 0;
+  const arc = { ...p, len: Math.max(0, len - gap), offset, share: total > 0 ? (p.value / total) * 100 : 0 };
+  offset += len;
+  return arc;
+});
+const peso = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP', maximumFractionDigits: 0 });
+---
+
+<div class="donut" style={`--size:${size}px`} data-animate>
+  <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+    <circle cx="50" cy="50" r={r} class="track" />
+    {arcs.map((a, i) => (
+      <circle
+        cx="50"
+        cy="50"
+        r={r}
+        class="arc"
+        stroke={a.color}
+        stroke-dasharray={`${a.len} ${C - a.len}`}
+        stroke-dashoffset={-a.offset}
+        style={`--i:${i}`}
+        data-tip={`${a.label}|${a.share.toFixed(1)}% · ${peso.format(a.value)}`}
+      />
+    ))}
+  </svg>
+  <div class="center">
+    <span class="c-value figure">{centerValue}</span>
+    <span class="c-label">{centerLabel}</span>
+  </div>
+</div>
+
+<style>
+  .donut {
+    position: relative;
+    width: min(100%, var(--size));
+    aspect-ratio: 1;
+    flex: none;
+  }
+  svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  .track {
+    fill: none;
+    stroke: var(--c-sunk);
+    stroke-width: 12;
+  }
+  .arc {
+    fill: none;
+    stroke-width: 12;
+    transition:
+      stroke-width var(--dur-2) var(--ease-out),
+      opacity 900ms var(--ease-out);
+    transition-delay: 0ms, calc(var(--i) * 160ms);
+    cursor: default;
+  }
+  .arc:hover {
+    stroke-width: 15;
+  }
+  :global(.js-motion) .donut .arc {
+    opacity: 0;
+  }
+  :global(.js-motion) .donut.is-in .arc {
+    opacity: 1;
+  }
+  :global(.js-motion) .donut svg {
+    transition: transform 1400ms var(--ease-out);
+    transform: rotate(-200deg);
+  }
+  :global(.js-motion) .donut.is-in svg {
+    transform: rotate(-90deg);
+  }
+  .center {
+    position: absolute;
+    inset: 22%;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    pointer-events: none;
+  }
+  .c-value {
+    font-family: var(--font-serif);
+    font-size: clamp(1.3rem, 1rem + 1vw, 1.75rem);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--c-navy);
+  }
+  .c-label {
+    margin-top: 2px;
+    font-size: var(--fs-2xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+</style>

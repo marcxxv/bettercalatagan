@@ -1,0 +1,137 @@
+---
+/**
+ * A multi-series line chart over shared categories. Decorative to assistive
+ * technology; the page's tables carry the same values.
+ */
+interface Series {
+  name: string;
+  color: string;
+  values: (number | null)[];
+  dashed?: boolean;
+}
+interface Props {
+  categories: string[];
+  series: Series[];
+  format?: 'number' | 'peso-m';
+  height?: number;
+  caption?: string;
+}
+const { categories, series, format = 'number', height = 280, caption } = Astro.props;
+
+const W = 720;
+const H = height;
+const pad = { top: 16, right: 16, bottom: 34, left: 62 };
+const innerW = W - pad.left - pad.right;
+const innerH = H - pad.top - pad.bottom;
+const all = series.flatMap((s) => s.values.filter((v): v is number => v !== null));
+const rawMax = Math.max(1, ...all);
+
+function niceTop(max: number) {
+  const exp = Math.floor(Math.log10(max));
+  const base = Math.pow(10, exp);
+  const m = [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((k) => k * base >= max) ?? 10;
+  return m * base;
+}
+const top = niceTop(rawMax * 1.04);
+const ticks = [0, 0.25, 0.5, 0.75, 1].map((f) => f * top);
+const x = (i: number) => pad.left + (categories.length === 1 ? innerW / 2 : (innerW * i) / (categories.length - 1));
+const y = (v: number) => pad.top + innerH - (v / top) * innerH;
+
+const int = new Intl.NumberFormat('en-PH');
+const fmtTick = (v: number) => (format === 'peso-m' ? `₱${int.format(Math.round(v / 1e6))}M` : int.format(v));
+const fmtFull = (v: number) =>
+  format === 'peso-m'
+    ? `₱${(v / 1e6).toLocaleString('en-PH', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}M`
+    : int.format(v);
+
+const lines = series.map((s) => {
+  let d = '';
+  let len = 0;
+  let prev: [number, number] | null = null;
+  s.values.forEach((v, i) => {
+    if (v === null) {
+      prev = null;
+      return;
+    }
+    const pt: [number, number] = [x(i), y(v)];
+    d += `${prev ? 'L' : 'M'}${pt[0].toFixed(1)} ${pt[1].toFixed(1)}`;
+    if (prev) len += Math.hypot(pt[0] - prev[0], pt[1] - prev[1]);
+    prev = pt;
+  });
+  return { ...s, d, len: Math.ceil(len) + 2 };
+});
+---
+
+<figure class="chart line-chart" data-animate>
+  {caption && <figcaption>{caption}</figcaption>}
+  <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false">
+    {ticks.map((t) => (
+      <g class="axis">
+        <line class="grid-line" x1={pad.left} x2={W - pad.right} y1={y(t)} y2={y(t)} />
+        <text x={pad.left - 10} y={y(t)} text-anchor="end" dominant-baseline="middle">{fmtTick(t)}</text>
+      </g>
+    ))}
+    {categories.map((c, i) => (
+      <text class="cat" x={x(i)} y={H - 10} text-anchor="middle">{c}</text>
+    ))}
+    {lines.map((l) => (
+      <path
+        d={l.d}
+        class:list={['line', { dashed: l.dashed }]}
+        stroke={l.color}
+        data-draw={l.dashed ? undefined : ''}
+        style={`--len:${l.len}`}
+      />
+    ))}
+    {lines.map((l) =>
+      l.values.map((v, i) =>
+        v === null ? null : (
+          <circle
+            class="dot"
+            cx={x(i)}
+            cy={y(v)}
+            r="4.5"
+            fill={l.color}
+            data-tip={`${l.name} · ${categories[i]}|${fmtFull(v)}`}
+          />
+        ),
+      ),
+    )}
+  </svg>
+  <ul class="chart-legend">
+    {series.map((s) => (
+      <li><span class="swatch" style={`background:${s.color}`}></span>{s.name}</li>
+    ))}
+  </ul>
+</figure>
+
+<style>
+  .line {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .line.dashed {
+    stroke-dasharray: 5 5;
+  }
+  .dot {
+    stroke: var(--c-surface);
+    stroke-width: 2;
+    transition: r var(--dur-1);
+  }
+  .dot:hover {
+    r: 7;
+  }
+  :global(.js-motion) .line-chart .dot {
+    opacity: 0;
+    transition: opacity 600ms 1200ms;
+  }
+  :global(.js-motion) .line-chart.is-in .dot {
+    opacity: 1;
+  }
+  .cat {
+    font-weight: 700;
+    fill: var(--c-ink-2) !important;
+  }
+</style>

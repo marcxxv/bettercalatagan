@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import Contours from '../components/Contours.astro';
+import { NAV } from '../lib/site';
+---
+
+<Base title="Page not found" description="This page does not exist on Better Calatagan.">
+  <section class="nf">
+    <div class="nf-panel">
+      <Contours lines={12} focus={0.7} beam />
+      <div class="nf-inner">
+        <p class="nf-code">404</p>
+        <h1>This page isn’t in the record.</h1>
+        <p class="nf-lede">
+          The address may be mistyped, or the page may have moved. Ask a question below, or start
+          from one of these:
+        </p>
+        <ul class="nf-links">
+          {NAV.map((item) => (
+            <li><a class="button" href={item.href}>{item.label}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    padding-inline: calc(var(--gutter) * 0.75);
+  }
+  .nf-panel {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    max-width: calc(var(--w-wide) + var(--gutter) * 1.5);
+    margin-inline: auto;
+    border-radius: var(--radius-2xl);
+    background: linear-gradient(180deg, var(--c-panel), var(--c-panel-2));
+    padding: calc(var(--header-h) + var(--sp-9)) var(--gutter) var(--sp-9);
+    text-align: center;
+  }
+  .nf-inner {
+    position: relative;
+  }
+  .nf-code {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(5rem, 3rem + 10vw, 11rem);
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: var(--c-accent);
+  }
+  h1 {
+    margin: var(--sp-4) auto 0;
+    max-width: 18ch;
+  }
+  .nf-lede {
+    max-width: 48ch;
+    margin: var(--sp-5) auto 0;
+    font-size: var(--fs-md);
+    color: var(--c-ink-2);
+  }
+  .nf-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--sp-2);
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-6) 0 0;
+  }
+  .nf-links li + li {
+    margin: 0;
+  }
+</style>

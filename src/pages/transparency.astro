@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Source from '../components/Source.astro';
+import Icon from '../components/Icon.astro';
 import { fdpDataset, fdpSource, fdpSummary, formatBytes } from '../data/fdp';
 import { formatPeriod } from '../data/schemas/fdp';
 import { formatDate, formatNumber } from '../lib/format';
@@ -25,6 +26,27 @@ const rows = records.map((record) => ({
 }));
 
 const firstYear = Math.min(...fdpSummary.years);
+const yearsAsc = [...fdpSummary.years].sort((a, b) => a - b);
+
+// Coverage matrix: filings per form type per year.
+const matrix = fdpSummary.forms.map((form) => ({
+  ...form,
+  cells: yearsAsc.map((year) => {
+    const inCell = records.filter((r) => r.formSlug === form.slug && r.documentPeriod.year === year);
+    return { year, count: inCell.length, failing: inCell.filter((r) => r.availability !== 'available').length };
+  }),
+}));
+const cellMax = Math.max(1, ...matrix.flatMap((m) => m.cells.map((c) => c.count)));
+/**
+ * Heat intensity, snapped away from the band where neither dark nor light
+ * text would reach 4.5:1 on the mixed colour.
+ */
+const heat = (count: number) => {
+  const a = 0.14 + 0.86 * (count / cellMax);
+  return a > 0.45 && a < 0.66 ? (a < 0.555 ? { a: 0.45, hi: false } : { a: 0.66, hi: true }) : { a, hi: a >= 0.66 };
+};
+const byYear = yearsAsc.map((year) => ({ year, count: records.filter((r) => r.documentPeriod.year === year).length }));
+const availablePct = Math.round((fdpSummary.available / Math.max(1, fdpSummary.total)) * 100);
 const lastYear = Math.max(...fdpSummary.years);
 const crumbs = [{ name: 'Disclosures', href: '/transparency' }];
 const description = `All ${fdpSummary.total} Full Disclosure Policy filings the Municipality of Calatagan posted to the DILG portal, CY${firstYear}–CY${lastYear}, each linked to the original document.`;
@@ -53,76 +75,147 @@ const jsonLd = [
 ];
 ---
 
+
 <Base title="Calatagan Full Disclosure Policy filings" {description} {crumbs} {jsonLd}>
   <PageHeader
     eyebrow="Disclosures"
+    icon="file"
     title="Full Disclosure Policy filings"
     lede="Philippine local governments must publish certain financial and procurement documents under the DILG’s Full Disclosure Policy. This is an index of every such filing the Municipality of Calatagan has posted, each linked to the original on the DILG portal."
     {crumbs}
-  />
-
-  <div class="container page-body">
-    <dl class="summary">
-      <div>
-        <dt>Filings indexed</dt>
-        <dd class="figure">{formatNumber(fdpSummary.total)}</dd>
+  >
+    <dl slot="aside" class="ring-card">
+      <div class="ring" style={`--p:${availablePct}`} aria-hidden="true">
+        <span class="figure">{availablePct}%</span>
       </div>
       <div>
-        <dt>Form types</dt>
-        <dd class="figure">{fdpSummary.forms.length}<span class="of"> of 14</span></dd>
-      </div>
-      <div>
-        <dt>Periods covered</dt>
-        <dd class="figure">{firstYear}–{lastYear}</dd>
-      </div>
-      <div>
-        <dt>Downloadable now</dt>
-        <dd class="figure">
-          {formatNumber(fdpSummary.available)}<span class="of"> of {formatNumber(fdpSummary.total)}</span>
+        <dt>Downloadable right now</dt>
+        <dd>
+          {formatNumber(fdpSummary.available)} of {formatNumber(fdpSummary.total)} filings open
+          cleanly from DILG. The rest are still listed — the filing exists even when the file will
+          not open.
         </dd>
       </div>
     </dl>
+  </PageHeader>
 
-    <div class="callout">
+  <div class="container wide page-body">
+    <dl class="stat-row summary" data-stagger="70">
+      <div class="stat" data-reveal>
+        <dt>Filings indexed</dt>
+        <dd class="figure" data-count={fdpSummary.total}>{formatNumber(fdpSummary.total)}</dd>
+        <dd class="stat-note">Every filing listed for Calatagan</dd>
+      </div>
+      <div class="stat" data-reveal>
+        <dt>Form types</dt>
+        <dd class="figure">{fdpSummary.forms.length}<span class="unit">of 14</span></dd>
+        <dd class="stat-note">Statutory FDP forms</dd>
+      </div>
+      <div class="stat" data-reveal>
+        <dt>Periods covered</dt>
+        <dd class="figure">{firstYear}–{lastYear}</dd>
+        <dd class="stat-note">By document period</dd>
+      </div>
+      <div class="stat" data-reveal>
+        <dt>Unavailable at source</dt>
+        <dd class="figure">{formatNumber(fdpSummary.sourceError)}</dd>
+        <dd class="stat-note">DILG returned a server error</dd>
+      </div>
+    </dl>
+
+    <div class="callout navy">
+      <p class="callout-title"><Icon name="info" size="18" /> This page indexes documents, not figures</p>
       <p>
-        <strong>This page indexes documents, not figures.</strong> No amount here has been extracted
-        or restated — each entry sends you to the DILG original to read for yourself. For figures
-        drawn from the quarterly statements, see <a href="/finances">Finances</a>.
+        No amount here has been extracted or restated — each entry sends you to the DILG original to
+        read for yourself. For figures drawn from the quarterly statements, see
+        <a href="/finances">Finances</a>.
       </p>
     </div>
 
-    {fdpSummary.sourceError > 0 && (
-      <div class="callout warn">
-        <p>
-          {formatNumber(fdpSummary.sourceError)} documents cannot be downloaded because the DILG
-          portal returns a server error for them. They are still listed, with everything we know
-          about them, because the filing exists even when the file will not open. Retrying later
-          sometimes works.
-        </p>
-      </div>
-    )}
-
     <Source source={fdpSource} label="this index" />
 
-    <section class="section" aria-labelledby="filings-title">
+    <section class="section-block" aria-labelledby="coverage-title">
+      <div class="cov-head">
+        <div>
+          <p class="eyebrow">Coverage</p>
+          <h2 id="coverage-title">What was filed, and when</h2>
+          <p class="prose muted">
+            Each cell counts the filings for one form in one year. <span class="js-inline">Select a
+            cell to list exactly those filings.</span> Cells with a warning dot include at least one
+            file DILG could not serve.
+          </p>
+        </div>
+        <ul class="cov-legend" aria-hidden="true">
+          <li><span class="lg-cell" style="--a:0"></span> None</li>
+          <li><span class="lg-cell" style="--a:0.35"></span> Some</li>
+          <li><span class="lg-cell" style="--a:1"></span> Most</li>
+          <li><span class="lg-dot"></span> Unavailable file</li>
+        </ul>
+      </div>
+      <div class="table-wrap cov-wrap" role="region" aria-labelledby="cov-caption" tabindex="0">
+        <table class="coverage sticky-first">
+          <caption id="cov-caption" class="visually-hidden">Filings per form type and year</caption>
+          <thead>
+            <tr>
+              <th scope="col">Form type</th>
+              {yearsAsc.map((y) => <th scope="col" class="num">{y}</th>)}
+              <th scope="col" class="num">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {matrix.map((row) => (
+              <tr>
+                <th scope="row">{row.label}</th>
+                {row.cells.map((cell) => (
+                  <td class="cell-td">
+                    {cell.count > 0 ? (
+                      <button
+                        type="button"
+                        class:list={['cov-cell', { hi: heat(cell.count).hi }]}
+                        style={`--a:${heat(cell.count).a.toFixed(2)}`}
+                        data-set-filter={`form=${row.slug}&year=${cell.year}`}
+                        data-for="filing-list"
+                        aria-pressed="false"
+                        aria-label={`${row.label}, ${cell.year}: ${cell.count} ${cell.count === 1 ? 'filing' : 'filings'}${cell.failing ? `, ${cell.failing} unavailable` : ''}. Show these filings`}
+                        data-tip={`${row.label}|CY${cell.year}: ${cell.count} ${cell.count === 1 ? 'filing' : 'filings'}${cell.failing ? `|${cell.failing} unavailable at source` : ''}`}
+                      >
+                        <span class="num">{cell.count}</span>
+                        {cell.failing > 0 && <span class="warn-dot" aria-hidden="true"></span>}
+                      </button>
+                    ) : (
+                      <span class="cov-empty" aria-label="none">·</span>
+                    )}
+                  </td>
+                ))}
+                <td class="num total">{row.count}</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row">All forms</th>
+              {byYear.map((y) => <td class="num">{y.count}</td>)}
+              <td class="num">{fdpSummary.total}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-block" id="filings" aria-labelledby="filings-title">
+      <p class="eyebrow">Index</p>
       <h2 id="filings-title">Filings</h2>
 
-      <form class="filters" role="search" aria-label="Filter filings" style="--filter-cols: 4">
-        <p class="field">
+      <form class="toolbar sticky" data-filter="filing-list" data-noun="filings" role="search" aria-label="Filter filings" style="--filter-cols: 4" hidden>
+        <p class="field search">
           <label for="f-search">Search</label>
-          <input
-            type="search"
-            id="f-search"
-            name="search"
-            placeholder="Form name or period"
-            autocomplete="off"
-          />
+          <input type="search" id="f-search" name="q" placeholder="Form name, period or id" autocomplete="off" />
         </p>
         <p class="field">
           <label for="f-year">Year</label>
           <select id="f-year" name="year">
             <option value="">All years</option>
-            {fdpSummary.years.map((year) => <option value={year}>CY{year}</option>)}
+            {fdpSummary.years.map((year) => <option value={String(year)}>CY{year}</option>)}
           </select>
         </p>
         <p class="field">
@@ -130,7 +223,7 @@ const jsonLd = [
           <select id="f-quarter" name="quarter">
             <option value="">All quarters</option>
             <option value="annual">Annual (no quarter)</option>
-            {fdpSummary.quarters.map((quarter) => <option value={quarter}>Q{quarter}</option>)}
+            {fdpSummary.quarters.map((quarter) => <option value={String(quarter)}>Q{quarter}</option>)}
           </select>
         </p>
         <p class="field">
@@ -151,29 +244,37 @@ const jsonLd = [
           </select>
         </p>
         <p class="field">
-          <button class="button" type="reset">Clear filters</button>
+          <button class="button" type="reset">Reset</button>
         </p>
       </form>
 
-      <p class="result-count" id="result-count" role="status" aria-live="polite">
-        Showing all {formatNumber(rows.length)} filings.
-      </p>
+      <div class="result-bar">
+        <p class="result-count" data-count-for="filing-list" role="status" aria-live="polite">
+          Showing all <strong>{formatNumber(rows.length)}</strong> filings
+        </p>
+        <ul class="active-filters" data-pills-for="filing-list" aria-label="Active filters"></ul>
+      </div>
 
       <ul class="filings" id="filing-list">
         {rows.map((row) => (
           <li
             class="filing"
-            data-year={row.documentPeriod.year}
-            data-quarter={row.documentPeriod.quarter ?? 'annual'}
+            data-item
+            data-year={String(row.documentPeriod.year)}
+            data-quarter={String(row.documentPeriod.quarter ?? 'annual')}
             data-form={row.formSlug}
             data-availability={row.availability}
             data-search={row.search}
           >
+            <span class:list={['f-icon', row.availability === 'available' ? 'ok' : 'bad']} aria-hidden="true">
+              <Icon name={row.availability === 'available' ? 'file' : 'alert'} size="20" />
+            </span>
             <div class="filing-main">
               <h3>{row.formLabel}</h3>
               <p class="tags">
                 <span class="chip">{row.periodLabel}</span>
-                <span class:list={['chip', row.availability === 'available' ? 'accent' : 'warn']}>
+                <span class:list={['chip', row.availability === 'available' ? 'ok' : 'warn']}>
+                  <span class="dot"></span>
                   {AVAILABILITY_LABEL[row.availability] ?? row.availability}
                 </span>
                 {row.fileType && (
@@ -185,21 +286,16 @@ const jsonLd = [
               </p>
             </div>
             <p class="get">
-              {row.availability === 'available' ? (
-                <a class="button" href={row.downloadUrl} rel="noopener noreferrer nofollow">
-                  Download<span class="visually-hidden">
-                    {' '}{row.formLabel}, {row.periodLabel}, from DILG
-                  </span>
-                  <span aria-hidden="true">&nbsp;↗</span>
-                </a>
-              ) : (
-                <a class="button" href={row.downloadUrl} rel="noopener noreferrer nofollow">
-                  Try DILG link<span class="visually-hidden">
-                    {' '}for {row.formLabel}, {row.periodLabel}
-                  </span>
-                  <span aria-hidden="true">&nbsp;↗</span>
-                </a>
-              )}
+              <a class:list={['button', 'small', { primary: row.availability === 'available' }]} href={row.downloadUrl} rel="noopener noreferrer nofollow">
+                {row.availability === 'available' ? (
+                  <><Icon name="download" size="16" /> Download</>
+                ) : (
+                  <>Try DILG link</>
+                )}
+                <span class="visually-hidden">
+                  {' '}{row.formLabel}, {row.periodLabel}, from DILG
+                </span>
+              </a>
             </p>
             <details class="filing-more">
               <summary>
@@ -265,128 +361,240 @@ const jsonLd = [
         ))}
       </ul>
 
-      <p class="empty" id="no-results" hidden>No filings match these filters.</p>
+      <div class="empty-state" data-empty-for="filing-list" hidden>
+        <Icon name="search" size="28" />
+        <strong>No filings match these filters.</strong>
+        <span>Remove a filter above, or reset to see all {formatNumber(rows.length)}.</span>
+      </div>
     </section>
   </div>
 
-  <script is:inline>
-    // Progressive enhancement: without JS every filing is listed, which is a
-    // perfectly usable page. With JS the filters narrow it in place.
-    (function () {
-      const form = document.querySelector('.filters');
-      const list = document.getElementById('filing-list');
-      const count = document.getElementById('result-count');
-      const empty = document.getElementById('no-results');
-      if (!form || !list || !count || !empty) return;
-
-      const items = Array.from(list.querySelectorAll('.filing'));
-      const total = items.length;
-
-      function apply() {
-        const data = new FormData(form);
-        const search = String(data.get('search') || '').trim().toLowerCase();
-        const year = String(data.get('year') || '');
-        const quarter = String(data.get('quarter') || '');
-        const formType = String(data.get('form') || '');
-        const availability = String(data.get('availability') || '');
-        let shown = 0;
-
-        for (const item of items) {
-          const ok =
-            (!year || item.dataset.year === year) &&
-            (!quarter || item.dataset.quarter === quarter) &&
-            (!formType || item.dataset.form === formType) &&
-            (!availability || item.dataset.availability === availability) &&
-            (!search || (item.dataset.search || '').includes(search));
-          item.hidden = !ok;
-          if (ok) shown += 1;
-        }
-
-        empty.hidden = shown !== 0;
-        count.textContent =
-          shown === total
-            ? 'Showing all ' + total + ' filings.'
-            : 'Showing ' + shown + ' of ' + total + ' filings.';
-      }
-
-      form.addEventListener('input', apply);
-      form.addEventListener('change', apply);
-      form.addEventListener('reset', function () { setTimeout(apply, 0); });
-      form.addEventListener('submit', function (event) { event.preventDefault(); apply(); });
-    })();
+  <script>
+    import '../scripts/filter.ts';
   </script>
 </Base>
 
 <style>
   .page-body {
-    padding-block: var(--sp-6) var(--sp-8);
+    padding-block: var(--sp-7) var(--sp-9);
   }
   .summary {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--sp-4);
-    margin: 0 0 var(--sp-5);
+    margin-bottom: var(--sp-5);
   }
-  @media (min-width: 48rem) {
-    .summary {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+  .section-block {
+    margin-top: var(--sp-9);
+    scroll-margin-top: calc(var(--header-h) + var(--sp-4));
+  }
+  .section-block > h2 {
+    margin-top: 0;
+  }
+
+  .ring-card {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-5);
+    margin: 0;
+    padding: var(--sp-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    box-shadow: var(--shadow-sm);
+  }
+  .ring-card dt {
+    font-weight: 800;
+    color: var(--c-band-ink);
+    margin-bottom: var(--sp-1);
+  }
+  .ring-card dd {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--c-band-muted);
+  }
+  .ring {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    background:
+      radial-gradient(closest-side, var(--c-surface) 78%, transparent 80% 100%),
+      conic-gradient(var(--c-accent) calc(var(--p) * 1%), var(--c-sunk) 0);
+  }
+  .ring .figure {
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--c-band-ink);
+  }
+
+  .cov-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    margin-bottom: var(--sp-4);
+  }
+  .cov-head h2 {
+    margin-top: 0;
+  }
+  .cov-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .cov-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    margin: 0;
+  }
+  .lg-cell {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1px solid var(--c-line);
+    background: color-mix(in srgb, var(--c-s1) calc(var(--a) * 100%), var(--c-surface));
+  }
+  .lg-dot,
+  .warn-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c-warn-line);
+    box-shadow: 0 0 0 2px var(--c-surface);
+  }
+  .coverage th[scope='row'] {
+    font-weight: 600;
+    min-width: 14rem;
+  }
+  .coverage td,
+  .coverage thead th {
+    text-align: center;
+  }
+  .coverage thead th:first-child {
+    text-align: left;
+  }
+  .coverage .cell-td {
+    padding: 4px;
+  }
+  .cov-cell {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-width: 44px;
+    height: 40px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--c-s1) calc(var(--a) * 100%), var(--c-surface));
+    color: var(--c-ink);
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+      transform var(--dur-1),
+      box-shadow var(--dur-1),
+      border-color var(--dur-1);
+  }
+  .cov-cell.hi {
+    color: #fff;
+  }
+  :global([data-theme='dark']) .cov-cell.hi {
+    color: #07111c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .cov-cell.hi {
+      color: #07111c;
     }
   }
-  .summary > div {
-    padding-top: var(--sp-3);
-    border-top: 2px solid var(--c-navy);
+  .cov-cell:hover {
+    transform: scale(1.06);
+    box-shadow: var(--shadow-md);
   }
-  .summary dt {
-    font-size: var(--fs-xs);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--c-muted);
+  .cov-cell[aria-pressed='true'] {
+    border-color: var(--c-navy);
+    box-shadow: 0 0 0 2px var(--c-navy);
   }
-  .summary dd {
-    margin: var(--sp-1) 0 0;
-    font-family: var(--font-serif);
-    font-size: var(--fs-xl);
-    font-weight: 600;
-    color: var(--c-navy);
+  .cov-cell .warn-dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
   }
-  .of {
-    font-family: var(--font-sans);
-    font-size: var(--fs-sm);
-    font-weight: 400;
-    color: var(--c-muted);
+  .cov-empty {
+    color: var(--c-line-strong);
+  }
+  .coverage .total {
+    font-weight: 800;
   }
 
   .filings {
     list-style: none;
     padding: 0;
     margin: 0;
-    border-top: var(--border);
+    display: grid;
+    gap: var(--sp-3);
   }
   .filing {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr);
     gap: var(--sp-2) var(--sp-4);
-    padding: var(--sp-4) 0;
+    padding: var(--sp-4) var(--sp-5);
     margin: 0;
-    border-bottom: var(--border);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    transition: border-color var(--dur-1), box-shadow var(--dur-1);
+  }
+  .filing:hover {
+    border-color: var(--c-accent-line);
+    box-shadow: var(--shadow-sm);
   }
   .filing[hidden] {
     display: none;
   }
+  .f-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--c-accent-wash);
+    color: var(--c-accent-strong);
+    grid-row: span 2;
+  }
+  .f-icon.bad {
+    background: var(--c-warn-bg);
+    color: var(--c-warn);
+  }
+  .get {
+    margin: 0;
+    grid-column: 2;
+  }
+  .filing-more {
+    grid-column: 1 / -1;
+  }
   @media (min-width: 48rem) {
     .filing {
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: start;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
     }
-    .filing-more {
-      grid-column: 1 / -1;
+    .f-icon {
+      grid-row: auto;
+    }
+    .get {
+      grid-column: auto;
     }
   }
   .filing h3 {
     font-family: var(--font-sans);
     font-size: var(--fs-base);
-    font-weight: 650;
+    font-weight: 700;
     color: var(--c-ink);
     margin: 0 0 var(--sp-2);
     line-height: 1.35;
@@ -402,16 +610,13 @@ const jsonLd = [
     font-size: var(--fs-xs);
     color: var(--c-muted);
   }
-  .get {
-    margin: 0;
-  }
   .filing-more > summary {
     display: inline-flex;
     align-items: center;
-    min-height: var(--tap);
+    min-height: 36px;
     color: var(--c-accent);
     font-size: var(--fs-sm);
-    font-weight: 650;
+    font-weight: 700;
   }
   .filing-more > summary::after {
     content: '+';
@@ -425,7 +630,7 @@ const jsonLd = [
     gap: var(--sp-2);
     margin: 0 0 var(--sp-2);
     padding: var(--sp-3) var(--sp-4);
-    background: var(--c-surface);
+    background: var(--c-bg-alt);
     border-radius: var(--radius-md);
     font-size: var(--fs-sm);
   }
@@ -441,7 +646,7 @@ const jsonLd = [
   }
   .filing-more dt {
     color: var(--c-muted);
-    font-weight: 650;
+    font-weight: 700;
   }
   .filing-more dd {
     margin: 0;
@@ -453,8 +658,10 @@ const jsonLd = [
     font-size: 0.72rem;
     overflow-wrap: anywhere;
   }
-  .empty {
-    color: var(--c-muted);
-    padding: var(--sp-5) 0;
+  .js-inline {
+    display: none;
+  }
+  :global(.js) .js-inline {
+    display: inline;
   }
 </style>

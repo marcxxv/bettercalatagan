@@ -50,19 +50,26 @@ const crumbs = [{ name: 'Sources', href: '/sources' }];
 >
   <PageHeader
     eyebrow="Sources"
+    icon="shield"
     title="Where every figure comes from"
     lede="Every figure on this site traces to a source listed here. Where a source could not be reached or a figure could not be confirmed, that is recorded too — an absence you can see is more useful than a number you cannot check."
     {crumbs}
   />
 
-  <div class="container page-body">
-    <nav class="on-page" aria-label="On this page">
-      <a href="#datasets">Datasets</a>
-      <a href="#references">References</a>
-      <a href="#withheld">Not published</a>
-      <a href="#open">Open items</a>
-    </nav>
-
+  <div class="container wide with-rail page-body">
+    <aside class="rail">
+      <nav class="rail-nav" aria-labelledby="toc-label" data-spy>
+        <p class="rail-title" id="toc-label">On this page</p>
+        <ul>
+          <li><a href="#datasets">Datasets</a></li>
+          <li><a href="#references">References</a></li>
+          <li><a href="#withheld">Not published</a></li>
+          <li><a href="#filings-title">Disclosure filings</a></li>
+          <li><a href="#open">Open items</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content">
     <section class="section" id="datasets" aria-labelledby="datasets-title">
       <h2 id="datasets-title">Datasets published</h2>
       <div class="table-wrap" role="region" aria-labelledby="datasets-caption" tabindex="0">
@@ -180,33 +187,16 @@ const crumbs = [{ name: 'Sources', href: '/sources' }];
         <a href={`${SITE.repository}/issues/new/choose`}>Open an issue</a>.
       </p>
     </section>
+    </div>
   </div>
 </Base>
 
 <style>
   .page-body {
-    padding-block: var(--sp-6) var(--sp-8);
+    padding-block: var(--sp-7) var(--sp-8);
   }
-  .on-page {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2);
-    margin-bottom: var(--sp-6);
-  }
-  .on-page a {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--tap);
-    padding: 0 var(--sp-4);
-    border: var(--border);
-    border-radius: 999px;
-    background: var(--c-surface);
-    font-size: var(--fs-sm);
-    font-weight: 600;
-    text-decoration: none;
-  }
-  .on-page a:hover {
-    border-color: var(--c-accent);
+  .section {
+    padding-block: 0 var(--sp-8);
   }
   .section {
     scroll-margin-top: var(--sp-5);
@@ -235,16 +225,41 @@ const crumbs = [{ name: 'Sources', href: '/sources' }];
     margin-top: var(--sp-1) !important;
   }
   .withheld {
-    max-width: var(--w-prose);
-    margin: var(--sp-4) 0 0;
-    border-top: var(--border);
+    display: grid;
+    gap: var(--sp-3);
+    margin: var(--sp-5) 0 0;
+  }
+  @media (min-width: 64rem) {
+    .withheld {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
   .withheld > div {
-    padding: var(--sp-3) 0;
-    border-bottom: var(--border);
+    padding: var(--sp-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
   }
   .withheld dt {
-    font-weight: 650;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    letter-spacing: -0.02em;
+  }
+  .withheld dt::before {
+    content: 'Withheld';
+    order: 2;
+    margin-left: auto;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--c-warn-bg);
+    color: var(--c-warn);
+    font-family: var(--font-sans);
+    font-size: var(--fs-2xs);
+    font-weight: 700;
+    letter-spacing: 0;
   }
   .withheld dd {
     margin: var(--sp-1) 0 0;

@@ -1,0 +1,290 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Icon from '../../components/Icon.astro';
+import { archivedDocuments, documentsSource } from '../../data/documents';
+import { fdpDataset, fdpSource } from '../../data/fdp';
+import { financialsSource, verifiedFilings } from '../../data/financials';
+import { municipality } from '../../data/municipality';
+import { barangays } from '../../data/barangays';
+import { population2024 } from '../../data/population';
+import { formatDate, formatNumber } from '../../lib/format';
+import { API_VERSION } from '../../lib/export';
+import { SITE } from '../../lib/site';
+
+/**
+ * A human front door to the machine-readable exports. The same list is served
+ * as JSON at /data/index.json; this page explains it.
+ */
+const datasets = [
+  {
+    file: 'municipality.json',
+    title: 'Identity, income class, barangays and census figures',
+    records: 1 + barangays.data.length,
+    tier: Math.max(municipality.source.tier, population2024.source.tier),
+    refresh: 'per census',
+    verified: population2024.source.lastVerified,
+    from: 'Philippine Statistics Authority · Bureau of Local Government Finance',
+    href: '/',
+  },
+  {
+    file: 'financials.json',
+    title: 'Statements of Receipts and Expenditures, cell by cell',
+    records: verifiedFilings.length,
+    tier: financialsSource.tier,
+    refresh: financialsSource.expectedRefresh,
+    verified: financialsSource.lastVerified,
+    from: 'DILG Full Disclosure Policy Portal',
+    href: '/finances',
+  },
+  {
+    file: 'fdp-filings.json',
+    title: 'Full Disclosure Policy filings index',
+    records: fdpDataset.recordCount,
+    tier: fdpSource.tier,
+    refresh: fdpSource.expectedRefresh,
+    verified: fdpSource.lastVerified,
+    from: 'DILG Full Disclosure Policy Portal',
+    href: '/transparency',
+  },
+  {
+    file: 'documents.json',
+    title: 'Documents archived from the former municipal website',
+    records: archivedDocuments.documentCount,
+    tier: documentsSource.tier,
+    refresh: documentsSource.expectedRefresh,
+    verified: documentsSource.lastVerified,
+    from: 'Internet Archive (calatagan.gov.ph)',
+    href: '/documents',
+  },
+];
+
+const origin = Astro.site ?? new URL('http://localhost:4321');
+const base = new URL('/data/', origin).toString();
+const crumbs = [{ name: 'Open data', href: '/data' }];
+---
+
+<Base
+  title="Open data"
+  description="Calatagan’s public record as open JSON: census figures, municipal finances, Full Disclosure filings and archived documents — each with its sources, dates and verification status."
+  {crumbs}
+>
+  <PageHeader
+    eyebrow="Open data"
+    icon="database"
+    title="Take the public record with you"
+    lede="Every dataset on this site is published as JSON with the same provenance you see on the page: its sources, the period it describes, when someone last checked it, and any caveat. Free to reuse with attribution."
+    {crumbs}
+  >
+    <Fragment slot="meta">
+      <span class="chip navy">API v{API_VERSION}</span>
+      <span class="chip">CORS open</span>
+      <span class="chip ok"><Icon name="check" size="14" /> CC BY 4.0 compilation</span>
+    </Fragment>
+  </PageHeader>
+
+  <div class="container wide page-body">
+    <ul class="datasets">
+      {datasets.map((d) => (
+        <li class="ds" data-reveal>
+          <div class="ds-head">
+            <span class="ds-icon"><Icon name="database" size="20" /></span>
+            <div>
+              <h2 class="ds-title">{d.title}</h2>
+              <p class="ds-from">{d.from}</p>
+            </div>
+          </div>
+          <dl class="ds-meta">
+            <div><dt>Records</dt><dd>{formatNumber(d.records)}</dd></div>
+            <div><dt>Readiness</dt><dd>Tier {d.tier}</dd></div>
+            <div><dt>Refreshed</dt><dd>{d.refresh.replace('-', ' ')}</dd></div>
+            <div><dt>Verified</dt><dd>{formatDate(d.verified)}</dd></div>
+          </dl>
+          <p class="ds-url"><code>{base}{d.file}</code></p>
+          <p class="ds-actions">
+            <a class="button primary small" href={`/data/${d.file}`}><Icon name="download" size="15" /> Open JSON</a>
+            <button class="button small js-only-inline" type="button" data-copy={`/data/${d.file}`}>
+              <Icon name="copy" size="15" /> <span data-copy-label>Copy URL</span>
+            </button>
+            <a class="link-arrow ds-page" href={d.href}>See it on the site</a>
+          </p>
+        </li>
+      ))}
+    </ul>
+
+    <section class="how" aria-labelledby="how-title">
+      <div>
+        <p class="eyebrow">Using the data</p>
+        <h2 id="how-title">One manifest, every dataset</h2>
+        <p>
+          Start at <a href="/data/index.json"><code>/data/index.json</code></a>. It lists every
+          dataset with its readiness tier and refresh cadence — and, just as usefully, what is
+          deliberately withheld and why.
+        </p>
+        <ul class="rules">
+          <li><strong>Provenance travels with the data.</strong> Each file’s <code>meta.provenance</code> names its sources, <code>as_of</code> and <code>last_verified</code>.</li>
+          <li><strong>Only tiers 1 and 2 are exported.</strong> Unverified records never leave the repository.</li>
+          <li><strong>Government documents are not relicensed.</strong> The CC BY 4.0 licence covers this project’s compilation only.</li>
+        </ul>
+      </div>
+      <pre class="code-block" aria-label="Example request"><code><span class="c-mute"># The manifest</span>
+<span class="c-cmd">curl</span> {base}index.json
+
+<span class="c-mute"># Barangay populations, 2024 census</span>
+<span class="c-cmd">curl</span> {base}municipality.json \
+  | <span class="c-cmd">jq</span> <span class="c-str">'.data.population.byBarangay[] | {'{'}name, totalPopulation{'}'}'</span></code></pre>
+    </section>
+
+    <p class="small muted attrib">
+      Attribution: “Better Calatagan”. Questions or corrections:
+      <a href={`${SITE.repository}/issues/new/choose`}>open an issue</a>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .page-body {
+    padding-block: var(--sp-7) var(--sp-8);
+  }
+  .datasets {
+    display: grid;
+    gap: var(--sp-4);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  @media (min-width: 64rem) {
+    .datasets {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .datasets li + li {
+    margin: 0;
+  }
+  .ds {
+    display: grid;
+    gap: var(--sp-4);
+    padding: var(--sp-6);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-xl);
+    background: var(--c-surface);
+    box-shadow: var(--shadow-xs);
+  }
+  .ds-head {
+    display: flex;
+    gap: var(--sp-4);
+    align-items: flex-start;
+  }
+  .ds-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--c-accent-wash);
+    color: var(--c-accent);
+  }
+  .ds-title {
+    margin: 0;
+    font-size: var(--fs-lg);
+    letter-spacing: -0.02em;
+  }
+  .ds-from {
+    margin: var(--sp-1) 0 0;
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+  .ds-meta {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-3);
+    margin: 0;
+    padding: var(--sp-4) 0;
+    border-block: 1px solid var(--c-line);
+  }
+  @media (max-width: 30rem) {
+    .ds-meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .ds-meta dt {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .ds-meta dd {
+    margin: 2px 0 0;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  .ds-url {
+    margin: 0;
+    font-size: var(--fs-sm);
+  }
+  .ds-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2) var(--sp-3);
+    margin: 0;
+  }
+  .ds-page {
+    margin-left: auto;
+    font-size: var(--fs-sm);
+  }
+  .js-only-inline {
+    display: none;
+  }
+  :global(.js) .js-only-inline {
+    display: inline-flex;
+  }
+  .how {
+    display: grid;
+    gap: var(--sp-6);
+    margin-top: var(--sp-9);
+    padding: clamp(1.5rem, 1rem + 3vw, 3.5rem);
+    border-radius: var(--radius-2xl);
+    background: var(--c-bg-alt);
+  }
+  @media (min-width: 64rem) {
+    .how {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      align-items: center;
+    }
+  }
+  .how h2 {
+    margin-top: 0;
+  }
+  .rules li + li {
+    margin-top: var(--sp-2);
+  }
+  .code-block {
+    margin: 0;
+    padding: var(--sp-5);
+    border-radius: var(--radius-lg);
+    background: var(--c-ink-panel);
+    color: #d8e2ee;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.75;
+    overflow-x: auto;
+  }
+  .code-block code {
+    padding: 0;
+    background: none;
+    color: inherit;
+    overflow-wrap: normal;
+  }
+  .c-mute {
+    color: #7f8ea3;
+  }
+  .c-cmd {
+    color: #9db7f2;
+  }
+  .c-str {
+    color: #b8e0a2;
+  }
+  .attrib {
+    margin-top: var(--sp-6);
+  }
+</style>

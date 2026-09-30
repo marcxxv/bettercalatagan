@@ -1,6 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import Source from '../components/Source.astro';
+import Contours from '../components/Contours.astro';
+import Icon from '../components/Icon.astro';
+import ColumnChart from '../components/ColumnChart.astro';
+import HeroCarousel from '../components/HeroCarousel.astro';
 import { barangays } from '../data/barangays';
 import {
   barangayPopulation2024,
@@ -9,11 +13,12 @@ import {
   population2024,
   populationSeries,
 } from '../data/population';
-import { incomeClassification, municipality } from '../data/municipality';
+import { incomeClassification, municipality, WITHHELD } from '../data/municipality';
 import { fdpSummary } from '../data/fdp';
-import { verifiedFilings } from '../data/financials';
+import { annualSeries, verifiedFilings } from '../data/financials';
 import { archivedDocuments } from '../data/documents';
-import { formatDate, formatNumber, ordinal } from '../lib/format';
+import { orderedCitations, timeline } from '../data/history';
+import { formatDate, formatNumber, formatPesoMillions, ordinal } from '../lib/format';
 import { NAV, SITE } from '../lib/site';
 
 const populationByCode = new Map(barangayPopulation2024.data.map((row) => [row.psgc10, row]));
@@ -27,16 +32,46 @@ const largest = Math.max(...barangayRows.map((row) => row.census?.totalPopulatio
 const yearsLabel = (years: number[]) =>
   years.length ? `CY${Math.min(...years)}–CY${Math.max(...years)}` : '';
 
+const pop = population2024.data;
+const series = [...populationSeries.data].sort((a, b) => a.referenceDate.localeCompare(b.referenceDate));
+const first = series[0];
+const last = series[series.length - 1];
+const growth = first && last ? ((last.population - first.population) / first.population) * 100 : null;
+// Household size from PSA's own household population and household counts.
+const householdSize = pop.householdPopulation / pop.households;
+
+const totalChecks = verifiedFilings.reduce((sum, f) => sum + f.reconciliation.total, 0);
+const years = annualSeries();
+
 /** What each section holds, counted from the data rather than written by hand. */
 const counts: Record<string, string> = {
-  '/history': 'Sourced narrative',
-  '/government': 'Verification status',
+  '/history': `${orderedCitations.length} cited sources`,
+  '/government': 'What can and cannot be verified',
   '/finances': `${verifiedFilings.length} quarterly statements`,
   '/transparency': `${formatNumber(fdpSummary.total)} filings, ${yearsLabel(fdpSummary.years)}`,
   '/documents': `${formatNumber(archivedDocuments.documents.length)} archived documents`,
-  '/sources': 'Every source, and what is withheld',
+  '/sources': `${WITHHELD.length} items deliberately withheld`,
 };
 const sections = NAV.filter((item) => item.href !== '/');
+
+const MILESTONE_DATES = ['Late 14th – mid 15th century', '1890', '23 October 1903', '1 January 1912', '2018', '1 July 2024'];
+const milestones = MILESTONE_DATES.map((when) => timeline.find((t) => t.when === when)).filter(
+  (t): t is (typeof timeline)[number] => Boolean(t),
+);
+
+/** The manifesto, word by word, with inline marks. */
+type Token = string | { mark: 'arrow' | 'sources' | 'check' };
+const manifesto: Token[] = [
+  'Better Calatagan',
+  { mark: 'arrow' },
+  'gathers the town’s public record and gives answers only from',
+  { mark: 'sources' },
+  'official sources. It’s free, runs no ads, tracks no one, and shows',
+  { mark: 'check' },
+  'where every figure came from.',
+];
+const agencies = ['PSA', 'DILG', 'BLGF'];
+const ring = ['PSA', 'DILG', 'BLGF', 'DOF', 'NHCP', 'IA'];
 
 const description =
   'Calatagan, Batangas in verified public data: 2024 population, 25 barangays, income class, finances, Full Disclosure filings and history, each linked to its source.';
@@ -47,7 +82,7 @@ const jsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     name: 'Calatagan, Batangas — 2024 population by barangay',
-    description: `Total population, household population and households for each of Calatagan’s ${barangays.data.length} barangays, from the Philippine Statistics Authority’s ${population2024.data.census}, as republished by ${SITE.name} with provenance.`,
+    description: `Total population, household population and households for each of Calatagan’s ${barangays.data.length} barangays, from the Philippine Statistics Authority’s ${pop.census}, as republished by ${SITE.name} with provenance.`,
     url: new URL('/#barangays', origin).toString(),
     isAccessibleForFree: true,
     creator: { '@type': 'Organization', name: 'Philippine Statistics Authority', url: 'https://psa.gov.ph' },
@@ -67,213 +102,369 @@ const jsonLd = [
 ---
 
 <Base title="Overview" {description} {jsonLd}>
+  <!-- ============ Hero ============ -->
   <section class="hero" aria-labelledby="hero-title">
-    <div class="container hero-inner">
-      <p class="hero-eyebrow">Independent civic guide · Batangas, Philippines</p>
-      <h1 id="hero-title">Calatagan, Batangas</h1>
-      <p class="hero-lede">
-        Better Calatagan collects public information about the Municipality of Calatagan and shows,
-        for every figure, where it came from and how well it has been checked. It publishes only
-        what it can trace to a source — and says plainly what it cannot.
-      </p>
+    <div class="hero-panel">
+      <Contours lines={14} beam focus={0.72} />
+      <div class="hero-inner">
+        <h1 id="hero-title">
+          <span class="hello">Kumusta, Calatagan</span>
+          <span class="visually-hidden">— </span>
+          <span class="hero-sub">Calatagan, Batangas, in the public record. Every figure traced to its source.</span>
+        </h1>
+        <HeroCarousel />
+      </div>
+    </div>
+  </section>
 
-      <dl class="stats">
-        <div>
+  <!-- ============ Manifesto ============ -->
+  <section class="manifesto-wrap" aria-label="What this site is">
+    <p class="manifesto" data-manifesto>
+      {manifesto.map((token) =>
+        typeof token === 'string' ? (
+          token.split(' ').map((word) => <><span class="w">{word}</span>{' '}</>)
+        ) : token.mark === 'arrow' ? (
+          <><span class="pill pill-arrow" aria-hidden="true"><Icon name="arrow-right" /></span>{' '}</>
+        ) : token.mark === 'sources' ? (
+          <>
+            <span class="pill pill-seals" aria-hidden="true">
+              {agencies.map((a) => <span class="badge">{a}</span>)}
+            </span>{' '}
+          </>
+        ) : (
+          <><span class="pill pill-check" aria-hidden="true"><Icon name="check" /></span>{' '}</>
+        ),
+      )}
+    </p>
+  </section>
+
+  <!-- ============ Feature rows ============ -->
+  <section class="features" aria-label="How Better Calatagan works">
+    <article class="feature" data-reveal>
+      <div class="f-visual f-stack" aria-hidden="true">
+        <div class="stack-card s1"><span>Census</span><strong>PSA</strong></div>
+        <div class="stack-card s2"><span>Filings</span><strong>DILG</strong></div>
+        <div class="stack-card s3"><span>Income class</span><strong>BLGF</strong></div>
+        <div class="stack-card s4"><span>Former website</span><strong>Archive</strong></div>
+        <div class="stack-core"><Icon name="layers" size="30" /></div>
+      </div>
+      <div class="f-copy">
+        <h2>Scattered records, <br />in one place.</h2>
+        <p>
+          Census tables at the PSA, quarterly filings at the DILG, an income classification at the
+          BLGF, and a municipal website that went offline. Better Calatagan brings them together:
+          {' '}{formatNumber(fdpSummary.total)} filings, {formatNumber(archivedDocuments.documentCount)} archived
+          documents and {verifiedFilings.length} quarters of finances.
+        </p>
+        <a class="link-arrow" href="/transparency">Explore the disclosures</a>
+      </div>
+    </article>
+
+    <article class="feature flip" data-reveal>
+      <div class="f-visual f-night" aria-hidden="true">
+        <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+          {Array.from({ length: 60 }, (_, i) => (
+            <circle cx={(i * 97) % 400} cy={(i * 53) % 260} r={i % 5 === 0 ? 1.4 : 0.8} fill="#fff" opacity={0.3 + ((i * 7) % 10) / 16} />
+          ))}
+          <circle cx="200" cy="300" r="120" fill="#dfe4ee" />
+          <circle cx="200" cy="300" r="120" fill="url(#moonshade)" />
+          <defs>
+            <radialGradient id="moonshade" cx="0.35" cy="0.3">
+              <stop offset="0.6" stop-color="#fff" stop-opacity="0" />
+              <stop offset="1" stop-color="#8b95a8" stop-opacity="0.55" />
+            </radialGradient>
+          </defs>
+        </svg>
+        <span class="lock"><Icon name="eye-off" size="26" /></span>
+      </div>
+      <div class="f-copy">
+        <h2>Nothing to sign in to. <br />Nothing tracked.</h2>
+        <p>
+          No accounts, no cookies, no analytics, no advertising. The site is plain pages and open
+          data — what you look up stays with you.
+        </p>
+        <a class="link-arrow" href="/about#privacy">How this site works</a>
+      </div>
+    </article>
+
+    <article class="feature" data-reveal>
+      <div class="f-visual f-ring" aria-hidden="true">
+        <div class="ring-orbit">
+          {ring.map((a, i) => (
+            <span class="orbit-badge" style={`--i:${i};--n:${ring.length}`}><span>{a}</span></span>
+          ))}
+        </div>
+        <span class="ring-core"><Icon name="shield" size="34" /></span>
+      </div>
+      <div class="f-copy">
+        <h2>Clear answers. <br />Official sources.</h2>
+        <p>
+          Every figure is read from the agency that published it, dated, and checked —
+          {' '}{formatNumber(totalChecks)} arithmetic checks on the finances alone. Where something
+          can’t be traced, it isn’t published, and we say why.
+        </p>
+        <a class="link-arrow" href="/sources">See every source</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ At a glance ============ -->
+  <section class="section glance-sec" aria-labelledby="glance-title">
+    <div class="container wide">
+      <header class="center-head">
+        <h2 id="glance-title">Calatagan at a glance</h2>
+        <p>The municipality in five official figures.</p>
+      </header>
+      <dl class="glance-grid" data-stagger="70">
+        <div class="g-item" data-reveal>
           <dt>Population</dt>
-          <dd class="figure">{formatNumber(population2024.data.population)}</dd>
-          <dd class="stat-note">PSA census, {formatDate(population2024.source.asOf ?? '')}</dd>
+          <dd class="g-figure figure" data-count={pop.population}>{formatNumber(pop.population)}</dd>
+          <dd class="g-note">{pop.census} · {formatDate(pop.referenceDate)}</dd>
         </div>
-        <div>
+        <div class="g-item" data-reveal>
+          <dt>Households</dt>
+          <dd class="g-figure figure" data-count={pop.households}>{formatNumber(pop.households)}</dd>
+          <dd class="g-note">{householdSize.toFixed(2)} persons per household</dd>
+        </div>
+        <div class="g-item" data-reveal>
           <dt>Barangays</dt>
-          <dd class="figure">{municipality.data.barangayCount}</dd>
-          <dd class="stat-note">PSA geographic code {municipality.data.psgc10}</dd>
+          <dd class="g-figure figure" data-count={municipality.data.barangayCount}>{municipality.data.barangayCount}</dd>
+          <dd class="g-note">PSGC {municipality.data.psgc10}</dd>
         </div>
-        <div>
+        <div class="g-item" data-reveal>
           <dt>Income class</dt>
-          <dd class="figure">{ordinal(incomeClassification.data.incomeClass)}</dd>
-          <dd class="stat-note">From {formatDate(incomeClassification.data.effectiveFrom)}</dd>
+          <dd class="g-figure figure">{ordinal(incomeClassification.data.incomeClass)}</dd>
+          <dd class="g-note">From {formatDate(incomeClassification.data.effectiveFrom)}</dd>
         </div>
-        <div>
+        <div class="g-item" data-reveal>
           <dt>Disclosure filings</dt>
-          <dd class="figure">{formatNumber(fdpSummary.total)}</dd>
-          <dd class="stat-note">Indexed from DILG, {yearsLabel(fdpSummary.years)}</dd>
+          <dd class="g-figure figure" data-count={fdpSummary.total}>{formatNumber(fdpSummary.total)}</dd>
+          <dd class="g-note">{yearsLabel(fdpSummary.years)}</dd>
         </div>
       </dl>
-      <p class="hero-foot">
-        Sources: Philippine Statistics Authority, Bureau of Local Government Finance and the DILG
-        Full Disclosure Policy Portal. <a href="#population">See how each figure was checked</a>.
+      <p class="glance-foot">
+        <Icon name="shield" size="16" />
+        Philippine Statistics Authority · Bureau of Local Government Finance · DILG Full Disclosure
+        Policy Portal. <a href="#population">How each figure was checked</a>
       </p>
     </div>
   </section>
 
-  <section class="section container" aria-labelledby="explore-title">
-    <header class="section-head">
-      <p class="eyebrow">What’s here</p>
-      <h2 id="explore-title">Explore Calatagan’s public record</h2>
-    </header>
-    <ul class="grid three sections-grid">
-      {sections.map((item) => (
-        <li>
-          <a class="card section-card" href={item.href}>
-            <span class="card-title">{item.label}</span>
-            <span class="card-blurb">{item.blurb}</span>
-            <span class="card-count">{counts[item.href]}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
-
-  <section class="section container" aria-labelledby="history-title">
-    <div class="history-teaser">
-    <div class="teaser-text">
-      <p class="eyebrow">History</p>
-      <h2 id="history-title">Six centuries on the Calatagan peninsula</h2>
-      <p>
-        Fifteenth-century graves at Pulong Bakaw held pottery from Siam and Annam. By 1895 most of
-        the town’s farmland belonged to one sugar-milling family, and a lighthouse at Cape Santiago guided ships
-        toward Manila. In 1903 Calatagan was folded into Balayan; in 1912 it was restored.
-      </p>
-      <p><a class="button" href="/history">Read the history, with its sources</a></p>
-    </div>
-    <ol class="teaser-dates" aria-label="Selected dates">
-      <li><span class="figure">14th–15th c.</span> Burials at Pulong Bakaw</li>
-      <li><span class="figure">1890</span> Cape Santiago lighthouse built</li>
-      <li><span class="figure">1903</span> Merged into Balayan</li>
-      <li><span class="figure">1912</span> Restored as a municipality</li>
-    </ol>
+  <!-- ============ Explore ============ -->
+  <section class="section explore-sec" aria-labelledby="explore-title">
+    <div class="container wide">
+      <header class="section-head split">
+        <h2 id="explore-title">Explore the public record</h2>
+        <p class="lede">
+          Six sections, one standard: each figure carries its source, the date it describes, and the
+          date someone last checked it.
+        </p>
+      </header>
+      <ul class="grid three gap-lg explore" data-stagger="70">
+        {sections.map((item) => (
+          <li data-reveal>
+            <a class="card explore-card" href={item.href}>
+              <span class="ex-icon"><Icon name={item.icon} size="22" /></span>
+              <span class="ex-title">{item.label}</span>
+              <span class="ex-blurb">{item.blurb}</span>
+              <span class="ex-foot">
+                <span class="ex-count">{counts[item.href]}</span>
+                <span class="ex-arrow" aria-hidden="true"><Icon name="arrow-right" size="16" /></span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
-  <section class="section container" aria-labelledby="how-title">
-    <header class="section-head">
-      <p class="eyebrow">How this works</p>
-      <h2 id="how-title">Every figure carries its source</h2>
-    </header>
-    <ol class="grid three how">
-      <li>
-        <h3>Official sources first</h3>
-        <p>
-          Figures come from government publications — PSA, BLGF, DILG — read directly, not from
-          mirrors or news reports.
-        </p>
-      </li>
-      <li>
-        <h3>Checked and dated</h3>
-        <p>
-          Each record says when the data is as of and, separately, when it was last verified. They
-          are rarely the same day.
-        </p>
-      </li>
-      <li>
-        <h3>Gaps stated, not filled</h3>
-        <p>
-          When something cannot be verified — including who holds office — the site says so rather
-          than guessing. <a href="/sources">What we withhold</a>.
-        </p>
-      </li>
-    </ol>
-  </section>
-
-  <div class="container data-sections">
-    <section class="section" id="population" aria-labelledby="population-title">
-      <header class="section-head">
+  <!-- ============ Population ============ -->
+  <section class="section" id="population" aria-labelledby="population-title">
+    <div class="container wide pop-grid">
+      <div class="pop-copy" data-reveal>
         <p class="eyebrow">People</p>
         <h2 id="population-title">Population</h2>
-      </header>
-      <p class="prose">
-        The latest official count is <strong>{formatNumber(population2024.data.population)}</strong>{' '}
-        people as of {formatDate(population2024.source.asOf ?? '')}, in
-        {' '}{formatNumber(population2024.data.households)} households ({population2024.data.census}).
-      </p>
-      <div class="table-wrap narrow" role="region" aria-labelledby="series-caption" tabindex="0">
-        <table>
-          <caption id="series-caption">Population at each census</caption>
-          <thead>
-            <tr>
-              <th scope="col">Census</th>
-              <th scope="col">Reference date</th>
-              <th scope="col" class="num">Population</th>
-            </tr>
-          </thead>
-          <tbody>
-            {populationSeries.data.map((entry) => (
-              <tr>
-                <th scope="row">{entry.census}</th>
-                <td>{formatDate(entry.referenceDate)}</td>
-                <td class="num">{formatNumber(entry.population)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <p class="lede">
+          The latest official count is <strong>{formatNumber(pop.population)}</strong> people as of
+          {' '}{formatDate(pop.referenceDate)}, in {formatNumber(pop.households)} households ({pop.census}).
+        </p>
+        {growth !== null && first && last && (
+          <dl class="mini-stats">
+            <div>
+              <dt>Change since {first.referenceDate.slice(0, 4)}</dt>
+              <dd class="figure">{growth > 0 ? '+' : ''}{growth.toFixed(1)}%</dd>
+            </div>
+            <div>
+              <dt>Added since {first.referenceDate.slice(0, 4)}</dt>
+              <dd class="figure">{growth > 0 ? '+' : ''}{formatNumber(last.population - first.population)}</dd>
+            </div>
+          </dl>
+        )}
+        <p class="small muted">
+          Changes are calculated here from PSA’s published counts. Values between census years are
+          not interpolated.
+        </p>
       </div>
+      <div class="card pop-chart" data-reveal>
+        <ColumnChart
+          caption="Population at each census"
+          categories={series.map((e) => e.census)}
+          series={[{ name: 'Population', color: 'var(--c-s1)', values: series.map((e) => e.population) }]}
+          labels
+          height={300}
+          notes={series.map((e) => `Reference date ${formatDate(e.referenceDate)}`)}
+        />
+        <details class="data-table">
+          <summary>View as a table</summary>
+          <div class="table-wrap" role="region" aria-labelledby="series-caption" tabindex="0">
+            <table>
+              <caption id="series-caption">Population at each census</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Census</th>
+                  <th scope="col">Reference date</th>
+                  <th scope="col" class="num">Population</th>
+                </tr>
+              </thead>
+              <tbody>
+                {populationSeries.data.map((entry) => (
+                  <tr>
+                    <th scope="row">{entry.census}</th>
+                    <td>{formatDate(entry.referenceDate)}</td>
+                    <td class="num">{formatNumber(entry.population)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </div>
+    <div class="container wide">
       <Source source={population2024.source} label="the population figures" />
-    </section>
+    </div>
+  </section>
 
-    <section class="section" id="barangays" aria-labelledby="barangays-title">
-      <header class="section-head">
-        <p class="eyebrow">Places</p>
-        <h2 id="barangays-title">The {barangays.data.length} barangays</h2>
+  <!-- ============ Barangays ============ -->
+  <section class="section band-alt" id="barangays" aria-labelledby="barangays-title">
+    <div class="container wide">
+      <header class="section-head split">
+        <div>
+          <p class="eyebrow">Places</p>
+          <h2 id="barangays-title">The {barangays.data.length} barangays</h2>
+        </div>
+        <p class="lede">
+          From the {pop.census}. The barangays sum to {formatNumber(barangayTotal)}, matching the
+          municipal total exactly. Search by name or code, and sort by any column.
+        </p>
       </header>
-      <p class="prose">
-        Populations are from the {population2024.data.census} and sum to
-        {' '}{formatNumber(barangayTotal)}, matching the municipal total. The barangays’ PSA codes
-        are not a continuous run: 012, 024 and 025 are unassigned.
-      </p>
-      <div class="table-wrap medium" role="region" aria-labelledby="barangay-caption" tabindex="0">
-        <table class="barangays">
+
+      <div class="brgy-tools">
+        <p class="field search">
+          <label for="brgy-search">Find a barangay</label>
+          <input id="brgy-search" type="search" placeholder="e.g. Balibago, Poblacion" autocomplete="off" />
+        </p>
+        <fieldset class="segmented">
+          <legend>Show</legend>
+          <label><input type="radio" name="brgy-view" value="all" checked /> All</label>
+          <label><input type="radio" name="brgy-view" value="pob" /> Poblacion</label>
+          <label><input type="radio" name="brgy-view" value="rural" /> Outside Poblacion</label>
+        </fieldset>
+        <p class="brgy-count" role="status" aria-live="polite" data-brgy-count></p>
+      </div>
+
+      <div class="table-wrap" role="region" aria-labelledby="barangay-caption" tabindex="0">
+        <table class="barangays" data-sortable>
           <caption id="barangay-caption">
-            Barangays of Calatagan by population, {population2024.data.census}
+            Barangays of Calatagan by population, {pop.census}
+            <span class="scroll-hint">Scroll sideways to see every column.</span>
           </caption>
           <thead>
             <tr>
-              <th scope="col">Barangay</th>
-              <th scope="col" class="num">Population</th>
-              <th scope="col" class="num">Households</th>
+              <th scope="col" data-sort="name" aria-sort="ascending">
+                <button type="button">Barangay <Icon name="sort" size="14" /></button>
+              </th>
+              <th scope="col" class="num" data-sort="pop">
+                <button type="button">Population <Icon name="sort" size="14" /></button>
+              </th>
+              <th scope="col" class="share-col">Share of municipality</th>
+              <th scope="col" class="num" data-sort="hh">
+                <button type="button">Households <Icon name="sort" size="14" /></button>
+              </th>
+              <th scope="col" class="num" data-sort="size">
+                <button type="button">Per household <Icon name="sort" size="14" /></button>
+              </th>
             </tr>
           </thead>
           <tbody>
-            {barangayRows.map((row) => (
-              <tr>
-                <th scope="row">
-                  {row.name}
-                  <span class="code">PSGC {row.psgc10}</span>
-                </th>
-                <td class="num">
-                  {row.census ? formatNumber(row.census.totalPopulation) : '—'}
-                  {row.census && (
-                    <span
-                      class="bar"
-                      aria-hidden="true"
-                      style={`--w:${((row.census.totalPopulation / largest) * 100).toFixed(1)}%`}
-                    ></span>
-                  )}
-                </td>
-                <td class="num">
-                  {row.census ? formatNumber(row.census.households) : '—'}
-                  {institutionalCodes.has(row.psgc10) && (
-                    <a href="#outside-households" class="fn">
-                      <span aria-hidden="true">*</span>
-                      <span class="visually-hidden">See the note on {row.name}’s households</span>
-                    </a>
-                  )}
-                </td>
-              </tr>
-            ))}
+            {barangayRows.map((row) => {
+              const total = row.census?.totalPopulation ?? 0;
+              const hh = row.census?.households ?? 0;
+              const hhPop = row.census?.householdPopulation ?? 0;
+              const size = hh > 0 ? hhPop / hh : null;
+              const share = barangayTotal > 0 ? (total / barangayTotal) * 100 : 0;
+              const isPob = /Pob\./.test(row.name);
+              return (
+                <tr
+                  id={`brgy-${row.psgc10}`}
+                  data-name={row.name.toLowerCase()}
+                  data-search={[row.name, ...row.aliases, row.psgc10].join(' ').toLowerCase()}
+                  data-pop={total}
+                  data-hh={hh}
+                  data-size={size ?? -1}
+                  data-pob={isPob ? '1' : '0'}
+                >
+                  <th scope="row">
+                    <span class="b-name">{row.name}</span>
+                    {isPob && <span class="chip navy">Poblacion</span>}
+                    <span class="code">PSGC {row.psgc10}</span>
+                  </th>
+                  <td class="num">{row.census ? formatNumber(total) : '—'}</td>
+                  <td class="share-col">
+                    <span class="share">
+                      <span class="share-bar" aria-hidden="true">
+                        <span data-grow style={`width:${((total / largest) * 100).toFixed(1)}%`}></span>
+                      </span>
+                      <span class="share-val num">{share < 0.5 && share > 0 ? '<0.5' : share.toFixed(1)}%</span>
+                    </span>
+                  </td>
+                  <td class="num">
+                    {row.census ? formatNumber(hh) : '—'}
+                    {institutionalCodes.has(row.psgc10) && (
+                      <a href="#outside-households" class="fn">
+                        <span aria-hidden="true">*</span>
+                        <span class="visually-hidden">See the note on {row.name}’s households</span>
+                      </a>
+                    )}
+                  </td>
+                  <td class="num">{size !== null ? size.toFixed(2) : '—'}</td>
+                </tr>
+              );
+            })}
           </tbody>
           <tfoot>
             <tr>
               <th scope="row">Total</th>
-              <td class="num"><strong>{formatNumber(barangayTotal)}</strong></td>
-              <td class="num"><strong>{formatNumber(population2024.data.households)}</strong></td>
+              <td class="num">{formatNumber(barangayTotal)}</td>
+              <td class="share-col"><span class="num">100%</span></td>
+              <td class="num">{formatNumber(pop.households)}</td>
+              <td class="num">{householdSize.toFixed(2)}</td>
             </tr>
           </tfoot>
         </table>
       </div>
+      <p class="empty-state" data-brgy-empty hidden>
+        <strong>No barangay matches.</strong> Try part of a name, or a PSGC code.
+      </p>
+      <p class="small muted brgy-note">
+        “Per household” is PSA’s household population divided by its household count, calculated
+        here. PSA codes are not a continuous run: 012, 024 and 025 are unassigned.
+      </p>
+
       {outsideHouseholds.length > 0 && (
-        <div class="fn-note" id="outside-households">
+        <div class="callout navy fn-note" id="outside-households">
           <p>
-            <strong aria-hidden="true">*</strong>
+            <strong aria-hidden="true">* </strong>
             {outsideHouseholds.map((b, i) => (
               <>
                 {i > 0 && '; '}
@@ -285,9 +476,9 @@ const jsonLd = [
             outside private households. PSA does not say which institutional quarters they were in,
             and this site does not guess.
           </p>
-          <details class="defs">
+          <details class="data-table">
             <summary>PSA’s definitions, verbatim</summary>
-            <ul>
+            <ul class="defs">
               <li>{censusDefinitions.totalPopulation}</li>
               <li>{censusDefinitions.householdPopulation}</li>
               <li>{censusDefinitions.institutionalPopulation}</li>
@@ -296,316 +487,1082 @@ const jsonLd = [
         </div>
       )}
       <Source source={barangayPopulation2024.source} label="the barangay figures" showNote={false} />
-    </section>
+    </div>
+  </section>
 
-    <section class="section" id="identity" aria-labelledby="identity-title">
+  <!-- ============ History ============ -->
+  <section class="section" aria-labelledby="history-title">
+    <div class="container wide">
+      <header class="section-head split">
+        <div>
+          <p class="eyebrow">History</p>
+          <h2 id="history-title">Six centuries on the Calatagan peninsula</h2>
+        </div>
+        <p class="lede">
+          Fifteenth-century graves that held pottery from Siam and Annam; a sugar estate; a
+          lighthouse for ships bound for Manila; a town merged into Balayan, then restored.
+        </p>
+      </header>
+      <ol class="rail-timeline" data-animate data-stagger="90">
+        {milestones.map((m) => (
+          <li data-reveal>
+            <span class="rt-when">{m.when.replace('Late 14th – mid 15th century', '14th–15th c.')}</span>
+            <span class="rt-event">{m.event}</span>
+          </li>
+        ))}
+      </ol>
+      <p class="history-cta">
+        <a class="button primary" href="/history">Read the history <span class="arrow" aria-hidden="true">→</span></a>
+        <span class="small muted">{orderedCitations.length} sources, primary documents first.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ Finances teaser ============ -->
+  {years.length > 1 && (
+    <section class="section band-alt" aria-labelledby="money-title">
+      <div class="container wide money-grid">
+        <div data-reveal>
+          <p class="eyebrow">Finances</p>
+          <h2 id="money-title">Where the money comes from, and where it goes</h2>
+          <p class="lede">
+            Full-year income and operating expenditure, from the municipality’s own fourth-quarter
+            statements to DILG. Every figure on the finances page names the spreadsheet cell it came
+            from.
+          </p>
+          <p><a class="link-arrow" href="/finances">Explore the finances</a></p>
+        </div>
+        <div class="card chart-card" data-reveal>
+          <ColumnChart
+            caption="Full-year income and operating expenditure"
+            categories={years.map((y) => `CY${y.year}`)}
+            series={[
+              { name: 'Income', color: 'var(--c-s1)', values: years.map((y) => y.income) },
+              { name: 'Operating expenditure', color: 'var(--c-s2)', values: years.map((y) => y.expenditures) },
+            ]}
+            format="peso-m"
+            height={260}
+          />
+          <p class="small muted chart-note">
+            Latest full year: income {formatPesoMillions(years.at(-1)?.income ?? 0)}, expenditure
+            {' '}{formatPesoMillions(years.at(-1)?.expenditures ?? 0)}. Reported, not audited.
+          </p>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ============ Identity ============ -->
+  <section class="section" id="identity" aria-labelledby="identity-title">
+    <div class="container wide">
       <header class="section-head">
         <p class="eyebrow">The municipality</p>
         <h2 id="identity-title">Identity and income class</h2>
       </header>
-      <dl class="facts">
-        <div><dt>Official name</dt><dd>{municipality.data.officialName}</dd></div>
-        <div><dt>Province</dt><dd>{municipality.data.province}</dd></div>
+      <div class="identity-grid">
         <div>
-          <dt>Region</dt>
-          <dd>{municipality.data.region} ({municipality.data.regionName})</dd>
+          <dl class="facts">
+            <div><dt>Official name</dt><dd>{municipality.data.officialName}</dd></div>
+            <div><dt>Province</dt><dd>{municipality.data.province}</dd></div>
+            <div>
+              <dt>Region</dt>
+              <dd>{municipality.data.region} ({municipality.data.regionName})</dd>
+            </div>
+            <div>
+              <dt>PSA geographic code</dt>
+              <dd>
+                <code>{municipality.data.psgc10}</code> (10-digit) · <code>{municipality.data.psgc9}</code> (9-digit)
+              </dd>
+            </div>
+            <div><dt>Barangays</dt><dd>{municipality.data.barangayCount}</dd></div>
+            <div>
+              <dt>Land area</dt>
+              <dd class="muted">Not published yet — <a href="/sources#withheld">see why</a></dd>
+            </div>
+          </dl>
+          <Source source={municipality.source} label="the municipality’s identity" />
         </div>
         <div>
-          <dt>PSA geographic code</dt>
-          <dd>
-            <code>{municipality.data.psgc10}</code> (10-digit) · <code>{municipality.data.psgc9}</code> (9-digit)
-          </dd>
+          <div class="class-card">
+            <span class="class-badge figure">{ordinal(incomeClassification.data.incomeClass)}</span>
+            <div>
+              <p class="class-title">class municipality</p>
+              <p class="class-sub">
+                Effective {formatDate(incomeClassification.data.effectiveFrom)}; reclassified from
+                {' '}{ordinal(incomeClassification.data.previousIncomeClass ?? 2)} class under
+                {' '}{incomeClassification.data.legalBasis}.
+              </p>
+            </div>
+          </div>
+          <p class="small muted">Issuance: {incomeClassification.data.issuance}</p>
+          <Source source={incomeClassification.source} label="the income class" />
         </div>
-        <div><dt>Barangays</dt><dd>{municipality.data.barangayCount}</dd></div>
-      </dl>
-      <Source source={municipality.source} label="the municipality’s identity" />
+      </div>
+    </div>
+  </section>
 
-      <p class="prose">
-        Calatagan is a <strong>{ordinal(incomeClassification.data.incomeClass)} class municipality</strong>,
-        effective {formatDate(incomeClassification.data.effectiveFrom)}. It was reclassified from
-        {' '}{ordinal(incomeClassification.data.previousIncomeClass ?? 2)} class under
-        {' '}{incomeClassification.data.legalBasis}.
+  <!-- ============ Gaps (the "More coming" band) ============ -->
+  <section class="gaps" aria-labelledby="gaps-title">
+    <div class="gaps-inner">
+      <h2 id="gaps-title">What we can’t yet prove</h2>
+      <p>
+        Who holds office, the land area, office phone numbers — {WITHHELD.length} things people
+        expect to find here are held back until a primary source settles them. Know where the
+        record is?
       </p>
-      <p class="small muted">Issuance: {incomeClassification.data.issuance}</p>
-      <Source source={incomeClassification.source} label="the income class" />
+      <div class="gaps-actions">
+        <a class="button primary" href="/sources#withheld">See what’s withheld</a>
+        <a class="button" href={`${SITE.repository}/issues/new/choose`}>Report a correction</a>
+      </div>
+    </div>
+    <ul class="gap-cards" aria-hidden="true">
+      {WITHHELD.slice(0, 4).map((w, i) => (
+        <li class={`gap-card g${i}`} data-reveal>
+          <span class="gc-state"><Icon name="eye-off" size="14" /> Withheld</span>
+          <span class="gc-title">{w.fact}</span>
+          <span class="gc-lines"><i></i><i></i><i></i></span>
+        </li>
+      ))}
+    </ul>
+  </section>
 
-      <p class="small muted">
-        Land area is not published yet. <a href="/sources#withheld">See why</a>.
-      </p>
-    </section>
-  </div>
+  <script>
+    import '../scripts/barangays.ts';
+
+    // The manifesto lights up word by word as it scrolls through the viewport.
+    const m = document.querySelector<HTMLElement>('[data-manifesto]');
+    if (m && document.documentElement.classList.contains('js-motion')) {
+      const words = [...m.querySelectorAll<HTMLElement>('.w, .pill')];
+      m.classList.add('armed');
+      let raf = 0;
+      const update = () => {
+        raf = 0;
+        const box = m.getBoundingClientRect();
+        const vh = window.innerHeight;
+        const progress = Math.min(1, Math.max(0, (vh * 0.8 - box.top) / (box.height * 0.9)));
+        const lit = Math.round(progress * words.length);
+        words.forEach((w, i) => w.classList.toggle('lit', i < lit));
+      };
+      window.addEventListener('scroll', () => (raf ||= requestAnimationFrame(update)), { passive: true });
+      update();
+    }
+  </script>
 </Base>
 
 <style>
+  /* ---------- Hero ---------- */
   .hero {
-    background: var(--c-band);
-    color: var(--c-band-ink);
-    padding-block: var(--sp-7) var(--sp-6);
-    border-bottom: 4px solid var(--c-clay);
+    padding-inline: calc(var(--gutter) * 0.75);
   }
-  @media (min-width: 48rem) {
-    .hero {
-      padding-block: var(--sp-8) var(--sp-7);
-    }
+  .hero-panel {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    max-width: calc(var(--w-wide) + var(--gutter) * 1.5);
+    margin-inline: auto;
+    border-radius: var(--radius-2xl);
+    background: linear-gradient(180deg, var(--c-panel) 0%, var(--c-panel-2) 100%);
+    padding: calc(var(--header-h) + clamp(2rem, 1rem + 5vw, 5.5rem)) var(--gutter) clamp(2rem, 1rem + 3vw, 4rem);
   }
-  .hero-eyebrow {
-    font-size: var(--fs-xs);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--c-band-accent);
-    margin: 0 0 var(--sp-3);
+  .hero-inner {
+    position: relative;
+    text-align: center;
   }
   .hero h1 {
-    color: var(--c-band-ink);
-    font-size: var(--fs-3xl);
-    margin: 0;
+    margin: 0 0 clamp(2rem, 1rem + 3vw, 3.5rem);
+    font-size: inherit;
+    letter-spacing: normal;
+    max-width: none;
   }
-  .hero-lede {
-    max-width: 60ch;
-    font-family: var(--font-serif);
-    font-size: var(--fs-md);
-    line-height: 1.55;
-    color: var(--c-band-ink);
-    margin: var(--sp-4) 0 0;
-  }
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--sp-5) var(--sp-4);
-    margin: var(--sp-7) 0 0;
-    padding-top: var(--sp-5);
-    border-top: 1px solid rgb(201 214 222 / 0.35);
-  }
-  @media (min-width: 64rem) {
-    .stats {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-  }
-  .stats dt {
-    font-size: var(--fs-xs);
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--c-band-muted);
-  }
-  .stats dd {
-    margin: 0;
-  }
-  .stats .figure {
-    font-family: var(--font-serif);
-    font-size: var(--fs-2xl);
-    font-weight: 600;
-    line-height: 1.1;
-    color: var(--c-band-ink);
-    margin-top: var(--sp-1);
-  }
-  .stat-note {
-    font-size: var(--fs-xs);
-    color: var(--c-band-muted);
-    margin-top: var(--sp-1) !important;
-  }
-  .hero-foot {
-    margin: var(--sp-6) 0 0;
-    font-size: var(--fs-sm);
-    color: var(--c-band-muted);
-  }
-  .hero a {
-    color: var(--c-band-accent);
-  }
-  .hero :focus-visible {
-    outline-color: var(--c-band-accent);
-  }
-
-  .section-head {
-    margin-bottom: var(--sp-5);
-  }
-  .section-head h2 {
-    margin: 0;
-  }
-
-  .sections-grid {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .sections-grid li + li {
-    margin-top: 0;
-  }
-  .section-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    gap: var(--sp-2);
-  }
-  .card-title {
-    font-family: var(--font-serif);
-    font-size: var(--fs-lg);
-    font-weight: 600;
-    color: var(--c-navy);
-  }
-  .card-blurb {
-    color: var(--c-ink-2);
-    font-size: var(--fs-sm);
-  }
-  .card-count {
-    margin-top: auto;
-    padding-top: var(--sp-3);
-    font-size: var(--fs-xs);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--c-clay);
-  }
-
-  .history-teaser {
-    display: grid;
-    gap: var(--sp-6);
-    padding: var(--sp-6) var(--sp-5);
-    background: var(--c-sunk);
-    border-radius: var(--radius-lg);
-  }
-  @media (min-width: 48rem) {
-    .history-teaser {
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-      align-items: center;
-      padding: var(--sp-7);
-    }
-  }
-  .teaser-text p:not(.eyebrow) {
-    max-width: 55ch;
-    color: var(--c-ink-2);
-  }
-  .teaser-dates {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border-left: 2px solid var(--c-clay);
-  }
-  .teaser-dates li {
-    padding: var(--sp-2) 0 var(--sp-2) var(--sp-4);
-    margin: 0;
-    color: var(--c-ink-2);
-  }
-  .teaser-dates .figure {
+  .hello {
     display: block;
     font-family: var(--font-serif);
-    font-size: var(--fs-lg);
-    font-weight: 600;
-    color: var(--c-navy);
-    line-height: 1.2;
+    font-size: var(--fs-display);
+    font-weight: 400;
+    letter-spacing: var(--track-display);
+    line-height: 0.98;
+    color: var(--c-ink);
+    animation: rise 900ms var(--ease-out) both;
+  }
+  .hero-sub {
+    display: block;
+    max-width: 48ch;
+    margin: var(--sp-4) auto 0;
+    font-family: var(--font-sans);
+    font-size: var(--fs-md);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.45;
+    color: var(--c-ink-2);
+    animation: rise 900ms 120ms var(--ease-out) both;
+  }
+  .hero-inner :global(.hc) {
+    animation: rise 1000ms 220ms var(--ease-out) both;
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
   }
 
-  .how {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  /* ---------- Manifesto ---------- */
+  .manifesto-wrap {
+    padding: clamp(5rem, 3rem + 8vw, 11rem) var(--gutter);
   }
-  .how li {
-    margin: 0;
-    padding-top: var(--sp-4);
-    border-top: 2px solid var(--c-navy);
+  .manifesto {
+    max-width: 17em;
+    margin: 0 auto;
+    font-family: var(--font-serif);
+    font-size: var(--fs-manifesto);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    text-align: center;
+    text-wrap: balance;
+    color: var(--c-ink);
   }
-  .how h3 {
+  .manifesto.armed .w {
+    color: color-mix(in srgb, var(--c-ink) 18%, var(--c-bg));
+    transition: color 500ms ease;
+  }
+  .manifesto.armed .w.lit {
+    color: var(--c-ink);
+  }
+  .manifesto.armed .pill {
+    opacity: 0.25;
+    transform: scale(0.85);
+    transition:
+      opacity 500ms ease,
+      transform 700ms var(--ease-out);
+  }
+  .manifesto.armed .pill.lit {
+    opacity: 1;
+    transform: none;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 0.95em;
+    vertical-align: -0.12em;
+  }
+  .pill-arrow,
+  .pill-check {
+    width: 0.95em;
+    border-radius: 50%;
+    background: var(--c-accent);
+    color: var(--c-bg);
+    box-shadow: var(--shadow-md);
+  }
+  .pill-arrow :global(.icon),
+  .pill-check :global(.icon) {
+    width: 0.5em;
+    height: 0.5em;
+    stroke-width: 2.4;
+  }
+  .pill-check {
+    background: radial-gradient(circle at 35% 30%, #e1f1ee, #b8e3dc);
+    color: var(--c-teal);
+  }
+  :global([data-theme='dark']) .pill-check {
+    color: #0a6660;
+  }
+  .pill-seals {
+    gap: 0;
+  }
+  .badge {
+    display: grid;
+    place-items: center;
+    width: 0.95em;
+    height: 0.95em;
+    margin-left: -0.22em;
+    border-radius: 50%;
+    border: 0.04em solid #d79f22;
+    background: radial-gradient(circle at 40% 35%, #ffffff, #eef1f8);
+    color: #1b3c8c;
+    font-family: var(--font-serif);
+    font-size: 1em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    box-shadow: 0 0.06em 0.18em rgb(11 18 32 / 0.25);
+  }
+  .pill-seals .badge {
+    font-size: 0.22em;
+    width: 4.3em;
+    height: 4.3em;
+    margin-left: -1em;
+  }
+  .pill-seals .badge:first-child {
+    margin-left: 0;
+  }
+
+  /* ---------- Feature rows ---------- */
+  .features {
+    display: grid;
+    gap: clamp(4rem, 2rem + 6vw, 8rem);
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 0 var(--gutter) var(--section-y);
+  }
+  .feature {
+    display: grid;
+    gap: var(--sp-6);
+    align-items: center;
+  }
+  @media (min-width: 48rem) {
+    .feature {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(2rem, 1rem + 5vw, 7rem);
+    }
+    .feature.flip .f-visual {
+      order: 2;
+    }
+  }
+  .f-copy h2 {
+    margin: 0 0 var(--sp-4);
+    font-family: var(--font-sans);
+    font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.6rem);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+  }
+  .f-copy p {
+    max-width: 30ch;
     font-size: var(--fs-md);
-    margin: 0 0 var(--sp-2);
-  }
-  .how p {
-    margin: 0;
+    line-height: 1.5;
     color: var(--c-ink-2);
   }
+  .f-visual {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .f-stack {
+    background: linear-gradient(160deg, #e8edf8, #f7f7f5);
+  }
+  .stack-card {
+    position: absolute;
+    display: grid;
+    gap: 4px;
+    width: 48%;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: var(--c-surface);
+    box-shadow: var(--shadow-md);
+    transition: transform 900ms var(--ease-out);
+  }
+  .stack-card span {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .stack-card strong {
+    font-family: var(--font-serif);
+    font-size: clamp(1.2rem, 0.9rem + 1vw, 1.7rem);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    color: var(--c-ink);
+    overflow-wrap: anywhere;
+  }
+  .s1 {
+    left: 7%;
+    top: 9%;
+    transform: rotate(-6deg);
+  }
+  .s2 {
+    right: 7%;
+    top: 16%;
+    transform: rotate(5deg);
+  }
+  .s3 {
+    left: 9%;
+    bottom: 14%;
+    transform: rotate(4deg);
+  }
+  .s4 {
+    right: 6%;
+    bottom: 9%;
+    transform: rotate(-4deg);
+  }
+  :global(.js-motion) .feature:not(.is-in) .stack-card {
+    transform: translate(0, 0) rotate(0);
+  }
+  .stack-core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    color: #fff;
+    transform: translate(-50%, -50%);
+    box-shadow: var(--shadow-lg);
+  }
+  .f-night {
+    background: radial-gradient(120% 90% at 50% 0%, #1a2b52, #070d1a 70%);
+  }
+  .f-night svg {
+    width: 100%;
+    height: 100%;
+  }
+  .lock {
+    position: absolute;
+    left: 50%;
+    top: 58%;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgb(11 18 32 / 0.8);
+    color: #fff;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.4);
+  }
+  .f-ring {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(160deg, #f7f7f5, #efefec);
+  }
+  .ring-orbit {
+    position: absolute;
+    inset: 12%;
+    border-radius: 50%;
+    border: 1px dashed var(--c-line-strong);
+    animation: orbit 60s linear infinite;
+  }
+  .orbit-badge {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 22%;
+    aspect-ratio: 1;
+    transform: rotate(calc(360deg / var(--n) * var(--i))) translateY(-190%) rotate(calc(-360deg / var(--n) * var(--i)));
+    margin: -11% 0 0 -11%;
+  }
+  .orbit-badge span {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid #d79f22;
+    background: radial-gradient(circle at 40% 35%, #fff, #eef1f8);
+    color: #1b3c8c;
+    font-family: var(--font-serif);
+    font-size: clamp(0.8rem, 0.6rem + 0.8vw, 1.2rem);
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+    animation: orbit 60s linear infinite reverse;
+  }
+  @keyframes orbit {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .ring-core {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    color: #fff;
+    box-shadow: var(--shadow-lg);
+  }
 
-  .data-sections {
-    padding-bottom: var(--sp-8);
+  /* ---------- At a glance ---------- */
+  .glance-sec {
+    border-top: 1px solid var(--c-line);
   }
-  .narrow {
-    max-width: 36rem;
+  .center-head {
+    text-align: center;
+    margin-bottom: var(--sp-7);
   }
-  .medium {
-    max-width: 44rem;
+  .center-head h2 {
+    margin: 0 0 var(--sp-2);
+  }
+  .center-head p {
+    margin: 0;
+    font-size: var(--fs-md);
+    color: var(--c-muted);
+  }
+  .glance-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-6) var(--sp-4);
+    margin: 0;
+  }
+  @media (min-width: 48rem) {
+    .glance-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 72rem) {
+    .glance-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+  .g-item {
+    text-align: center;
+  }
+  .g-item dt {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--c-muted);
+  }
+  .g-item dd {
+    margin: 0;
+  }
+  .g-figure {
+    margin-top: var(--sp-2) !important;
+    font-family: var(--font-serif);
+    font-size: clamp(2.4rem, 1.6rem + 2.4vw, 3.6rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--c-ink);
+  }
+  .g-note {
+    margin-top: var(--sp-2) !important;
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .glance-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-2);
+    margin: var(--sp-7) 0 0;
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+    text-align: center;
+  }
+  .glance-foot :global(.icon) {
+    color: var(--c-teal);
+  }
+
+  /* ---------- Explore ---------- */
+  .explore-sec {
+    padding-top: 0;
+  }
+  .explore-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    height: 100%;
+    padding: var(--sp-6);
+    border-radius: var(--radius-xl);
+  }
+  .ex-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: var(--sp-3);
+    border-radius: 50%;
+    background: var(--c-accent-wash);
+    color: var(--c-accent);
+    transition: background var(--dur-2), color var(--dur-2);
+  }
+  .explore-card:hover .ex-icon {
+    background: var(--c-accent);
+    color: var(--c-bg);
+  }
+  .ex-title {
+    font-family: var(--font-serif);
+    font-size: var(--fs-xl);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--c-ink);
+  }
+  .ex-blurb {
+    color: var(--c-ink-2);
+  }
+  .ex-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    margin-top: auto;
+    padding-top: var(--sp-4);
+  }
+  .ex-count {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--c-muted);
+  }
+  .ex-arrow {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--c-sunk);
+    color: var(--c-ink);
+    transition: transform var(--dur-2) var(--ease-out), background var(--dur-2), color var(--dur-2);
+  }
+  .explore-card:hover .ex-arrow {
+    transform: translateX(3px);
+    background: var(--c-ink);
+    color: var(--c-bg);
+  }
+
+  /* ---------- Population ---------- */
+  .pop-grid {
+    display: grid;
+    gap: var(--sp-6);
+  }
+  @media (min-width: 64rem) {
+    .pop-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+      gap: var(--sp-8);
+      align-items: center;
+    }
+  }
+  .mini-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-6);
+    margin: var(--sp-5) 0;
+    padding: var(--sp-4) 0;
+    border-block: 1px solid var(--c-line);
+  }
+  .mini-stats dt {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--c-muted);
+  }
+  .mini-stats dd {
+    margin: var(--sp-1) 0 0;
+    font-family: var(--font-serif);
+    font-size: var(--fs-xl);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    color: var(--c-accent);
+  }
+  .pop-chart,
+  .chart-card {
+    padding: var(--sp-5);
+    border-radius: var(--radius-xl);
+  }
+
+  /* ---------- Barangays ---------- */
+  .brgy-tools {
+    display: none;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--sp-3) var(--sp-5);
+    margin-bottom: var(--sp-4);
+  }
+  :global(.js) .brgy-tools {
+    display: flex;
+  }
+  .brgy-tools .field {
+    flex: 1 1 16rem;
+    max-width: 24rem;
+  }
+  .brgy-count {
+    margin: 0 0 0 auto;
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+    align-self: center;
   }
   .barangays th[scope='row'] {
     font-weight: 600;
+    min-width: 12rem;
   }
-  @media (max-width: 30rem) {
-    .barangays th,
-    .barangays td {
-      padding-inline: var(--sp-2);
-    }
+  .b-name {
+    margin-right: var(--sp-2);
+  }
+  .barangays .chip {
+    vertical-align: 0.1em;
+    font-size: 0.62rem;
+    padding: 0.2em 0.55em;
   }
   .code {
     display: block;
+    margin-top: 2px;
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 400;
     color: var(--c-muted);
   }
-  .barangays td.num {
-    position: relative;
-    vertical-align: top;
+  thead th[data-sort] {
+    padding: 0;
   }
-  .bar {
+  thead th[data-sort] button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    width: 100%;
+    min-height: 44px;
+    padding: 0 var(--sp-4);
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+  }
+  thead th.num[data-sort] button {
+    justify-content: flex-end;
+  }
+  thead th[data-sort] button:hover,
+  thead th[aria-sort] button {
+    color: var(--c-ink);
+  }
+  thead th[aria-sort] :global(.icon) {
+    color: var(--c-accent);
+  }
+  .share-col {
+    width: 32%;
+    min-width: 11rem;
+  }
+  .share {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+  .share-bar {
+    flex: 1;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--c-sunk);
+    overflow: hidden;
+  }
+  .share-bar span {
     display: block;
-    height: 4px;
-    margin-top: var(--sp-1);
-    margin-left: auto;
-    width: calc(var(--w) * 0.6);
-    max-width: 6rem;
-    background: var(--c-accent);
-    border-radius: 2px;
-    opacity: 0.55;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--c-s1);
+  }
+  .share-val {
+    min-width: 3.2em;
+    text-align: right;
+    font-size: var(--fs-xs);
+    color: var(--c-ink-2);
+  }
+  .barangays tbody tr:target,
+  .barangays tbody tr:global(.is-hit) {
+    background: var(--c-warn-bg);
   }
   .fn {
     display: inline-grid;
     place-items: center;
     min-width: 24px;
     min-height: 24px;
-    font-weight: 700;
+    font-weight: 800;
     text-decoration: none;
+  }
+  .brgy-note {
+    margin-top: var(--sp-3);
   }
   .fn-note {
     max-width: var(--w-prose);
-    margin-top: var(--sp-4);
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
   }
-  .defs summary {
-    color: var(--c-accent);
-    font-weight: 650;
-    min-height: var(--tap);
-    display: flex;
-    align-items: center;
-  }
-  .defs ul {
-    padding-left: 1.2em;
+  .defs {
     color: var(--c-muted);
+    margin-top: var(--sp-2);
   }
 
+  /* ---------- History rail ---------- */
+  .rail-timeline {
+    position: relative;
+    display: grid;
+    gap: var(--sp-5);
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--sp-7);
+  }
+  @media (min-width: 64rem) {
+    .rail-timeline {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      padding-top: var(--sp-6);
+    }
+    .rail-timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0.55rem;
+      height: 1px;
+      background: var(--c-line-strong);
+      transform-origin: left;
+      transition: transform 1600ms var(--ease-out);
+    }
+    :global(.js-motion) .rail-timeline::before {
+      transform: scaleX(0);
+    }
+    :global(.js-motion) .rail-timeline:global(.is-in)::before {
+      transform: scaleX(1);
+    }
+    .rail-timeline li::before {
+      content: '';
+      position: absolute;
+      top: -1.95rem;
+      left: 0;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--c-bg);
+      border: 3px solid var(--c-accent);
+    }
+  }
+  .rail-timeline li {
+    position: relative;
+    margin: 0;
+    padding-left: var(--sp-4);
+    border-left: 1px solid var(--c-line-strong);
+  }
+  @media (min-width: 64rem) {
+    .rail-timeline li {
+      padding-left: 0;
+      padding-right: var(--sp-3);
+      border-left: 0;
+    }
+  }
+  .rt-when {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--c-ink);
+    line-height: 1.2;
+  }
+  .rt-event {
+    display: block;
+    margin-top: var(--sp-1);
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .history-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-4);
+    margin: 0;
+  }
+
+  /* ---------- Money ---------- */
+  .money-grid {
+    display: grid;
+    gap: var(--sp-6);
+  }
+  @media (min-width: 64rem) {
+    .money-grid {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+      gap: var(--sp-8);
+      align-items: center;
+    }
+  }
+  .chart-note {
+    margin: var(--sp-3) 0 0;
+  }
+
+  /* ---------- Identity ---------- */
+  .identity-grid {
+    display: grid;
+    gap: var(--sp-6);
+  }
+  .identity-grid > *,
+  .pop-grid > *,
+  .money-grid > * {
+    min-width: 0;
+  }
+  @media (min-width: 64rem) {
+    .identity-grid {
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: var(--sp-8);
+    }
+  }
   .facts {
     display: grid;
-    gap: 0;
     margin: 0;
-    max-width: 44rem;
-    border-top: var(--border);
+    border-top: 1px solid var(--c-line);
   }
   .facts > div {
     display: grid;
     gap: var(--sp-1);
     padding: var(--sp-3) 0;
-    border-bottom: var(--border);
+    border-bottom: 1px solid var(--c-line);
   }
   @media (min-width: 40rem) {
     .facts > div {
-      grid-template-columns: 14rem minmax(0, 1fr);
+      grid-template-columns: 13rem minmax(0, 1fr);
       gap: var(--sp-4);
     }
   }
   .facts dt {
     color: var(--c-muted);
     font-size: var(--fs-sm);
-    font-weight: 650;
+    font-weight: 600;
   }
   .facts dd {
     margin: 0;
+    font-weight: 500;
+  }
+  .class-card {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-5);
+    padding: var(--sp-6);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, var(--c-panel), var(--c-panel-2));
+  }
+  .class-badge {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    font-family: var(--font-serif);
+    font-size: 2.6rem;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    color: var(--c-bg);
+    box-shadow: var(--shadow-md);
+  }
+  .class-title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: var(--fs-xl);
+    letter-spacing: -0.03em;
+    color: var(--c-ink);
+  }
+  .class-sub {
+    margin: var(--sp-1) 0 0;
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+
+  /* ---------- Gaps band ---------- */
+  .gaps {
+    position: relative;
+    overflow: hidden;
+    margin-top: var(--section-y);
+    padding: clamp(4rem, 2rem + 7vw, 9rem) var(--gutter) 0;
+    background: var(--c-bg-alt);
+    text-align: center;
+  }
+  .gaps-inner {
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+  .gaps h2 {
+    margin: 0 0 var(--sp-4);
+    font-size: var(--fs-3xl);
+    letter-spacing: var(--track-display);
+  }
+  .gaps p {
+    font-size: var(--fs-md);
+    color: var(--c-ink-2);
+  }
+  .gaps-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--sp-3);
+    margin-top: var(--sp-6);
+  }
+  .gap-cards {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: var(--sp-4);
+    list-style: none;
+    margin: clamp(3rem, 2rem + 4vw, 5rem) auto 0;
+    padding: 0;
+    max-width: 64rem;
+    height: 11rem;
+  }
+  .gap-cards li + li {
+    margin: 0;
+  }
+  .gap-card {
+    display: grid;
+    align-content: start;
+    gap: var(--sp-2);
+    width: 15rem;
+    padding: var(--sp-4) var(--sp-5);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: var(--c-surface);
+    box-shadow: var(--shadow-md);
+    text-align: left;
+  }
+  .g1 {
+    margin-top: 2rem;
+  }
+  .g2 {
+    margin-top: 0.8rem;
+  }
+  .g3 {
+    margin-top: 2.6rem;
+  }
+  @media (max-width: 48rem) {
+    .g2,
+    .g3 {
+      display: none;
+    }
+  }
+  .gc-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    justify-self: start;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--c-warn-bg);
+    color: var(--c-warn);
+    font-size: var(--fs-2xs);
+    font-weight: 700;
+  }
+  .gc-title {
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .gc-lines {
+    display: grid;
+    gap: 6px;
+    margin-top: var(--sp-2);
+  }
+  .gc-lines i {
+    height: 5px;
+    border-radius: 3px;
+    background: var(--c-sunk);
+  }
+  .gc-lines i:nth-child(2) {
+    width: 75%;
+  }
+  .gc-lines i:nth-child(3) {
+    width: 50%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hello,
+    .hero-sub,
+    .hero-inner :global(.hc) {
+      animation: none;
+    }
+    .ring-orbit,
+    .orbit-badge span {
+      animation: none;
+    }
   }
 </style>
