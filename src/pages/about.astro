@@ -29,6 +29,7 @@ const crumbs = [{ name: 'About', href: '/about' }];
           {ASK.endpoint && <li><a href="#assistant">The assistant</a></li>}
           <li><a href="#privacy">Privacy</a></li>
           <li><a href="#licensing">Licensing</a></li>
+          <li><a href="#credits">Credits</a></li>
           <li><a href="#contribute">Corrections</a></li>
         </ul>
       </nav>
@@ -179,6 +180,22 @@ const crumbs = [{ name: 'About', href: '/about' }];
         <p class="small muted">
           Full terms are in the <a href={`${SITE.repository}/blob/main/LICENSES.md`}>repository</a>.
           The typefaces are Source Serif 4 and Public Sans, both under the SIL Open Font License.
+        </p>
+      </section>
+
+      <section class="section" id="credits" aria-labelledby="credits-title">
+        <h2 id="credits-title">Credits</h2>
+        <p>
+          The site’s design draws on public references: the
+          <a href="https://bettergov.ph" rel="noopener">BetterGov.ph</a> family of
+          <a href="https://lgu.bettergov.ph" rel="noopener">Better LGU portals</a>, whose emblem style
+          ours follows, and <a href="https://www.america.gov" rel="noopener">America.gov</a>’s
+          editorial, answer-first layout. No code, text or images were copied, and the project has
+          no affiliation with any of them.
+        </p>
+        <p>
+          Typefaces: Source Serif 4 and Public Sans, both under the SIL Open Font License. Documents
+          are read in place with PDF.js.
         </p>
       </section>
 

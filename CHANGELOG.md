@@ -7,6 +7,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Credits
+- **About → Credits:** names the site's design references (the BetterGov.ph family of Better LGU
+  portals, whose emblem style ours follows, and America.gov's editorial layout), states that
+  nothing was copied and that there is no affiliation, and lists the typefaces and PDF.js.
+
 ### Added — Local emergency hotlines
 See `docs/adr/0010-local-hotlines-by-attestation.md`. MDRRMO (0909 456 5818, (043) 419 7510), PNP,
 BFP, RHU, Coast Guard, Medicare and BATELEC numbers, from the municipality's emergency hotlines
