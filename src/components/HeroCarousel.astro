@@ -372,7 +372,15 @@ const scenes = [
     background: var(--c-raised);
     box-shadow: var(--shadow-bar);
     border: 1px solid color-mix(in srgb, var(--c-ink) 18%, transparent);
-    transition: box-shadow var(--dur-2), border-color var(--dur-2);
+    transition:
+      transform 420ms var(--ease-out),
+      box-shadow 420ms var(--ease-out),
+      border-color var(--dur-2);
+  }
+  @media (hover: hover) {
+    .hc-ask form:hover {
+      transform: scale(1.025);
+    }
   }
   .hc-ask form:focus-within {
     border-color: var(--c-accent);
@@ -425,17 +433,14 @@ const scenes = [
     height: 52px;
     border: 0;
     border-radius: 50%;
-    background: #0b2a6b;
-    color: #fff;
+    background: var(--go-bg);
+    color: var(--go-ink);
     cursor: pointer;
     transition: transform var(--dur-2) var(--ease-out), background var(--dur-1);
   }
-  :global([data-theme='dark']) .ask-go {
-    background: var(--c-accent);
-    color: var(--c-bg);
-  }
   .ask-go:hover {
-    background: var(--c-accent-strong);
+    background: var(--go-hover);
+    color: var(--go-ink);
     transform: translateX(2px);
   }
   .ask-results {

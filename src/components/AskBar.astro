@@ -70,7 +70,20 @@ import Icon from './Icon.astro';
     border-radius: 999px;
     background: var(--c-raised);
     box-shadow: 0 12px 32px -14px rgb(11 18 32 / 0.25);
-    transition: border-color var(--dur-1);
+    transform-origin: center bottom;
+    transition:
+      transform 420ms var(--ease-out),
+      box-shadow 420ms var(--ease-out),
+      border-color var(--dur-1);
+  }
+  @media (hover: hover) {
+    .ask-bar form:hover {
+      transform: scale(1.045);
+      box-shadow: 0 22px 48px -16px rgb(11 18 32 / 0.34);
+    }
+  }
+  .ask-bar form:focus-within {
+    transform: scale(1.045);
   }
   .ask-bar form:focus-within {
     border-color: var(--c-ink);
@@ -128,17 +141,14 @@ import Icon from './Icon.astro';
     height: 34px;
     border: 0;
     border-radius: 50%;
-    background: #0b2a6b;
-    color: #fff;
+    background: var(--go-bg);
+    color: var(--go-ink);
     cursor: pointer;
     transition: transform var(--dur-2) var(--ease-out), background var(--dur-1);
   }
-  :global([data-theme='dark']) .ab-go {
-    background: var(--c-accent);
-    color: var(--c-bg);
-  }
   .ab-go:hover {
-    background: #081f52;
+    background: var(--go-hover);
+    color: var(--go-ink);
     transform: scale(1.04);
   }
   @media (max-width: 40rem) {

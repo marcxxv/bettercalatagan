@@ -13,6 +13,8 @@ interface Props {
 }
 const { size = 32, title } = Astro.props;
 const svg = raw
+  .replaceAll('#1a3aa8', 'var(--logo-ink)')
+  .replaceAll('#ffffff', 'var(--logo-bg)')
   .replace('<svg ', `<svg class="mark" width="${size}" height="${size}" focusable="false" ${title ? `role="img" aria-label="${title}"` : 'aria-hidden="true"'} `)
   .trim();
 ---

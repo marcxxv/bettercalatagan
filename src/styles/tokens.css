@@ -86,6 +86,15 @@
   --c-s4: #b4502c;
   --c-s5: #8fa3c8;
 
+  /* Components that must flip with the theme */
+  --go-bg: #0b2a6b;
+  --go-ink: #ffffff;
+  --go-hover: #081f52;
+  --hit-hover: var(--c-bg-alt);
+  --check-ink: #0a6660;
+  --logo-ink: #1a3aa8;
+  --logo-bg: #ffffff;
+
   /* Typography */
   --font-serif: 'Source Serif 4', 'Source Serif Pro', Georgia, 'Times New Roman', serif;
   --font-sans: 'Public Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
@@ -211,6 +220,13 @@
     --shadow-md: 0 18px 40px -18px rgb(0 0 0 / 0.7);
     --shadow-lg: 0 36px 70px -24px rgb(0 0 0 / 0.8);
     --shadow-bar: 0 10px 40px -8px rgb(0 0 0 / 0.7);
+    --go-bg: #9db7f2;
+    --go-ink: #0a0f17;
+    --go-hover: #c3d3f7;
+    --hit-hover: rgb(255 255 255 / 0.04);
+    --check-ink: #0a6660;
+    --logo-ink: #9db7f2;
+    --logo-bg: #0f1622;
   }
 }
 
@@ -267,4 +283,12 @@
   --shadow-md: 0 18px 40px -18px rgb(0 0 0 / 0.7);
   --shadow-lg: 0 36px 70px -24px rgb(0 0 0 / 0.8);
   --shadow-bar: 0 10px 40px -8px rgb(0 0 0 / 0.7);
+
+  --go-bg: #9db7f2;
+  --go-ink: #0a0f17;
+  --go-hover: #c3d3f7;
+  --hit-hover: rgb(255 255 255 / 0.04);
+  --check-ink: #0a6660;
+  --logo-ink: #9db7f2;
+  --logo-bg: #0f1622;
 }
