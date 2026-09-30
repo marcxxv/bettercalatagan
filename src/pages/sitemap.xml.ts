@@ -4,7 +4,11 @@ import { fdpSource } from '../data/fdp';
 import { financialsSource } from '../data/financials';
 import { HISTORY_RESEARCHED_ON } from '../data/history';
 import { barangayPopulation2024 } from '../data/population';
-import { NAV, SECONDARY_NAV } from '../lib/site';
+import { PAGES } from '../lib/site';
+import { barangayPages } from '../lib/barangay-pages';
+import { infrastructureSource } from '../data/infrastructure';
+import { competitivenessSource } from '../data/competitiveness';
+import { servicesSource } from '../data/services';
 
 /**
  * Every HTML page, with `lastmod` taken from the date its content was last
@@ -17,16 +21,23 @@ const LASTMOD: Record<string, string> = {
   '/finances': financialsSource.lastVerified,
   '/transparency': fdpSource.lastVerified,
   '/documents': documentsSource.lastVerified,
+  '/infrastructure': infrastructureSource.lastVerified,
+  '/statistics': competitivenessSource.lastVerified,
+  '/services': servicesSource.lastVerified,
+  '/barangays': barangayPopulation2024.source.lastVerified,
 };
 
 export const GET: APIRoute = ({ site }) => {
   const origin = site ?? new URL('http://localhost:4321');
-  const pages = [...NAV, ...SECONDARY_NAV].filter((item) => !item.href.endsWith('.json'));
+  const pages = [
+    ...PAGES.filter((item) => !item.href.endsWith('.json')),
+    ...barangayPages.map((b) => ({ href: `/barangays/${b.slug}` })),
+  ];
 
   const urls = pages
     .map(({ href }) => {
       const loc = new URL(href, origin).toString().replace(/\/$/, href === '/' ? '/' : '');
-      const lastmod = LASTMOD[href];
+      const lastmod = LASTMOD[href] ?? (href.startsWith('/barangays/') ? LASTMOD['/barangays'] : undefined);
       return `  <url>\n    <loc>${loc}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ''}\n  </url>`;
     })
     .join('\n');

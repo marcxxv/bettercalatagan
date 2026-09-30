@@ -12,9 +12,10 @@
  */
 import Mark from './Mark.astro';
 import Icon from './Icon.astro';
-import { NAV, SECONDARY_NAV, SITE, isCurrent } from '../lib/site';
+import { NAV_GROUPS, OVERVIEW, SITE, isCurrent } from '../lib/site';
 
 const pathname = Astro.url.pathname;
+const groupCurrent = (items: readonly { href: string }[]) => items.some((item) => isCurrent(item.href, pathname));
 ---
 
 <div class="gov-banner">
@@ -61,11 +62,35 @@ const pathname = Astro.url.pathname;
 
     <nav class="primary" aria-label="Primary">
       <ul class="nav-inline">
-        {NAV.map((item) => (
+        <li>
+          <a href={OVERVIEW.href} aria-current={isCurrent(OVERVIEW.href, pathname) ? 'page' : undefined}>
+            {OVERVIEW.label}
+          </a>
+        </li>
+        {NAV_GROUPS.map((group) => (
           <li>
-            <a href={item.href} aria-current={isCurrent(item.href, pathname) ? 'page' : undefined}>
-              {item.label}
-            </a>
+            <details class="nav-drop" data-nav-drop>
+              <summary class:list={{ current: groupCurrent(group.items) }}>
+                {group.label}
+                <Icon name="chevron-down" size="14" class="drop-caret" />
+              </summary>
+              <div class="drop-panel">
+                <p class="drop-blurb">{group.blurb}</p>
+                <ul>
+                  {group.items.map((item) => (
+                    <li>
+                      <a href={item.href} aria-current={isCurrent(item.href, pathname) ? 'page' : undefined}>
+                        <span class="drop-icon"><Icon name={item.icon} size="18" /></span>
+                        <span class="drop-text">
+                          <span class="drop-label">{item.label}</span>
+                          <span class="drop-item-blurb">{item.blurb}</span>
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </details>
           </li>
         ))}
       </ul>
@@ -89,19 +114,29 @@ const pathname = Astro.url.pathname;
         <div class="menu-sheet">
           <nav class="menu-inner" aria-label="Menu">
             <ul class="menu-list">
-              {NAV.map((item) => (
-                <li>
-                  <a href={item.href} aria-current={isCurrent(item.href, pathname) ? 'page' : undefined}>
-                    <span class="menu-label">{item.label}</span>
-                    <span class="menu-blurb">{item.blurb}</span>
-                  </a>
-                </li>
-              ))}
+              <li>
+                <a href={OVERVIEW.href} aria-current={isCurrent(OVERVIEW.href, pathname) ? 'page' : undefined}>
+                  <span class="menu-label">{OVERVIEW.label}</span>
+                  <span class="menu-blurb">{OVERVIEW.blurb}</span>
+                </a>
+              </li>
             </ul>
+            {NAV_GROUPS.map((group) => (
+              <section class="menu-group" aria-label={group.label}>
+                <p class="menu-group-title">{group.label}</p>
+                <ul class="menu-list compact">
+                  {group.items.map((item) => (
+                    <li>
+                      <a href={item.href} aria-current={isCurrent(item.href, pathname) ? 'page' : undefined}>
+                        <span class="menu-label">{item.label}</span>
+                        <span class="menu-blurb">{item.blurb}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
             <ul class="menu-secondary">
-              {SECONDARY_NAV.map((item) => (
-                <li><a href={item.href}>{item.label}</a></li>
-              ))}
               <li><a href={SITE.repository}>Source code</a></li>
               <li><a href={`${SITE.repository}/issues/new/choose`}>Report a correction</a></li>
             </ul>
@@ -335,9 +370,139 @@ const pathname = Astro.url.pathname;
     color: var(--c-ink);
     background: var(--c-sunk);
   }
-  .nav-inline a[aria-current='page'] {
+  .nav-inline a[aria-current='page'],
+  .nav-drop > summary.current {
     color: var(--c-bg);
     background: var(--c-ink);
+  }
+
+  /* Grouped menus: native disclosures, so they open without JavaScript. */
+  .nav-inline > li {
+    position: relative;
+  }
+  .nav-drop > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 36px;
+    padding: 0 var(--sp-3) 0 var(--sp-4);
+    border-radius: 999px;
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    cursor: pointer;
+    list-style: none;
+    transition: color var(--dur-1), background var(--dur-1);
+  }
+  .nav-drop > summary::-webkit-details-marker {
+    display: none;
+  }
+  .nav-drop > summary:hover,
+  .nav-drop[open] > summary:not(.current) {
+    color: var(--c-ink);
+    background: var(--c-sunk);
+  }
+  .nav-drop :global(.drop-caret) {
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+  .nav-drop[open] :global(.drop-caret) {
+    transform: rotate(180deg);
+  }
+  .drop-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    z-index: 40;
+    width: 22rem;
+    padding: var(--sp-3);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-raised);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(-50%);
+    animation: drop-in 200ms var(--ease-out);
+  }
+  /* An invisible bridge over the gap, so moving down to the panel keeps it open. */
+  .drop-panel::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 12px;
+  }
+  .nav-inline > li:last-child .drop-panel {
+    left: auto;
+    right: -4px;
+    transform: none;
+    animation-name: drop-in-right;
+  }
+  @keyframes drop-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -6px);
+    }
+  }
+  @keyframes drop-in-right {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+  .drop-blurb {
+    margin: 0 0 var(--sp-2);
+    padding: var(--sp-1) var(--sp-3) var(--sp-2);
+    border-bottom: 1px solid var(--c-line);
+    font-size: var(--fs-2xs);
+    color: var(--c-muted);
+  }
+  .drop-panel ul {
+    display: grid;
+    gap: 2px;
+  }
+  .drop-panel a {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--sp-3);
+    align-items: start;
+    min-height: 0;
+    padding: var(--sp-3);
+    border-radius: var(--radius-md);
+    color: var(--c-ink);
+    background: transparent;
+  }
+  .drop-panel a:hover,
+  .drop-panel a:focus-visible {
+    background: var(--c-accent-wash);
+    color: var(--c-ink);
+  }
+  .drop-panel a[aria-current='page'] {
+    background: var(--c-sunk);
+    color: var(--c-ink);
+  }
+  .drop-icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+    background: var(--c-sunk);
+    color: var(--c-accent);
+  }
+  .drop-text {
+    display: grid;
+    gap: 1px;
+  }
+  .drop-label {
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--c-navy);
+  }
+  .drop-item-blurb {
+    font-size: var(--fs-2xs);
+    line-height: 1.4;
+    color: var(--c-muted);
+    white-space: normal;
   }
 
   .actions {
@@ -402,6 +567,18 @@ const pathname = Astro.url.pathname;
     }
     .theme-toggle {
       display: none !important;
+    }
+  }
+  /* Standard phones (360–400 px): brand, search and Menu must share one row. */
+  @media (max-width: 25rem) {
+    .brand {
+      gap: var(--sp-2);
+    }
+    .wordmark {
+      font-size: 1.1rem;
+    }
+    .nav-menu > summary {
+      padding: 0 var(--sp-4);
     }
   }
   @media (max-width: 23rem) {
@@ -504,6 +681,20 @@ const pathname = Astro.url.pathname;
   .menu-blurb {
     font-size: var(--fs-sm);
     color: var(--c-muted);
+  }
+  .menu-group {
+    margin-top: var(--sp-6);
+  }
+  .menu-group-title {
+    margin: 0 0 var(--sp-1);
+    font-size: var(--fs-2xs);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-clay);
+  }
+  .menu-list.compact .menu-label {
+    font-size: clamp(1.3rem, 1.1rem + 1vw, 1.6rem);
   }
   .menu-secondary {
     display: flex;

@@ -25,8 +25,20 @@ const only = flag('only');
 const single = flag('ask');
 const verbose = args.includes('--verbose') || Boolean(single);
 
+/** fetch, retried on connection errors (not on HTTP errors, which are results). */
+async function fetchRetry(url, init, tries = 3) {
+  for (let i = 1; ; i++) {
+    try {
+      return await fetch(url, init);
+    } catch (error) {
+      if (i >= tries) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 2000 * i));
+    }
+  }
+}
+
 async function session() {
-  const res = await fetch(`${base}/session`, {
+  const res = await fetchRetry(`${base}/session`, {
     method: 'POST',
     headers: { Origin: origin, 'Content-Type': 'application/json' },
     body: JSON.stringify({ turnstileToken: 'XXXX.DUMMY.TOKEN.XXXX' }),
@@ -37,7 +49,7 @@ async function session() {
 
 export async function ask(token, messages) {
   const started = Date.now();
-  const res = await fetch(`${base}/chat`, {
+  const res = await fetchRetry(`${base}/chat`, {
     method: 'POST',
     headers: { Origin: origin, 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ messages }),

@@ -55,6 +55,16 @@ jobs:
         continue-on-error: true
         run: npm run archive:index
 
+      - name: DPWH infrastructure projects (via the BetterGov.ph DPWH API)
+        id: dpwh
+        continue-on-error: true
+        run: npm run dpwh:fetch
+
+      - name: DTI Cities and Municipalities Competitiveness Index
+        id: cmci
+        continue-on-error: true
+        run: npm run cmci:fetch
+
       # The same gate as every pull request: schemas, provenance rules,
       # reconciliation, never-shrink snapshots, and a clean build.
       - name: Full check
@@ -67,6 +77,8 @@ jobs:
           SRE: ${{ steps.sre.outcome }}
           PSA: ${{ steps.psa.outcome }}
           ARCHIVE: ${{ steps.archive.outcome }}
+          DPWH: ${{ steps.dpwh.outcome }}
+          CMCI: ${{ steps.cmci.outcome }}
         run: |
           set -euo pipefail
           node scripts/data-report.mjs --github > "$RUNNER_TEMP/report.md"
@@ -80,6 +92,8 @@ jobs:
             echo "| SRE extraction | $SRE |"
             echo "| PSA OpenSTAT | $PSA |"
             echo "| Internet Archive | $ARCHIVE |"
+            echo "| DPWH projects | $DPWH |"
+            echo "| DTI CMCI | $CMCI |"
           } >> "$RUNNER_TEMP/report.md"
           cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
 

@@ -24,7 +24,9 @@
     "fdp:extract": "NODE_EXTRA_CA_CERTS=certs/geotrust-tls-rsa-ca-g1.pem node scripts/sre.mjs extract",
     "psa:fetch": "node scripts/psa.mjs fetch",
     "archive:index": "node scripts/documents.mjs build",
-    "data:refresh": "npm run fdp:stage && npm run fdp:promote && npm run fdp:extract && npm run psa:fetch && npm run archive:index",
+    "dpwh:fetch": "node scripts/dpwh.mjs fetch",
+    "cmci:fetch": "node scripts/cmci.mjs fetch",
+    "data:refresh": "npm run fdp:stage && npm run fdp:promote && npm run fdp:extract && npm run psa:fetch && npm run archive:index && npm run dpwh:fetch && npm run cmci:fetch",
     "data:report": "node scripts/data-report.mjs"
   },
   "dependencies": {

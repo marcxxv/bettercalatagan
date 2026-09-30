@@ -36,7 +36,8 @@ cannot check.
 
 ## Current status
 
-Nine pages — including a sourced history of Calatagan and an open-data front door — and four
+Forty-four pages, grouped as the Better LGU portals group theirs (Services, Government,
+Statistics, Transparency) and counting a profile for each of the 25 barangays, and eight
 machine-readable datasets, guarded by a civic-data test suite that runs on every push. Every page
 has an "Ask anything" box: instant search as you type, and, on Enter, an assistant that answers
 in English, Filipino or Taglish from the site's own pages only, citing each one. Its figures are
@@ -51,6 +52,10 @@ checked against the pages in code before they are shown (see
 | Municipal finances — 14 quarters, CY2023 Q1–CY2026 Q2 | 2 | Extracted from DILG filings; 838 reconciliation checks, all passing |
 | Full Disclosure filings — 156 across 14 forms | 2 | DILG portal, every download endpoint exercised |
 | Archived documents — 232 | 2 | Internet Archive of the municipality's dead website |
+| DPWH projects — 179 located in Calatagan (plus 53 listed, not counted) | 2 | DPWH contract records via BetterGov.ph's open API, placed by their own descriptions |
+| DTI competitiveness — 2015–2024 | 1 | DTI CMCI ranking tables |
+| Municipal services — 119, from 18 offices | 2 | The offices' 2022 Citizen's Charters (archived) |
+| Holidays 2026 and national hotlines | 1 | Presidential proclamations; executive orders |
 
 Every figure on the finances page records the spreadsheet cell it came from. Filings that do not
 reconcile against their own internal arithmetic are withheld, not flagged.

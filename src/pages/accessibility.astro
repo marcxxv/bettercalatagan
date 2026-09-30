@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { SITE } from '../lib/site';
+
+/**
+ * The accessibility statement. Every claim here is one the project checks
+ * (see AGENTS.md, "Verifying a change"): contrast is measured, axe-core is
+ * run, and the layout is checked at 320 px.
+ */
+const crumbs = [
+  { name: 'About', href: '/about' },
+  { name: 'Accessibility', href: '/accessibility' },
+];
+const description = 'How Better Calatagan is built to be usable by everyone: the standard it aims for, how it is checked, and how to report a barrier.';
+---
+
+<Base title="Accessibility" {description} {crumbs}>
+  <PageHeader
+    eyebrow="About"
+    icon="eye"
+    title="Accessibility"
+    lede="Public information should be usable by everyone, on any device and connection. This is the standard the site aims for, how it is checked, and where it still falls short."
+    {crumbs}
+  />
+
+  <div class="container page-body prose">
+    <section class="section" aria-labelledby="standard-title">
+      <h2 id="standard-title">The standard</h2>
+      <p>
+        The site aims to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA, in
+        both light and dark themes.
+      </p>
+      <ul>
+        <li><strong>Text contrast is measured,</strong> not estimated, for every colour pairing the site uses, in both themes.</li>
+        <li><strong>Pages are checked with axe-core</strong> for WCAG 2.2 AA issues when they change.</li>
+        <li><strong>Everything works from the keyboard,</strong> with a visible focus outline, a “Skip to main content” link, and labelled dialogs that return focus when they close.</li>
+        <li><strong>Charts are never the only way to read a figure.</strong> Each chart sits beside a table or text with the same numbers.</li>
+        <li><strong>Motion is optional.</strong> With “reduce motion” set on your device, animations stop and nothing moves on its own.</li>
+        <li><strong>Small screens and slow connections come first.</strong> No page scrolls sideways at 320 pixels wide, the pages are static files, and nothing but the page itself loads unless you ask for it.</li>
+        <li><strong>Everything works without JavaScript</strong> except search, the assistant and the document reader; every list is shown in full and every document can still be downloaded.</li>
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="gaps-title">
+      <h2 id="gaps-title">Known limitations</h2>
+      <ul>
+        <li>Documents from the former municipal website and from DILG are shown as their authors made them. Some are scanned images with no text layer, which screen readers cannot read; the original file is always offered.</li>
+        <li>The site is in English. The assistant answers in Filipino or Taglish when asked in those languages, but the pages themselves are not yet translated.</li>
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="report-title">
+      <h2 id="report-title">Report a barrier</h2>
+      <p>
+        If something on the site does not work for you, please say so: open an issue at
+        <a href={`${SITE.repository}/issues/new/choose`}>the project’s repository</a>, describing the page,
+        what you were trying to do, and the device or assistive technology you use.
+      </p>
+    </section>
+  </div>
+</Base>

@@ -1,0 +1,202 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Source from '../components/Source.astro';
+import Icon from '../components/Icon.astro';
+import { foundingAnniversary, HOLIDAY_YEAR, holidays, holidaysSource, type HolidayKind } from '../data/calendar';
+
+/**
+ * The year's holidays as they apply in Calatagan: the national list from the
+ * President's annual proclamation, the Eid dates fixed during the year, and
+ * the town's own special days. Past dates dim and the next one is marked in
+ * the browser, against Manila time.
+ */
+
+const crumbs = [
+  { name: 'Services', href: '/services' },
+  { name: 'Holidays', href: '/holidays' },
+];
+
+const KIND: Record<HolidayKind, { label: string; tone: string }> = {
+  regular: { label: 'Regular holiday', tone: 'accent' },
+  special: { label: 'Special (non-working) day', tone: 'clay' },
+  'special-working': { label: 'Special working day', tone: '' },
+  local: { label: 'Calatagan only', tone: 'teal' },
+};
+
+const format = (iso: string, options: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat('en-PH', { timeZone: 'Asia/Manila', ...options }).format(new Date(`${iso}T12:00:00+08:00`));
+
+const months = [...new Set(holidays.map((h) => h.date.slice(0, 7)))].map((month) => ({
+  month,
+  label: format(`${month}-01`, { month: 'long' }),
+  days: holidays.filter((h) => h.date.startsWith(month)),
+}));
+
+const counts = {
+  regular: holidays.filter((h) => h.kind === 'regular').length,
+  special: holidays.filter((h) => h.kind === 'special').length,
+  local: holidays.filter((h) => h.kind === 'local').length,
+};
+
+const description = `Regular holidays and special days for ${HOLIDAY_YEAR} as they apply in Calatagan, Batangas, including the town’s own special days, each with the proclamation that declares it.`;
+---
+
+<Base title={`Holidays in ${HOLIDAY_YEAR}`} {description} {crumbs}>
+  <PageHeader
+    eyebrow="Services"
+    icon="calendar"
+    title={`Holidays in ${HOLIDAY_YEAR}`}
+    lede="Every regular holiday and special day observed in Calatagan this year, from the President’s proclamations, including the days declared for Calatagan alone."
+    {crumbs}
+  >
+    <dl slot="aside" class="aside-card">
+      <div><dt>Regular holidays</dt><dd class="figure">{counts.regular}</dd></div>
+      <div><dt>Special days</dt><dd>{counts.special} nationwide, {counts.local} for Calatagan only</dd></div>
+    </dl>
+  </PageHeader>
+
+  <div class="container wide page-body">
+    <p class="next" data-next hidden>
+      <Icon name="calendar" size="18" /> <span data-next-text></span>
+    </p>
+
+    {months.map(({ month, label, days }) => (
+      <section class="month" aria-labelledby={`m-${month}`}>
+        <h2 id={`m-${month}`}>{label}</h2>
+        <ul class="records">
+          {days.map((h) => (
+            <li class="record holiday" data-date={h.date}>
+              <span class="date" aria-hidden="true">
+                <span class="d-num">{format(h.date, { day: 'numeric' })}</span>
+                <span class="d-day">{format(h.date, { weekday: 'short' })}</span>
+              </span>
+              <div>
+                <h3>{h.name}</h3>
+                <p class="record-tags">
+                  <span class:list={['chip', KIND[h.kind].tone]}><span class="dot"></span>{KIND[h.kind].label}</span>
+                  <time datetime={h.date}>{format(h.date, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</time>
+                  {h.note && <span>{h.note}</span>}
+                </p>
+              </div>
+              <p class="record-side small">
+                <a href={h.source.url} rel="noopener nofollow">{h.proclamation}</a>
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+
+    <section class="section-block" id="anniversary" aria-labelledby="anniversary-title">
+      <p class="eyebrow">Calatagan’s own days</p>
+      <h2 id="anniversary-title">Founding anniversary, {foundingAnniversary.day}</h2>
+      <p class="lede">
+        Calatagan’s founding anniversary has been declared a special (non-working) day in the town by
+        separate proclamation, most recently for {foundingAnniversary.proclamations[0].year}:
+      </p>
+      <ul>
+        {foundingAnniversary.proclamations.map((p) => (
+          <li><a href={p.source.url} rel="noopener nofollow">{p.name}</a> — {foundingAnniversary.day} {p.year}</li>
+        ))}
+      </ul>
+      <p class="small muted">
+        It is not listed for {HOLIDAY_YEAR} until a proclamation for {HOLIDAY_YEAR} is found. Local special
+        days are declared one at a time during the year; the municipality announces them too.
+      </p>
+    </section>
+
+    <Source source={holidaysSource} label="these dates" />
+  </div>
+</Base>
+
+<script>
+  // Dim past dates and name the next one, by the date in Manila.
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Manila' }).format(new Date());
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-date]')];
+  let next: HTMLElement | null = null;
+  for (const row of rows) {
+    const date = row.dataset.date ?? '';
+    row.classList.toggle('past', date < today);
+    if (!next && date >= today) next = row;
+  }
+  const banner = document.querySelector<HTMLElement>('[data-next]');
+  if (next && banner) {
+    next.classList.add('upcoming');
+    const name = next.querySelector('h3')?.textContent ?? '';
+    const when = next.querySelector('time')?.textContent ?? '';
+    banner.querySelector('[data-next-text]')!.textContent = `${next.dataset.date === today ? 'Today' : 'Next'}: ${name}, ${when}`;
+    banner.hidden = false;
+  }
+</script>
+
+<style>
+  .next {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    margin: 0 0 var(--sp-5);
+    padding: var(--sp-3) var(--sp-4);
+    border-radius: var(--radius-md);
+    background: var(--c-accent-wash);
+    color: var(--c-accent-strong);
+    font-weight: 700;
+  }
+  .next[hidden] {
+    display: none;
+  }
+  .month {
+    margin-top: var(--sp-7);
+  }
+  .month:first-of-type {
+    margin-top: 0;
+  }
+  .month h2 {
+    margin: 0 0 var(--sp-3);
+    font-size: var(--fs-lg);
+  }
+  .date {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: var(--c-sunk);
+    color: var(--c-ink);
+    line-height: 1;
+    grid-row: span 2;
+  }
+  .d-num {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+  }
+  .d-day {
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+  @media (min-width: 48rem) {
+    .date {
+      grid-row: auto;
+    }
+  }
+  /* Past dates step back without losing contrast: a muted date tile, a label. */
+  .holiday:global(.past) {
+    background: var(--c-bg-alt);
+  }
+  .holiday:global(.past) .date {
+    background: transparent;
+    border: 1px solid var(--c-line-strong);
+  }
+  .holiday:global(.past) h3::after {
+    content: ' · past';
+    font-weight: 500;
+    color: var(--c-muted);
+  }
+  .holiday:global(.upcoming) {
+    border-color: var(--c-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent) 18%, transparent);
+  }
+</style>

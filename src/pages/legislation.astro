@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Source from '../components/Source.astro';
+import Icon from '../components/Icon.astro';
+import ArchiveList from '../components/ArchiveList.astro';
+import { archivedDocuments, documentsSource } from '../data/documents';
+import { offices } from '../data/services';
+
+/**
+ * Local legislation, as the Better LGU portals' "OpenLGU" pages list it:
+ * ordinances, resolutions and executive orders. What survives is what the
+ * former municipal website posted, so this is an archive of those postings,
+ * dated, not a current code of ordinances.
+ */
+
+const crumbs = [
+  { name: 'Government', href: '/government' },
+  { name: 'Legislation', href: '/legislation' },
+];
+
+const of = (...kinds: string[]) =>
+  archivedDocuments.documents
+    .filter((d) => kinds.includes(d.kind))
+    .sort((a, b) => (b.publishedYear ?? 0) - (a.publishedYear ?? 0) || a.title.localeCompare(b.title, 'en', { numeric: true }));
+
+const groups = [
+  { id: 'ordinances', title: 'Ordinances', note: 'Enacted by the Sangguniang Bayan', docs: of('ordinance') },
+  { id: 'resolutions', title: 'Resolutions', note: 'Sangguniang Bayan resolutions, posted as annual volumes', docs: of('resolution') },
+  { id: 'executive-orders', title: 'Executive orders', note: 'Issued by the Office of the Mayor', docs: of('executive-order') },
+  { id: 'land-use', title: 'Land use and zoning', note: 'Zoning and land-use documents', docs: of('land-use-plan') },
+].filter((g) => g.docs.length > 0);
+
+const total = groups.reduce((n, g) => n + g.docs.length, 0);
+const years = groups.flatMap((g) => g.docs.map((d) => d.publishedYear).filter((y): y is number => y !== null));
+const sb = offices.find((o) => o.slug === 'sangguniang-bayan')!;
+const description = `Ordinances, resolutions and executive orders of Calatagan, Batangas that survive from the former municipal website (${Math.min(...years)}–${Math.max(...years)}), readable on the site.`;
+---
+
+<Base title="Local legislation" {description} {crumbs}>
+  <PageHeader
+    eyebrow="Government"
+    icon="book"
+    title="Ordinances, resolutions and executive orders"
+    lede="The local legislation the municipality posted on its former website, now preserved only by the Internet Archive. Each opens here to read in full."
+    {crumbs}
+  >
+    <dl slot="aside" class="aside-card">
+      <div><dt>Documents on record</dt><dd class="figure">{total}</dd></div>
+      <div><dt>Posted</dt><dd>{Math.min(...years)}–{Math.max(...years)}, on calatagan.gov.ph</dd></div>
+    </dl>
+  </PageHeader>
+
+  <div class="container wide page-body">
+    <div class="callout warn">
+      <p class="callout-title"><Icon name="clock" size="18" /> An archive, not the current code</p>
+      <p>
+        These are what the former municipal website happened to post, mostly in 2016. Later
+        ordinances, amendments and repeals are not here, so none of these should be read as the law in
+        force today. The {sb.name} issues certified copies of its documents (<a href="/services#government">see
+        services</a>).
+      </p>
+    </div>
+
+    <nav class="jump" aria-label="Kinds of legislation">
+      {groups.map((g) => <a class="chip" href={`#${g.id}`}>{g.title} · {g.docs.length}</a>)}
+    </nav>
+
+    {groups.map((g) => (
+      <section class="section-block" id={g.id} aria-labelledby={`${g.id}-title`}>
+        <p class="eyebrow">{g.note}</p>
+        <h2 id={`${g.id}-title`}>{g.title}</h2>
+        <ArchiveList documents={g.docs} showKind={false} />
+      </section>
+    ))}
+
+    <section class="section-block" aria-labelledby="missing-title">
+      <h2 id="missing-title">What is not here</h2>
+      <p class="lede">
+        No ordinance or resolution after the former website went offline is available from a public
+        source this project can reach. If you hold a certified copy of a recent ordinance, a correction
+        with the document is welcome.
+      </p>
+    </section>
+
+    <Source source={documentsSource} label="these documents" />
+  </div>
+</Base>
+
+<style>
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-5) 0;
+  }
+  .jump a {
+    text-decoration: none;
+  }
+</style>

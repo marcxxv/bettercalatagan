@@ -1,0 +1,197 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Source from '../components/Source.astro';
+import Icon from '../components/Icon.astro';
+import ArchiveList from '../components/ArchiveList.astro';
+import { archivedDocuments, documentsSource } from '../data/documents';
+import { KIND_LABELS } from '../data/schemas/documents';
+import { inCalatagan, infrastructureSource } from '../data/infrastructure';
+import { formatNumber, formatPeso } from '../lib/format';
+
+/**
+ * Procurement on record, in two parts: the municipality's own notices of
+ * award and bid results (preserved from its former website), and the bidding
+ * behind each national DPWH contract in Calatagan (from DPWH's records).
+ */
+
+const crumbs = [
+  { name: 'Transparency', href: '/transparency' },
+  { name: 'Procurement', href: '/procurement' },
+];
+
+const isBidResult = (title: string) => /\bbids? results?\b/i.test(title);
+const municipal = archivedDocuments.documents
+  .filter(
+    (d) =>
+      d.kind === 'procurement-award' ||
+      d.kind === 'procurement-notice' ||
+      d.kind === 'procurement-plan' ||
+      (d.kind === 'other' && isBidResult(d.title)),
+  )
+  .sort((a, b) => (b.publishedYear ?? 0) - (a.publishedYear ?? 0) || a.title.localeCompare(b.title, 'en', { numeric: true }));
+
+const kinds = [...new Set(municipal.map((d) => d.kind))].map((kind) => ({
+  kind,
+  label: kind === 'other' ? 'Bid results' : KIND_LABELS[kind],
+  count: municipal.filter((d) => d.kind === kind).length,
+}));
+const years = [...new Set(municipal.map((d) => d.publishedYear).filter((y): y is number => y !== null))].sort((a, b) => b - a);
+
+// DPWH: how many bidders each contract drew, as DPWH records them.
+const withBidders = inCalatagan.filter((p) => p.bidders !== null && p.bidders > 0);
+const singleBidder = withBidders.filter((p) => p.bidders === 1);
+const recent = [...inCalatagan]
+  .filter((p) => p.abc !== null && p.budget !== null)
+  .sort((a, b) => (b.advertisementDate ?? '').localeCompare(a.advertisementDate ?? ''))
+  .slice(0, 12);
+
+const description = `Procurement in Calatagan, Batangas: ${municipal.length} municipal notices of award and bid results from the former website, and the bidding behind ${inCalatagan.length} DPWH contracts.`;
+---
+
+<Base title="Procurement" {description} {crumbs}>
+  <PageHeader
+    eyebrow="Transparency"
+    icon="file"
+    title="Procurement on record"
+    lede="Who won which contract, and how many bid for it: the municipality’s own notices of award and bid results, and the bidding behind every national DPWH contract located in Calatagan."
+    {crumbs}
+  >
+    <dl slot="aside" class="aside-card">
+      <div><dt>Municipal notices and results</dt><dd class="figure">{formatNumber(municipal.length)}</dd></div>
+      <div><dt>DPWH contracts with bidding records</dt><dd>{formatNumber(withBidders.length)} of {formatNumber(inCalatagan.length)}</dd></div>
+    </dl>
+  </PageHeader>
+
+  <div class="container wide with-rail page-body">
+    <aside class="rail">
+      <nav class="rail-nav" aria-labelledby="toc-label" data-spy>
+        <p class="rail-title" id="toc-label">On this page</p>
+        <ul>
+          <li><a href="#national">DPWH contracts</a></li>
+          <li><a href="#municipal">Municipal notices</a></li>
+          <li><a href="#where">Where to look now</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="content">
+      <section class="section" id="national" aria-labelledby="national-title">
+        <p class="eyebrow">Department of Public Works and Highways</p>
+        <h2 id="national-title">Bidding for DPWH contracts in Calatagan</h2>
+        <dl class="stat-row">
+          <div class="stat">
+            <dt>Contracts with bidders recorded</dt>
+            <dd class="figure">{formatNumber(withBidders.length)}</dd>
+            <dd class="stat-note">of {formatNumber(inCalatagan.length)} located in Calatagan</dd>
+          </div>
+          <div class="stat">
+            <dt>A single bidder</dt>
+            <dd class="figure">{formatNumber(singleBidder.length)}</dd>
+            <dd class="stat-note">Contracts where DPWH lists one bidder</dd>
+          </div>
+        </dl>
+        <p>
+          The most recently advertised contracts, with the approved budget for the contract (ABC) and
+          the contract budget DPWH lists. Every contract, with its bidders and contractor, is on the
+          <a href="/infrastructure#projects">Infrastructure</a> page.
+        </p>
+        <div class="table-wrap" tabindex="0">
+          <table>
+            <caption>Recently advertised DPWH contracts in Calatagan</caption>
+            <thead>
+              <tr>
+                <th scope="col">Contract</th>
+                <th scope="col">Advertised</th>
+                <th scope="col" class="num">Bidders</th>
+                <th scope="col" class="num">ABC</th>
+                <th scope="col" class="num">Contract budget</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recent.map((p) => (
+                <tr>
+                  <td><a href={`/infrastructure#contract-${p.contractId}`}><code>{p.contractId}</code></a> {p.contractor ?? ''}</td>
+                  <td>{p.advertisementDate ?? '—'}</td>
+                  <td class="num">{p.bidders ?? '—'}</td>
+                  <td class="num">{formatPeso(p.abc!)}</td>
+                  <td class="num">{formatPeso(p.budget!)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Source source={infrastructureSource} label="the DPWH records" />
+      </section>
+
+      <section class="section" id="municipal" aria-labelledby="municipal-title">
+        <p class="eyebrow">Former municipal website</p>
+        <h2 id="municipal-title">The municipality’s notices of award and bid results</h2>
+        <div class="callout warn">
+          <p class="callout-title"><Icon name="clock" size="18" /> {years.at(-1)}–{years[0]}, archived</p>
+          <p>
+            These are the procurement documents the municipality posted before its website went
+            offline. They show awards made then; they are not a complete record of its procurement.
+          </p>
+        </div>
+
+        <form class="toolbar" data-filter="procurement-list" data-noun="documents" role="search" aria-label="Filter procurement documents" style="--filter-cols: 3" hidden>
+          <p class="field search">
+            <label for="pr-search">Search</label>
+            <input type="search" id="pr-search" name="q" placeholder="Project, barangay or year" autocomplete="off" />
+          </p>
+          <p class="field">
+            <label for="pr-kind">Kind</label>
+            <select id="pr-kind" name="kind">
+              <option value="">All kinds</option>
+              {kinds.map((k) => <option value={k.kind}>{k.label} ({k.count})</option>)}
+            </select>
+          </p>
+          <p class="field">
+            <label for="pr-year">Year</label>
+            <select id="pr-year" name="year">
+              <option value="">All years</option>
+              {years.map((y) => <option value={String(y)}>{y}</option>)}
+            </select>
+          </p>
+          <p class="field"><button class="button" type="reset">Reset</button></p>
+        </form>
+        <div class="result-bar">
+          <p class="result-count" data-count-for="procurement-list" role="status" aria-live="polite">
+            Showing all <strong>{formatNumber(municipal.length)}</strong> documents
+          </p>
+          <ul class="active-filters" data-pills-for="procurement-list" aria-label="Active filters"></ul>
+        </div>
+        <ArchiveList documents={municipal} id="procurement-list" />
+        <div class="empty-state" data-empty-for="procurement-list" hidden><p>No document matches those filters.</p></div>
+        <Source source={documentsSource} label="these documents" />
+      </section>
+
+      <section class="section" id="where" aria-labelledby="where-title">
+        <h2 id="where-title">Where to look for current procurement</h2>
+        <p>
+          Government agencies post bid notices and awards on PhilGEPS, the Philippine Government
+          Electronic Procurement System. BetterGov.ph makes that record searchable by organisation.
+          The municipality also files its quarterly bid results under the Full Disclosure Policy:
+          <a href="/transparency?form=bid-results#filings">read them on the Disclosures page</a>.
+        </p>
+        <p class="more">
+          <a class="link-arrow" href="https://www.philgeps.gov.ph" rel="noopener">PhilGEPS</a>
+          <a class="link-arrow" href="https://transparency.bettergov.ph/procurement" rel="noopener">BetterGov procurement search</a>
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    import '../scripts/filter.ts';
+  </script>
+</Base>
+
+<style>
+  .more {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-5);
+  }
+</style>

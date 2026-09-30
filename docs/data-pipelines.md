@@ -36,6 +36,8 @@ Rules that hold for every pipeline:
 | `npm run fdp:extract` | `scripts/sre.mjs extract` | the SRE spreadsheets named in the FDP index | `src/data/generated/sre-financials.json` | — |
 | `npm run psa:fetch` | `scripts/psa.mjs fetch` | PSA OpenSTAT (PxWeb API) | `src/data/generated/psa-population.json` | 0001, 0003 |
 | `npm run archive:index` | `scripts/documents.mjs build` | Internet Archive CDX for calatagan.gov.ph | `src/data/generated/archived-documents.json` | — |
+| `npm run dpwh:fetch` | `scripts/dpwh.mjs fetch` | BetterGov.ph DPWH API (DPWH's contract records) | `src/data/generated/dpwh-projects.json` | 0009 |
+| `npm run cmci:fetch` | `scripts/cmci.mjs fetch` | DTI CMCI ranking tables | `src/data/generated/cmci.json` | 0009 |
 | `npm run data:refresh` | all of the above, in order | | | |
 | `npm run data:report` | `scripts/data-report.mjs` | working tree vs `HEAD` | Markdown on stdout | |
 
@@ -68,6 +70,21 @@ and not published. Unmatched labels are reported, not guessed.
 PSA's web pages sit behind a bot challenge; OpenSTAT's API does not. Geo keys are PSGC codes;
 Calatagan's 25 barangay codes are non-contiguous (012, 024, 025 unassigned). Tests assert the
 barangays sum to the municipal total.
+
+### DPWH projects
+
+The API is searched for "Calatagan"; each hit is classified by `scripts/lib/dpwh-location.mjs`
+from its own description: `calatagan` (counted), `road` (the Nasugbu–Lian–Calatagan national road,
+kilometre posts only), `shared` (a package across towns) or `elsewhere` (dropped). Barangays are
+read from DPWH's spellings ("BRGY. 1, 2, 3 AND 4", "STA. ANA", "QULITISAN"). The rule's tests use
+real descriptions; add a failing description to them before changing it. Refuses to write if the
+Calatagan count falls.
+
+### DTI CMCI
+
+Reads the ranking table for each year DTI offers, in the category Calatagan was ranked in.
+DTI's server wants a browser user agent. A year whose table prints every score as 0.0000 (2018)
+is stored with `score: null`. Never read the LGU profile's contact block (stale, withheld).
 
 ### Internet Archive index
 

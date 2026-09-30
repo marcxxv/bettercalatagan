@@ -16,7 +16,13 @@ import { incomeClassification, municipality, WITHHELD } from '../data/municipali
 import { barangayPopulation2024, population2024, populationSeries } from '../data/population';
 import { KIND_LABELS } from '../data/schemas/documents';
 import { formatDate, formatNumber, formatPeso, formatPesoMillions, ordinal } from './format';
-import { NAV, SECONDARY_NAV } from './site';
+import { offices, SERVICE_CATEGORIES } from '../data/services';
+import { inCalatagan, totalBudget } from '../data/infrastructure';
+import { latestCmci } from '../data/competitiveness';
+import { holidays, hotlines, HOLIDAY_YEAR } from '../data/calendar';
+import { barangayPages } from './barangay-pages';
+import { dpwhTitle } from './dpwh-text';
+import { PAGES } from './site';
 
 export interface SearchEntry {
   /** Title */
@@ -42,7 +48,7 @@ export function buildSearchIndex(): SearchEntry[] {
   const entries: SearchEntry[] = [];
 
   // Pages
-  for (const item of [...NAV, ...SECONDARY_NAV]) {
+  for (const item of PAGES) {
     entries.push({ t: item.label, g: 'Pages', u: item.href, d: item.blurb });
   }
 
@@ -117,7 +123,7 @@ export function buildSearchIndex(): SearchEntry[] {
     entries.push({
       t: barangay.name,
       g: 'Barangays',
-      u: `/?barangay=${encodeURIComponent(barangay.name)}#barangays`,
+      u: `/barangays/${barangayPages.find((b) => b.psgc10 === barangay.psgc10)?.slug ?? ''}`,
       a: census
         ? `${formatNumber(census.totalPopulation)} people · ${formatNumber(census.households)} households (2024)`
         : undefined,
@@ -233,6 +239,77 @@ export function buildSearchIndex(): SearchEntry[] {
   }
   for (const entry of timeline) {
     entries.push({ t: entry.event, g: 'Timeline', u: '/history#timeline', d: entry.when });
+  }
+
+  // Services, by office, as listed in the 2022 Citizen's Charters.
+  for (const office of offices) {
+    entries.push({
+      t: office.short ? `${office.name} (${office.short})` : office.name,
+      g: 'Offices',
+      u: `/services#office-${office.slug}`,
+      d: office.services.length ? `${office.services.length} services listed in its 2022 Citizen’s Charter` : 'Internal services only',
+      k: 'office department municipal',
+    });
+    for (const service of office.services) {
+      entries.push({
+        t: service.name,
+        g: 'Services',
+        u: `/services#${service.category}`,
+        d: `${office.name} · ${SERVICE_CATEGORIES[service.category].label} · listed in 2022`,
+        k: `service ${service.category} ${office.short ?? ''}`,
+      });
+    }
+  }
+
+  // National infrastructure (DPWH).
+  entries.push({
+    t: 'DPWH projects in Calatagan',
+    g: 'Answers',
+    u: '/infrastructure',
+    a: `${inCalatagan.length} projects, ${formatPesoMillions(totalBudget(inCalatagan))} in contract budgets`,
+    s: 'DPWH, via the BetterGov.ph DPWH transparency API',
+    k: 'dpwh infrastructure projects roads bridges buildings public works national',
+  });
+  for (const p of inCalatagan) {
+    entries.push({
+      t: ((d) => (d.length > 140 ? `${d.slice(0, 137)}…` : d))(dpwhTitle(p.description)),
+      g: 'Projects',
+      u: `/infrastructure#contract-${p.contractId}`,
+      d: [p.infraYear, p.status, p.budget !== null ? formatPeso(p.budget) : null].filter(Boolean).join(' · '),
+      k: `${p.contractId} ${p.contractor ?? ''} dpwh project`,
+    });
+  }
+
+  // Competitiveness (DTI CMCI).
+  entries.push({
+    t: 'Competitiveness ranking (DTI CMCI)',
+    g: 'Answers',
+    u: '/statistics#competitiveness',
+    a: `${ordinal(latestCmci.rank)} of ${formatNumber(latestCmci.ranked)} ${latestCmci.category.toLowerCase()} (${latestCmci.year})`,
+    s: 'Department of Trade and Industry, Cities and Municipalities Competitiveness Index',
+    k: 'cmci competitiveness dti rank ranking index economic dynamism resiliency',
+  });
+
+  // Holidays and hotlines.
+  for (const h of holidays) {
+    entries.push({
+      t: h.name,
+      g: 'Holidays',
+      u: '/holidays',
+      a: `${formatDate(h.date)}${h.kind === 'local' ? ' (Calatagan only)' : ''}`,
+      s: h.proclamation,
+      k: `holiday ${HOLIDAY_YEAR} ${h.kind} walang pasok`,
+    });
+  }
+  for (const line of hotlines) {
+    entries.push({
+      t: line.name,
+      g: 'Answers',
+      u: '/hotlines',
+      a: `Call ${line.number}`,
+      s: line.source.name.split(' — ')[0],
+      k: 'hotline emergency number call police fire ambulance complaint',
+    });
   }
 
   // The question residents ask most, answered honestly.

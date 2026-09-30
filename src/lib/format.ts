@@ -22,5 +22,9 @@ export function formatDate(iso: string): string {
   });
 }
 
-const ORDINALS = ['', '1st', '2nd', '3rd', '4th', '5th', '6th'];
-export const ordinal = (n: number) => ORDINALS[n] ?? `${n}th`;
+/** 1st, 2nd, 3rd, 11th, 12th, 13th, 21st, 321st, 340th. */
+export function ordinal(n: number): string {
+  const tens = n % 100;
+  if (tens >= 11 && tens <= 13) return `${n}th`;
+  return `${n}${({ 1: 'st', 2: 'nd', 3: 'rd' } as Record<number, string>)[n % 10] ?? 'th'}`;
+}

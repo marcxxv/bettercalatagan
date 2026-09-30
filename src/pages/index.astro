@@ -21,6 +21,9 @@ import { archivedDocuments } from '../data/documents';
 import { orderedCitations, timeline } from '../data/history';
 import { formatDate, formatNumber, formatPesoMillions, ordinal } from '../lib/format';
 import { ASK, NAV, SITE } from '../lib/site';
+import { offices, publicServiceCount } from '../data/services';
+import { cmciYears, latestCmci } from '../data/competitiveness';
+import { inCalatagan } from '../data/infrastructure';
 
 const populationByCode = new Map(barangayPopulation2024.data.map((row) => [row.psgc10, row]));
 const barangayRows = [...barangays.data]
@@ -52,8 +55,22 @@ const counts: Record<string, string> = {
   '/transparency': `${formatNumber(fdpSummary.total)} filings, ${yearsLabel(fdpSummary.years)}`,
   '/documents': `${formatNumber(archivedDocuments.documents.length)} archived documents`,
   '/sources': `${WITHHELD.length} items deliberately withheld`,
+  '/services': `${publicServiceCount} services from ${offices.length} offices`,
+  '/barangays': `${barangays.data.length} barangay profiles`,
+  '/statistics': `DTI competitiveness, ${cmciYears[0].year}–${latestCmci.year}`,
+  '/infrastructure': `${inCalatagan.length} DPWH projects`,
+  '/legislation': 'Ordinances, resolutions, executive orders',
+  '/procurement': 'Notices of award and bidding',
 };
-const sections = NAV.filter((item) => item.href !== '/');
+/** The twelve sections the home page points to, in the order a newcomer wants them. */
+const EXPLORE = [
+  '/services', '/government', '/barangays', '/statistics', '/finances', '/infrastructure',
+  '/transparency', '/procurement', '/legislation', '/history', '/documents', '/sources',
+];
+const sections = EXPLORE.map((href) => NAV.find((item) => item.href === href)).filter(
+  (item): item is (typeof NAV)[number] => Boolean(item),
+);
+const NUMBER_WORDS = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'];
 
 const MILESTONE_DATES = ['Late 14th – mid 15th century', '1890', '23 October 1903', '1 January 1912', '2018', '1 July 2024'];
 const milestones = MILESTONE_DATES.map((when) => timeline.find((t) => t.when === when)).filter(
@@ -257,8 +274,8 @@ const jsonLd = [
       <header class="section-head split">
         <h2 id="explore-title">Explore the public record</h2>
         <p class="lede">
-          Six sections, one standard: each figure carries its source, the date it describes, and the
-          date someone last checked it.
+          {NUMBER_WORDS[sections.length] ?? sections.length} sections, one standard: each figure carries
+          its source, the date it describes, and the date someone last checked it.
         </p>
       </header>
       <ul class="grid three gap-lg explore" data-stagger="70">

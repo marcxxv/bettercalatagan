@@ -7,6 +7,34 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — The Better LGU structure, sourced
+See `docs/adr/0009-better-lgu-information-architecture.md`. The hero is unchanged.
+- **Navigation** grouped as the Better LGU portals group theirs: Services · Government ·
+  Statistics · Transparency · About, as dropdowns that open on hover, click or keyboard; grouped
+  mobile menu; footer directory with the BetterGov.ph network and national government sources.
+- **Services** (`/services`): 119 services from 18 offices' 2022 Citizen's Charters (archived),
+  by topic, each opening its dated charter. Fees and times are not restated.
+- **Infrastructure** (`/infrastructure`): 179 DPWH projects located in Calatagan, 2016–2026,
+  ₱1.83 billion in contract budgets, with contractor, bidders, ABC, dates and barangay; 51
+  national-road segments and 2 multi-town packages listed but not counted. Source: DPWH via the
+  BetterGov.ph DPWH API (`npm run dpwh:fetch`).
+- **Statistics** (`/statistics`): census, income class and finances in one place, and DTI's
+  Competitiveness Index 2015–2024 (340th of 509 1st–2nd class municipalities in 2024; source:
+  DTI CMCI ranking tables, `npm run cmci:fetch`).
+- **Barangays** (`/barangays`, 25 profiles), **Legislation** (`/legislation`), **Procurement**
+  (`/procurement`), **Holidays** (`/holidays`: Proclamations 1006, 1189, 1264; Calatagan's own
+  Cultural Day, Proclamation 1220, and founding anniversary, 1102 and 1050), **Hotlines**
+  (`/hotlines`: 911 by EO 56 s. 2018, 8888 by EO 6 s. 2016), **Accessibility**, **Sitemap**.
+- Open data: `infrastructure.json`, `competitiveness.json`, `services.json`, `holidays.json`.
+
+### Fixed
+- **Missing spaces site-wide** before links and emphasis ("on theFinances", "Sources" glued to
+  the word before it on About, Finances, Government, Disclosures and the home page): Astro's HTML
+  compression dropped them; it is now off.
+- **Header on phones** overflowed the right edge by 17 px at 375 px wide.
+- **`ordinal()`** printed "321th"; now correct for every number.
+- **Duplicate search landmark label** on the home page (hero box and floating bar).
+
 ### Added — A grounded assistant behind "Ask anything"
 See `docs/adr/0008-grounded-assistant.md`. **No data changed.**
 - **Ask, then search:** the home page box, the floating ask bar and the ⌘K dialog offer "Ask" as

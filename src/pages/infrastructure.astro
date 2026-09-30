@@ -1,0 +1,327 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Source from '../components/Source.astro';
+import Icon from '../components/Icon.astro';
+import ColumnChart from '../components/ColumnChart.astro';
+import {
+  byYear,
+  categories,
+  dpwh,
+  inCalatagan,
+  infrastructureSource,
+  onNationalRoad,
+  sharedPackages,
+  statusCounts,
+  totalBudget,
+  type DpwhProject,
+} from '../data/infrastructure';
+import { barangayPages } from '../lib/barangay-pages';
+import { formatDate, formatNumber, formatPeso, formatPesoMillions } from '../lib/format';
+import { SITE } from '../lib/site';
+import { dpwhTitle } from '../lib/dpwh-text';
+
+/**
+ * National infrastructure in Calatagan: every DPWH contract whose own
+ * description places the work here, as Better LGU portals list them.
+ * Road segments with no stated municipality, and packages shared with other
+ * towns, are shown apart and never counted (see data/infrastructure.ts).
+ */
+
+const crumbs = [
+  { name: 'Transparency', href: '/transparency' },
+  { name: 'Infrastructure', href: '/infrastructure' },
+];
+
+const barangayName = new Map(barangayPages.map((b) => [b.psgc10, b]));
+const total = totalBudget(inCalatagan);
+const statuses = statusCounts(inCalatagan);
+const chronological = [...byYear].reverse();
+const years = byYear.map((y) => y.year);
+const completed = inCalatagan.filter((p) => p.status === 'Completed').length;
+
+const statusTone = (status: string) =>
+  status === 'Completed' ? 'ok' : status === 'On-Going' ? 'accent' : status === 'Terminated' ? 'warn' : 'clay';
+
+const search = (p: DpwhProject) =>
+  [p.contractId, p.description, p.contractor, p.category, p.status, p.infraYear, ...p.barangays.map((c) => barangayName.get(c)?.name)]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+
+const slugOf = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+const description = `${inCalatagan.length} DPWH infrastructure projects located in Calatagan, Batangas (${Math.min(...years)}–${Math.max(...years)}): budgets, contractors, status and barangay, from DPWH’s own records.`;
+
+const origin = Astro.site ?? new URL('http://localhost:4321');
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Calatagan, Batangas — DPWH infrastructure projects',
+    description,
+    url: new URL('/infrastructure', origin).toString(),
+    isAccessibleForFree: true,
+    creator: { '@type': 'Organization', name: 'Department of Public Works and Highways' },
+    publisher: { '@type': 'Organization', name: SITE.name },
+    temporalCoverage: `${Math.min(...years)}/${Math.max(...years)}`,
+    spatialCoverage: { '@type': 'Place', name: 'Calatagan, Batangas, Philippines' },
+    isBasedOn: infrastructureSource.sources.map((s) => s.url),
+    distribution: [
+      { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: new URL('/data/infrastructure.json', origin).toString() },
+    ],
+  },
+];
+---
+
+<Base title="Infrastructure projects in Calatagan" {description} {crumbs} {jsonLd}>
+  <PageHeader
+    eyebrow="Transparency"
+    icon="flag"
+    title="National infrastructure in Calatagan"
+    lede="Roads, school buildings, covered courts, water systems and bridges: every contract the Department of Public Works and Highways describes as being in Calatagan, with its budget, contractor and status, as DPWH published it."
+    {crumbs}
+  >
+    <dl slot="aside" class="aside-card">
+      <div>
+        <dt>Projects in Calatagan</dt>
+        <dd class="figure">{formatNumber(inCalatagan.length)}</dd>
+      </div>
+      <div>
+        <dt>Contract budgets, {Math.min(...years)}–{Math.max(...years)}</dt>
+        <dd>{formatPesoMillions(total)} in total, as DPWH lists them</dd>
+      </div>
+    </dl>
+  </PageHeader>
+
+  <div class="container wide page-body">
+    <dl class="stat-row summary" data-stagger="70">
+      <div class="stat" data-reveal>
+        <dt>Completed</dt>
+        <dd class="figure" data-count={completed}>{formatNumber(completed)}</dd>
+        <dd class="stat-note">of {formatNumber(inCalatagan.length)} projects</dd>
+      </div>
+      {statuses
+        .filter(([status]) => status !== 'Completed')
+        .slice(0, 2)
+        .map(([status, count]) => (
+          <div class="stat" data-reveal>
+            <dt>{status}</dt>
+            <dd class="figure">{formatNumber(count)}</dd>
+            <dd class="stat-note">As DPWH last reported</dd>
+          </div>
+        ))}
+      <div class="stat" data-reveal>
+        <dt>Barangays named</dt>
+        <dd class="figure">{new Set(inCalatagan.flatMap((p) => p.barangays)).size}<span class="unit">of 25</span></dd>
+        <dd class="stat-note">In DPWH’s descriptions</dd>
+      </div>
+    </dl>
+
+    <div class="callout navy">
+      <p class="callout-title"><Icon name="info" size="18" /> National projects, not municipal ones</p>
+      <p>
+        These are DPWH contracts, mostly let by its Batangas 1st District Engineering Office. They are
+        national government spending in Calatagan, separate from the municipality’s own budget on the
+        <a href="/finances">Finances</a> page. Amounts are contract budgets, not audited spending.
+      </p>
+    </div>
+
+    <Source source={infrastructureSource} label="these projects" />
+
+    <section class="section-block" id="by-year" aria-labelledby="by-year-title">
+      <p class="eyebrow">By year</p>
+      <h2 id="by-year-title">Contract budgets by DPWH infrastructure year</h2>
+      <ColumnChart
+        categories={chronological.map((y) => String(y.year))}
+        series={[{ name: 'Contract budgets', color: 'var(--c-s1)', values: chronological.map((y) => (y.budgeted ? y.budget : null)) }]}
+        format="peso-m"
+        caption="Sum of DPWH contract budgets for projects located in Calatagan, by infrastructure year"
+        notes={chronological.map((y) => (y.budgeted ? `${y.projects.length} projects` : `${y.projects.length} projects, no budgets listed yet`))}
+      />
+      <details class="data-table">
+        <summary>View as a table</summary>
+        <div class="table-wrap" tabindex="0">
+          <table>
+            <caption>DPWH projects located in Calatagan, by infrastructure year</caption>
+            <thead>
+              <tr><th scope="col">Year</th><th scope="col" class="num">Projects</th><th scope="col" class="num">Contract budgets</th></tr>
+            </thead>
+            <tbody>
+              {byYear.map((y) => (
+                <tr><th scope="row">{y.year}</th><td class="num">{y.projects.length}</td><td class="num">{y.budgeted ? formatPeso(y.budget) : 'Not listed yet'}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <section class="section-block" id="projects" aria-labelledby="projects-title">
+      <p class="eyebrow">Every contract</p>
+      <h2 id="projects-title">Projects</h2>
+
+      <form class="toolbar sticky" data-filter="project-list" data-noun="projects" role="search" aria-label="Filter projects" style="--filter-cols: 4" hidden>
+        <p class="field search">
+          <label for="p-search">Search</label>
+          <input type="search" id="p-search" name="q" placeholder="Barangay, school, contractor or contract ID" autocomplete="off" />
+        </p>
+        <p class="field">
+          <label for="p-year">Year</label>
+          <select id="p-year" name="year">
+            <option value="">All years</option>
+            {byYear.map((y) => <option value={String(y.year)}>{y.year} ({y.projects.length})</option>)}
+          </select>
+        </p>
+        <p class="field">
+          <label for="p-status">Status</label>
+          <select id="p-status" name="status">
+            <option value="">Any status</option>
+            {statuses.map(([status, count]) => <option value={slugOf(status)}>{status} ({count})</option>)}
+          </select>
+        </p>
+        <p class="field">
+          <label for="p-category">Type</label>
+          <select id="p-category" name="category">
+            <option value="">All types</option>
+            {categories.map((c) => <option value={slugOf(c)}>{c}</option>)}
+          </select>
+        </p>
+        <p class="field">
+          <label for="p-barangay">Barangay</label>
+          <select id="p-barangay" name="barangay">
+            <option value="">All barangays</option>
+            {barangayPages.filter((b) => b.projects.length > 0).map((b) => <option value={b.slug}>{b.name} ({b.projects.length})</option>)}
+          </select>
+        </p>
+        <p class="field">
+          <button class="button" type="reset">Reset</button>
+        </p>
+      </form>
+
+      <div class="result-bar">
+        <p class="result-count" data-count-for="project-list" role="status" aria-live="polite">
+          Showing all <strong>{formatNumber(inCalatagan.length)}</strong> projects
+        </p>
+        <ul class="active-filters" data-pills-for="project-list" aria-label="Active filters"></ul>
+      </div>
+
+      <ul class="records" id="project-list">
+        {inCalatagan.map((p) => (
+          <li
+            class="record"
+            id={`contract-${p.contractId}`}
+            data-item
+            data-year={String(p.infraYear ?? '')}
+            data-status={slugOf(p.status)}
+            data-category={slugOf(p.category ?? 'Other')}
+            data-barangay={p.barangays.length === 1 ? barangayName.get(p.barangays[0])?.slug : p.barangays.length ? 'multiple' : ''}
+            data-search={search(p)}
+          >
+            <span class:list={['record-icon', { ok: p.status === 'Completed' }]} aria-hidden="true">
+              <Icon name={p.status === 'Completed' ? 'check' : 'clock'} size="20" />
+            </span>
+            <div>
+              <h3>{dpwhTitle(p.description)}</h3>
+              <p class="record-tags">
+                <span class:list={['chip', statusTone(p.status)]}><span class="dot"></span>{p.status}{p.progress !== null && p.status !== 'Completed' ? ` · ${p.progress}%` : ''}</span>
+                {p.infraYear && <span class="chip">{p.infraYear}</span>}
+                {p.category && <span>{p.category}</span>}
+                {p.barangays.map((code) => {
+                  const b = barangayName.get(code);
+                  return b ? <a href={`/barangays/${b.slug}`}>{b.name}</a> : null;
+                })}
+              </p>
+            </div>
+            <p class="record-side">
+              {p.budget !== null ? <span class="record-amount">{formatPeso(p.budget)}</span> : <span class="muted">No budget listed</span>}
+            </p>
+            <details class="record-more">
+              <summary>Contract details</summary>
+              <dl>
+                <dt>Contract ID</dt><dd><code>{p.contractId}</code></dd>
+                {p.contractor && <><dt>Contractor</dt><dd>{p.contractor}</dd></>}
+                {p.bidders !== null && <><dt>Bidders</dt><dd>{p.bidders}</dd></>}
+                {p.abc !== null && <><dt>Approved budget (ABC)</dt><dd>{formatPeso(p.abc)}</dd></>}
+                {p.startDate && <><dt>Start</dt><dd>{formatDate(p.startDate)}</dd></>}
+                {p.completionDate && <><dt>Completion</dt><dd>{formatDate(p.completionDate)}</dd></>}
+                {p.sourceOfFunds && <><dt>Source of funds</dt><dd>{p.sourceOfFunds}</dd></>}
+                {p.implementingOffice && <><dt>Implementing office</dt><dd>DPWH {p.implementingOffice}</dd></>}
+                <dt>Record</dt>
+                <dd><a href={`https://transparency.bettergov.ph/dpwh/${p.contractId}`} rel="noopener nofollow">This contract on BetterGov Transparency</a></dd>
+              </dl>
+            </details>
+          </li>
+        ))}
+      </ul>
+      <div class="empty-state" data-empty-for="project-list" hidden>
+        <p>No project matches those filters.</p>
+      </div>
+    </section>
+
+    <section class="section-block" id="not-counted" aria-labelledby="not-counted-title">
+      <p class="eyebrow">Listed, not counted</p>
+      <h2 id="not-counted-title">Work near Calatagan that cannot be placed in it</h2>
+      <p class="lede">
+        DPWH describes these contracts without placing them in Calatagan alone, so they are not in the
+        totals above. They are listed so nothing mentioning Calatagan is quietly left out.
+      </p>
+
+      <div class="group-head">
+        <h3>On the Nasugbu–Lian–Calatagan national road</h3>
+        <p>{onNationalRoad.length} contracts · {formatPesoMillions(totalBudget(onNationalRoad))} · kilometre posts given, municipality not stated</p>
+      </div>
+      <details class="data-table">
+        <summary>Show the {onNationalRoad.length} road contracts</summary>
+        <div class="table-wrap" tabindex="0">
+          <table>
+            <caption>DPWH contracts on the Nasugbu–Lian–Calatagan road with no municipality stated</caption>
+            <thead>
+              <tr><th scope="col">Year</th><th scope="col">Contract</th><th scope="col">Status</th><th scope="col" class="num">Budget</th></tr>
+            </thead>
+            <tbody>
+              {onNationalRoad.map((p) => (
+                <tr>
+                  <td>{p.infraYear}</td>
+                  <td>{dpwhTitle(p.description)} <code>{p.contractId}</code></td>
+                  <td>{p.status}</td>
+                  <td class="num">{p.budget !== null ? formatPeso(p.budget) : '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      {sharedPackages.length > 0 && (
+        <>
+          <div class="group-head">
+            <h3>Packages shared with other municipalities</h3>
+            <p>{sharedPackages.length} {sharedPackages.length === 1 ? 'contract' : 'contracts'} · one budget covering sites in more than one town</p>
+          </div>
+          <ul class="records">
+            {sharedPackages.map((p) => (
+              <li class="record">
+                <span class="record-icon warn" aria-hidden="true"><Icon name="layers" size="20" /></span>
+                <div>
+                  <h3>{dpwhTitle(p.description)}</h3>
+                  <p class="record-tags"><span class="chip">{p.infraYear}</span><span>{p.status}</span><code>{p.contractId}</code></p>
+                </div>
+                <p class="record-side">{p.budget !== null && <span class="record-amount">{formatPeso(p.budget)}</span>}</p>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      <p class="small muted">
+        {formatNumber(dpwh.searched)} DPWH records mention “Calatagan”; {formatNumber(dpwh.excluded.elsewhere)} of them are
+        elsewhere (for example a creek in Makati, a barangay in Virac, bridges on the road placed in Lian)
+        and are not listed.
+      </p>
+    </section>
+  </div>
+
+  <script>
+    import '../scripts/filter.ts';
+  </script>
+</Base>

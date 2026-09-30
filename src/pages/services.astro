@@ -1,0 +1,325 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Source from '../components/Source.astro';
+import Icon from '../components/Icon.astro';
+import {
+  charterDocuments,
+  offices,
+  publicServiceCount,
+  SERVICE_CATEGORIES,
+  servicesSource,
+  type ServiceCategory,
+} from '../data/services';
+import { archiveReadAttrs } from '../lib/viewer';
+import { formatNumber } from '../lib/format';
+
+/**
+ * Municipal services, arranged the way the Better LGU portals arrange theirs:
+ * by what a resident wants to do, not by which office does it. Every service
+ * names its office and opens that office's dated charter in the reader.
+ *
+ * Fees, requirements and processing times are deliberately left in the
+ * charters (dated 2022) rather than restated as if current. See services.ts.
+ */
+
+const crumbs = [{ name: 'Services', href: '/services' }];
+
+const CATEGORY_ICON: Record<ServiceCategory, Parameters<typeof Icon>[0]['name']> = {
+  'civil-registry': 'file',
+  business: 'coins',
+  'tax-property': 'landmark',
+  health: 'shield',
+  'social-welfare': 'people',
+  agriculture: 'pin',
+  jobs: 'layers',
+  disaster: 'alert',
+  environment: 'flag',
+  transport: 'arrow-right',
+  tourism: 'lighthouse',
+  government: 'book',
+};
+
+const categories = (Object.keys(SERVICE_CATEGORIES) as ServiceCategory[])
+  .map((key) => ({
+    key,
+    ...SERVICE_CATEGORIES[key],
+    services: offices.flatMap((office) =>
+      office.services
+        .filter((service) => service.category === key)
+        .map((service) => ({ ...service, office })),
+    ),
+  }))
+  .filter((category) => category.services.length > 0);
+
+const readFor = (slug: string) => {
+  const doc = charterDocuments.get(slug)!;
+  return { doc, read: archiveReadAttrs(doc) };
+};
+
+const publicOffices = offices.filter((office) => office.services.length > 0);
+const description = `The ${publicServiceCount} services Calatagan’s municipal offices listed in their 2022 Citizen’s Charters, by topic, each with its office and the dated charter.`;
+---
+
+<Base title="Municipal services" {description} {crumbs}>
+  <PageHeader
+    eyebrow="Services"
+    icon="layers"
+    title="What the municipality provides"
+    lede="Birth certificates, business permits, the cedula, senior citizen IDs, farmer registration: every service Calatagan’s offices listed in their Citizen’s Charters, arranged by what you need to do. Each one names its office and opens that office’s charter, dated, so you can see the requirements for yourself."
+    {crumbs}
+  >
+    <dl slot="aside" class="aside-card">
+      <div>
+        <dt>Services listed</dt>
+        <dd class="figure">{formatNumber(publicServiceCount)}</dd>
+      </div>
+      <div>
+        <dt>Offices</dt>
+        <dd>{publicOffices.length} offices, each with its own 2022 charter</dd>
+      </div>
+    </dl>
+  </PageHeader>
+
+  <div class="container wide page-body">
+    <div class="callout warn">
+      <p class="callout-title"><Icon name="clock" size="18" /> Listed in 2022 — confirm before you go</p>
+      <p>
+        These are the services in the charters the municipality published in 2022, on a website that
+        is now offline. Fees, requirements and processing times are in each charter but are not
+        repeated here, because they are the details most likely to have changed. Check the charter,
+        then confirm at the municipal hall. For emergencies, see <a href="/hotlines">hotlines</a>.
+      </p>
+    </div>
+
+    <nav class="topics" aria-label="Services by topic">
+      <ul>
+        {categories.map((category) => (
+          <li>
+            <a href={`#${category.key}`}>
+              <span class="t-icon" aria-hidden="true"><Icon name={CATEGORY_ICON[category.key]} size="18" /></span>
+              <span class="t-text">
+                <span class="t-label">{category.label}</span>
+                <span class="t-count">{category.services.length} {category.services.length === 1 ? 'service' : 'services'}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <Source source={servicesSource} label="this list of services" />
+
+    {categories.map((category) => (
+      <section class="section-block" id={category.key} aria-labelledby={`${category.key}-title`}>
+        <p class="eyebrow">{category.blurb}</p>
+        <h2 id={`${category.key}-title`}>{category.label}</h2>
+        <ul class="records">
+          {category.services.map((service) => {
+            const { doc, read } = readFor(service.office.slug);
+            return (
+              <li class="record">
+                <span class="record-icon" aria-hidden="true"><Icon name={CATEGORY_ICON[category.key]} size="20" /></span>
+                <div>
+                  <h3>{service.name}</h3>
+                  <p class="record-tags">
+                    <span class="chip">{service.office.short ?? service.office.name}</span>
+                    {service.office.short && <span>{service.office.name}</span>}
+                    {service.allHours && <span class="chip ok"><span class="dot"></span>24 hours, as listed</span>}
+                    {service.who && <span>For: {service.who}</span>}
+                  </p>
+                </div>
+                <p class="record-side">
+                  <a
+                    class="button small"
+                    href={doc.archiveUrl}
+                    rel="noopener noreferrer nofollow"
+                    {...(read ?? {})}
+                  >
+                    <Icon name="eye" size="16" /> Charter
+                    <span class="visually-hidden"> of the {service.office.name}, 2022</span>
+                  </a>
+                </p>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))}
+
+    <section class="section-block" id="offices" aria-labelledby="offices-title">
+      <p class="eyebrow">By office</p>
+      <h2 id="offices-title">Every office and its charter</h2>
+      <p class="lede">
+        The same services, listed under the office that provides them. Services an office lists for
+        other offices or for its own employees are shown separately, as the charters themselves
+        separate them.
+      </p>
+      <ul class="office-grid">
+        {offices.map((office) => {
+          const { doc, read } = readFor(office.slug);
+          return (
+            <li class="office" id={`office-${office.slug}`}>
+              <h3>
+                {office.name}
+                {office.short && <span class="office-short">{office.short}</span>}
+              </h3>
+              {office.services.length > 0 && (
+                <ul class="office-services">
+                  {office.services.map((service) => <li>{service.name}</li>)}
+                </ul>
+              )}
+              {office.internal && (
+                <p class="office-internal">
+                  <strong>Internal:</strong> {office.internal.join('; ')}.
+                </p>
+              )}
+              <p class="office-doc">
+                <a href={doc.archiveUrl} rel="noopener noreferrer nofollow" {...(read ?? {})}>
+                  Read the {doc.publishedYear} charter
+                </a>
+                <span class="muted"> · archived {doc.capturedAt}</span>
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+
+    <section class="section-block" id="national" aria-labelledby="national-title">
+      <p class="eyebrow">Beyond the municipality</p>
+      <h2 id="national-title">Services from national agencies</h2>
+      <p class="lede">
+        Some documents residents often need are issued nationally, not by the municipality. Go to the
+        issuing agency directly:
+      </p>
+      <ul class="national">
+        <li><a href="https://www.psaserbilis.com.ph" rel="noopener">PSA Serbilis</a> — PSA birth, marriage, death and CENOMAR certificates, ordered online</li>
+        <li><a href="https://philsys.gov.ph" rel="noopener">PhilSys</a> — the Philippine national ID</li>
+        <li><a href="https://bnrs.dti.gov.ph" rel="noopener">DTI Business Name Registration</a> — registering a sole proprietorship’s name, before the municipal business permit</li>
+        <li><a href="https://www.foi.gov.ph" rel="noopener">Freedom of Information</a> — requests to national agencies</li>
+      </ul>
+      <p class="small muted">
+        Links go to each agency’s own site; this project does not handle applications or payments.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .topics {
+    margin: var(--sp-6) 0;
+  }
+  .topics ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
+    gap: var(--sp-2);
+  }
+  .topics li + li {
+    margin: 0;
+  }
+  .topics a {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    height: 100%;
+    padding: var(--sp-3) var(--sp-4);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-md);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    text-decoration: none;
+    transition: border-color var(--dur-1), background var(--dur-1);
+  }
+  .topics a:hover {
+    border-color: var(--c-accent-line);
+    background: var(--c-accent-wash);
+  }
+  .t-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: var(--c-sunk);
+    color: var(--c-accent);
+  }
+  .t-text {
+    display: grid;
+  }
+  .t-label {
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--c-navy);
+  }
+  .t-count {
+    font-size: var(--fs-2xs);
+    color: var(--c-muted);
+  }
+
+  .office-grid {
+    list-style: none;
+    margin: var(--sp-5) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(22rem, 100%), 1fr));
+    gap: var(--sp-4);
+  }
+  .office-grid > li + li {
+    margin: 0;
+  }
+  .office {
+    display: flex;
+    flex-direction: column;
+    padding: var(--sp-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    scroll-margin-top: calc(var(--header-h) + var(--sp-4));
+  }
+  .office h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-2);
+    margin: 0 0 var(--sp-3);
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .office-short {
+    font-family: var(--font-sans);
+    font-size: var(--fs-2xs);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--c-clay);
+  }
+  .office-services {
+    margin: 0 0 var(--sp-3);
+    padding-left: 1.1em;
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .office-services li + li {
+    margin-top: 2px;
+  }
+  .office-internal {
+    margin: 0 0 var(--sp-3);
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .office-doc {
+    margin: auto 0 0;
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--c-line);
+    font-size: var(--fs-sm);
+  }
+  .national {
+    max-width: 68ch;
+  }
+</style>

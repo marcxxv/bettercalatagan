@@ -1,0 +1,129 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Source from '../../components/Source.astro';
+import Icon from '../../components/Icon.astro';
+import { barangayPages } from '../../lib/barangay-pages';
+import { barangayPopulation2024, population2024 } from '../../data/population';
+import { infrastructureSource } from '../../data/infrastructure';
+import { formatNumber } from '../../lib/format';
+
+/**
+ * The barangay directory the Better LGU portals open their Government
+ * section with: every barangay, its census counts, and a profile page.
+ * Barangay officials are not listed, for the reason on the Government page.
+ */
+
+const crumbs = [
+  { name: 'Government', href: '/government' },
+  { name: 'Barangays', href: '/barangays' },
+];
+const pop = population2024.data;
+const description = `All ${barangayPages.length} barangays of Calatagan, Batangas: 2024 population and households from PSA, and the DPWH projects in each.`;
+const pct = (share: number | null) =>
+  share === null ? '—' : share < 0.005 ? '<0.5%' : `${(share * 100).toFixed(1)}%`;
+---
+
+<Base title="Barangays of Calatagan" {description} {crumbs}>
+  <PageHeader
+    eyebrow="Government"
+    icon="pin"
+    title="The 25 barangays"
+    lede="Every barangay of Calatagan, with its population and households from the 2024 census and the national infrastructure projects DPWH describes as being in it."
+    {crumbs}
+  >
+    <dl slot="aside" class="aside-card">
+      <div><dt>Barangays</dt><dd class="figure">{barangayPages.length}</dd></div>
+      <div><dt>Population, {pop.census}</dt><dd>{formatNumber(pop.population)} in {formatNumber(pop.households)} households</dd></div>
+    </dl>
+  </PageHeader>
+
+  <div class="container wide page-body">
+    <ul class="bgy-grid">
+      {barangayPages.map((b) => (
+        <li>
+          <a class="bgy" href={`/barangays/${b.slug}`}>
+            <span class="bgy-name">{b.name}</span>
+            <span class="bgy-pop">
+              {b.census ? <>{formatNumber(b.census.totalPopulation)} <span class="muted">people</span></> : '—'}
+            </span>
+            <span class="bgy-bar" aria-hidden="true"><span style={`width:${Math.min(100, (b.share ?? 0) * 100 * 8)}%`}></span></span>
+            <span class="bgy-meta">
+              {pct(b.share)} of the town · {b.census ? `${formatNumber(b.census.households)} households` : ''}
+              {b.projects.length > 0 && <> · {b.projects.length} DPWH {b.projects.length === 1 ? 'project' : 'projects'}</>}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="callout navy">
+      <p class="callout-title"><Icon name="info" size="18" /> Not listed: barangay officials and halls</p>
+      <p>
+        Barangay captains and councils are not named, for the same reason as the municipal officials
+        (<a href="/government#officials">see why</a>), and no barangay office addresses or numbers
+        are published.
+      </p>
+    </div>
+
+    <Source source={barangayPopulation2024.source} label="the census figures" />
+    <Source source={infrastructureSource} label="the project counts" />
+  </div>
+</Base>
+
+<style>
+  .bgy-grid {
+    list-style: none;
+    margin: 0 0 var(--sp-6);
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
+    gap: var(--sp-3);
+  }
+  .bgy-grid > li + li {
+    margin: 0;
+  }
+  .bgy {
+    display: grid;
+    gap: var(--sp-1);
+    height: 100%;
+    padding: var(--sp-4) var(--sp-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    text-decoration: none;
+    transition: border-color var(--dur-1), box-shadow var(--dur-1), transform var(--dur-2) var(--ease-out);
+  }
+  .bgy:hover {
+    border-color: var(--c-accent-line);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+  }
+  .bgy-name {
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+    letter-spacing: -0.01em;
+    color: var(--c-navy);
+  }
+  .bgy-pop {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .bgy-bar {
+    height: 4px;
+    margin: var(--sp-1) 0;
+    border-radius: 999px;
+    background: var(--c-sunk);
+    overflow: hidden;
+  }
+  .bgy-bar span {
+    display: block;
+    height: 100%;
+    background: var(--c-s1);
+  }
+  .bgy-meta {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+</style>

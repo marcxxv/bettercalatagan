@@ -128,3 +128,126 @@ export const PSA_OPENSTAT_SERIES: SourceReference = {
  * It is no longer a blocker: the underlying figures now come from PSA OpenSTAT,
  * the same authority serving the same release as data.
  */
+
+/**
+ * DPWH's published contracts, read through the BetterGov.ph mirror of DPWH's
+ * infrastructure transparency data (the same source other Better LGU portals
+ * use). DPWH is the author of every value; the mirror is the carrier.
+ */
+export const DPWH_BETTERGOV_API: SourceReference = {
+  name: 'DPWH infrastructure projects (contracts, budgets, contractors, status)',
+  publisher: 'Department of Public Works and Highways, via the BetterGov.ph DPWH transparency API',
+  url: 'https://api.dpwh.bettergov.ph/projects?search=Calatagan',
+  accessedOn: '2026-09-30',
+  authority: 'civic-tech-derivative',
+  locator: 'Search "Calatagan"; each contract read from /projects/{contractId}',
+};
+
+export const DPWH_TRANSPARENCY_BETTERGOV: SourceReference = {
+  name: 'BetterGov.ph Transparency — DPWH projects',
+  publisher: 'BetterGov.ph',
+  url: 'https://transparency.bettergov.ph/dpwh?q=Calatagan',
+  accessedOn: '2026-09-30',
+  authority: 'civic-tech-derivative',
+};
+
+/** DTI's Cities and Municipalities Competitiveness Index, ranking tables. */
+export const DTI_CMCI_RANKINGS: SourceReference = {
+  name: 'Cities and Municipalities Competitiveness Index — rankings, 1st to 2nd class municipalities',
+  publisher: 'Department of Trade and Industry, Competitiveness Bureau',
+  url: 'https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities',
+  accessedOn: '2026-09-30',
+  authority: 'primary-government',
+  locator: 'Row "Calatagan, Batangas", each year from 2015',
+};
+
+export const DTI_CMCI_PROFILE: SourceReference = {
+  name: 'CMCI LGU profile — Calatagan',
+  publisher: 'Department of Trade and Industry, Competitiveness Bureau',
+  url: 'https://cmci.dti.gov.ph/lgu-profile.php?lgu=Calatagan',
+  accessedOn: '2026-09-30',
+  authority: 'primary-government',
+  locator: 'Pillar and indicator rankings only; the contact block on this page is stale and not used',
+};
+
+/* ---------- Holidays and national hotlines ---------- */
+
+/** Proclamation No. 1006, s. 2025: the 2026 holidays. The signed, certified copy (scanned). */
+export const PROC_1006_2025: SourceReference = {
+  name: 'Proclamation No. 1006, s. 2025 — Regular holidays and special (non-working) days for 2026',
+  publisher: 'Office of the President (Presidential Communications Office)',
+  url: 'https://pco.gov.ph/wp-content/uploads/2025/09/20250903-PROC-1006-FRM.pdf.pdf',
+  accessedOn: '2026-09-30',
+  authority: 'primary-government',
+  locator: 'Section 1, A–D (page 2 of 3); certified copy, signed 3 September 2025',
+  sha256: '1f4e765de7208c685b628cc8bd872ea329918f64d300fcd9115660a892f8e541',
+};
+export const PROC_1006_2025_ELIBRARY: SourceReference = {
+  name: 'Proclamation No. 1006, s. 2025',
+  publisher: 'Supreme Court E-Library',
+  url: 'https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/7/99678',
+  accessedOn: '2026-09-30',
+  authority: 'government-hosted-copy',
+};
+export const PROC_1189_2026: SourceReference = {
+  name: 'Proclamation No. 1189, s. 2026 — Eid’l Fitr, 20 March 2026',
+  publisher: 'Presidential Communications Office',
+  url: 'https://pco.gov.ph/news_releases/proclamation-no-1189-s-2026-declaring-friday-20-march-2026-a-regular-holiday-throughout-the-country-in-observance-of-eidl-fitr-feast-of-ramadhan/',
+  accessedOn: '2026-09-30',
+  authority: 'primary-government',
+};
+export const PROC_1264_2026: SourceReference = {
+  name: 'Proclamation No. 1264, s. 2026 — Eid’l Adha, 27 May 2026',
+  publisher: 'Presidential Communications Office',
+  url: 'https://pco.gov.ph/news_releases/palace-declares-may-27-as-a-regular-holiday-for-eidl-adha-observance/',
+  accessedOn: '2026-09-30',
+  authority: 'primary-government',
+};
+export const PROC_1220_2026: SourceReference = {
+  name: 'Proclamation No. 1220, s. 2026 — Calatagan Cultural Day, 30 April 2026',
+  publisher: 'Presidential Communications Office',
+  url: 'https://pco.gov.ph/news_releases/pbbm-declares-special-non-working-days-in-several-provinces-across-ph/',
+  accessedOn: '2026-09-30',
+  authority: 'primary-government',
+};
+export const PROC_1102_2025: SourceReference = {
+  name: 'Proclamation No. 1102, s. 2025 — Calatagan Founding Anniversary, 16 December 2025',
+  publisher: 'Supreme Court E-Library',
+  url: 'https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/7/100590',
+  accessedOn: '2026-09-30',
+  authority: 'government-hosted-copy',
+  locator: 'Signed 3 December 2025',
+};
+export const PROC_1050_2020: SourceReference = {
+  name: 'Proclamation No. 1050, s. 2020 — Calatagan Founding Anniversary, 16 December 2020',
+  publisher: 'Supreme Court E-Library',
+  url: 'https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/7/92651',
+  accessedOn: '2026-09-30',
+  authority: 'government-hosted-copy',
+  locator: 'Signed 17 November 2020',
+};
+export const EO_56_2018: SourceReference = {
+  name: 'Executive Order No. 56, s. 2018 — Emergency 911 as the nationwide emergency hotline',
+  publisher: 'Supreme Court E-Library',
+  url: 'https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/5/83090',
+  accessedOn: '2026-09-30',
+  authority: 'government-hosted-copy',
+  locator: 'Section 1: “911” institutionalized as the Nationwide Emergency Hotline Number, replacing “117”',
+};
+export const EO_6_2016: SourceReference = {
+  name: 'Executive Order No. 6, s. 2016 — the 8888 Citizens’ Complaint Hotline',
+  publisher: 'Supreme Court E-Library',
+  url: 'https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/5/71975',
+  accessedOn: '2026-09-30',
+  authority: 'government-hosted-copy',
+  locator: 'Sections 1–2',
+};
+/** Executive Order No. 414, s. 2005: the Calatagan Port Zone. */
+export const EO_414_2005: SourceReference = {
+  name: 'Executive Order No. 414, s. 2005 — Declaring and delineating the Calatagan Port Zone',
+  publisher: 'Supreme Court E-Library',
+  url: 'https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/5/452',
+  accessedOn: '2026-09-30',
+  authority: 'government-hosted-copy',
+  locator: 'Signed 7 March 2005; port zone of 289,371.64 square metres under the Philippine Ports Authority',
+};

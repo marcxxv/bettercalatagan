@@ -10,7 +10,7 @@
  * the first time someone asks.
  */
 import Icon from './Icon.astro';
-import { NAV, SECONDARY_NAV } from '../lib/site';
+import { PAGES } from '../lib/site';
 
 interface Props {
   endpoint: string;
@@ -20,7 +20,7 @@ interface Props {
 const { endpoint, turnstileSiteKey } = Astro.props;
 
 /** Section names for source links, so a source reads "Finances", not a page title. */
-const pages = Object.fromEntries([...NAV, ...SECONDARY_NAV].map((item) => [item.href, item.label]));
+const pages = Object.fromEntries(PAGES.map((item) => [item.href, item.label]));
 
 const suggestions = [
   'How many people live in Calatagan?',

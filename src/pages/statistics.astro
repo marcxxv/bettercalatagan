@@ -1,0 +1,289 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Source from '../components/Source.astro';
+import Icon from '../components/Icon.astro';
+import ColumnChart from '../components/ColumnChart.astro';
+import { cmciYears, competitivenessSource, latestCmci } from '../data/competitiveness';
+import { annualSeries, financialsSource } from '../data/financials';
+import { incomeClassification, municipality } from '../data/municipality';
+import { barangayPopulation2024, population2024, populationSeries } from '../data/population';
+import { formatDate, formatNumber, formatPesoMillions, ordinal } from '../lib/format';
+
+/**
+ * The statistics hub the Better LGU portals all have: demographics, the
+ * income class, the municipal economy, and DTI's competitiveness index.
+ * Census and finance figures link on to the pages that hold them in full;
+ * the competitiveness index is new to this site and lives here.
+ */
+
+const crumbs = [{ name: 'Statistics', href: '/statistics' }];
+
+const pop = population2024.data;
+const series = [...populationSeries.data].sort((a, b) => a.referenceDate.localeCompare(b.referenceDate));
+const years = annualSeries();
+const latestYear = years.at(-1);
+const largest = [...barangayPopulation2024.data].sort((a, b) => b.totalPopulation - a.totalPopulation)[0];
+
+const place = ordinal;
+
+const description = `Calatagan, Batangas in figures: ${formatNumber(pop.population)} people (2024), ${municipality.data.barangayCount} barangays, 1st class income, and DTI competitiveness rankings ${cmciYears[0].year}–${latestCmci.year}.`;
+---
+
+<Base title="Statistics" {description} {crumbs}>
+  <PageHeader
+    eyebrow="Statistics"
+    icon="chart"
+    title="Calatagan in figures"
+    lede="The census, the income classification, the municipality’s own finances and the Department of Trade and Industry’s competitiveness index, in one place, each from the agency that publishes it."
+    {crumbs}
+  >
+    <dl slot="aside" class="aside-card">
+      <div>
+        <dt>Population, {pop.census}</dt>
+        <dd class="figure">{formatNumber(pop.population)}</dd>
+      </div>
+      <div>
+        <dt>DTI competitiveness, {latestCmci.year}</dt>
+        <dd>{place(latestCmci.rank)} of {formatNumber(latestCmci.ranked)} {latestCmci.category.toLowerCase()}</dd>
+      </div>
+    </dl>
+  </PageHeader>
+
+  <div class="container wide with-rail page-body">
+    <aside class="rail">
+      <nav class="rail-nav" aria-labelledby="toc-label" data-spy>
+        <p class="rail-title" id="toc-label">On this page</p>
+        <ul>
+          <li><a href="#people">People</a></li>
+          <li><a href="#economy">Economy and finances</a></li>
+          <li><a href="#competitiveness">Competitiveness</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="content">
+      <section class="section" id="people" aria-labelledby="people-title">
+        <p class="eyebrow">Philippine Statistics Authority</p>
+        <h2 id="people-title">People</h2>
+        <dl class="stat-row" data-stagger="70">
+          <div class="stat" data-reveal>
+            <dt>Population</dt>
+            <dd class="figure" data-count={pop.population}>{formatNumber(pop.population)}</dd>
+            <dd class="stat-note">{pop.census} · {formatDate(pop.referenceDate)}</dd>
+          </div>
+          <div class="stat" data-reveal>
+            <dt>Households</dt>
+            <dd class="figure" data-count={pop.households}>{formatNumber(pop.households)}</dd>
+            <dd class="stat-note">{pop.census}</dd>
+          </div>
+          <div class="stat" data-reveal>
+            <dt>Barangays</dt>
+            <dd class="figure">{municipality.data.barangayCount}</dd>
+            <dd class="stat-note">Largest: <a href="/barangays">{largest.name}</a></dd>
+          </div>
+        </dl>
+        <ColumnChart
+          categories={series.map((s) => s.census)}
+          series={[{ name: 'Population', color: 'var(--c-s1)', values: series.map((s) => s.population) }]}
+          labels
+          height={240}
+          caption="Population at each census"
+        />
+        <p class="more">
+          <a class="link-arrow" href="/#population">Census details and definitions</a>
+          <a class="link-arrow" href="/barangays">All 25 barangays</a>
+        </p>
+        <Source source={population2024.source} label="the census figures" />
+      </section>
+
+      <section class="section" id="economy" aria-labelledby="economy-title">
+        <p class="eyebrow">BLGF and DILG</p>
+        <h2 id="economy-title">Economy and municipal finances</h2>
+        <dl class="stat-row">
+          <div class="stat">
+            <dt>Income class</dt>
+            <dd class="figure">{ordinal(incomeClassification.data.incomeClass)}</dd>
+            <dd class="stat-note">From {formatDate(incomeClassification.data.effectiveFrom)}</dd>
+          </div>
+          {latestYear && (
+            <>
+              <div class="stat">
+                <dt>Income, CY{latestYear.year}</dt>
+                <dd class="figure">{formatPesoMillions(latestYear.income ?? 0)}</dd>
+                <dd class="stat-note">Reported, not audited</dd>
+              </div>
+              <div class="stat">
+                <dt>Operating expenditure, CY{latestYear.year}</dt>
+                <dd class="figure">{formatPesoMillions(latestYear.expenditures ?? 0)}</dd>
+                <dd class="stat-note">Reported, not audited</dd>
+              </div>
+            </>
+          )}
+        </dl>
+        <p class="more">
+          <a class="link-arrow" href="/finances">Every quarter, every line item</a>
+          <a class="link-arrow" href="/infrastructure">National infrastructure spending</a>
+        </p>
+        <Source source={incomeClassification.source} label="the income class" />
+        <Source source={financialsSource} label="the municipal finances" />
+      </section>
+
+      <section class="section" id="competitiveness" aria-labelledby="competitiveness-title">
+        <p class="eyebrow">Department of Trade and Industry</p>
+        <h2 id="competitiveness-title">Competitiveness</h2>
+        <p>
+          DTI’s Cities and Municipalities Competitiveness Index ranks local governments on economic
+          dynamism, government efficiency, infrastructure, resiliency and innovation, from data they
+          and national agencies submit. Municipalities are ranked against others of their income
+          class; Calatagan was ranked among <strong>{latestCmci.category.toLowerCase()}</strong> in
+          every year shown.
+        </p>
+
+        <ol class="ranks" aria-label="Calatagan’s CMCI rank by year">
+          {[...cmciYears].reverse().map((y) => (
+            <li>
+              <span class="r-year">{y.year}</span>
+              <span class="r-track" aria-hidden="true">
+                <span class="r-mark" style={`--at:${((y.rank - 1) / Math.max(1, y.ranked - 1)) * 100}%`}></span>
+              </span>
+              <span class="r-label">
+                <strong>{place(y.rank)}</strong> of {formatNumber(y.ranked)}
+                <span class="muted"> · score {y.score !== null ? y.score.toFixed(2) : 'not published'}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+        <p class="small muted">
+          The marker shows the rank along the field: left is first. Pillars were added over time
+          (Resiliency in 2017, Innovation in 2022), so scores from different years are not directly
+          comparable. DTI’s 2018 table gives ranks but no scores.
+        </p>
+
+        <div class="table-wrap" tabindex="0">
+          <table>
+            <caption>Calatagan by CMCI pillar, {latestCmci.year}, as published by DTI</caption>
+            <thead>
+              <tr><th scope="col">Pillar</th><th scope="col" class="num">Rank</th><th scope="col" class="num">Score</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Overall</th>
+                <td class="num">{place(latestCmci.rank)} of {formatNumber(latestCmci.ranked)}</td>
+                <td class="num">{latestCmci.score?.toFixed(4) ?? '—'}</td>
+              </tr>
+              {latestCmci.pillars.map((pillar) => (
+                <tr>
+                  <th scope="row">{pillar.name}</th>
+                  <td class="num">{pillar.rank !== null ? place(pillar.rank) : '—'}</td>
+                  <td class="num">{pillar.score?.toFixed(4) ?? '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <details class="data-table">
+          <summary>Every year, every pillar</summary>
+          <div class="table-wrap" tabindex="0">
+            <table>
+              <caption>Calatagan’s CMCI ranks by pillar, {cmciYears[0].year}–{latestCmci.year}</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Year</th>
+                  <th scope="col" class="num">Overall</th>
+                  {['Economic Dynamism', 'Government Efficiency', 'Infrastructure', 'Resiliency', 'Innovation'].map((name) => (
+                    <th scope="col" class="num">{name}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[...cmciYears].reverse().map((y) => (
+                  <tr>
+                    <th scope="row"><a href={y.url} rel="noopener nofollow">{y.year}</a></th>
+                    <td class="num">{place(y.rank)} / {y.ranked}</td>
+                    {['Economic Dynamism', 'Government Efficiency', 'Infrastructure', 'Resiliency', 'Innovation'].map((name) => {
+                      const pillar = y.pillars.find((p) => p.name === name);
+                      return <td class="num">{pillar?.rank ? place(pillar.rank) : '—'}</td>;
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <div class="callout navy">
+          <p class="callout-title"><Icon name="info" size="18" /> What a rank does and does not say</p>
+          <p>
+            The CMCI scores what local governments and agencies report against DTI’s indicators. It is
+            a comparison with other municipalities of the same class, not a measure of how residents
+            fare. DTI’s profile page for Calatagan also shows a mayor, a population, a telephone number
+            and an e-mail address; those are out of date and are not repeated here
+            (<a href="/sources#withheld">see why</a>).
+          </p>
+        </div>
+        <Source source={competitivenessSource} label="the competitiveness index" />
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .more {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-5);
+    margin: var(--sp-4) 0;
+  }
+  .ranks {
+    list-style: none;
+    margin: var(--sp-5) 0 var(--sp-3);
+    padding: 0;
+    display: grid;
+    gap: var(--sp-2);
+  }
+  .ranks li + li {
+    margin: 0;
+  }
+  .ranks li {
+    display: grid;
+    grid-template-columns: 3.2rem minmax(6rem, 1fr) 15.5rem;
+    align-items: center;
+    gap: var(--sp-3);
+    font-size: var(--fs-sm);
+  }
+  .r-year {
+    font-weight: 700;
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .r-track {
+    position: relative;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--c-sunk);
+  }
+  .r-mark {
+    position: absolute;
+    top: 50%;
+    left: var(--at);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    box-shadow: 0 0 0 3px var(--c-bg);
+    transform: translate(-50%, -50%);
+  }
+  .r-label {
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 30rem) {
+    .ranks li {
+      grid-template-columns: 2.8rem 1fr;
+    }
+    .r-label {
+      grid-column: 2;
+    }
+  }
+</style>

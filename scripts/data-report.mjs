@@ -26,6 +26,8 @@ const DATASETS = [
   { file: 'src/data/generated/sre-financials.json', label: 'Statements of Receipts and Expenditures', list: 'filings', key: 'filingId' },
   { file: 'src/data/generated/psa-population.json', label: 'PSA census by barangay', list: 'barangays', key: 'psgc10' },
   { file: 'src/data/generated/archived-documents.json', label: 'Archived municipal documents', list: 'documents', key: 'id' },
+  { file: 'src/data/generated/dpwh-projects.json', label: 'DPWH infrastructure projects', list: 'projects', key: 'contractId' },
+  { file: 'src/data/generated/cmci.json', label: 'DTI competitiveness index', list: 'years', key: 'year' },
 ];
 
 /** Restamped on every run; a change here is not a change in the data. */

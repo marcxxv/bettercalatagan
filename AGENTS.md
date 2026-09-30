@@ -78,7 +78,7 @@ src/
   styles/             tokens.css (design tokens, light + dark), global.css
 scripts/              Node pipelines (fdp, sre, psa, documents), data-report, brand
 data/staging/         FDP staging file (committed)
-docs/adr/             decisions 0001–0008; docs/data-pipelines.md runbook
+docs/adr/             decisions 0001–0009; docs/data-pipelines.md runbook
 worker/               the assistant: Cloudflare Worker, D1 + Vectorize, eval set (worker/README.md)
 public/               logo*.svg, favicons, og/*.png, fonts/ (self-hosted), agencies/ (badges)
 certs/                DILG intermediate certificate
@@ -93,8 +93,11 @@ certs/                DILG intermediate certificate
 - Generated datasets: `fdp-filings.json` (156 DILG filings, 14 forms), `sre-financials.json` (14
   reconciled quarterly SREs, cell-referenced), `psa-population.json` (2024 POPCEN, 25 barangays),
   `archived-documents.json` (232 files from calatagan.gov.ph via the Internet Archive).
+- More generated datasets (ADR 0009): `dpwh-projects.json` (DPWH contracts mentioning Calatagan,
+  each with a `scope`: calatagan / road / shared) and `cmci.json` (DTI competitiveness, by year).
 - Hand-maintained: `municipality.ts` (identity, income class, `WITHHELD`), `history.ts`,
-  `sources.ts`, `barangays.ts`.
+  `sources.ts`, `barangays.ts`, `services.ts` (2022 Citizen's Charter services, no fees or times),
+  `calendar.ts` (holidays by proclamation; hotlines by executive order).
 - Exports: `/data/index.json` (catalogue), `/data/{municipality,financials,fdp-filings,documents}.json`,
   `/search.json` (ask/search index), `/llms.txt`, `/sitemap.xml`.
 - Pipelines, review flow and how to add a source: **`docs/data-pipelines.md`**.
@@ -129,6 +132,16 @@ system dark). Theme choice is stored in `localStorage['bc-theme']` and applied p
 **Avoid (rejected before):** coloured left-stripe panels ("AI-slop" border-left accents),
 gradients-as-decoration, glassmorphism, stock hero photos, a back-to-top button, anything that
 looks like an official government site.
+
+**Navigation** (ADR 0009) follows the Better LGU portals: `NAV_GROUPS` in `site.ts` (Services ·
+Government · Statistics · Transparency · About) drives the header dropdowns (native `<details>`,
+hover-to-open with a mouse, click/keyboard otherwise), the mobile menu, the footer directory,
+`sitemap.xml`, `/sitemap`, `llms.txt`, the search index and the assistant. `PAGES` is every page
+once; `NAV` is the main sections. A new page goes in a group, not in a flat list.
+
+**Shared list styles** in `global.css`: `.records`/`.record` (+ `-icon`, `-tags`, `-side`,
+`-amount`, `-more`), `.section-block`, `.aside-card`, `.group-head`. `ArchiveList.astro` renders
+archived documents with reader links anywhere.
 
 **Components** (`src/components/`): `SiteHeader`, `SiteFooter` (giant wordmark), `PageHeader`
 (rounded panel with eyebrow, icon, lede, aside slot), `HeroCarousel` (home scenes, hero ask
@@ -223,6 +236,15 @@ indexed. Keep titles ≤ 60 characters and descriptions ≤ 160 where possible.
   relicensed (LICENSES.md). Fonts are OFL (listed in LICENSES.md).
 
 ## 11. Known gotchas
+
+- `compressHTML` is off on purpose: Astro's compressor dropped the space where a line of text
+  breaks before an inline element ("on the\n<a>" → "on the<a>"). Don't turn it back on.
+- The Supreme Court E-Library (proclamations, EOs) omits its intermediate certificate; use
+  `certs/globalsign-gcc-r3-ev-tls-ca-2025.pem`. DTI's CMCI site wants a browser user agent.
+- DPWH descriptions mention "Calatagan" for the national road and for places elsewhere
+  (Makati, Virac). Never count a project by keyword; `scripts/lib/dpwh-location.mjs` decides.
+- If the repo sits in an iCloud-synced folder, sync conflicts create untracked `name 2.ext`
+  copies. Compare them to the originals, then delete them; never commit them.
 
 - Sandboxed sessions: `*.gov.ph`, `archive.org`, `america.gov`, `bettergov.ph` and Wikimedia are
   often blocked by the network policy. Don't fake data around it; say what you could not reach.

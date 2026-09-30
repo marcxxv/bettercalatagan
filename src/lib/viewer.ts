@@ -55,7 +55,7 @@ export function readAttrs(o: ReadOptions): Record<string, string> {
   };
 }
 
-const sizeLabel = (bytes: number | null | undefined) => {
+export const sizeLabel = (bytes: number | null | undefined) => {
   if (!bytes) return null;
   if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;

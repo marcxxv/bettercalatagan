@@ -1,0 +1,151 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Source from '../../components/Source.astro';
+import Icon from '../../components/Icon.astro';
+import { barangayPages, type BarangayPage } from '../../lib/barangay-pages';
+import { barangayPopulation2024, outsideHouseholds } from '../../data/population';
+import { infrastructureSource } from '../../data/infrastructure';
+import { dpwhTitle } from '../../lib/dpwh-text';
+import { formatDate, formatNumber, formatPeso, formatPesoMillions } from '../../lib/format';
+
+/** One barangay: its census counts, where it ranks, and the national projects DPWH places in it. */
+
+export function getStaticPaths() {
+  return barangayPages.map((barangay) => ({ params: { slug: barangay.slug }, props: { barangay } }));
+}
+
+interface Props {
+  barangay: BarangayPage;
+}
+const { barangay: b } = Astro.props;
+const crumbs = [
+  { name: 'Barangays', href: '/barangays' },
+  { name: b.name, href: `/barangays/${b.slug}` },
+];
+const institutional = outsideHouseholds.find((o) => o.psgc10 === b.psgc10);
+const perHousehold = b.census && b.census.households > 0 ? b.census.householdPopulation / b.census.households : null;
+const index = barangayPages.findIndex((x) => x.slug === b.slug);
+const prev = barangayPages[(index - 1 + barangayPages.length) % barangayPages.length];
+const next = barangayPages[(index + 1) % barangayPages.length];
+const share = b.share === null ? null : b.share < 0.005 ? 'less than 0.5%' : `${(b.share * 100).toFixed(1)}%`;
+const description = `${b.name}, a barangay of Calatagan, Batangas: ${b.census ? `${formatNumber(b.census.totalPopulation)} people in ${formatNumber(b.census.households)} households (2024 census)` : 'census figures'}${b.projects.length ? ` and ${b.projects.length} DPWH projects` : ''}.`;
+---
+
+<Base title={`${b.name}, Calatagan`} {description} {crumbs}>
+  <PageHeader
+    eyebrow="Barangay"
+    icon="pin"
+    title={b.name}
+    lede={`One of Calatagan’s 25 barangays. PSGC ${b.psgc10}.`}
+    {crumbs}
+  >
+    {b.census && (
+      <dl slot="aside" class="aside-card">
+        <div><dt>Population, 2024 POPCEN</dt><dd class="figure">{formatNumber(b.census.totalPopulation)}</dd></div>
+        <div><dt>Rank in Calatagan</dt><dd>{b.rank} of 25 by population · {share} of the town</dd></div>
+      </dl>
+    )}
+  </PageHeader>
+
+  <div class="container wide page-body">
+    {b.census && (
+      <section aria-labelledby="census-title">
+        <h2 id="census-title" class="visually-hidden">Census</h2>
+        <dl class="stat-row">
+          <div class="stat">
+            <dt>Population</dt>
+            <dd class="figure">{formatNumber(b.census.totalPopulation)}</dd>
+            <dd class="stat-note">2024 POPCEN · {formatDate('2024-07-01')}</dd>
+          </div>
+          <div class="stat">
+            <dt>Households</dt>
+            <dd class="figure">{formatNumber(b.census.households)}</dd>
+            <dd class="stat-note">2024 POPCEN</dd>
+          </div>
+          <div class="stat">
+            <dt>Household population</dt>
+            <dd class="figure">{formatNumber(b.census.householdPopulation)}</dd>
+            <dd class="stat-note">{perHousehold !== null ? `${perHousehold.toFixed(2)} per household, calculated here` : 'No private households'}</dd>
+          </div>
+        </dl>
+        {institutional && (
+          <div class="callout navy">
+            <p class="callout-title"><Icon name="info" size="18" /> People counted outside households</p>
+            <p>
+              PSA counts {formatNumber(institutional.institutionalPopulation)} of {b.name}’s residents outside
+              private households. By PSA’s definition, total population is household population plus
+              institutional population; PSA does not say which institutions, and this site does not
+              guess. <a href="/#barangays">PSA’s definitions</a>.
+            </p>
+          </div>
+        )}
+        <Source source={barangayPopulation2024.source} label="the census figures" />
+      </section>
+    )}
+
+    <section class="section-block" id="projects" aria-labelledby="projects-title">
+      <p class="eyebrow">Department of Public Works and Highways</p>
+      <h2 id="projects-title">National projects in {b.name}</h2>
+      {b.projects.length > 0 ? (
+        <>
+          <p class="lede">
+            {b.projects.length === 1 ? 'One DPWH contract names' : `${b.projects.length} DPWH contracts name`} {b.name} in
+            {b.projects.length === 1 ? ' its' : ' their'} description, with contract budgets of {formatPesoMillions(b.projectBudget)} in total.
+          </p>
+          <ul class="records">
+            {b.projects.map((p) => (
+              <li class="record">
+                <span class:list={['record-icon', { ok: p.status === 'Completed' }]} aria-hidden="true">
+                  <Icon name={p.status === 'Completed' ? 'check' : 'clock'} size="20" />
+                </span>
+                <div>
+                  <h3><a href={`/infrastructure#contract-${p.contractId}`}>{dpwhTitle(p.description)}</a></h3>
+                  <p class="record-tags">
+                    <span class="chip">{p.infraYear}</span>
+                    <span>{p.status}</span>
+                    {p.category && <span>{p.category}</span>}
+                  </p>
+                </div>
+                <p class="record-side">{p.budget !== null && <span class="record-amount">{formatPeso(p.budget)}</span>}</p>
+              </li>
+            ))}
+          </ul>
+          <Source source={infrastructureSource} label="these projects" />
+        </>
+      ) : (
+        <p class="lede">
+          No DPWH contract names {b.name} in its description. Work in the barangay may still be
+          described only as “Calatagan”; see <a href="/infrastructure">all projects</a>.
+        </p>
+      )}
+    </section>
+
+    <nav class="pager" aria-label="Other barangays">
+      <a href={`/barangays/${prev.slug}`}><span class="muted">Previous</span> {prev.name}</a>
+      <a href="/barangays">All barangays</a>
+      <a href={`/barangays/${next.slug}`}><span class="muted">Next</span> {next.name}</a>
+    </nav>
+  </div>
+</Base>
+
+<style>
+  .pager {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    margin-top: var(--sp-8);
+    padding-top: var(--sp-5);
+    border-top: 1px solid var(--c-line);
+    font-weight: 600;
+  }
+  .record h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .record h3 a:hover {
+    color: var(--c-accent);
+    text-decoration: underline;
+  }
+</style>

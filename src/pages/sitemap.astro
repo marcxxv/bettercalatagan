@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { NAV_GROUPS, OVERVIEW } from '../lib/site';
+import { barangayPages } from '../lib/barangay-pages';
+
+/** Every page, grouped as the navigation groups them. The XML sitemap is at /sitemap.xml. */
+const crumbs = [
+  { name: 'About', href: '/about' },
+  { name: 'Sitemap', href: '/sitemap' },
+];
+const description = 'Every page on Better Calatagan, grouped by section.';
+---
+
+<Base title="Sitemap" {description} {crumbs}>
+  <PageHeader eyebrow="About" icon="layers" title="Every page" lede="The whole site, grouped as the menu groups it." {crumbs} />
+
+  <div class="container wide page-body">
+    <div class="map">
+      <section>
+        <h2><a href={OVERVIEW.href}>{OVERVIEW.label}</a></h2>
+        <p class="muted">{OVERVIEW.blurb}</p>
+      </section>
+      {NAV_GROUPS.map((group) => (
+        <section>
+          <h2>{group.label}</h2>
+          <ul>
+            {group.items.map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+                <span class="muted"> — {item.blurb}</span>
+                {item.href === '/barangays' && (
+                  <ul class="sub">
+                    {barangayPages.map((b) => <li><a href={`/barangays/${b.slug}`}>{b.name}</a></li>)}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+      <section>
+        <h2>For machines</h2>
+        <ul>
+          <li><a href="/data">Open data catalogue</a></li>
+          <li><a href="/sitemap.xml">sitemap.xml</a></li>
+          <li><a href="/llms.txt">llms.txt</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .map {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(22rem, 100%), 1fr));
+    gap: var(--sp-7) var(--sp-6);
+  }
+  .map h2 {
+    margin: 0 0 var(--sp-3);
+    font-size: var(--fs-lg);
+  }
+  .map ul {
+    margin: 0;
+    padding-left: 1.1em;
+  }
+  .map li + li {
+    margin-top: var(--sp-2);
+  }
+  .sub {
+    columns: 2;
+    margin-top: var(--sp-2) !important;
+    font-size: var(--fs-sm);
+  }
+  .sub li + li {
+    margin-top: 2px;
+  }
+</style>

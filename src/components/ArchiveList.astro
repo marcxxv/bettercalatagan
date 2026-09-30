@@ -1,0 +1,57 @@
+---
+/**
+ * A list of documents from the former municipal website, each opening in the
+ * reader, with its kind, year and capture date. Used wherever archived
+ * documents are grouped by topic (legislation, procurement, barangays).
+ */
+import Icon from './Icon.astro';
+import type { ArchivedDocument } from '../data/schemas/documents';
+import { KIND_LABELS } from '../data/schemas/documents';
+import { archiveReadAttrs, sizeLabel } from '../lib/viewer';
+
+interface Props {
+  documents: readonly ArchivedDocument[];
+  /** id for the list, so a filter form can target it. */
+  id?: string;
+  showKind?: boolean;
+}
+
+const { documents, id, showKind = true } = Astro.props;
+---
+
+<ul class="records" id={id}>
+  {documents.map((doc) => {
+    const read = archiveReadAttrs(doc);
+    return (
+      <li
+        class="record"
+        data-item
+        data-year={String(doc.publishedYear ?? '')}
+        data-kind={doc.kind}
+        data-search={`${doc.title} ${doc.filename} ${doc.publishedYear ?? ''}`.toLowerCase()}
+      >
+        <span class="record-icon" aria-hidden="true"><Icon name="file" size="20" /></span>
+        <div>
+          <h3>{doc.title}</h3>
+          <p class="record-tags">
+            {showKind && <span class="chip">{KIND_LABELS[doc.kind]}</span>}
+            {doc.publishedYear && <span class="chip clay">{doc.publishedYear}</span>}
+            <span>Archived {doc.capturedAt}</span>
+            <span>{doc.fileType.toUpperCase()}{doc.byteLength ? ` · ${sizeLabel(doc.byteLength)}` : ''}</span>
+          </p>
+        </div>
+        <p class="record-side">
+          {read ? (
+            <a class="button small primary" href={doc.archiveUrl} rel="noopener noreferrer nofollow" {...read}>
+              <Icon name="eye" size="16" /> Read<span class="visually-hidden"> {doc.title}</span>
+            </a>
+          ) : (
+            <a class="button small" href={doc.archiveUrl} rel="noopener noreferrer nofollow">
+              <Icon name="download" size="16" /> Get file<span class="visually-hidden"> {doc.title}</span>
+            </a>
+          )}
+        </p>
+      </li>
+    );
+  })}
+</ul>

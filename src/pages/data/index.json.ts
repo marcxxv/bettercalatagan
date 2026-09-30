@@ -5,6 +5,10 @@ import { financialsSource, verifiedFilings } from '../../data/financials';
 import { municipality, WITHHELD } from '../../data/municipality';
 import { barangays } from '../../data/barangays';
 import { population2024 } from '../../data/population';
+import { dpwh, infrastructureSource } from '../../data/infrastructure';
+import { cmciYears, competitivenessSource } from '../../data/competitiveness';
+import { offices, servicesSource } from '../../data/services';
+import { holidays, holidaysSource, HOLIDAY_YEAR } from '../../data/calendar';
 import { API_VERSION, DISCLAIMER, LICENSE } from '../../lib/export';
 
 /**
@@ -53,6 +57,42 @@ export const GET: APIRoute = ({ site }) => {
       readiness_tier: documentsSource.tier,
       expected_refresh: documentsSource.expectedRefresh,
       primary_sources: ['Internet Archive (of calatagan.gov.ph)'],
+    },
+    {
+      id: 'dpwh-projects',
+      title: 'DPWH infrastructure projects in and near Calatagan',
+      url: `${base}/infrastructure.json`,
+      records: dpwh.projects.length,
+      readiness_tier: infrastructureSource.tier,
+      expected_refresh: infrastructureSource.expectedRefresh,
+      primary_sources: ['Department of Public Works and Highways (via BetterGov.ph)'],
+    },
+    {
+      id: 'cmci',
+      title: 'DTI Cities and Municipalities Competitiveness Index — Calatagan',
+      url: `${base}/competitiveness.json`,
+      records: cmciYears.length,
+      readiness_tier: competitivenessSource.tier,
+      expected_refresh: competitivenessSource.expectedRefresh,
+      primary_sources: ['Department of Trade and Industry'],
+    },
+    {
+      id: 'municipal-services',
+      title: 'Municipal services by office (2022 Citizen’s Charters)',
+      url: `${base}/services.json`,
+      records: offices.length,
+      readiness_tier: servicesSource.tier,
+      expected_refresh: servicesSource.expectedRefresh,
+      primary_sources: ['Internet Archive (of calatagan.gov.ph)'],
+    },
+    {
+      id: `holidays-${HOLIDAY_YEAR}`,
+      title: `Holidays observed in Calatagan, ${HOLIDAY_YEAR}`,
+      url: `${base}/holidays.json`,
+      records: holidays.length,
+      readiness_tier: holidaysSource.tier,
+      expected_refresh: holidaysSource.expectedRefresh,
+      primary_sources: ['Office of the President'],
     },
   ];
 

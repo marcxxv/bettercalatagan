@@ -96,6 +96,51 @@ if (menu) {
   });
 }
 
+// Grouped header menus: one open at a time; close on Escape, outside click or
+// when focus leaves. Native <details>, so they work without this too.
+const drops = [...document.querySelectorAll<HTMLDetailsElement>('[data-nav-drop]')];
+for (const drop of drops) {
+  drop.addEventListener('toggle', () => {
+    if (drop.open) for (const other of drops) if (other !== drop) other.open = false;
+  });
+  drop.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && drop.open) {
+      drop.open = false;
+      drop.querySelector('summary')?.focus();
+    }
+  });
+  drop.addEventListener('focusout', (event) => {
+    if (drop.open && !drop.contains(event.relatedTarget as Node | null)) drop.open = false;
+  });
+}
+document.addEventListener('click', (event) => {
+  for (const drop of drops) if (drop.open && !drop.contains(event.target as Node)) drop.open = false;
+});
+// With a mouse or trackpad, a group opens on hover and closes shortly after the
+// pointer leaves (the delay forgives a diagonal move toward the panel). Touch
+// and keyboard keep the click-to-open disclosure.
+if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  let closing = 0;
+  for (const drop of drops) {
+    drop.addEventListener('pointerenter', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      window.clearTimeout(closing);
+      drop.open = true;
+    });
+    // The pointer already opened it; a click on the label should not close it again.
+    drop.querySelector('summary')?.addEventListener('click', (event) => {
+      if ((event as PointerEvent).pointerType === 'mouse' && drop.open) event.preventDefault();
+    });
+    drop.addEventListener('pointerleave', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      window.clearTimeout(closing);
+      closing = window.setTimeout(() => {
+        if (!drop.contains(document.activeElement)) drop.open = false;
+      }, 180);
+    });
+  }
+}
+
 /* ---------- Manila clock in the utility bar ---------- */
 
 const clocks = document.querySelectorAll<HTMLElement>('[data-ph-clock]');

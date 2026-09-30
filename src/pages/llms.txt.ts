@@ -4,7 +4,7 @@ import { fdpDataset, fdpSource } from '../data/fdp';
 import { financialsSource, verifiedFilings } from '../data/financials';
 import { incomeClassification, municipality, WITHHELD } from '../data/municipality';
 import { population2024 } from '../data/population';
-import { NAV, SECONDARY_NAV, SITE } from '../lib/site';
+import { NAV_GROUPS, OVERVIEW, SITE } from '../lib/site';
 
 /**
  * /llms.txt — a plain-text guide for AI answer engines (llmstxt.org).
@@ -41,7 +41,8 @@ ${WITHHELD.map((w) => `- ${w.fact}: ${w.reason}`).join('\n')}
 
 ## Pages
 
-${[...NAV, ...SECONDARY_NAV].map((item) => `- [${item.label}](${url(item.href)}): ${item.blurb}`).join('\n')}
+- [${OVERVIEW.label}](${url(OVERVIEW.href)}): ${OVERVIEW.blurb}
+${NAV_GROUPS.map((group) => `\n### ${group.label}\n\n${group.items.map((item) => `- [${item.label}](${url(item.href)}): ${item.blurb}`).join('\n')}`).join('\n')}
 
 ## Open data (JSON, with provenance on every record)
 

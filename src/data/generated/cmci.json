@@ -1,0 +1,315 @@
+{
+  "retrievedAt": "2026-09-30T10:58:11.277Z",
+  "source": {
+    "base": "https://cmci.dti.gov.ph",
+    "lgu": "Calatagan",
+    "province": "Batangas"
+  },
+  "years": [
+    {
+      "category": "1st to 2nd Class Municipalities",
+      "pillars": [
+        {
+          "name": "Economic Dynamism",
+          "rank": 438,
+          "score": 3.9262
+        },
+        {
+          "name": "Government Efficiency",
+          "rank": 380,
+          "score": 9.2665
+        },
+        {
+          "name": "Infrastructure",
+          "rank": 324,
+          "score": 6.2421
+        }
+      ],
+      "rank": 397,
+      "ranked": 462,
+      "score": 19.4348,
+      "url": "https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities&year=2015",
+      "year": 2015
+    },
+    {
+      "category": "1st to 2nd Class Municipalities",
+      "pillars": [
+        {
+          "name": "Economic Dynamism",
+          "rank": 367,
+          "score": 5.9509
+        },
+        {
+          "name": "Government Efficiency",
+          "rank": 411,
+          "score": 5.5474
+        },
+        {
+          "name": "Infrastructure",
+          "rank": 401,
+          "score": 5.9823
+        }
+      ],
+      "rank": 412,
+      "ranked": 490,
+      "score": 17.4806,
+      "url": "https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities&year=2016",
+      "year": 2016
+    },
+    {
+      "category": "1st to 2nd Class Municipalities",
+      "pillars": [
+        {
+          "name": "Economic Dynamism",
+          "rank": 320,
+          "score": 4.0551
+        },
+        {
+          "name": "Government Efficiency",
+          "rank": 437,
+          "score": 5.4421
+        },
+        {
+          "name": "Infrastructure",
+          "rank": 374,
+          "score": 5.0719
+        },
+        {
+          "name": "Resiliency",
+          "rank": 264,
+          "score": 15.5182
+        }
+      ],
+      "rank": 381,
+      "ranked": 489,
+      "score": 30.0872,
+      "url": "https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities&year=2017",
+      "year": 2017
+    },
+    {
+      "category": "1st to 2nd Class Municipalities",
+      "pillars": [
+        {
+          "name": "Economic Dynamism",
+          "rank": 356,
+          "score": null
+        },
+        {
+          "name": "Government Efficiency",
+          "rank": 353,
+          "score": null
+        },
+        {
+          "name": "Infrastructure",
+          "rank": 410,
+          "score": null
+        },
+        {
+          "name": "Resiliency",
+          "rank": 342,
+          "score": null
+        }
+      ],
+      "rank": 372,
+      "ranked": 489,
+      "score": null,
+      "url": "https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities&year=2018",
+      "year": 2018
+    },
+    {
+      "category": "1st to 2nd Class Municipalities",
+      "pillars": [
+        {
+          "name": "Economic Dynamism",
+          "rank": 319,
+          "score": 3.4868
+        },
+        {
+          "name": "Government Efficiency",
+          "rank": 410,
+          "score": 7.8404
+        },
+        {
+          "name": "Infrastructure",
+          "rank": 345,
+          "score": 5.1575
+        },
+        {
+          "name": "Resiliency",
+          "rank": 152,
+          "score": 16.7473
+        }
+      ],
+      "rank": 361,
+      "ranked": 489,
+      "score": 33.232,
+      "url": "https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities&year=2019",
+      "year": 2019
+    },
+    {
+      "category": "1st to 2nd Class Municipalities",
+      "pillars": [
+        {
+          "name": "Economic Dynamism",
+          "rank": 367,
+          "score": 3.812
+        },
+        {
+          "name": "Government Efficiency",
+          "rank": 418,
+          "score": 7.9603
+        },
+        {
+          "name": "Infrastructure",
+          "rank": 302,
+          "score": 5.391
+        },
+        {
+          "name": "Resiliency",
+          "rank": 167,
+          "score": 16.9792
+        }
+      ],
+      "rank": 375,
+      "ranked": 489,
+      "score": 34.1425,
+      "url": "https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities&year=2020",
+      "year": 2020
+    },
+    {
+      "category": "1st to 2nd Class Municipalities",
+      "pillars": [
+        {
+          "name": "Economic Dynamism",
+          "rank": 372,
+          "score": 3.9648
+        },
+        {
+          "name": "Government Efficiency",
+          "rank": 467,
+          "score": 6.4658
+        },
+        {
+          "name": "Infrastructure",
+          "rank": 467,
+          "score": 4.1105
+        },
+        {
+          "name": "Resiliency",
+          "rank": 226,
+          "score": 13.3483
+        }
+      ],
+      "rank": 433,
+      "ranked": 508,
+      "score": 27.8893,
+      "url": "https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities&year=2021",
+      "year": 2021
+    },
+    {
+      "category": "1st to 2nd Class Municipalities",
+      "pillars": [
+        {
+          "name": "Economic Dynamism",
+          "rank": 442,
+          "score": 3.7837
+        },
+        {
+          "name": "Government Efficiency",
+          "rank": 445,
+          "score": 5.5543
+        },
+        {
+          "name": "Infrastructure",
+          "rank": 207,
+          "score": 2.3157
+        },
+        {
+          "name": "Resiliency",
+          "rank": 282,
+          "score": 11.3339
+        },
+        {
+          "name": "Innovation",
+          "rank": 314,
+          "score": 3.4458
+        }
+      ],
+      "rank": 393,
+      "ranked": 511,
+      "score": 26.4334,
+      "url": "https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities&year=2022",
+      "year": 2022
+    },
+    {
+      "category": "1st to 2nd Class Municipalities",
+      "pillars": [
+        {
+          "name": "Economic Dynamism",
+          "rank": 295,
+          "score": 3.1024
+        },
+        {
+          "name": "Government Efficiency",
+          "rank": 440,
+          "score": 7.4195
+        },
+        {
+          "name": "Infrastructure",
+          "rank": 272,
+          "score": 2.6135
+        },
+        {
+          "name": "Resiliency",
+          "rank": 271,
+          "score": 11.2992
+        },
+        {
+          "name": "Innovation",
+          "rank": 191,
+          "score": 5.2918
+        }
+      ],
+      "rank": 321,
+      "ranked": 511,
+      "score": 29.7264,
+      "url": "https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities&year=2023",
+      "year": 2023
+    },
+    {
+      "category": "1st to 2nd Class Municipalities",
+      "pillars": [
+        {
+          "name": "Economic Dynamism",
+          "rank": 342,
+          "score": 3.0368
+        },
+        {
+          "name": "Government Efficiency",
+          "rank": 459,
+          "score": 6.5969
+        },
+        {
+          "name": "Infrastructure",
+          "rank": 210,
+          "score": 2.499
+        },
+        {
+          "name": "Resiliency",
+          "rank": 282,
+          "score": 11.3129
+        },
+        {
+          "name": "Innovation",
+          "rank": 199,
+          "score": 5.8097
+        }
+      ],
+      "rank": 340,
+      "ranked": 509,
+      "score": 29.2553,
+      "url": "https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities&year=2024",
+      "year": 2024
+    }
+  ]
+}

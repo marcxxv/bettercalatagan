@@ -8,6 +8,10 @@ import { financialsSource, verifiedFilings } from '../../data/financials';
 import { municipality } from '../../data/municipality';
 import { barangays } from '../../data/barangays';
 import { population2024 } from '../../data/population';
+import { dpwh, infrastructureSource } from '../../data/infrastructure';
+import { cmciYears, competitivenessSource } from '../../data/competitiveness';
+import { offices, servicesSource } from '../../data/services';
+import { holidays, holidaysSource } from '../../data/calendar';
 import { formatDate, formatNumber } from '../../lib/format';
 import { API_VERSION } from '../../lib/export';
 import { SITE } from '../../lib/site';
@@ -56,6 +60,46 @@ const datasets = [
     verified: documentsSource.lastVerified,
     from: 'Internet Archive (calatagan.gov.ph)',
     href: '/documents',
+  },
+  {
+    file: 'infrastructure.json',
+    title: 'DPWH infrastructure projects in and near Calatagan',
+    records: dpwh.projects.length,
+    tier: infrastructureSource.tier,
+    refresh: infrastructureSource.expectedRefresh,
+    verified: infrastructureSource.lastVerified,
+    from: 'DPWH, via the BetterGov.ph DPWH API',
+    href: '/infrastructure',
+  },
+  {
+    file: 'competitiveness.json',
+    title: 'DTI Competitiveness Index ranks and scores, by year',
+    records: cmciYears.length,
+    tier: competitivenessSource.tier,
+    refresh: competitivenessSource.expectedRefresh,
+    verified: competitivenessSource.lastVerified,
+    from: 'Department of Trade and Industry',
+    href: '/statistics#competitiveness',
+  },
+  {
+    file: 'services.json',
+    title: 'Municipal services by office, from the 2022 Citizen’s Charters',
+    records: offices.length,
+    tier: servicesSource.tier,
+    refresh: servicesSource.expectedRefresh,
+    verified: servicesSource.lastVerified,
+    from: 'Internet Archive (calatagan.gov.ph)',
+    href: '/services',
+  },
+  {
+    file: 'holidays.json',
+    title: 'Holidays observed in Calatagan, with proclamations',
+    records: holidays.length,
+    tier: holidaysSource.tier,
+    refresh: holidaysSource.expectedRefresh,
+    verified: holidaysSource.lastVerified,
+    from: 'Office of the President',
+    href: '/holidays',
   },
 ];
 

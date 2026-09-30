@@ -48,6 +48,10 @@ export default defineConfig({
   site,
   integrations: [askCorpus()],
   output: 'static',
+  // Astro's HTML compression drops the space where a line of text breaks before
+  // an inline element ("on the\n<a>Finances</a>" became "on theFinances"). The
+  // host compresses responses anyway, so keeping whitespace costs next to nothing.
+  compressHTML: false,
   trailingSlash: 'ignore',
   build: { format: 'directory' },
   vite: {

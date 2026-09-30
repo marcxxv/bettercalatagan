@@ -1,6 +1,6 @@
 # Source inventory
 
-The evidence base for Better Calatagan. Maintained by hand; last reviewed **2026-09-22**.
+The evidence base for Better Calatagan. Maintained by hand; last reviewed **2026-09-30**.
 
 Ranks refer to the evidence hierarchy in [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -17,6 +17,12 @@ Ranks refer to the evidence hierarchy in [CONTRIBUTING.md](CONTRIBUTING.md).
 | [PSGC API](https://psgc.gitlab.io/api/municipalities/041008000/barangays/) | psgc.gitlab.io (PSA mirror) | 3 | PSGC codes, barangay names | JSON | Now a cross-check rather than the basis. |
 | [PSGC Cloud API](https://psgc.cloud/api/municipalities/0401008000/barangays) | psgc.cloud (PSA mirror) | 3 | PSGC codes, 2020 barangay populations | JSON | Independent of the above. Its `status` field carries the 2020 CPH count. |
 | [PhilAtlas — Calatagan](https://www.philatlas.com/luzon/r04a/batangas/calatagan.html) | PhilAtlas | 3 | 2020 CPH totals, barangay breakdown | HTML | Cross-check. Land area shown as 101.50 km² attributed to a 2013 figure. |
+| [DTI CMCI rankings](https://cmci.dti.gov.ph/rankings-data.php?unit=1st%20to%202nd%20Class%20Municipalities) | DTI Competitiveness Bureau | 1 | Calatagan's rank, score and pillar ranks, 2015–2024 | HTML table (`scripts/cmci.mjs`) | Rank is within "1st to 2nd class municipalities" every year. DTI's 2018 table prints no scores (all 0.0000); recorded as not published. The profile page's contact block is stale and not used. Needs a browser user agent. |
+| [BetterGov.ph DPWH API](https://api.dpwh.bettergov.ph/projects?search=Calatagan) | DPWH, via BetterGov.ph | 4 | Every DPWH contract mentioning Calatagan: budget, ABC, contractor, bidders, dates, status | JSON, no auth (`scripts/dpwh.mjs`) | 269 matches; 179 placed in Calatagan by their own description, 51 national-road segments with no municipality and 2 multi-town packages listed separately, 37 elsewhere (Makati's Calatagan Creek, a barangay in Virac, bridges in Lian). |
+| Citizen's Charters, 2022 (18 offices), via the Internet Archive | Municipality of Calatagan (archived) | 7 | Services each office listed, who may avail | PDF, text layer | Read 2026-09-30. Fees and times deliberately not restated. Hand-curated in `src/data/services.ts`. |
+| [Proclamation No. 1006, s. 2025](https://pco.gov.ph/wp-content/uploads/2025/09/20250903-PROC-1006-FRM.pdf.pdf) | Office of the President | 1 | 2026 holidays | PDF (scanned, **no** text layer) | Read from the page images; SHA-256 recorded. Web summaries of it misclassify several days; the proclamation is authoritative. |
+| Proclamations 1189, 1264 (Eid holidays), 1220 (Calatagan Cultural Day, 30 April 2026), 1102 and 1050 (Calatagan Founding Anniversary, 16 December 2025 and 2020) | Office of the President (PCO releases; SC E-Library) | 1–2 | Holidays | HTML | See `src/data/calendar.ts`. |
+| [EO No. 56, s. 2018](https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/5/83090) and [EO No. 6, s. 2016](https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/5/71975) | Office of the President, via the Supreme Court E-Library | 2 | Emergency 911; 8888 complaint hotline | HTML | The E-Library omits its intermediate certificate (GlobalSign GCC R3 EV TLS CA 2025); it is supplied from `certs/`, never bypassed. |
 
 ## Known and characterised, not yet used
 
@@ -24,10 +30,10 @@ Ranks refer to the evidence hierarchy in [CONTRIBUTING.md](CONTRIBUTING.md).
 | --- | --- | --- | --- | --- | --- |
 | [DILG Full Disclosure Policy Portal](https://fdpp.dilg.gov.ph/fdpp/report/index?region_filter=04&province_filter=010&lgu_filter=08) | DILG | 1 | 156 filings, 14 statutory forms, CY2022–CY2026 | Public, no auth | See the format audit below. The backbone of a later phase. |
 | [BetterGov Officials API](https://officials.bettergov.ph/api/v1/contests?province=batangas&town=calatagan&year=2025&candidates=1) | BetterGov.ph, from Open Halalan | 4 | Local election results 2001–2025 | JSON, no auth | Results, **not** incumbency. Carries `match_confidence` per candidacy. |
-| [DTI CMCI — Calatagan](https://cmci.dti.gov.ph/lgu-profile.php?lgu=Calatagan) | DTI | 3 | Competitiveness scores 2015–2024 | HTML | **Its LGU profile block is stale**: income class, mayor and website fields are all out of date. Do not use for identity facts. |
 | [COA](https://www.coa.gov.ph/) | Commission on Audit | 1 | Annual Audit Reports | **Blocked** (bot challenge) | A CY2022 executive summary URL is known to exist. Coverage unconfirmed. |
 | [PSA editorial site](https://psa.gov.ph/) | Philippine Statistics Authority | 1 | Census write-ups, PSGC pages | **Blocked** (bot challenge) | Superseded for our purposes by OpenSTAT above, which serves the same releases as data. |
-| [PhilGEPS](https://notices.philgeps.gov.ph/) | Procurement Service, DBM | 1 | Procurement notices | Public, session-based | Reference numbers are the stable join key. |
+| [PhilGEPS](https://notices.philgeps.gov.ph/) | Procurement Service, DBM | 1 | Procurement notices | Public, session-based | Reference numbers are the stable join key. BetterGov's searchable mirror needs an API key; not used. |
+| [EO No. 414, s. 2005](https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/5/452) | Office of the President | 2 | Calatagan Port Zone (289,371.64 m²) under the PPA | HTML | Registered in `sources.ts`; a candidate for the History timeline. |
 | [Internet Archive — calatagan.gov.ph](https://web.archive.org/web/*/calatagan.gov.ph) | Internet Archive | 7 | 236 documents, 2016–2022 | Public | The official site is offline; see below. |
 
 ---
