@@ -5,6 +5,7 @@ import Contours from '../components/Contours.astro';
 import Icon from '../components/Icon.astro';
 import ColumnChart from '../components/ColumnChart.astro';
 import HeroCarousel from '../components/HeroCarousel.astro';
+import AgencyBadge, { type AgencyKey } from '../components/AgencyBadge.astro';
 import { barangays } from '../data/barangays';
 import {
   barangayPopulation2024,
@@ -70,8 +71,8 @@ const manifesto: Token[] = [
   { mark: 'check' },
   'where every figure came from.',
 ];
-const agencies = ['PSA', 'DILG', 'BLGF'];
-const ring = ['PSA', 'DILG', 'BLGF', 'DOF', 'NHCP', 'IA'];
+const agencies: AgencyKey[] = ['psa', 'dilg', 'blgf'];
+const ring: AgencyKey[] = ['psa', 'dilg', 'blgf', 'dof', 'nhcp', 'ia'];
 
 const description =
   'Calatagan, Batangas in verified public data: 2024 population, 25 barangays, income class, finances, Full Disclosure filings and history, each linked to its source.';
@@ -127,8 +128,8 @@ const jsonLd = [
           <><span class="pill pill-arrow" aria-hidden="true"><Icon name="arrow-right" /></span>{' '}</>
         ) : token.mark === 'sources' ? (
           <>
-            <span class="pill pill-seals" aria-hidden="true">
-              {agencies.map((a) => <span class="badge">{a}</span>)}
+            <span class="pill pill-seals">
+              {agencies.map((a) => <AgencyBadge agency={a} size="0.95em" class="badge" />)}
             </span>{' '}
           </>
         ) : (
@@ -191,7 +192,7 @@ const jsonLd = [
       <div class="f-visual f-ring" aria-hidden="true">
         <div class="ring-orbit">
           {ring.map((a, i) => (
-            <span class="orbit-badge" style={`--i:${i};--n:${ring.length}`}><span>{a}</span></span>
+            <span class="orbit-badge" style={`--i:${i};--n:${ring.length}`}><span><AgencyBadge agency={a} size="100%" /></span></span>
           ))}
         </div>
         <span class="ring-core"><Icon name="shield" size="34" /></span>
@@ -771,29 +772,10 @@ const jsonLd = [
   .pill-seals {
     gap: 0;
   }
-  .badge {
-    display: grid;
-    place-items: center;
-    width: 0.95em;
-    height: 0.95em;
+  .pill-seals :global(.agency) {
     margin-left: -0.22em;
-    border-radius: 50%;
-    border: 0.04em solid #d79f22;
-    background: radial-gradient(circle at 40% 35%, #ffffff, #eef1f8);
-    color: #1b3c8c;
-    font-family: var(--font-serif);
-    font-size: 1em;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    box-shadow: 0 0.06em 0.18em rgb(11 18 32 / 0.25);
   }
-  .pill-seals .badge {
-    font-size: 0.22em;
-    width: 4.3em;
-    height: 4.3em;
-    margin-left: -1em;
-  }
-  .pill-seals .badge:first-child {
+  .pill-seals :global(.agency:first-child) {
     margin-left: 0;
   }
 
@@ -945,20 +927,18 @@ const jsonLd = [
     transform: rotate(calc(360deg / var(--n) * var(--i))) translateY(-190%) rotate(calc(-360deg / var(--n) * var(--i)));
     margin: -11% 0 0 -11%;
   }
-  .orbit-badge span {
-    display: grid;
-    place-items: center;
+  .orbit-badge > span {
+    display: block;
     width: 100%;
     height: 100%;
-    border-radius: 50%;
-    border: 2px solid #d79f22;
-    background: radial-gradient(circle at 40% 35%, #fff, #eef1f8);
-    color: #1b3c8c;
-    font-family: var(--font-serif);
-    font-size: clamp(0.8rem, 0.6rem + 0.8vw, 1.2rem);
-    font-weight: 600;
-    box-shadow: var(--shadow-md);
     animation: orbit 60s linear infinite reverse;
+  }
+  .orbit-badge :global(.agency) {
+    width: 100%;
+    height: 100%;
+  }
+  .orbit-badge :global(.ini) {
+    font-size: clamp(0.8rem, 0.6rem + 0.8vw, 1.2rem);
   }
   @keyframes orbit {
     to {
