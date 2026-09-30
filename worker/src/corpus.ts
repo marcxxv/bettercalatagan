@@ -121,6 +121,10 @@ export async function sync(env: Env, { force = false } = {}): Promise<SyncResult
     );
   }
 
+  // Remove vectors before rows: if this fails, the rows (and the version) stay,
+  // and the next sync retries the same deletions. Vectorize takes 100 ids a call.
+  for (let i = 0; i < removed.length; i += 100) await env.VECTORS.deleteByIds(removed.slice(i, i + 100));
+
   const upsert = env.DB.prepare(
     `INSERT INTO chunks (id, hash, url, page, section, text) VALUES (?1, ?2, ?3, ?4, ?5, ?6)
      ON CONFLICT(id) DO UPDATE SET hash = ?2, url = ?3, page = ?4, section = ?5, text = ?6`,
@@ -139,9 +143,6 @@ export async function sync(env: Env, { force = false } = {}): Promise<SyncResult
   }
   for (const id of removed) statements.push(drop.bind(id), dropFts.bind(id));
   for (let i = 0; i < statements.length; i += 90) await env.DB.batch(statements.slice(i, i + 90));
-  if (removed.length) {
-    for (let i = 0; i < removed.length; i += 500) await env.VECTORS.deleteByIds(removed.slice(i, i + 500));
-  }
 
   await env.DB.batch([
     setMeta(env, 'corpus_version', corpus.version),

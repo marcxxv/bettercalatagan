@@ -45,7 +45,7 @@ const WHO = /\b(who|whos|who's|sino|sinu|name|names|pangalan|list)\b/i;
 const OFFICE =
   /\b(mayor|vice[\s-]?mayor|alkalde|punong[\s-]?bayan|councilors?|councillors?|konsehal|kagawad|sangguniang|sb members?|captain|kapitan|punong[\s-]?barangay|chairman|governor|gobernador|congress(wo)?man|representative|officials?|opisyal|incumbent|nanunungkulan)\b/i;
 const EMERGENCY =
-  /\b(emergency|emerhensiya|emergensiya|sunog|fire|ambulance|ambulansya|police|pulis|saklolo|drowning|nalulunod|accident|aksidente|hotline|rescue)\b/i;
+  /\b(emergency|emerhensiya|emergensiya|sunog|fire|ambulance|ambulansya|police|pulis|saklolo|drowning|nalulunod|accident|aksidente|rescue)\b/i;
 
 /** Classify a question that needs a fixed answer instead of the model's. */
 export function screen(question: string): Intent | null {
