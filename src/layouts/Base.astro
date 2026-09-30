@@ -6,6 +6,7 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import AskBar from '../components/AskBar.astro';
+import DocViewer from '../components/DocViewer.astro';
 import AskPanel from '../components/AskPanel.astro';
 import { ASK } from '../lib/site';
 
@@ -17,9 +18,11 @@ interface Props {
   ogType?: 'website' | 'article';
   /** Show a reading-progress bar under the header (long-form pages). */
   progress?: boolean;
+  /** Keep the page out of search results. */
+  noindex?: boolean;
 }
 
-const { title, description, crumbs, jsonLd, ogType, progress = false } = Astro.props;
+const { title, description, crumbs, jsonLd, ogType, progress = false, noindex = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -62,7 +65,7 @@ const { title, description, crumbs, jsonLd, ogType, progress = false } = Astro.p
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap.xml" />
-    <Seo title={title} description={description} crumbs={crumbs} jsonLd={jsonLd} ogType={ogType} />
+    <Seo title={title} description={description} crumbs={crumbs} jsonLd={jsonLd} ogType={ogType} noindex={noindex} />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -74,6 +77,7 @@ const { title, description, crumbs, jsonLd, ogType, progress = false } = Astro.p
     <SiteFooter />
     <SearchDialog />
     <AskBar />
+    <DocViewer />
     {ASK.endpoint && <AskPanel endpoint={ASK.endpoint} turnstileSiteKey={ASK.turnstileSiteKey} />}
 
     <script>

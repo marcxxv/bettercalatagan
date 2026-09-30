@@ -1,7 +1,7 @@
 # The Better Calatagan assistant (Cloudflare Worker)
 
 Answers questions from the site’s own published pages, with citations. Design and reasoning:
-[ADR 0007](../docs/adr/0007-grounded-assistant.md).
+[ADR 0007](../docs/adr/0008-grounded-assistant.md).
 
 ```
 Browser ──POST /session──▶ Worker ──▶ signed session token (Turnstile first, if configured)

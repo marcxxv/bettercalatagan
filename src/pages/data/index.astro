@@ -62,12 +62,40 @@ const datasets = [
 const origin = Astro.site ?? new URL('http://localhost:4321');
 const base = new URL('/data/', origin).toString();
 const crumbs = [{ name: 'Open data', href: '/data' }];
+
+// A DataCatalog makes every export discoverable in Google Dataset Search.
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'DataCatalog',
+    name: `${SITE.name} open data`,
+    description: 'Machine-readable civic data about Calatagan, Batangas, each dataset carrying its sources, dates and verification status.',
+    url: new URL('/data', origin).toString(),
+    publisher: { '@id': new URL('/#publisher', origin).toString() },
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    dataset: datasets.map((d) => ({
+      '@type': 'Dataset',
+      name: `Calatagan, Batangas — ${d.title}`,
+      description: `${d.title}. ${formatNumber(d.records)} records from ${d.from}, readiness tier ${d.tier}, last verified ${d.verified}.`,
+      url: new URL(d.href, origin).toString(),
+      isAccessibleForFree: true,
+      license: 'https://creativecommons.org/licenses/by/4.0/',
+      creator: { '@id': new URL('/#publisher', origin).toString() },
+      spatialCoverage: { '@type': 'Place', name: 'Calatagan, Batangas, Philippines' },
+      dateModified: d.verified,
+      distribution: [
+        { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: base + d.file },
+      ],
+    })),
+  },
+];
 ---
 
 <Base
   title="Open data"
-  description="Calatagan’s public record as open JSON: census figures, municipal finances, Full Disclosure filings and archived documents — each with its sources, dates and verification status."
+  description="Calatagan’s public record as open JSON: census, finances, Full Disclosure filings and archived documents, each with its sources and verification status."
   {crumbs}
+  {jsonLd}
 >
   <PageHeader
     eyebrow="Open data"

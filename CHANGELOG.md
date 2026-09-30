@@ -8,7 +8,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added — A grounded assistant behind "Ask anything"
-See `docs/adr/0007-grounded-assistant.md`. **No data changed.**
+See `docs/adr/0008-grounded-assistant.md`. **No data changed.**
 - **Ask, then search:** the home page box, the floating ask bar and the ⌘K dialog offer "Ask" as
   the first option; Enter opens a conversation that grows out of the box it was asked from.
   Instant search results stay beneath it. Answers stream in English, Filipino or Taglish, with
@@ -21,6 +21,40 @@ See `docs/adr/0007-grounded-assistant.md`. **No data changed.**
   questions get fixed answers. The guard's lists are tested against the CI leak checks.
 - **Privacy:** no questions or answers stored; daily-rotating hashed rate limits; conversation kept
   in the tab only. About and Privacy copy updated to say what is sent where.
+
+### Added — Data pipelines and project memory
+- **Scheduled refresh** (`.github/workflows/refresh-data.yml`): every Monday, each source is
+  re-read independently, the full check gates the result, and a pull request opens only when
+  something substantive changed. The pull request body is a plain-language change report
+  (`scripts/data-report.mjs`, also `npm run data:report`) that ignores retrieval timestamps and
+  lists records added, removed and changed, field by field, plus each source's outcome.
+- `npm run data:refresh` and `npm run archive:index` scripts; `docs/data-pipelines.md` runbook.
+- **AGENTS.md** (with **CLAUDE.md** importing it, and `.github/copilot-instructions.md`): the
+  project's working memory for AI agents and new contributors — non-negotiables, stack, data flow,
+  UI system, reader, SEO, verification steps, gotchas and recipes.
+
+### Added — Search and answer-engine visibility
+- Every page now declares a `WebPage` tied to one publisher `Organization` (with logo) and the
+  `WebSite`; `/data` is a `DataCatalog` of all five datasets and `/documents` a `Dataset`, so each
+  export can surface in Google Dataset Search.
+- Robots directives allow large image previews and full snippets; the 404 page is `noindex`; the
+  reader's pass-through paths are excluded from crawling.
+- **`/llms.txt`**: a plain-text guide for AI answer engines, generated from the same data modules as
+  the pages, including the list of withheld facts so assistants do not fill those gaps from elsewhere.
+  CI's withheld-value check now scans `.txt` output too.
+
+### Added — Read documents on the site
+See `docs/adr/0007-in-site-document-reader.md`. **No data changed.**
+- **Reader:** every archived PDF (227) and DOCX, and every retrievable DILG filing (132 XLSX),
+  now opens in a full-screen reader instead of sending readers off-site. PDFs render page by page
+  with selectable text, page jump, zoom and keyboard shortcuts; spreadsheets keep their sheets,
+  merged headers and the filing's own number formats; Word files keep headings, lists, tables and
+  images. Download and "open the original" stay one click away.
+- **Where:** `/documents`, `/government` (office documents), `/transparency` (every filing) and
+  `/finances` (the source filing behind each period and year). A `?read=<id>` link opens a document
+  directly.
+- **How:** same-origin pass-through rewrites to the Internet Archive and the DILG portal
+  (`vercel.json`); nothing is stored here. The four legacy `.doc` forms keep a download link.
 
 ### Fixed
 - **Government page:** a missing space in "they are Citizen's Charter service standards".

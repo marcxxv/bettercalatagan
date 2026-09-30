@@ -67,7 +67,7 @@ jobs:
           fail=0
           check() {
             # $1 = pattern, $2 = why it must not appear
-            if grep -rqF -- "$1" dist --include='*.html' --include='*.json' 2>/dev/null; then
+            if grep -rqF -- "$1" dist --include='*.html' --include='*.json' --include='*.txt' 2>/dev/null; then
               echo "::error::withheld value '$1' appears in built output ($2)"
               fail=1
             fi

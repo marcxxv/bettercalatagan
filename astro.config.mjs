@@ -1,4 +1,7 @@
 // @ts-check
+import { readFileSync } from 'node:fs';
+import { Agent } from 'node:https';
+import { rootCertificates } from 'node:tls';
 import { defineConfig } from 'astro/config';
 import askCorpus from './scripts/lib/ask-corpus.mjs';
 
@@ -20,13 +23,37 @@ const site =
   process.env.SITE_URL ??
   (productionUrl ? `https://${productionUrl}` : 'http://localhost:4321');
 
+/** Same-origin pass-through to DILG Full Disclosure Policy Portal filings. */
+const fdpProxy = {
+  target: 'https://fdpp.dilg.gov.ph',
+  changeOrigin: true,
+  // The portal omits an intermediate certificate; supply it rather than
+  // disabling verification (see README, "certs/").
+  agent: new Agent({
+    ca: [...rootCertificates, readFileSync(new URL('./certs/geotrust-tls-rsa-ca-g1.pem', import.meta.url), 'utf8')],
+  }),
+  rewrite: (/** @type {string} */ path) => path.replace(/^\/fdp-file\/(\d+).*/, '/fdpp/report/document-download?id=$1'),
+};
+/** Same-origin pass-through to the Internet Archive's raw captures. */
+const waybackProxy = {
+  target: 'https://web.archive.org',
+  changeOrigin: true,
+  rewrite: (/** @type {string} */ path) => path.replace(/^\/wayback/, '/web'),
+};
+
 // Static output. No adapter, no server, no database: the assistant runs in a
 // separate Worker and reads the corpus this build writes to /ask/corpus.json.
-// See docs/adr/0002-static-astro-no-backend.md and 0007-grounded-assistant.md
+// See docs/adr/0002-static-astro-no-backend.md and 0008-grounded-assistant.md
 export default defineConfig({
   site,
   integrations: [askCorpus()],
   output: 'static',
   trailingSlash: 'ignore',
   build: { format: 'directory' },
+  vite: {
+    // Mirrors the /wayback and /fdp-file rewrites in vercel.json for local dev
+    // and preview, so the document reader can fetch source files same-origin.
+    server: { proxy: { '/wayback': waybackProxy, '/fdp-file': fdpProxy } },
+    preview: { proxy: { '/wayback': waybackProxy, '/fdp-file': fdpProxy } },
+  },
 });

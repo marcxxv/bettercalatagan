@@ -22,10 +22,15 @@
     "fdp:promote": "node scripts/fdp.mjs promote",
     "validate:data": "vitest run src/data",
     "fdp:extract": "NODE_EXTRA_CA_CERTS=certs/geotrust-tls-rsa-ca-g1.pem node scripts/sre.mjs extract",
-    "psa:fetch": "node scripts/psa.mjs fetch"
+    "psa:fetch": "node scripts/psa.mjs fetch",
+    "archive:index": "node scripts/documents.mjs build",
+    "data:refresh": "npm run fdp:stage && npm run fdp:promote && npm run fdp:extract && npm run psa:fetch && npm run archive:index",
+    "data:report": "node scripts/data-report.mjs"
   },
   "dependencies": {
     "astro": "^7.3.4",
+    "fflate": "^0.8.3",
+    "pdfjs-dist": "^6.3.289",
     "zod": "^3.24.2"
   },
   "devDependencies": {

@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import { archivedDocuments } from '../data/documents';
 import { KIND_LABELS } from '../data/schemas/documents';
+import { archiveReadAttrs } from '../lib/viewer';
 
 /**
  * A deliberate gap page.
@@ -150,10 +151,16 @@ const crumbs = [{ name: 'Government', href: '/government' }];
                 <td data-label="Kind">{KIND_LABELS[doc.kind]}</td>
                 <td data-label="Published">{doc.publishedYear ?? '—'}</td>
                 <td data-label="Archived copy">
-                  <a href={doc.archiveUrl} rel="noopener noreferrer nofollow">
-                    Open<span class="visually-hidden"> {doc.title} on the Wayback Machine</span>
-                    <span aria-hidden="true"> ↗</span>
-                  </a>
+                  {archiveReadAttrs(doc) ? (
+                    <a href={doc.archiveUrl} rel="noopener noreferrer nofollow" {...archiveReadAttrs(doc)}>
+                      Read<span class="visually-hidden"> {doc.title}</span>
+                    </a>
+                  ) : (
+                    <a href={doc.archiveUrl} rel="noopener noreferrer nofollow">
+                      Get file<span class="visually-hidden"> {doc.title} from the Wayback Machine</span>
+                      <span aria-hidden="true"> ↗</span>
+                    </a>
+                  )}
                 </td>
               </tr>
             ))}

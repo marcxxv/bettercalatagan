@@ -15,7 +15,7 @@ and a 850 MB repository.
 ## Decision
 
 **Astro, TypeScript, static output.** No backend, database, CMS, authentication, analytics,
-search service or AI.
+search service or AI. *(AI: see 0008.)*
 
 Astro ships zero JavaScript by default, which suits a document-heavy, near-static site and keeps
 payloads small on poor connections. Data lives in typed TypeScript modules validated by Zod at
@@ -37,4 +37,7 @@ exports rather than a live API, which also means published data cannot silently 
 citation.
 
 If the project later needs genuinely dynamic behaviour, this decision should be revisited in a new
-ADR rather than eroded.
+ADR rather than eroded. *Update: [0007](0007-in-site-document-reader.md) adds host-level
+pass-through rewrites so documents can be read in place; no server code, no storage.*
+*Update: [0008](0008-grounded-assistant.md) adds the one piece of server code, a separate
+Cloudflare Worker for the assistant; the site itself stays static and works without it.*

@@ -1,4 +1,4 @@
-# 0007 — A grounded assistant behind the ask boxes
+# 0008 — A grounded assistant behind the ask boxes
 
 **Status:** Accepted · 2026-09-30 · Revisits [0002](0002-static-astro-no-backend.md) (no backend, no AI)
 and extends [0006](0006-editorial-redesign.md) (answer-first search)

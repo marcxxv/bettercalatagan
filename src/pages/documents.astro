@@ -6,6 +6,7 @@ import Icon from '../components/Icon.astro';
 import { archivedDocuments, documentKinds, documentYears, documentsSource } from '../data/documents';
 import { KIND_LABELS } from '../data/schemas/documents';
 import { formatDate, formatNumber } from '../lib/format';
+import { archiveReadAttrs } from '../lib/viewer';
 
 const docs = archivedDocuments.documents;
 
@@ -23,6 +24,7 @@ const rows = docs.map((doc) => ({
   kindLabel: KIND_LABELS[doc.kind],
   size: sizeLabel(doc.byteLength),
   search: `${doc.title} ${doc.filename} ${KIND_LABELS[doc.kind]}`.toLowerCase(),
+  read: archiveReadAttrs(doc),
 }));
 const inspectedCount = docs.filter((doc) => doc.inspected).length;
 const kindMax = Math.max(1, ...documentKinds.map((k) => k.count));
@@ -31,12 +33,38 @@ const years = docs.map((d) => d.publishedYear).filter((y): y is number => y !== 
 const span = years.length ? `${Math.min(...years)}–${Math.max(...years)}` : '—';
 
 const crumbs = [{ name: 'Archive', href: '/documents' }];
+
+const origin = Astro.site ?? new URL('http://localhost:4321');
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Calatagan, Batangas — documents archived from the former municipal website',
+    description: `An index of ${archivedDocuments.documentCount} documents that calatagan.gov.ph published and the Internet Archive preserved: ordinances, plans, reports, notices of award and forms, classified by kind and year, each linked to its archived copy.`,
+    url: new URL('/documents', origin).toString(),
+    isAccessibleForFree: true,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    creator: { '@id': new URL('/#publisher', origin).toString() },
+    temporalCoverage: years.length ? `${Math.min(...years)}/${Math.max(...years)}` : undefined,
+    spatialCoverage: { '@type': 'Place', name: 'Calatagan, Batangas, Philippines' },
+    isBasedOn: documentsSource.sources.map((s) => s.url),
+    dateModified: documentsSource.lastVerified,
+    distribution: [
+      {
+        '@type': 'DataDownload',
+        encodingFormat: 'application/json',
+        contentUrl: new URL('/data/documents.json', origin).toString(),
+      },
+    ],
+  },
+];
 ---
 
 <Base
   title="Archived Calatagan municipal documents"
-  description={`${formatNumber(archivedDocuments.documentCount)} documents recovered from the former Calatagan municipal website — ordinances, plans, reports and forms — indexed as a historical record.`}
+  description={`${formatNumber(archivedDocuments.documentCount)} documents recovered from the former Calatagan municipal website — ordinances, plans, reports and forms — readable on this site as a historical record.`}
   {crumbs}
+  {jsonLd}
 >
   <PageHeader
     eyebrow="Archive"
@@ -173,10 +201,20 @@ const crumbs = [{ name: 'Archive', href: '/documents' }];
               </p>
             </div>
             <p class="get">
-              <a class="button small" href={doc.archiveUrl} rel="noopener noreferrer nofollow">
-                Open copy<span class="visually-hidden"> of {doc.title} on the Wayback Machine</span>
-                <Icon name="external" size="15" />
-              </a>
+              {doc.read ? (
+                <>
+                  <a class="button small primary" href={doc.archiveUrl} rel="noopener noreferrer nofollow" {...doc.read}>
+                    <Icon name="eye" size="16" /> Read<span class="visually-hidden"> {doc.title}</span>
+                  </a>
+                  <a class="button small icon-only" href={doc.read['data-read']} download={doc.filename} title="Download" aria-label={`Download ${doc.title}`}>
+                    <Icon name="download" size="16" />
+                  </a>
+                </>
+              ) : (
+                <a class="button small" href={doc.archiveUrl} rel="noopener noreferrer nofollow" title="Older Word format: it opens in Word or LibreOffice, not in the browser">
+                  <Icon name="download" size="16" /> Get file<span class="visually-hidden"> {doc.title} from the Wayback Machine</span>
+                </a>
+              )}
             </p>
           </li>
         ))}
@@ -402,6 +440,8 @@ const crumbs = [{ name: 'Archive', href: '/documents' }];
     font-size: 0.72rem;
   }
   .get {
+    display: flex;
+    gap: var(--sp-2);
     margin: 0;
     grid-column: 2;
   }
