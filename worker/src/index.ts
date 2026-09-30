@@ -23,6 +23,18 @@ const MESSAGES: Record<string, string> = {
   budget: 'The assistant has reached its limit for today. Search still works, and the assistant will be back tomorrow.',
 };
 
+/** Larger bodies are refused before parsing: a full conversation is well under this. */
+const MAX_BODY_BYTES = 64 * 1024;
+
+/** Compare two secrets without leaking, through timing, how much of them matched. */
+async function sameSecret(given: string | null, expected: string): Promise<boolean> {
+  if (!given) return false;
+  const [a, b] = await Promise.all([digest(given), digest(expected)]);
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
 const bearer = (request: Request) => request.headers.get('Authorization')?.replace(/^Bearer\s+/i, '') ?? null;
 
 async function health(env: Env, cors: Record<string, string>) {
@@ -46,11 +58,14 @@ export default {
     if (url.pathname === '/health' && request.method === 'GET') return health(env, cors);
 
     if (url.pathname === '/admin/sync' && request.method === 'POST') {
-      if (!env.ADMIN_TOKEN || bearer(request) !== env.ADMIN_TOKEN) return json({ error: 'unauthorized' }, 401);
+      if (!env.ADMIN_TOKEN || !(await sameSecret(bearer(request), env.ADMIN_TOKEN))) {
+        return json({ error: 'unauthorized' }, 401);
+      }
       try {
         return json(await sync(env, { force: url.searchParams.get('force') === '1' }));
       } catch (error) {
-        return json({ error: String(error) }, 502);
+        console.error('admin sync failed', String(error));
+        return json({ error: 'sync_failed' }, 502);
       }
     }
 
@@ -60,8 +75,20 @@ export default {
     if (!originAllowed(origin, env.ALLOWED_ORIGINS)) {
       return json({ error: { code: 'forbidden', message: 'Origin not allowed' } }, 403);
     }
+    if (Number(request.headers.get('Content-Length') ?? 0) > MAX_BODY_BYTES) {
+      return json({ error: { code: 'too_large', message: 'That message is too long.' } }, 413, cors);
+    }
     const ip = request.headers.get('CF-Connecting-IP') ?? '0.0.0.0';
-    const body = await request.json().catch(() => null);
+    const text = await request.text().catch(() => '');
+    if (text.length > MAX_BODY_BYTES) {
+      return json({ error: { code: 'too_large', message: 'That message is too long.' } }, 413, cors);
+    }
+    let body: unknown = null;
+    try {
+      body = JSON.parse(text);
+    } catch {
+      body = null;
+    }
 
     if (url.pathname === '/session') {
       const token = (body as { turnstileToken?: unknown } | null)?.turnstileToken;

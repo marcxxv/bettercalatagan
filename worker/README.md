@@ -58,6 +58,18 @@ the site with `PUBLIC_ASK_ENDPOINT=http://localhost:8787` in `.env`, and `.dev.v
 `ALLOWED_ORIGINS=http://localhost:4321`. The first time, apply the schema with
 `npx wrangler d1 execute bettercalatagan-ask --local --file schema.sql`.
 
+## Emergencies
+
+- **Switch the assistant off:** set `MODELS = ""` in `wrangler.toml` and `npx wrangler deploy`.
+  Every question then gets the "can't answer right now" reply with the closest pages; search is
+  unaffected. For a full stop, unset `PUBLIC_ASK_ENDPOINT` in Vercel and redeploy the site.
+- **Abuse:** lower `LIMIT_GLOBAL_PER_MIN`, or rotate `SESSION_SECRET`
+  (`npx wrangler secret put SESSION_SECRET`), which ends every open session.
+- **A leaked secret:** rotate it with `wrangler secret put`; `ADMIN_TOKEN`, `SESSION_SECRET`,
+  `NYO_API_KEY` and `TURNSTILE_SECRET` are independent of one another.
+- **A bad answer:** add it to `eval/cases.json`, tighten `guard.ts` or `prompt.ts`, redeploy, and
+  re-run the eval.
+
 ## Tuning
 
 `wrangler.toml` `[vars]`: `MODELS` (order of `provider:model`), `DAILY_TOKEN_CAP`,

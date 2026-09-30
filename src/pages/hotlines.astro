@@ -5,10 +5,9 @@ import Source from '../components/Source.astro';
 import { hotlines, hotlinesSource, localHotlines, localHotlinesSource } from '../data/calendar';
 
 /**
- * Hotlines, held to the site's standard: only numbers fixed by law are
- * listed. Local numbers are withheld (see municipality.ts, WITHHELD) because
- * the only records of them are years out of date, and a wrong emergency
- * number is worse than none.
+ * Hotlines: national numbers fixed by executive order, then Calatagan's own
+ * lines as the municipal government provided them (tier 2 by attestation,
+ * ADR 0010). 911 stays first: a wrong emergency number is worse than none.
  */
 
 const crumbs = [

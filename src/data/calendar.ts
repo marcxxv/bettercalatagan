@@ -7,9 +7,9 @@
  * Calatagan's own special days are declared one at a time by proclamation;
  * only those found in a primary record are listed, with their proclamation.
  *
- * Hotlines: only numbers established by an executive order are listed. Local
- * numbers (municipal hall, MDRRMO, police, fire) are withheld for the reason
- * given in municipality.ts: the only records of them are out of date.
+ * Hotlines: national numbers established by executive order, and local
+ * numbers (MDRRMO, police, fire, health and others) as provided by the
+ * municipal government, published on the maintainer's attestation (ADR 0010).
  */
 import {
   EO_56_2018,

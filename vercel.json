@@ -14,6 +14,10 @@
         {
           "key": "X-Robots-Tag",
           "value": "noindex"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "sandbox; default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'"
         }
       ]
     },
@@ -63,8 +67,8 @@
   ],
   "rewrites": [
     {
-      "source": "/wayback/:path*",
-      "destination": "https://web.archive.org/web/:path*"
+      "source": "/wayback/:ts(\\d{14}id_)/:target(https?\\://(?:www\\.)?calatagan\\.gov\\.ph(?:\\:80)?/.*)",
+      "destination": "https://web.archive.org/web/:ts/:target"
     },
     {
       "source": "/fdp-file/:id",

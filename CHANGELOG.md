@@ -33,6 +33,20 @@ emergency answer now gives the MDRRMO lines.
 - The home carousel steps with the ← and → keys while it is on screen (not while typing).
 - Office contact numbers are no longer listed as unproven: the municipality supplied them.
 
+### Security and privacy
+- The document reader's `/wayback/` pass-through now serves only captures of calatagan.gov.ph,
+  and its responses carry a sandboxing Content-Security-Policy, so the site's address cannot be
+  used to show arbitrary archived pages.
+- Assistant Worker: the admin token is compared in constant time, sync errors are no longer
+  echoed, and request bodies over 64 KB are refused before parsing.
+- The privacy notice now says what actually happens: providers process questions outside the
+  Philippines, the host and Cloudflare keep short-lived request logs, voice input uses the
+  browser's speech service, and requests to remove personal information come down first.
+- Wording: the officials section says this project could not obtain the records (not that
+  agencies failed to publish them); the DTI profile note no longer calls its contact fields out
+  of date. Five new assistant eval cases cover loaded questions (hiding, fraud, addresses).
+- `worker/README.md` documents how to switch the assistant off and rotate secrets.
+
 ### Fixed
 - History: the contents rail stuck under the masthead ("Chapters" hidden when scrolling).
 
