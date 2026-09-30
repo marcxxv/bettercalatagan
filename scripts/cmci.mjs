@@ -85,6 +85,42 @@ export function parseRankings(html) {
   return { pillars, rows };
 }
 
+const PILLAR_IDS = { ed: 'Economic Dynamism', ge: 'Government Efficiency', in: 'Infrastructure', re: 'Resiliency', iv: 'Innovation' };
+
+/**
+ * The indicator breakdown on DTI's LGU profile page: for each pillar, a
+ * collapsible table of indicator, rank and score. The page does not print a
+ * year, so the caller matches the pillar totals against a ranking year.
+ *
+ * Every panel ends with the same stray row ("Local Economy Size", with
+ * figures that belong to none of the pillars): a template artefact on DTI's
+ * side. A last row identical in every panel is that artefact and is dropped.
+ */
+export function parseProfile(html) {
+  const pillars = [];
+  for (const [, id, body] of html.matchAll(/id="collapse-([a-z]+)"[^>]*>([\s\S]*?)(?=id="collapse-|<\/body>)/gi)) {
+    const name = PILLAR_IDS[id];
+    if (!name) continue;
+    const cells = text(body.replace(/<\/(td|th|tr)>/gi, ' | ')).split('|').map((c) => c.trim()).filter(Boolean);
+    const rows = [];
+    for (let i = 0; i < cells.length; i++) {
+      const m = cells[i + 1]?.match(/^(\d+)\s*(st|nd|rd|th)?$/);
+      const score = cells[i + 2]?.match(/^\d+(\.\d+)?$/) ? Number(cells[i + 2]) : null;
+      if (!m || score === null || /^\d/.test(cells[i])) continue;
+      rows.push({ name: cells[i], rank: Number(m[1]), score });
+      i += 2;
+    }
+    const [total, ...indicators] = rows;
+    if (!total || total.name.toLowerCase() !== name.toLowerCase()) continue;
+    pillars.push({ name, rank: total.rank, score: total.score, indicators });
+  }
+  const tail = (p) => JSON.stringify(p.indicators.at(-1));
+  if (pillars.length > 1 && pillars.every((p) => tail(p) === tail(pillars[0]))) {
+    for (const p of pillars) p.indicators.pop();
+  }
+  return pillars;
+}
+
 function sortKeys(value) {
   if (Array.isArray(value)) return value.map(sortKeys);
   if (value && typeof value === 'object') {
@@ -140,6 +176,21 @@ async function fetchAll() {
     /* first run */
   }
   if (results.length < previous) throw new Error(`refusing to write: ${results.length} years, down from ${previous}`);
+
+  // The indicator breakdown, placed in the ranking year whose pillar ranks and
+  // scores it reproduces exactly; if none matches, it is not recorded.
+  const profileUrl = `${BASE}/lgu-profile.php?lgu=${encodeURIComponent(LGU)}`;
+  const profile = parseProfile(await getHtml(profileUrl));
+  const match = results.find(
+    (y) =>
+      profile.length === y.pillars.length &&
+      y.pillars.every((p) => profile.some((q) => q.name === p.name && q.rank === p.rank && q.score === p.score)),
+  );
+  if (match) {
+    match.indicators = { url: profileUrl, pillars: profile.map(({ name, indicators }) => ({ name, indicators })) };
+  } else {
+    console.warn('cmci: profile indicators match no ranking year; not recorded');
+  }
 
   const dataset = { source: { base: BASE, lgu: LGU, province: PROVINCE }, retrievedAt, years: results };
   await writeFile(OUT_PATH, `${JSON.stringify(sortKeys(dataset), null, 2)}\n`);

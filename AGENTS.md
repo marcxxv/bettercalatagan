@@ -94,7 +94,8 @@ certs/                DILG intermediate certificate
   reconciled quarterly SREs, cell-referenced), `psa-population.json` (2024 POPCEN, 25 barangays),
   `archived-documents.json` (232 files from calatagan.gov.ph via the Internet Archive).
 - More generated datasets (ADR 0009): `dpwh-projects.json` (DPWH contracts mentioning Calatagan,
-  each with a `scope`: calatagan / road / shared) and `cmci.json` (DTI competitiveness, by year).
+  each with a `scope`: calatagan / road / shared) and `cmci.json` (DTI competitiveness, by year; the latest year also carries the 50-indicator
+  breakdown from DTI's LGU profile).
 - Hand-maintained: `municipality.ts` (identity, income class, `WITHHELD`), `history.ts`,
   `sources.ts`, `barangays.ts`, `services.ts` (2022 Citizen's Charter services, no fees or times),
   `calendar.ts` (holidays by proclamation; hotlines by executive order).

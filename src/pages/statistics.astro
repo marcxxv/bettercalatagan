@@ -183,6 +183,42 @@ const description = `Calatagan, Batangas in figures: ${formatNumber(pop.populati
           </table>
         </div>
 
+        {latestCmci.indicators && (
+          <>
+            <h3 id="indicators-title">What each pillar is made of, {latestCmci.year}</h3>
+            <p class="small muted">
+              DTI scores every pillar from ten indicators. These are Calatagan’s ranks and scores on
+              each, as DTI’s profile page for Calatagan prints them; many municipalities share a rank
+              where they score the same.
+            </p>
+            <div class="dataset" style="--cols: minmax(0, 1fr) 5.5rem 5.5rem" aria-labelledby="indicators-title">
+              <div class="dataset-head" aria-hidden="true">
+                <span>Indicator</span><span class="num">Rank</span><span class="num">Score</span>
+              </div>
+              <ul class="dataset-rows">
+                {latestCmci.indicators.pillars.map((pillar) => {
+                  const total = latestCmci.pillars.find((p) => p.name === pillar.name);
+                  return (
+                    <>
+                      <li class="dataset-group">
+                        {pillar.name}
+                        {total?.rank && <span class="group-rank"> · {place(total.rank)} overall</span>}
+                      </li>
+                      {pillar.indicators.map((ind) => (
+                        <li class="dataset-row">
+                          <span class="cell main"><span class="row-title">{ind.name}</span></span>
+                          <span class="cell num"><span class="cell-label">Rank</span>{place(ind.rank)}</span>
+                          <span class="cell num"><span class="cell-label">Score</span>{ind.score.toFixed(4)}</span>
+                        </li>
+                      ))}
+                    </>
+                  );
+                })}
+              </ul>
+            </div>
+          </>
+        )}
+
         <details class="data-table">
           <summary>Every year, every pillar</summary>
           <div class="table-wrap" tabindex="0">
@@ -236,6 +272,12 @@ const description = `Calatagan, Batangas in figures: ${formatNumber(pop.populati
     flex-wrap: wrap;
     gap: var(--sp-2) var(--sp-5);
     margin: var(--sp-4) 0;
+  }
+  .group-rank {
+    font-weight: 500;
+    color: var(--c-muted);
+    text-transform: none;
+    letter-spacing: 0;
   }
   .ranks {
     list-style: none;

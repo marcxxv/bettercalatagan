@@ -56,6 +56,12 @@ emergency answer now gives the MDRRMO lines.
   this document?" or "explain this page" are answered about that page. Only bound parameters and
   the corpus's own titles reach the model.
 
+### Added — What each competitiveness pillar is made of
+- Statistics now lists Calatagan's rank and score on all 50 CMCI indicators for 2024 (ten per
+  pillar), from DTI's LGU profile page. `scripts/cmci.mjs` places the breakdown in the ranking year
+  whose pillar totals it reproduces exactly, and drops a stray row DTI's page repeats under every
+  pillar. The profile's contact block is still not read.
+
 ### Changed — Source cards
 - Every source is now a small chip (publisher, verified date, status dot) that opens in place to
   the status, dates, note, method and every source. Tier 2 caveats stay visible on the chip as

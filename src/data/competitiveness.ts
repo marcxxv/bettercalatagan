@@ -13,7 +13,7 @@
  *  - DTI's 2018 table gives ranks but prints every score as 0.0000. Those
  *    scores are recorded as not published, not as zero.
  *
- * The CMCI profile page also shows a mayor, a population, a telephone number
+ * From the CMCI profile page only the indicator breakdown is used. It also shows a mayor, a population, a telephone number
  * and an e-mail address. Those fields are stale and are withheld on this site
  * (municipality.ts, WITHHELD); nothing from that block is used.
  */
@@ -44,6 +44,6 @@ export const competitivenessSource: DataSource = {
   expectedRefresh: 'annual',
   isLatestKnownOfficial: true,
   methodology:
-    'Read from DTI’s CMCI ranking table for each year, in the category Calatagan was ranked in (1st to 2nd class municipalities throughout). The overall rank and score, each pillar’s rank and score, and the number of LGUs ranked are recorded exactly as DTI’s table prints them.',
+    'Read from DTI’s CMCI ranking table for each year, in the category Calatagan was ranked in (1st to 2nd class municipalities throughout). The overall rank and score, each pillar’s rank and score, and the number of LGUs ranked are recorded exactly as DTI’s table prints them. The indicator breakdown comes from DTI’s LGU profile page for Calatagan and is placed in the year whose pillar ranks and scores it reproduces exactly; a stray row DTI’s page repeats under every pillar is dropped.',
   note: 'The CMCI measures what LGUs and agencies report to DTI against DTI’s indicators; a rank compares Calatagan with other municipalities of its class, and pillars were added over time (Resiliency from 2017, Innovation from 2022), so overall scores from different years are not strictly comparable. DTI’s 2018 table prints no scores, only ranks.',
 };

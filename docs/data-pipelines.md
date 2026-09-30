@@ -37,7 +37,7 @@ Rules that hold for every pipeline:
 | `npm run psa:fetch` | `scripts/psa.mjs fetch` | PSA OpenSTAT (PxWeb API) | `src/data/generated/psa-population.json` | 0001, 0003 |
 | `npm run archive:index` | `scripts/documents.mjs build` | Internet Archive CDX for calatagan.gov.ph | `src/data/generated/archived-documents.json` | — |
 | `npm run dpwh:fetch` | `scripts/dpwh.mjs fetch` | BetterGov.ph DPWH API (DPWH's contract records) | `src/data/generated/dpwh-projects.json` | 0009 |
-| `npm run cmci:fetch` | `scripts/cmci.mjs fetch` | DTI CMCI ranking tables | `src/data/generated/cmci.json` | 0009 |
+| `npm run cmci:fetch` | `scripts/cmci.mjs fetch` | DTI CMCI ranking tables and LGU profile (indicators) | `src/data/generated/cmci.json` | 0009 |
 | `npm run data:refresh` | all of the above, in order | | | |
 | `npm run data:report` | `scripts/data-report.mjs` | working tree vs `HEAD` | Markdown on stdout | |
 

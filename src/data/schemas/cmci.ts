@@ -18,6 +18,22 @@ export const cmciYearSchema = z
     score: z.number().positive().nullable(),
     pillars: z.array(pillarSchema).min(3),
     url: z.string().url().startsWith('https://cmci.dti.gov.ph/'),
+    /** Indicator ranks and scores from DTI's LGU profile, for the year they match. */
+    indicators: z
+      .object({
+        url: z.string().url().startsWith('https://cmci.dti.gov.ph/lgu-profile.php'),
+        pillars: z
+          .array(
+            z.object({
+              name: z.string().trim().min(3),
+              indicators: z
+                .array(z.object({ name: z.string().trim().min(3), rank: z.number().int().positive(), score: z.number().nonnegative() }))
+                .min(1),
+            }),
+          )
+          .min(3),
+      })
+      .optional(),
   })
   .refine((y) => y.rank <= y.ranked, 'rank cannot exceed the number of LGUs ranked');
 

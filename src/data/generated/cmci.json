@@ -1,5 +1,5 @@
 {
-  "retrievedAt": "2026-09-30T10:58:11.277Z",
+  "retrievedAt": "2026-09-30T16:13:32.023Z",
   "source": {
     "base": "https://cmci.dti.gov.ph",
     "lgu": "Calatagan",
@@ -278,6 +278,286 @@
     },
     {
       "category": "1st to 2nd Class Municipalities",
+      "indicators": {
+        "pillars": [
+          {
+            "indicators": [
+              {
+                "name": "Local Economy Size",
+                "rank": 169,
+                "score": 0.0105
+              },
+              {
+                "name": "Local Economy Growth",
+                "rank": 65,
+                "score": 0.0007
+              },
+              {
+                "name": "Active Establishments in the Locality",
+                "rank": 197,
+                "score": 0.1956
+              },
+              {
+                "name": "Safety Compliant Business",
+                "rank": 204,
+                "score": 0.1505
+              },
+              {
+                "name": "Employment Generation",
+                "rank": 162,
+                "score": 0.1078
+              },
+              {
+                "name": "Cost of Living",
+                "rank": 53,
+                "score": 0.7677
+              },
+              {
+                "name": "Cost of Doing Business",
+                "rank": 72,
+                "score": 1.5757
+              },
+              {
+                "name": "Financial Deepening",
+                "rank": 278,
+                "score": 0.128
+              },
+              {
+                "name": "Productivity",
+                "rank": 166,
+                "score": 0.0687
+              },
+              {
+                "name": "Presence of Business and Professional Organizations",
+                "rank": 129,
+                "score": 0.0316
+              }
+            ],
+            "name": "Economic Dynamism"
+          },
+          {
+            "indicators": [
+              {
+                "name": "Compliance to National Directives",
+                "rank": 7,
+                "score": 1.76
+              },
+              {
+                "name": "Presence of Investment Promotion Unit",
+                "rank": 41,
+                "score": 0
+              },
+              {
+                "name": "Compliance to ARTA Citizens Charter",
+                "rank": 1,
+                "score": 2
+              },
+              {
+                "name": "Capacity to Generate Local Resource",
+                "rank": 193,
+                "score": 0.1139
+              },
+              {
+                "name": "Capacity of Health Services",
+                "rank": 332,
+                "score": 0.0539
+              },
+              {
+                "name": "Capacity of School Services",
+                "rank": 120,
+                "score": 0.0757
+              },
+              {
+                "name": "Recognition of Performance",
+                "rank": 294,
+                "score": 0.0149
+              },
+              {
+                "name": "Getting Business Permits",
+                "rank": 1,
+                "score": 2
+              },
+              {
+                "name": "Peace and Order",
+                "rank": 47,
+                "score": 0.0825
+              },
+              {
+                "name": "Social Protection",
+                "rank": 232,
+                "score": 0.496
+              }
+            ],
+            "name": "Government Efficiency"
+          },
+          {
+            "indicators": [
+              {
+                "name": "Road Network",
+                "rank": 52,
+                "score": 0.0006
+              },
+              {
+                "name": "Distance to Ports",
+                "rank": 161,
+                "score": 1.898
+              },
+              {
+                "name": "Availability of Basic Utilities",
+                "rank": 102,
+                "score": 0.3447
+              },
+              {
+                "name": "Transportation Vehicles",
+                "rank": 280,
+                "score": 0.0109
+              },
+              {
+                "name": "Education",
+                "rank": 203,
+                "score": 0.0581
+              },
+              {
+                "name": "Health",
+                "rank": 234,
+                "score": 0.1209
+              },
+              {
+                "name": "LGU Investment",
+                "rank": 103,
+                "score": 0.0027
+              },
+              {
+                "name": "Accommodation Capacity",
+                "rank": 119,
+                "score": 0.024
+              },
+              {
+                "name": "Information Technology Capacity",
+                "rank": 33,
+                "score": 0.0166
+              },
+              {
+                "name": "Financial Technology Capacity",
+                "rank": 83,
+                "score": 0.0225
+              }
+            ],
+            "name": "Infrastructure"
+          },
+          {
+            "indicators": [
+              {
+                "name": "Land Use Plan",
+                "rank": 3,
+                "score": 1.9714
+              },
+              {
+                "name": "Disaster Risk Reduction Plan",
+                "rank": 3,
+                "score": 1.9565
+              },
+              {
+                "name": "Annual Disaster Drill",
+                "rank": 104,
+                "score": 1.0028
+              },
+              {
+                "name": "Early Warning System",
+                "rank": 121,
+                "score": 1.0032
+              },
+              {
+                "name": "Budget for DRRMP",
+                "rank": 45,
+                "score": 0.002
+              },
+              {
+                "name": "Local Risk Assessments",
+                "rank": 1,
+                "score": 2
+              },
+              {
+                "name": "Emergency Infrastructure",
+                "rank": 331,
+                "score": 0.3619
+              },
+              {
+                "name": "Utilities",
+                "rank": 157,
+                "score": 1.5023
+              },
+              {
+                "name": "Employed Population",
+                "rank": 253,
+                "score": 0.0128
+              },
+              {
+                "name": "Sanitary System",
+                "rank": 22,
+                "score": 1.5
+              }
+            ],
+            "name": "Resiliency"
+          },
+          {
+            "indicators": [
+              {
+                "name": "ICT Plan",
+                "rank": 2,
+                "score": 1.3334
+              },
+              {
+                "name": "Innovation Financing: R&D Expenditures Allotment",
+                "rank": 41,
+                "score": 0.0002
+              },
+              {
+                "name": "ICT Use: E-BPLS Software",
+                "rank": 1,
+                "score": 2
+              },
+              {
+                "name": "Online Payment Facilities",
+                "rank": 1,
+                "score": 2
+              },
+              {
+                "name": "STEM graduates",
+                "rank": 243,
+                "score": 0
+              },
+              {
+                "name": "Intellectual Property Registration",
+                "rank": 214,
+                "score": 0.0016
+              },
+              {
+                "name": "Internet Capability",
+                "rank": 87,
+                "score": 0.0044
+              },
+              {
+                "name": "Availability of Basic Internet Service",
+                "rank": 90,
+                "score": 0.4646
+              },
+              {
+                "name": "Start Up and Innovation Facilities",
+                "rank": 180,
+                "score": 0
+              },
+              {
+                "name": "New Technology",
+                "rank": 7,
+                "score": 0.0055
+              }
+            ],
+            "name": "Innovation"
+          }
+        ],
+        "url": "https://cmci.dti.gov.ph/lgu-profile.php?lgu=Calatagan"
+      },
       "pillars": [
         {
           "name": "Economic Dynamism",
