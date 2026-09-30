@@ -130,8 +130,9 @@ system dark). Theme choice is stored in `localStorage['bc-theme']` and applied p
 `Base.astro`. Light is the default.
 
 **Avoid (rejected before):** coloured left-stripe panels ("AI-slop" border-left accents),
-gradients-as-decoration, glassmorphism, stock hero photos, a back-to-top button, anything that
-looks like an official government site.
+gradients-as-decoration, glassmorphism, stock hero photos, a back-to-top button, a giant footer
+wordmark or other near-copies of a reference site's signature elements, anything that looks like
+an official government site.
 
 **Navigation** (ADR 0009) follows the Better LGU portals: `NAV_GROUPS` in `site.ts` (Services ·
 Government · Statistics · Transparency · About) drives the header dropdowns (native `<details>`,
@@ -155,7 +156,7 @@ width so its `thead` sticks to the page. Selects are `appearance: none` (Safari)
 
 **Name:** the site is **BetterCalatagan**, one word, everywhere.
 
-**Components** (`src/components/`): `SiteHeader`, `SiteFooter` (giant wordmark), `PageHeader`
+**Components** (`src/components/`): `SiteHeader`, `SiteFooter` (record band with live counts, directory, outside links, fine print), `PageHeader`
 (rounded panel with eyebrow, icon, lede, aside slot), `HeroCarousel` (home scenes, hero ask
 `data-hero-ask`), `AskBar` (floating 448×56 ask bar; hides when the hero ask is visible or a
 dialog is open; grows on hover), `SearchDialog` (⌘K), `DocViewer` (reader), `Source` (provenance

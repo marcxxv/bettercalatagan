@@ -7,6 +7,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Footer and credits
+- **Footer redesigned** around what only this site has: a record band (the page header's panel
+  and lighthouse beam, closing the page) with live counts of the public record — barangays,
+  Full Disclosure filings, reconciled statements, rescued documents — each linking to where it is
+  kept, and the date a person last checked the data. The directory is one row of sections;
+  outside links sit in their own rows. The giant wordmark, centred serif link row and laurels,
+  which read as a near-copy of a reference site, are gone.
+- **About → Credits:** names the design references (America.gov, the Better LGU portals,
+  BetterGov.ph's emblem style), the typefaces and PDF.js, and states that nothing was copied.
+
 ### Added — Local emergency hotlines
 See `docs/adr/0010-local-hotlines-by-attestation.md`. MDRRMO (0909 456 5818, (043) 419 7510), PNP,
 BFP, RHU, Coast Guard, Medicare and BATELEC numbers, from the municipality's emergency hotlines

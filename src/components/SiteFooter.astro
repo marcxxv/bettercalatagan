@@ -1,10 +1,21 @@
 ---
+/**
+ * The footer: a record band, then the directory, then the fine print.
+ *
+ * The band mirrors the page header's panel, so every page opens and closes on
+ * the same chart of the cape, and it carries what only this site has: live
+ * counts of the public record, each linking to where it is kept, and the date
+ * a person last checked the data.
+ */
+import Contours from './Contours.astro';
+import Icon from './Icon.astro';
 import Mark from './Mark.astro';
 import { GOVERNMENT_LINKS, NAV_GROUPS, NETWORK_LINKS, SITE } from '../lib/site';
 import { barangayPopulation2024 } from '../data/population';
-import { fdpSource } from '../data/fdp';
-import { financialsSource } from '../data/financials';
-import { formatDate } from '../lib/format';
+import { fdpDataset, fdpSource } from '../data/fdp';
+import { financialsSource, verifiedFilings } from '../data/financials';
+import { archivedDocuments } from '../data/documents';
+import { formatDate, formatNumber } from '../lib/format';
 
 const year = new Date().getUTCFullYear();
 
@@ -13,44 +24,71 @@ const lastChecked = [barangayPopulation2024.source.lastVerified, fdpSource.lastV
   .sort()
   .at(-1)!;
 
-const links = [
-  ...NAV_GROUPS.filter((group) => group.label !== 'About').map((group) => ({ href: group.href, label: group.label })),
-  { href: '/history', label: 'History' },
-  { href: '/sources', label: 'Sources' },
-  { href: '/about', label: 'About' },
+/** The record, counted from the data modules — never typed in by hand. */
+const ledger = [
+  { value: barangayPopulation2024.data.length, label: 'barangays, each counted', from: 'PSA 2024 census', href: '/barangays' },
+  { value: fdpDataset.recordCount, label: 'Full Disclosure filings', from: 'DILG portal', href: '/transparency' },
+  { value: verifiedFilings.length, label: 'quarterly statements reconciled', from: 'Cell by cell', href: '/finances' },
+  { value: archivedDocuments.documentCount, label: 'documents rescued', from: 'Internet Archive', href: '/documents' },
 ];
-
-/** One side of a laurel: pointed leaves in pairs along a curved stem. */
-const stem = 'M30 94 C 12 76, 8 44, 22 8';
-const leaves = Array.from({ length: 8 }, (_, i) => {
-  const t = 0.1 + (i / 7) * 0.82;
-  // Point on the stem's cubic Bézier.
-  const [x0, y0, x1, y1, x2, y2, x3, y3] = [30, 94, 12, 76, 8, 44, 22, 8];
-  const u = 1 - t;
-  const x = u ** 3 * x0 + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t ** 3 * x3;
-  const y = u ** 3 * y0 + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t ** 3 * y3;
-  const scale = 1 - i * 0.05;
-  return { x, y, scale };
-});
-const leaf = 'M0 0 C 3 -4, 3 -10, 0 -14 C -3 -10, -3 -4, 0 0 Z';
 ---
 
 <footer class="site-footer">
-  <nav class="big-links" aria-label="Footer">
-    <ul>
-      {links.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
-    </ul>
-  </nav>
-
-  <nav class="directory" aria-label="All pages">
-    {NAV_GROUPS.map((group) => (
-      <div>
-        <p class="dir-title">{group.label}</p>
-        <ul>
-          {group.items.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
-        </ul>
+  <section class="record on-band" aria-labelledby="record-title">
+    <Contours lines={12} focus={0.35} beam />
+    <div class="record-inner">
+      <div class="record-lede">
+        <span class="record-mark"><Mark size={52} /></span>
+        <h2 id="record-title">Calatagan’s public record, <em>traced to its source.</em></h2>
+        <p>
+          Data last checked by a person on
+          <time datetime={lastChecked}>{formatDate(lastChecked)}</time>. Found something wrong?
+        </p>
+        <p class="record-actions">
+          <a class="button primary" href={`${SITE.repository}/issues/new/choose`}>Report a correction</a>
+          <a class="button" href="/data"><Icon name="database" size="16" /> Open data</a>
+        </p>
       </div>
-    ))}
+      <ul class="ledger">
+        {ledger.map((item) => (
+          <li>
+            <a href={item.href}>
+              <span class="l-value">{formatNumber(item.value)}</span>
+              <span class="l-label">{item.label}</span>
+              <span class="l-from">{item.from} <span class="l-arrow" aria-hidden="true">→</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <div class="foot-grid">
+    <div class="brand">
+      <a class="brand-name" href="/">
+        <Mark size={30} />
+        <span>Better Calatagan</span>
+      </a>
+      <p>{SITE.independence}</p>
+      <p class="brand-meta">
+        Part of the <a href="https://bettergov.ph" rel="noopener">BetterGov.ph</a> Better LGU community ·
+        built by volunteers · cost to the people <strong>₱0</strong>
+      </p>
+    </div>
+
+    <nav class="directory" aria-label="All pages">
+      {NAV_GROUPS.map((group) => (
+        <div>
+          <p class="dir-title">{group.label}</p>
+          <ul>
+            {group.items.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+          </ul>
+        </div>
+      ))}
+    </nav>
+  </div>
+
+  <div class="elsewhere">
     <div>
       <p class="dir-title">BetterGov.ph network</p>
       <ul>
@@ -63,109 +101,232 @@ const leaf = 'M0 0 C 3 -4, 3 -10, 0 -14 C -3 -10, -3 -4, 0 0 Z';
         {GOVERNMENT_LINKS.map((link) => <li><a href={link.href} rel="noopener">{link.label}</a></li>)}
       </ul>
     </div>
-  </nav>
-
-  <p class="wordmark" aria-hidden="true">BetterCalatagan</p>
-
-  <div class="credits">
-    <p class="credit left">
-      <span class="credit-mark"><Mark size={36} /></span>
-      <span>Part of the <a href="https://bettergov.ph" rel="noopener">BetterGov.ph</a> Better LGU community</span>
-    </p>
-    <p class="credit center">
-      <svg class="laurel" viewBox="0 0 44 100" aria-hidden="true" focusable="false">
-        <path d={stem} fill="none" stroke="currentColor" stroke-width="1.6" />
-        {leaves.map((l) => (
-          <>
-            <path d={leaf} transform={`translate(${l.x} ${l.y}) rotate(-58) scale(${l.scale})`} />
-            <path d={leaf} transform={`translate(${l.x} ${l.y}) rotate(38) scale(${l.scale})`} />
-          </>
-        ))}
-      </svg>
-      <span>Every figure, traced to its source</span>
-      <svg class="laurel flip" viewBox="0 0 44 100" aria-hidden="true" focusable="false">
-        <path d={stem} fill="none" stroke="currentColor" stroke-width="1.6" />
-        {leaves.map((l) => (
-          <>
-            <path d={leaf} transform={`translate(${l.x} ${l.y}) rotate(-58) scale(${l.scale})`} />
-            <path d={leaf} transform={`translate(${l.x} ${l.y}) rotate(38) scale(${l.scale})`} />
-          </>
-        ))}
-      </svg>
-    </p>
-    <p class="credit right">
-      <span>Built by volunteers in the Philippines · <span class="cost">Cost to the people: <strong>₱0</strong></span></span>
-    </p>
   </div>
 
   <div class="fine">
+    <p class="legal">
+      © {year} BetterCalatagan contributors. Code under MIT; this project’s own compilation under
+      CC BY 4.0. Government documents cited here remain the works of their issuing agencies and are
+      not relicensed.
+    </p>
     <ul class="fine-links">
       <li><a href="/about#licensing">Licensing</a></li>
-      <li><a href="/about#privacy">Privacy: no tracking</a></li>
+      <li><a href="/about#privacy">Privacy</a></li>
+      <li><a href="/about#credits">Credits</a></li>
       <li><a href={SITE.repository}>Source code</a></li>
-      <li><a href={`${SITE.repository}/issues/new/choose`}>Report a correction</a></li>
-      <li>Data last verified <time datetime={lastChecked}>{formatDate(lastChecked)}</time></li>
     </ul>
-    <p class="legal">
-      {SITE.independence} © {year} BetterCalatagan contributors. Code under MIT; this project’s own
-      compilation under CC BY 4.0. Government documents cited here remain the works of their issuing
-      agencies and are not relicensed.
-    </p>
   </div>
 </footer>
 
 <style>
   .site-footer {
     margin-top: var(--section-y);
-    padding: var(--sp-8) var(--gutter) calc(var(--sp-10) + 2rem);
-    border-top: 1px solid var(--c-line);
-    background: var(--c-bg);
+    padding: 0 calc(var(--gutter) * 0.75) var(--sp-8);
     color: var(--c-ink-2);
-    text-align: center;
-    overflow: hidden;
   }
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
   }
-  li + li {
-    margin-top: 0;
-  }
 
-  .big-links ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0 clamp(1rem, 0.5rem + 1.5vw, 2rem);
-    max-width: 60rem;
+  /* The record band: the page header's panel, closing the page. */
+  .record {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    max-width: calc(var(--w-wide) + var(--gutter) * 1.5);
+    margin-inline: auto;
+    border-radius: var(--radius-2xl);
+    background: linear-gradient(180deg, var(--c-panel-2) 0%, var(--c-panel) 100%);
+    color: var(--c-band-ink);
+    padding: clamp(2.5rem, 1.5rem + 4vw, 4.5rem) calc(var(--gutter) * 1.25);
+  }
+  .record-inner {
+    position: relative;
+    display: grid;
+    gap: var(--sp-7);
+    max-width: var(--w-wide);
     margin-inline: auto;
   }
-  .big-links a {
-    font-family: var(--font-serif);
-    font-size: clamp(1.6rem, 1.1rem + 2vw, 2.75rem);
-    font-weight: 400;
-    letter-spacing: -0.03em;
-    line-height: 1.3;
-    color: var(--c-ink);
-    text-decoration: none;
-    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
-    transition: background-size var(--dur-2) var(--ease-out), color var(--dur-1);
+  @media (min-width: 64rem) {
+    .record-inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      align-items: center;
+      gap: var(--sp-9);
+    }
   }
-  .big-links a:hover {
-    background-size: 100% 1px;
-    color: var(--c-accent);
+  .record-mark {
+    display: inline-flex;
+    margin-bottom: var(--sp-4);
+  }
+  .record h2 {
+    margin: 0;
+    max-width: 16ch;
+    font-family: var(--font-serif);
+    font-size: var(--fs-2xl);
+    font-weight: 400;
+    letter-spacing: var(--track-display);
+    line-height: 1.08;
+    color: var(--c-band-ink);
+  }
+  .record h2 em {
+    font-style: italic;
+    color: var(--c-band-accent);
+  }
+  .record-lede p {
+    margin: var(--sp-4) 0 0;
+    max-width: 44ch;
+    color: var(--c-band-muted);
+  }
+  .record-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    margin-top: var(--sp-5) !important;
   }
 
+  .ledger {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-3);
+  }
+  .ledger a {
+    display: grid;
+    align-content: start;
+    gap: 2px;
+    height: 100%;
+    padding: var(--sp-5);
+    border: 1px solid var(--c-band-line);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--c-surface) 72%, transparent);
+    color: var(--c-band-ink);
+    text-decoration: none;
+    transition:
+      transform var(--dur-2) var(--ease-out),
+      border-color var(--dur-1),
+      box-shadow var(--dur-2);
+  }
+  .ledger a:hover {
+    transform: translateY(-2px);
+    border-color: var(--c-line-strong);
+    box-shadow: var(--shadow-md);
+  }
+  .l-value {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 1.4rem + 2vw, 2.9rem);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .l-label {
+    margin-top: var(--sp-2);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .l-from {
+    margin-top: var(--sp-2);
+    font-size: var(--fs-xs);
+    color: var(--c-band-muted);
+  }
+  .l-arrow {
+    display: inline-block;
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+  .ledger a:hover .l-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Directory. */
+  .foot-grid {
+    display: grid;
+    gap: var(--sp-7);
+    max-width: var(--w-wide);
+    margin: clamp(2.5rem, 1.5rem + 3vw, 4rem) auto 0;
+    padding-inline: calc(var(--gutter) * 0.5);
+  }
+  @media (min-width: 64rem) {
+    .foot-grid {
+      grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+      gap: var(--sp-9);
+    }
+  }
+  .brand-name {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    color: var(--c-ink);
+    text-decoration: none;
+  }
+  .brand p {
+    margin: var(--sp-4) 0 0;
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .brand-meta {
+    color: var(--c-muted);
+  }
+  .brand-meta a {
+    color: var(--c-ink);
+  }
+  .brand-meta strong {
+    color: var(--c-ink);
+  }
   .directory {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--sp-6) var(--sp-5);
+  }
+  @media (min-width: 40rem) {
+    .directory {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 64rem) {
+    .directory {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+
+  /* Outside links: one quiet row each, so they never crowd the directory. */
+  .elsewhere {
+    display: grid;
+    gap: var(--sp-4);
     max-width: var(--w-wide);
-    margin: clamp(2.5rem, 1rem + 4vw, 4.5rem) auto 0;
-    padding-top: var(--sp-6);
+    margin: var(--sp-8) auto 0;
+    padding: var(--sp-5) calc(var(--gutter) * 0.5) 0;
     border-top: 1px solid var(--c-line);
-    text-align: left;
+  }
+  .elsewhere > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-2) var(--sp-5);
+  }
+  .elsewhere .dir-title {
+    flex: 0 0 13rem;
+    margin: 0;
+  }
+  .elsewhere ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-5);
+  }
+  .elsewhere li {
+    margin: 0;
+  }
+  .elsewhere a {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    text-decoration: none;
+  }
+  .elsewhere a:hover {
+    color: var(--c-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .dir-title {
     margin: 0 0 var(--sp-3);
@@ -189,90 +350,41 @@ const leaf = 'M0 0 C 3 -4, 3 -10, 0 -14 C -3 -10, -3 -4, 0 0 Z';
     text-underline-offset: 3px;
   }
 
-  .wordmark {
-    margin: clamp(2.5rem, 1rem + 5vw, 5rem) 0 var(--sp-6);
-    font-family: var(--font-serif);
-    font-size: 14.2vw;
-    font-weight: 400;
-    letter-spacing: -0.05em;
-    line-height: 0.95;
-    white-space: nowrap;
-    color: var(--c-ink);
-    user-select: none;
-  }
-
-  .credits {
-    display: grid;
-    gap: var(--sp-4);
-    align-items: center;
-    max-width: var(--w-wide);
-    margin: 0 auto var(--sp-6);
-    font-size: var(--fs-sm);
-    color: var(--c-ink);
-  }
-  @media (min-width: 64rem) {
-    .credits {
-      grid-template-columns: 1fr auto 1fr;
-    }
-    .credit.left {
-      justify-content: flex-start;
-      text-align: left;
-    }
-    .credit.right {
-      justify-content: flex-end;
-      text-align: right;
-    }
-  }
-  .credit {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--sp-3);
-    margin: 0;
-  }
-  .credit a {
-    color: var(--c-ink);
-  }
-  .center {
-    font-weight: 600;
-  }
-  .laurel {
-    width: 24px;
-    height: 54px;
-    fill: var(--c-ink);
-    color: var(--c-ink);
-  }
-  .laurel.flip {
-    transform: scaleX(-1);
-  }
-  .cost strong {
-    color: var(--c-teal);
-  }
-
+  /* Fine print. */
   .fine {
-    max-width: 62rem;
-    margin-inline: auto;
+    display: grid;
+    gap: var(--sp-3) var(--sp-7);
+    max-width: var(--w-wide);
+    margin: var(--sp-6) auto 0;
+    padding: var(--sp-5) calc(var(--gutter) * 0.5) 0;
+    border-top: 1px solid var(--c-line);
     font-size: var(--fs-xs);
     color: var(--c-muted);
+  }
+  @media (min-width: 64rem) {
+    .fine {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+    }
+  }
+  .legal {
+    margin: 0;
+    max-width: 80ch;
   }
   .fine-links {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: var(--sp-2) var(--sp-5);
-    margin-bottom: var(--sp-4);
-    font-size: var(--fs-sm);
-    color: var(--c-ink-2);
+  }
+  .fine-links li {
+    margin: 0;
   }
   .fine-links a {
-    color: var(--c-ink);
+    color: var(--c-ink-2);
     text-decoration: none;
   }
   .fine-links a:hover {
+    color: var(--c-ink);
     text-decoration: underline;
-  }
-  .legal {
-    margin: 0 auto;
-    max-width: 80ch;
   }
 </style>
