@@ -48,7 +48,9 @@ for (const button of document.querySelectorAll<HTMLButtonElement>('[data-theme-t
   button.addEventListener('click', () => {
     const order: ThemeChoice[] = ['system', 'light', 'dark'];
     const next = order[(order.indexOf(readTheme()) + 1) % order.length];
+    root.classList.add('theme-switching');
     applyTheme(next);
+    window.setTimeout(() => root.classList.remove('theme-switching'), 420);
   });
 }
 
@@ -195,6 +197,66 @@ if (primary && morph && window.matchMedia('(hover: hover) and (pointer: fine)').
     });
   }
   window.addEventListener('resize', () => current && place(current, true));
+}
+
+/* ---------- Gliding highlights ---------- */
+
+// One soft highlight that follows the pointer between items of a list, the way
+// product sites do it, instead of each item flashing its own background.
+// Mouse and trackpad only; touch and keyboard keep the items' own states.
+function glide(host: HTMLElement, items: string) {
+  if (host.dataset.glided) return;
+  host.dataset.glided = '1';
+  host.classList.add('glide-host');
+  const pill = document.createElement('span');
+  pill.className = 'glide';
+  pill.setAttribute('aria-hidden', 'true');
+  host.prepend(pill);
+  let shown = false;
+  const moveTo = (el: HTMLElement) => {
+    const h = host.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    // First appearance fades in where it is; later moves slide.
+    host.classList.toggle('glide-snap', !shown);
+    host.style.setProperty('--gx', `${r.left - h.left + host.scrollLeft}px`);
+    host.style.setProperty('--gy', `${r.top - h.top + host.scrollTop}px`);
+    host.style.setProperty('--gw', `${r.width}px`);
+    host.style.setProperty('--gh', `${r.height}px`);
+    if (!shown) requestAnimationFrame(() => host.classList.remove('glide-snap'));
+    shown = true;
+    host.classList.add('gliding');
+  };
+  host.addEventListener('pointerover', (event) => {
+    if ((event as PointerEvent).pointerType !== 'mouse') return;
+    const item = (event.target as Element).closest<HTMLElement>(items);
+    if (!item || !host.contains(item) || item.hidden) return;
+    // Lists rebuilt by script (search results) lose the highlight; put it back.
+    if (!pill.isConnected) host.prepend(pill);
+    item.setAttribute('data-glide-item', '');
+    moveTo(item.matches('li') && item.firstElementChild instanceof HTMLAnchorElement ? item.firstElementChild : item);
+  });
+  host.addEventListener('pointerleave', () => {
+    shown = false;
+    host.classList.remove('gliding');
+  });
+}
+
+if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  const targets: [string, string][] = [
+    ['.drop-panel ul', ':scope > li'],
+    ['.group-links', ':scope > li'],
+    ['.rail-nav ul', ':scope > li'],
+    ['.dataset-rows', ':scope > .dataset-row'],
+    ['.footer-directory ul', ':scope > li'],
+  ];
+  const attach = () => {
+    for (const [hostSel, itemSel] of targets) {
+      for (const host of document.querySelectorAll<HTMLElement>(hostSel)) glide(host, itemSel.replace(':scope > ', ''));
+    }
+  };
+  attach();
+  // Search results are rebuilt as you type; attach once the lists exist.
+  for (const list of document.querySelectorAll<HTMLElement>('.search-results')) glide(list, '[role="option"]');
 }
 
 /* ---------- Tables: keep the header row in view ---------- */

@@ -62,7 +62,7 @@ reconcile against their own internal arithmetic are withheld, not flagged.
 
 **Not published, and why:** land area (PSA's own table reports a figure implying ten times its
 neighbours' density), elected officials (an election result is not proof of present incumbency),
-office contact details (their source record is demonstrably stale), COA figures, and planning
+COA figures, and planning
 documents that exist only on third-party hosts. Each appears on the Sources page with its reason.
 
 See [SOURCES.md](SOURCES.md) for the full inventory and open items.

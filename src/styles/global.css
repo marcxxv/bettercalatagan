@@ -1665,3 +1665,103 @@ details > summary::-webkit-details-marker {
 .table-wrap.fits:has(caption) thead th {
   border-radius: 0;
 }
+
+/* ---------- Feel: selection, gliding highlights, soft transitions ---------- */
+
+::selection {
+  background: color-mix(in srgb, var(--c-accent) 26%, transparent);
+  color: var(--c-ink);
+}
+
+/* One highlight that slides between items (scripts/ui.ts, [data-glide]).
+   While it is active, the items' own hover backgrounds step aside. */
+.glide-host {
+  position: relative;
+  isolation: isolate;
+}
+.glide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: var(--gw, 0px);
+  height: var(--gh, 0px);
+  border-radius: var(--gr, var(--radius-md));
+  background: var(--glide-bg, var(--c-accent-wash));
+  opacity: 0;
+  transform: translate(var(--gx, 0px), var(--gy, 0px));
+  pointer-events: none;
+  transition:
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease;
+}
+.glide-host.gliding > .glide {
+  opacity: 1;
+}
+.glide-host.glide-snap > .glide {
+  transition: opacity 180ms ease;
+}
+.glide-host.gliding [data-glide-item]:hover,
+.glide-host.gliding [data-glide-item]:hover > a,
+.glide-host.gliding [data-glide-item] > a:hover {
+  background: transparent;
+}
+.dataset-rows.glide-host {
+  --glide-bg: var(--hit-hover);
+  --gr: 0px;
+}
+
+/* Theme changes cross-fade instead of snapping (ui.ts adds the class briefly). */
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition:
+    background-color 360ms ease,
+    color 360ms ease,
+    border-color 360ms ease,
+    fill 360ms ease,
+    box-shadow 360ms ease !important;
+}
+
+/* Presses feel physical; focus rings ease in. */
+.button,
+.icon-action,
+.icon-button,
+.ap-go,
+.ab-go,
+.ask-go {
+  transition-property: background, color, border-color, box-shadow, transform;
+  transition-duration: var(--dur-1), var(--dur-1), var(--dur-1), var(--dur-2), 160ms;
+}
+.button:active,
+.icon-action:active,
+.icon-button:active,
+.task:active,
+.topics a:active {
+  transform: scale(0.97);
+}
+:where(a, button, input, select, summary):focus-visible {
+  transition: outline-offset 160ms ease;
+}
+
+/* Pages arrive softly. */
+.js-motion main {
+  animation: page-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glide {
+    transition: opacity 120ms ease;
+  }
+  html.theme-switching * {
+    transition: none !important;
+  }
+}

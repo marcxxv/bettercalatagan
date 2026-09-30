@@ -19,6 +19,8 @@ import { archivedDocuments } from '../data/documents';
 import { timeline } from '../data/history';
 import { formatPeriod } from '../data/schemas/fdp';
 import { formatNumber, formatPesoMillions } from '../lib/format';
+import { byYear, inCalatagan, totalBudget } from '../data/infrastructure';
+import { offices, publicServiceCount, SERVICE_CATEGORIES, type ServiceCategory } from '../data/services';
 
 const W = 800;
 const H = 450;
@@ -106,6 +108,25 @@ const tiles = fdpDataset.records.slice(0, 36).map((r) => ({
 }));
 const rows = [tiles.slice(0, 12), tiles.slice(12, 24), tiles.slice(24, 36)];
 
+// ---- Scene 5: infrastructure, DPWH budgets by year as a skyline --------------
+const infraYears = [...byYear].reverse().filter((y) => y.budgeted);
+const infraMax = Math.max(...infraYears.map((y) => y.budget));
+const skyline = infraYears.map((y, i) => {
+  const w = 44;
+  const gap = (W - 120 - infraYears.length * w) / Math.max(1, infraYears.length - 1);
+  const h = Math.max(6, (y.budget / infraMax) * 130);
+  return { x: 60 + i * (w + gap), w, h, year: y.year, count: y.projects.length };
+});
+
+// ---- Scene 6: services, the twelve topics sized by how many services each has
+const topicSizes = (Object.keys(SERVICE_CATEGORIES) as ServiceCategory[])
+  .map((key) => ({
+    label: SERVICE_CATEGORIES[key].label,
+    n: offices.reduce((sum, o) => sum + o.services.filter((sv) => sv.category === key).length, 0),
+  }))
+  .filter((t) => t.n > 0)
+  .sort((a, b) => b.n - a.n);
+
 const scenes = [
   {
     id: 'lighthouse',
@@ -130,6 +151,18 @@ const scenes = [
     prompt: 'Try ‘Annual budget report’',
     caption: `${formatNumber(fdpSummary.total)} disclosure filings · ${formatNumber(archivedDocuments.documentCount)} archived documents`,
     href: '/transparency',
+  },
+  {
+    id: 'infra',
+    prompt: 'Try ‘How many DPWH projects are in Calatagan?’',
+    caption: `${formatNumber(inCalatagan.length)} DPWH projects · ${formatPesoMillions(totalBudget(inCalatagan))} in contract budgets`,
+    href: '/infrastructure',
+  },
+  {
+    id: 'services',
+    prompt: 'Try ‘How do I get a senior citizen ID?’',
+    caption: `${publicServiceCount} municipal services from ${offices.length} offices`,
+    href: '/services',
   },
 ];
 ---
@@ -286,6 +319,47 @@ const scenes = [
                 ))}
               </div>
             ))}
+          </div>
+        )}
+
+        {scene.id === 'infra' && (
+          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="infra-sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#0b1a3a" />
+                <stop offset="1" stop-color="#1b3c8c" />
+              </linearGradient>
+            </defs>
+            <rect width={W} height={H} fill="url(#infra-sky)" />
+            {Array.from({ length: 9 }, (_, i) => (
+              <line x1="0" x2={W} y1={70 + i * 32} y2={70 + i * 32} stroke="#9db7f2" stroke-opacity="0.07" />
+            ))}
+            {skyline.map((b) => (
+              <g class="bar">
+                <rect x={b.x} y={340 - b.h} width={b.w} height={b.h} rx="6" fill="#9db7f2" fill-opacity={0.35 + 0.6 * (b.h / 130)} />
+                <text x={b.x + b.w / 2} y={362} text-anchor="middle" fill="#c3d3f7" font-size="12" font-family="Public Sans, sans-serif">{b.year}</text>
+                <text x={b.x + b.w / 2} y={332 - b.h} text-anchor="middle" fill="#eef1f5" font-size="11" font-weight="700" font-family="Public Sans, sans-serif">{b.count}</text>
+              </g>
+            ))}
+            <rect y="340" width={W} height="4" fill="#d79f22" fill-opacity="0.8" />
+            <g stroke="#f7d9a4" stroke-width="3" stroke-dasharray="18 14" stroke-opacity="0.8">
+              <line x1="0" x2={W} y1="400" y2="400" class="road" />
+            </g>
+            <text x="44" y="140" fill="#fbfbfa" font-family="Source Serif 4, Georgia, serif" font-size="56" letter-spacing="-2">{formatNumber(inCalatagan.length)} projects</text>
+            <text x="48" y="168" fill="#c3d3f7" font-family="Public Sans, sans-serif" font-size="16">DPWH, located in Calatagan · projects per year above each column</text>
+          </svg>
+        )}
+
+        {scene.id === 'services' && (
+          <div class="svc-field" aria-hidden="true">
+            <p class="svc-big"><span>{publicServiceCount}</span> services</p>
+            <ul>
+              {topicSizes.map((t, ti) => (
+                <li style={`--s:${0.8 + (t.n / topicSizes[0].n) * 0.7};--d:${ti * 0.35}s`}>
+                  {t.label}<b>{t.n}</b>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
 
@@ -622,8 +696,8 @@ const scenes = [
     display: grid;
     gap: 6px;
     align-content: start;
-    width: 220px;
-    height: 128px;
+    width: 236px;
+    height: 136px;
     padding: 14px 16px;
     border-radius: 14px;
     background: #fbfbfa;
@@ -643,15 +717,16 @@ const scenes = [
     font-weight: 800;
     letter-spacing: 0.06em;
   }
+  /* Exactly two lines: a fixed box, not -webkit-line-clamp, which draws half a
+     third line inside a grid cell (Safari). */
   .m-label {
+    display: block;
+    height: calc(2 * 1.18em);
+    overflow: hidden;
     font-family: var(--font-serif);
     font-size: 15px;
-    line-height: 1.15;
+    line-height: 1.18;
     letter-spacing: -0.02em;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
   .m-period {
     font-size: 11px;
@@ -672,6 +747,100 @@ const scenes = [
   }
   .m-lines i:nth-child(3) {
     width: 55%;
+  }
+
+  /* Scene 5 */
+  .scene-infra .bar rect {
+    transform-origin: bottom;
+    transform-box: fill-box;
+  }
+  :global(.js-motion) .scene-infra.active .bar rect {
+    animation: bar-rise 900ms var(--ease-out) both;
+  }
+  @keyframes bar-rise {
+    from {
+      transform: scaleY(0.05);
+    }
+  }
+  :global(.js-motion) .scene-infra .road {
+    animation: road 3s linear infinite;
+  }
+  @keyframes road {
+    to {
+      stroke-dashoffset: -64;
+    }
+  }
+
+  /* Scene 6 */
+  .svc-field {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    gap: 22px;
+    padding: 36px 44px 70px;
+    background: radial-gradient(circle at 80% 20%, #1c3a78, #081229 70%);
+    color: #eef1f5;
+  }
+  .svc-big {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.4rem, 1rem + 2vw, 2.4rem);
+    color: #c3d3f7;
+  }
+  .svc-big span {
+    font-size: 2.2em;
+    color: #fbfbfa;
+    letter-spacing: -0.04em;
+  }
+  .svc-field ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .svc-field li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 6px 10px 6px 14px;
+    border: 1px solid rgb(195 211 247 / 0.28);
+    border-radius: 999px;
+    background: rgb(157 183 242 / 0.1);
+    font-size: calc(0.78rem * var(--s));
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .svc-field b {
+    min-width: 1.6em;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: #fbfbfa;
+    color: #0b1220;
+    font-size: 0.8em;
+    text-align: center;
+  }
+  :global(.js-motion) .scene-services.active .svc-field li {
+    animation: chip-in 600ms var(--ease-out) both;
+    animation-delay: calc(var(--d) * 0.25);
+  }
+  @keyframes chip-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+  @media (max-width: 40rem) {
+    .svc-field {
+      padding: 24px 20px 64px;
+      gap: 14px;
+    }
+    .svc-field li {
+      font-size: 0.72rem;
+    }
   }
 
   .hc-controls {

@@ -20,10 +20,11 @@ import { annualSeries, verifiedFilings } from '../data/financials';
 import { archivedDocuments } from '../data/documents';
 import { orderedCitations, timeline } from '../data/history';
 import { formatDate, formatNumber, formatPesoMillions, ordinal } from '../lib/format';
-import { ASK, NAV, SITE } from '../lib/site';
+import { ASK, NAV_GROUPS, SITE } from '../lib/site';
 import { offices, publicServiceCount } from '../data/services';
 import { cmciYears, latestCmci } from '../data/competitiveness';
 import { inCalatagan } from '../data/infrastructure';
+import { holidays } from '../data/calendar';
 
 const populationByCode = new Map(barangayPopulation2024.data.map((row) => [row.psgc10, row]));
 const barangayRows = [...barangays.data]
@@ -61,16 +62,30 @@ const counts: Record<string, string> = {
   '/infrastructure': `${inCalatagan.length} DPWH projects`,
   '/legislation': 'Ordinances, resolutions, executive orders',
   '/procurement': 'Notices of award and bidding',
+  '/hotlines': '911 and local lines',
+  '/holidays': `${holidays.length} dates this year`,
 };
-/** The twelve sections the home page points to, in the order a newcomer wants them. */
-const EXPLORE = [
-  '/services', '/government', '/barangays', '/statistics', '/finances', '/infrastructure',
-  '/transparency', '/procurement', '/legislation', '/history', '/documents', '/sources',
+/** Plain-language shortcuts for the four things people most often come for. */
+const TASKS: { label: string; href: string; icon: Parameters<typeof Icon>[0]['name'] }[] = [
+  { label: 'get a certificate or permit', href: '/services', icon: 'file' },
+  { label: 'call for help', href: '/hotlines', icon: 'alert' },
+  { label: 'find my barangay', href: '/barangays', icon: 'pin' },
+  { label: 'see where the money goes', href: '/finances', icon: 'coins' },
 ];
-const sections = EXPLORE.map((href) => NAV.find((item) => item.href === href)).filter(
-  (item): item is (typeof NAV)[number] => Boolean(item),
-);
-const NUMBER_WORDS = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'];
+
+/** The menu's groups, so the home page teaches the navigation. */
+const GROUP_ICON: Record<string, Parameters<typeof Icon>[0]['name']> = {
+  Services: 'layers',
+  Government: 'landmark',
+  Statistics: 'chart',
+  Transparency: 'shield',
+};
+const GROUPS = NAV_GROUPS.filter((g) => g.label in GROUP_ICON).map((g) => ({
+  ...g,
+  key: g.label.toLowerCase(),
+  icon: GROUP_ICON[g.label],
+}));
+
 
 const MILESTONE_DATES = ['Late 14th – mid 15th century', '1890', '23 October 1903', '1 January 1912', '2018', '1 July 2024'];
 const milestones = MILESTONE_DATES.map((when) => timeline.find((t) => t.when === when)).filter(
@@ -274,25 +289,50 @@ const jsonLd = [
       <header class="section-head split">
         <h2 id="explore-title">Explore the public record</h2>
         <p class="lede">
-          {NUMBER_WORDS[sections.length] ?? sections.length} sections, one standard: each figure carries
-          its source, the date it describes, and the date someone last checked it.
+          Start with what you need to do, or browse by section. Every figure carries its source and
+          the date someone last checked it.
         </p>
       </header>
-      <ul class="grid three gap-lg explore" data-stagger="70">
-        {sections.map((item) => (
+
+      <ul class="tasks" data-stagger="60" aria-label="Common tasks">
+        {TASKS.map((task) => (
           <li data-reveal>
-            <a class="card explore-card" href={item.href}>
-              <span class="ex-icon"><Icon name={item.icon} size="22" /></span>
-              <span class="ex-title">{item.label}</span>
-              <span class="ex-blurb">{item.blurb}</span>
-              <span class="ex-foot">
-                <span class="ex-count">{counts[item.href]}</span>
-                <span class="ex-arrow" aria-hidden="true"><Icon name="arrow-right" size="16" /></span>
+            <a class="task" href={task.href}>
+              <span class="task-icon" aria-hidden="true"><Icon name={task.icon} size="22" /></span>
+              <span class="task-text">
+                <span class="task-want">I want to</span>
+                <span class="task-label">{task.label}</span>
               </span>
+              <span class="task-arrow" aria-hidden="true"><Icon name="arrow-right" size="18" /></span>
             </a>
           </li>
         ))}
       </ul>
+
+      <div class="groups" data-stagger="80">
+        {GROUPS.map((group) => (
+          <section class="group" data-reveal aria-labelledby={`group-${group.key}`}>
+            <header class="group-top">
+              <span class="group-icon" aria-hidden="true"><Icon name={group.icon} size="24" /></span>
+              <div>
+                <h3 id={`group-${group.key}`}><a href={group.href}>{group.label}</a></h3>
+                <p>{group.blurb}</p>
+              </div>
+            </header>
+            <ul class="group-links">
+              {group.items.map((item) => (
+                <li>
+                  <a href={item.href}>
+                    <span class="gl-label">{item.label}</span>
+                    <span class="gl-count">{counts[item.href] ?? ''}</span>
+                    <span class="gl-arrow" aria-hidden="true"><Icon name="arrow-right" size="15" /></span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -624,7 +664,7 @@ const jsonLd = [
     <div class="gaps-inner">
       <h2 id="gaps-title">What we can’t yet prove</h2>
       <p>
-        Who holds office, the land area, office phone numbers — {WITHHELD.length} things people
+        Who holds office, the land area — {WITHHELD.length} things people
         expect to find here are held back until a primary source settles them. Know where the
         record is?
       </p>
@@ -1047,67 +1087,164 @@ const jsonLd = [
   .explore-sec {
     padding-top: 0;
   }
-  .explore-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-2);
-    height: 100%;
-    padding: var(--sp-6);
-    border-radius: var(--radius-xl);
-  }
-  .ex-icon {
+  /* ---- Explore: tasks, then the menu's groups ---- */
+  .tasks {
+    list-style: none;
+    margin: 0 0 var(--sp-6);
+    padding: 0;
     display: grid;
-    place-items: center;
-    width: 48px;
-    height: 48px;
-    margin-bottom: var(--sp-3);
-    border-radius: 50%;
-    background: var(--c-accent-wash);
-    color: var(--c-accent);
-    transition: background var(--dur-2), color var(--dur-2);
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    gap: var(--sp-3);
   }
-  .explore-card:hover .ex-icon {
-    background: var(--c-accent);
-    color: var(--c-bg);
+  .tasks li + li {
+    margin: 0;
   }
-  .ex-title {
-    font-family: var(--font-serif);
-    font-size: var(--fs-xl);
-    font-weight: 400;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    color: var(--c-ink);
-  }
-  .ex-blurb {
-    color: var(--c-ink-2);
-  }
-  .ex-foot {
+  .task {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: var(--sp-3);
-    margin-top: auto;
-    padding-top: var(--sp-4);
+    height: 100%;
+    padding: var(--sp-4) var(--sp-5);
+    border-radius: var(--radius-lg);
+    background: var(--go-bg);
+    color: var(--go-ink);
+    text-decoration: none;
+    transition: transform var(--dur-2) var(--ease-out), box-shadow var(--dur-2) var(--ease-out), background var(--dur-1);
   }
-  .ex-count {
-    font-size: var(--fs-xs);
-    font-weight: 600;
-    color: var(--c-muted);
+  .task:hover,
+  .task:focus-visible {
+    background: var(--go-hover);
+    color: var(--go-ink);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
   }
-  .ex-arrow {
+  .task-icon {
     display: grid;
     place-items: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: var(--c-sunk);
-    color: var(--c-ink);
-    transition: transform var(--dur-2) var(--ease-out), background var(--dur-2), color var(--dur-2);
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.14);
   }
-  .explore-card:hover .ex-arrow {
+  .task-text {
+    display: grid;
+    flex: 1;
+    line-height: 1.25;
+  }
+  .task-want {
+    font-size: var(--fs-2xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+  .task-label {
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+  }
+  .task-arrow {
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+  .task:hover .task-arrow {
     transform: translateX(3px);
-    background: var(--c-ink);
-    color: var(--c-bg);
+  }
+
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr));
+    gap: var(--sp-4);
+  }
+  .group {
+    padding: var(--sp-5) var(--sp-5) var(--sp-3);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-xl);
+    background: var(--c-surface);
+  }
+  .group-top {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-4);
+    margin-bottom: var(--sp-3);
+  }
+  .group-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--c-accent-wash);
+    color: var(--c-accent-strong);
+  }
+  .group h3 {
+    margin: 0 0 2px;
+    font-size: var(--fs-lg);
+  }
+  .group h3 a {
+    color: var(--c-navy);
+    text-decoration: none;
+  }
+  .group h3 a:hover {
+    color: var(--c-accent);
+  }
+  .group-top p {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+  .group-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .group-links li + li {
+    margin: 0;
+    border-top: 1px solid var(--c-line);
+  }
+  .group-links a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: var(--sp-3);
+    min-height: 52px;
+    padding: var(--sp-2) var(--sp-2);
+    border-radius: var(--radius-sm);
+    color: var(--c-ink);
+    text-decoration: none;
+    transition: background var(--dur-1);
+  }
+  .group-links a:hover {
+    background: var(--hit-hover);
+  }
+  .gl-label {
+    font-weight: 700;
+  }
+  .gl-count {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+    text-align: right;
+  }
+  .gl-arrow {
+    color: var(--c-accent);
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+  .group-links a:hover .gl-arrow {
+    transform: translateX(3px);
+  }
+  @media (max-width: 30rem) {
+    .group-links a {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .gl-count {
+      grid-column: 1;
+      grid-row: 2;
+      text-align: left;
+    }
+    .gl-arrow {
+      grid-row: 1 / 3;
+      grid-column: 2;
+    }
   }
 
   /* ---------- Population ---------- */

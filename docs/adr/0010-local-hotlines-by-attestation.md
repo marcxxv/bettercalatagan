@@ -31,3 +31,7 @@ the municipality's current list.
 - A number that changes will be wrong until someone reports it; the caveat asks readers to.
 - Attestation is not a general escape hatch: it covers official accounts' current contact
   information, and every use must be recorded in an ADR like this one.
+
+*Update (2026-09-30): the maintainer reports that the municipal government provided the list
+directly. The "Municipal office contact details" entry is removed from `WITHHELD`; the older DTI
+CMCI contact block stays unused (its record is stale).*

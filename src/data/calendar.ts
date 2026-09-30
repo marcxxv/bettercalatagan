@@ -154,7 +154,7 @@ export const localHotlinesSource: DataSource = {
       accessedOn: '2026-09-30',
       authority: 'social-media',
       locator:
-        'Requested 2026-09-30; Facebook’s login wall prevented this project from reading the post. The poster’s content was supplied and attested by the maintainer.',
+        'Requested 2026-09-30; Facebook’s login wall prevented this project from reading the post. The list was provided to the maintainer by the municipal government, who attests it.',
     },
   ],
   asOf: 'As posted by the municipality (undated poster)',
@@ -164,7 +164,7 @@ export const localHotlinesSource: DataSource = {
   tier: 2,
   expectedRefresh: 'irregular',
   attestation:
-    'The maintainer supplied the municipality’s emergency hotlines poster on 30 September 2026 and attests that it is the municipality’s current published list.',
+    'The maintainer obtained this list from the municipal government, which provided it directly, and attests on 30 September 2026 that it is the municipality’s current list.',
   caveat:
-    'Local numbers come from a poster the municipality published on social media, not from a government website, and numbers change. In a life-threatening emergency call 911 first. Tell us if a number no longer works.',
+    'Provided by the municipal government and published on its social media; there is no municipal website to cite. Numbers change: in a life-threatening emergency call 911 first, and tell us if a number no longer works.',
 };
