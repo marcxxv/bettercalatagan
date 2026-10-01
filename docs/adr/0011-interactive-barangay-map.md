@@ -33,4 +33,4 @@ self-hosted sensibly on a static site.
 - A visitor who scrolls to the map sends their IP address to OpenFreeMap and AWS. Stated on
   /about#privacy. If either service disappears, the tiles fail and the SVG map remains.
 - MapLibre adds about 1 MB of JavaScript, loaded only on this page and only on demand.
-- Barangay profile pages do not embed the map yet; a later change can reuse the component.
+- Barangay profile pages embed the same map with `focus`, opening on that barangay.

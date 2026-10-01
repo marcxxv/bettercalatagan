@@ -240,7 +240,7 @@ async function start() {
     root.classList.add('ready');
     for (const el of root.querySelectorAll<HTMLElement>('[data-map-ui]')) el.hidden = false;
     say(null);
-    if (!reduced) map.easeTo({ ...HOME, duration: 2200, essential: false });
+    if (!reduced && !root.dataset.focus) map.easeTo({ ...HOME, duration: 2200, essential: false });
   });
   map.on('error', (e) => {
     // Tiles can fail one by one without breaking the map; only a failure before load matters.
@@ -301,7 +301,9 @@ async function start() {
       dl.append(div);
     }
     const link = Object.assign(document.createElement('a'), { href: `/barangays/${f.slug}`, className: 'link-arrow', textContent: 'Open the barangay profile' });
-    card.append(close, name, dl, link);
+    // On a barangay's own profile, its card needs no link back to the page you are on.
+    card.append(close, name, dl);
+    if (id !== root!.dataset.focus) card.append(link);
     card.hidden = false;
     if (fly) frame(id);
   };
@@ -333,6 +335,8 @@ async function start() {
     row.addEventListener('mouseleave', () => map.loaded() && setHover(null));
   }
   api = { select: (id) => select(id) };
+  // A profile page opens the map on its own barangay, selected, without the intro sweep.
+  if (root!.dataset.focus && !pending) pending = root!.dataset.focus;
   if (pending) {
     const id = pending;
     pending = null;

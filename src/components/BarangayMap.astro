@@ -15,13 +15,18 @@ import { barangayPages } from '../lib/barangay-pages';
 import { projectToSvg } from '../lib/geo';
 import { formatNumber } from '../lib/format';
 
+interface Props {
+  /** A barangay's PSGC code: the map opens on it, selected, and the outline map marks it. */
+  focus?: string;
+}
+const { focus } = Astro.props;
 const byCode = new Map(barangayPages.map((b) => [b.psgc10, b]));
 const svg = projectToSvg(boundaries.features);
 const max = Math.max(...barangayPages.map((b) => b.census?.totalPopulation ?? 0));
 ---
 
-<section class="bmap" data-bgy-map data-src="/data/barangays.geojson" aria-labelledby="bmap-title">
-  <h2 id="bmap-title" class="visually-hidden">Map of Calatagan’s barangays</h2>
+<section class:list={['bmap', { focused: focus }]} data-bgy-map data-src="/data/barangays.geojson" data-focus={focus} aria-labelledby="bmap-title">
+  <h2 id="bmap-title" class="visually-hidden">{focus ? `${byCode.get(focus)?.name} on the map of Calatagan` : 'Map of Calatagan’s barangays'}</h2>
 
   <div class="bmap-stage">
     <svg class="bmap-fallback" viewBox={`0 0 ${svg.width} ${svg.height}`} role="img" aria-labelledby="bmap-svg-title">
@@ -30,7 +35,7 @@ const max = Math.max(...barangayPages.map((b) => b.census?.totalPopulation ?? 0)
         const b = byCode.get(p.psgc10)!;
         const t = (b.census?.totalPopulation ?? 0) / max;
         return (
-          <a href={`/barangays/${b.slug}`} data-psgc={b.psgc10}>
+          <a href={`/barangays/${b.slug}`} data-psgc={b.psgc10} class:list={{ on: b.psgc10 === focus }} aria-current={b.psgc10 === focus ? 'page' : undefined}>
             <title>{b.name}: {formatNumber(b.census?.totalPopulation ?? 0)} people</title>
             <path d={p.d} style={`--t:${(0.12 + t * 0.78).toFixed(2)}`} />
           </a>
@@ -100,6 +105,21 @@ const max = Math.max(...barangayPages.map((b) => b.census?.totalPopulation ?? 0)
     stroke-width: 1.5;
     vector-effect: non-scaling-stroke;
     transition: fill var(--dur-1);
+  }
+  .focused .bmap-fallback a:not(.on) path {
+    fill: color-mix(in srgb, var(--c-accent) 14%, var(--c-surface));
+  }
+  .bmap-fallback a.on path {
+    fill: var(--c-clay);
+  }
+  .focused {
+    margin-bottom: var(--sp-3);
+  }
+  .focused .bmap-legend {
+    display: none;
+  }
+  .focused .bmap-stage {
+    height: clamp(22rem, 48vh, 30rem);
   }
   .bmap-fallback a:hover path,
   .bmap-fallback a:focus-visible path {

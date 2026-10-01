@@ -68,6 +68,8 @@ emergency answer now gives the MDRRMO lines.
   third-party requests, on this page only, and the privacy notice says so. Without JavaScript or
   WebGL the page shows a server-drawn outline map instead. `/data/barangays.geojson` publishes
   the joined data.
+- Every barangay profile has the map too, opening on that barangay, selected; click any other
+  to compare.
 - Source chips that sat together now share one chip, naming every publisher.
 
 ### Added — Poverty in Batangas (PSA)

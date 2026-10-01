@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import Source from '../../components/Source.astro';
 import Icon from '../../components/Icon.astro';
+import BarangayMap from '../../components/BarangayMap.astro';
 import { barangayPages, type BarangayPage } from '../../lib/barangay-pages';
 import { barangayPopulation2024, outsideHouseholds } from '../../data/population';
 import { infrastructureSource } from '../../data/infrastructure';
@@ -83,6 +84,16 @@ const description = `${b.name}, a barangay of Calatagan, Batangas: ${b.census ? 
         <Source source={barangayPopulation2024.source} label="the census figures" />
       </section>
     )}
+
+    <section class="section-block" aria-labelledby="where-title">
+      <p class="eyebrow">Where it is</p>
+      <h2 id="where-title">{b.name} among Calatagan’s barangays</h2>
+      <BarangayMap focus={b.psgc10} />
+      <p class="small muted">
+        Outlines are approximate and drawn for orientation only (<a href="/barangays#map-sources">sources</a>).
+        Click any barangay to compare it.
+      </p>
+    </section>
 
     <section class="section-block" id="projects" aria-labelledby="projects-title">
       <p class="eyebrow">Department of Public Works and Highways</p>
