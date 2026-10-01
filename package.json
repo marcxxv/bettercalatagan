@@ -27,12 +27,14 @@
     "dpwh:fetch": "node scripts/dpwh.mjs fetch",
     "cmci:fetch": "node scripts/cmci.mjs fetch",
     "poverty:fetch": "node scripts/poverty.mjs fetch",
+    "boundaries:fetch": "node scripts/boundaries.mjs fetch",
     "data:refresh": "npm run fdp:stage && npm run fdp:promote && npm run fdp:extract && npm run psa:fetch && npm run archive:index && npm run dpwh:fetch && npm run cmci:fetch && npm run poverty:fetch",
     "data:report": "node scripts/data-report.mjs"
   },
   "dependencies": {
     "astro": "^7.3.4",
     "fflate": "^0.8.3",
+    "maplibre-gl": "^6.11.2",
     "pdfjs-dist": "^6.3.289",
     "zod": "^3.24.2"
   },

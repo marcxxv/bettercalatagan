@@ -178,8 +178,11 @@ const description = `Calatagan, Batangas in figures: ${formatNumber(pop.populati
           <a class="link-arrow" href="/finances">Every quarter, every line item</a>
           <a class="link-arrow" href="/infrastructure">National infrastructure spending</a>
         </p>
-        <Source source={incomeClassification.source} label="the income class" />
-        <Source source={financialsSource} label="the municipal finances" />
+        <Source
+          source={incomeClassification.source}
+          label="the income class"
+          also={[{ source: financialsSource, label: 'the municipal finances' }]}
+        />
       </section>
 
       <section class="section" id="competitiveness" aria-labelledby="competitiveness-title">

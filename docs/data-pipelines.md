@@ -39,6 +39,7 @@ Rules that hold for every pipeline:
 | `npm run dpwh:fetch` | `scripts/dpwh.mjs fetch` | BetterGov.ph DPWH API (DPWH's contract records) | `src/data/generated/dpwh-projects.json` | 0009 |
 | `npm run cmci:fetch` | `scripts/cmci.mjs fetch` | DTI CMCI ranking tables and LGU profile (indicators) | `src/data/generated/cmci.json` | 0009 |
 | `npm run poverty:fetch` | `scripts/poverty.mjs fetch` | PSA OpenSTAT full-year poverty tables | `src/data/generated/psa-poverty.json` | 0009 |
+| `npm run boundaries:fetch` | `scripts/boundaries.mjs fetch` | faeldon/philippines-json-maps (PSGC 2023 barangay shapes) | `src/data/generated/barangay-boundaries.json` | 0011 |
 | `npm run data:refresh` | all of the above, in order | | | |
 | `npm run data:report` | `scripts/data-report.mjs` | working tree vs `HEAD` | Markdown on stdout | |
 

@@ -188,6 +188,16 @@ export const PSA_POVERTY_FAMILIES: SourceReference = {
   locator: 'Table 1; Geolocation: Batangas and Region IV-A (CALABARZON)',
 };
 
+/** Barangay outlines: an open, PSGC-coded dataset (MIT), for the map only. */
+export const BARANGAY_BOUNDARIES: SourceReference = {
+  name: 'Philippines JSON maps — Calatagan barangays (2023 PSGC)',
+  publisher: 'faeldon/philippines-json-maps, from altcoder/philippines-psgc-shapefiles',
+  url: 'https://github.com/faeldon/philippines-json-maps',
+  accessedOn: '2026-10-01',
+  authority: 'civic-tech-derivative',
+  locator: '2023/geojson/municities/hires/bgysubmuns-municity-401008000.0.1.json',
+};
+
 /* ---------- Holidays and national hotlines ---------- */
 
 /** Proclamation No. 1006, s. 2025: the 2026 holidays. The signed, certified copy (scanned). */

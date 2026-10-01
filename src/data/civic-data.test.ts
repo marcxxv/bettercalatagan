@@ -1,4 +1,5 @@
 import { poverty } from './poverty';
+import { boundaries, boundariesSource } from './boundaries';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
@@ -32,6 +33,7 @@ const datasets: { name: string; record: Sourced<unknown> }[] = [
   { name: 'populationSeries', record: populationSeries },
   { name: 'barangayPopulation2024', record: barangayPopulation2024 },
   { name: 'poverty', record: poverty },
+  { name: 'boundaries', record: { data: boundaries.features, source: boundariesSource } },
 ];
 
 describe('provenance envelope', () => {

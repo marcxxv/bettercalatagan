@@ -141,6 +141,12 @@ const crumbs = [{ name: 'About', href: '/about' }];
           </p>
         )}
         <p>
+          One page loads outside services: the map on the <a href="/barangays">Barangays</a> page.
+          When you scroll to it, your browser fetches map tiles from OpenFreeMap and elevation
+          tiles from Amazon Web Services, which see your IP address like any website you visit.
+          Nothing else on the site does, and the page shows a plain outline map without them.
+        </p>
+        <p>
           Like any web service, the site’s host (Vercel) and Cloudflare keep short-lived technical
           logs of requests, such as IP addresses, for security and operations. If you use voice
           input, your browser’s own speech service (in Chrome, Google’s) turns your speech into

@@ -43,7 +43,7 @@ Breaking any of these is a defect, whatever else improves.
 
 Astro 7 (static output, no adapter), TypeScript, Zod, Vitest, ESLint. Node ≥ 22.12. No
 framework runtime, no Tailwind, no analytics, and the site itself has no backend or database
-(ADR 0002). Runtime deps: `astro`, `zod`, `pdfjs-dist`, `fflate`. The one piece of server code is
+(ADR 0002). The one exception to "no third-party requests" is the barangay map (ADR 0011). Runtime deps: `astro`, `zod`, `pdfjs-dist`, `fflate`, `maplibre-gl` (barangay map, lazy-loaded). The one piece of server code is
 the assistant, a Cloudflare Worker in `worker/` with its own `package.json` (ADR 0008, §6).
 
 | Command | What it does |
@@ -78,7 +78,7 @@ src/
   styles/             tokens.css (design tokens, light + dark), global.css
 scripts/              Node pipelines (fdp, sre, psa, documents), data-report, brand
 data/staging/         FDP staging file (committed)
-docs/adr/             decisions 0001–0009; docs/data-pipelines.md runbook
+docs/adr/             decisions 0001–0011; docs/data-pipelines.md runbook
 worker/               the assistant: Cloudflare Worker, D1 + Vectorize, eval set (worker/README.md)
 public/               logo*.svg, favicons, og/*.png, fonts/ (self-hosted), agencies/ (badges)
 certs/                DILG intermediate certificate
@@ -96,7 +96,8 @@ certs/                DILG intermediate certificate
 - More generated datasets (ADR 0009): `dpwh-projects.json` (DPWH contracts mentioning Calatagan,
   each with a `scope`: calatagan / road / shared) and `cmci.json` (DTI competitiveness, by year; the latest year also carries the 50-indicator
   breakdown from DTI's LGU profile) and `psa-poverty.json` (PSA poverty for Batangas and
-  Region IV-A; always labelled as provincial).
+  Region IV-A; always labelled as provincial) and `barangay-boundaries.json` (map outlines,
+  approximate, never used for area).
 - Hand-maintained: `municipality.ts` (identity, income class, `WITHHELD`), `history.ts`,
   `sources.ts`, `barangays.ts`, `services.ts` (2022 Citizen's Charter services, no fees or times),
   `calendar.ts` (holidays by proclamation; hotlines by executive order).
@@ -160,8 +161,8 @@ width so its `thead` sticks to the page. Selects are `appearance: none` (Safari)
 **Components** (`src/components/`): `SiteHeader`, `SiteFooter` (giant wordmark), `PageHeader`
 (rounded panel with eyebrow, icon, lede, aside slot), `HeroCarousel` (home scenes, hero ask
 `data-hero-ask`), `AskBar` (floating 448×56 ask bar; hides when the hero ask is visible or a
-dialog is open; grows on hover), `SearchDialog` (⌘K), `DocViewer` (reader), `Source` (provenance
-card), `Cites`, `Freshness`, `AgencyBadge` (PSA/DILG/BLGF/DOF/NHCP/IA marks), `Mark` (inline logo,
+dialog is open; grows on hover), `SearchDialog` (⌘K), `DocViewer` (reader), `BarangayMap` (SVG fallback + lazy MapLibre 3D map, `scripts/barangay-map.ts`), `Source` (provenance chip;
+`also` groups records that sit together), `Cites`, `Freshness`, `AgencyBadge` (PSA/DILG/BLGF/DOF/NHCP/IA marks), `Mark` (inline logo,
 theme-aware), `Icon` (stroke icon set; add names to the `IconName` union), charts `ColumnChart`,
 `LineChart`, `Donut`, `Contours` (decorative topography).
 

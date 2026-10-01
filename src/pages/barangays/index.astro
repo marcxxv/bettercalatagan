@@ -3,6 +3,8 @@ import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import Source from '../../components/Source.astro';
 import Icon from '../../components/Icon.astro';
+import BarangayMap from '../../components/BarangayMap.astro';
+import { boundariesSource } from '../../data/boundaries';
 import { barangayPages } from '../../lib/barangay-pages';
 import { barangayPopulation2024, population2024 } from '../../data/population';
 import { infrastructureSource } from '../../data/infrastructure';
@@ -20,6 +22,8 @@ const crumbs = [
 ];
 const pop = population2024.data;
 const description = `All ${barangayPages.length} barangays of Calatagan, Batangas: 2024 population and households from PSA, and the DPWH projects in each.`;
+const maxPop = Math.max(...barangayPages.map((b) => b.census?.totalPopulation ?? 0));
+const ranked = [...barangayPages].sort((a, b) => (b.census?.totalPopulation ?? 0) - (a.census?.totalPopulation ?? 0));
 const pct = (share: number | null) =>
   share === null ? '—' : share < 0.005 ? '<0.5%' : `${(share * 100).toFixed(1)}%`;
 ---
@@ -29,7 +33,7 @@ const pct = (share: number | null) =>
     eyebrow="Government"
     icon="pin"
     title="The 25 barangays"
-    lede="Every barangay of Calatagan, with its population and households from the 2024 census and the national infrastructure projects DPWH describes as being in it."
+    lede="Every barangay of Calatagan on one map, raised by its population, households or national projects, with the 2024 census figures and a profile for each."
     {crumbs}
   >
     <dl slot="aside" class="aside-card">
@@ -39,23 +43,56 @@ const pct = (share: number | null) =>
   </PageHeader>
 
   <div class="container wide page-body">
-    <ul class="bgy-grid">
-      {barangayPages.map((b) => (
-        <li>
-          <a class="bgy" href={`/barangays/${b.slug}`}>
-            <span class="bgy-name">{b.name}</span>
-            <span class="bgy-pop">
-              {b.census ? <>{formatNumber(b.census.totalPopulation)} <span class="muted">people</span></> : '—'}
-            </span>
-            <span class="bgy-bar" aria-hidden="true"><span style={`width:${Math.min(100, (b.share ?? 0) * 100 * 8)}%`}></span></span>
-            <span class="bgy-meta">
-              {pct(b.share)} of the town · {b.census ? `${formatNumber(b.census.households)} households` : ''}
-              {b.projects.length > 0 && <> · {b.projects.length} DPWH {b.projects.length === 1 ? 'project' : 'projects'}</>}
-            </span>
-          </a>
-        </li>
-      ))}
-    </ul>
+    <BarangayMap />
+
+    <section aria-labelledby="list-title">
+      <div class="list-head">
+        <div>
+          <p class="eyebrow">2024 Census of Population</p>
+          <h2 id="list-title">Every barangay, ranked</h2>
+        </div>
+        <div class="seg sort" role="radiogroup" aria-label="Sort barangays by" data-sort-group hidden>
+          <button type="button" role="radio" aria-checked="true" data-sort="population">Population</button>
+          <button type="button" role="radio" aria-checked="false" data-sort="households">Households</button>
+          <button type="button" role="radio" aria-checked="false" data-sort="projects">Projects</button>
+          <button type="button" role="radio" aria-checked="false" data-sort="name">A–Z</button>
+        </div>
+      </div>
+
+      <div class="dataset" style="--cols: 2.2rem minmax(0, 1.4fr) minmax(8rem, 1.2fr) 5rem 6.5rem 5.5rem 2.5rem">
+        <div class="dataset-head" aria-hidden="true">
+          <span class="num">#</span><span>Barangay</span><span>Population</span><span class="num">Share</span><span class="num">Households</span><span class="num">Projects</span><span></span>
+        </div>
+        <ol class="dataset-rows" data-sort-list>
+          {ranked.map((b, i) => (
+            <li
+              class="dataset-row bgy-row"
+              data-psgc={b.psgc10}
+              data-name={b.name}
+              data-population={b.census?.totalPopulation ?? 0}
+              data-households={b.census?.households ?? 0}
+              data-projects={b.projects.length}
+            >
+              <span class="cell num rank" data-rank>{i + 1}</span>
+              <span class="cell main"><a class="row-title" href={`/barangays/${b.slug}`}>{b.name}</a></span>
+              <span class="cell pop">
+                <span class="cell-label">Population</span>
+                <strong>{b.census ? formatNumber(b.census.totalPopulation) : '—'}</strong>
+                <span class="meter" aria-hidden="true"><span style={`width:${(((b.census?.totalPopulation ?? 0) / maxPop) * 100).toFixed(1)}%`}></span></span>
+              </span>
+              <span class="cell num"><span class="cell-label">Share</span>{pct(b.share)}</span>
+              <span class="cell num"><span class="cell-label">Households</span>{b.census ? formatNumber(b.census.households) : '—'}</span>
+              <span class="cell num"><span class="cell-label">DPWH projects</span>{b.projects.length}</span>
+              <span class="cell row-actions">
+                <a class="icon-action" href={`/barangays/${b.slug}`} data-show-on-map aria-label={`Show ${b.name} on the map`} data-tip="Show on map">
+                  <Icon name="pin" size="16" />
+                </a>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
 
     <div class="callout navy">
       <p class="callout-title"><Icon name="info" size="18" /> Not listed: barangay officials and halls</p>
@@ -66,64 +103,119 @@ const pct = (share: number | null) =>
       </p>
     </div>
 
-    <Source source={barangayPopulation2024.source} label="the census figures" />
-    <Source source={infrastructureSource} label="the project counts" />
+    <div id="map-sources">
+      <Source
+        source={barangayPopulation2024.source}
+        label="the census figures"
+        also={[
+          { source: infrastructureSource, label: 'the project counts' },
+          { source: boundariesSource, label: 'the map outlines' },
+        ]}
+      />
+    </div>
   </div>
 </Base>
 
-<style>
-  .bgy-grid {
-    list-style: none;
-    margin: 0 0 var(--sp-6);
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
-    gap: var(--sp-3);
+<script>
+  // Sorting the list: the order is also the map's, so nothing else needs to move.
+  const group = document.querySelector<HTMLElement>('[data-sort-group]');
+  const list = document.querySelector<HTMLElement>('[data-sort-list]');
+  if (group && list) {
+    group.hidden = false;
+    for (const button of group.querySelectorAll<HTMLButtonElement>('[data-sort]')) {
+      button.addEventListener('click', () => {
+        const key = button.dataset.sort!;
+        for (const b of group.querySelectorAll('[data-sort]')) b.setAttribute('aria-checked', String(b === button));
+        const rows = [...list.querySelectorAll<HTMLElement>('.bgy-row')];
+        rows.sort((a, b) =>
+          key === 'name'
+            ? a.dataset.name!.localeCompare(b.dataset.name!, 'en', { numeric: true })
+            : Number(b.dataset[key]) - Number(a.dataset[key]),
+        );
+        rows.forEach((row, i) => {
+          row.querySelector('[data-rank]')!.textContent = String(i + 1);
+          list.append(row);
+        });
+      });
+    }
   }
-  .bgy-grid > li + li {
+</script>
+
+<style>
+  .list-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    margin-bottom: var(--sp-4);
+  }
+  .list-head h2 {
     margin: 0;
   }
-  .bgy {
-    display: grid;
-    gap: var(--sp-1);
-    height: 100%;
-    padding: var(--sp-4) var(--sp-5);
+  .seg {
+    display: inline-flex;
+    flex-wrap: wrap;
+    padding: 3px;
     border: 1px solid var(--c-line);
-    border-radius: var(--radius-lg);
+    border-radius: 999px;
     background: var(--c-surface);
-    color: var(--c-ink);
-    text-decoration: none;
-    transition: border-color var(--dur-1), box-shadow var(--dur-1), transform var(--dur-2) var(--ease-out);
   }
-  .bgy:hover {
-    border-color: var(--c-accent-line);
-    box-shadow: var(--shadow-sm);
-    transform: translateY(-2px);
+  .seg button {
+    min-height: 34px;
+    padding: 0 var(--sp-3);
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--c-muted);
+    font: 600 var(--fs-xs) var(--font-sans);
+    cursor: pointer;
+    transition: background var(--dur-1), color var(--dur-1);
   }
-  .bgy-name {
-    font-family: var(--font-serif);
-    font-size: var(--fs-md);
-    letter-spacing: -0.01em;
-    color: var(--c-navy);
+  .seg button[aria-checked='true'] {
+    background: var(--c-accent);
+    color: var(--c-surface);
   }
-  .bgy-pop {
-    font-weight: 700;
+  .rank {
+    color: var(--c-muted);
     font-variant-numeric: tabular-nums;
   }
-  .bgy-bar {
-    height: 4px;
-    margin: var(--sp-1) 0;
+  .bgy-row .row-title {
+    font-family: var(--font-serif);
+    font-size: var(--fs-md);
+    color: var(--c-ink);
+    text-decoration: none;
+  }
+  .bgy-row .row-title:hover {
+    color: var(--c-accent);
+  }
+  .pop {
+    display: grid;
+    gap: 5px;
+  }
+  .pop strong {
+    font-variant-numeric: tabular-nums;
+  }
+  .meter {
+    height: 5px;
     border-radius: 999px;
     background: var(--c-sunk);
     overflow: hidden;
   }
-  .bgy-bar span {
+  .meter span {
     display: block;
     height: 100%;
-    background: var(--c-s1);
+    border-radius: inherit;
+    background: var(--c-accent);
+    transition: background var(--dur-1);
   }
-  .bgy-meta {
-    font-size: var(--fs-xs);
-    color: var(--c-muted);
+  .bgy-row.is-mapped .meter span {
+    background: var(--c-clay);
+  }
+  .bgy-row.is-mapped .row-title {
+    color: var(--c-clay);
+  }
+  .callout {
+    margin-top: var(--sp-8);
   }
 </style>

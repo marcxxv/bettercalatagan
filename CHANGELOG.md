@@ -56,6 +56,20 @@ emergency answer now gives the MDRRMO lines.
   this document?" or "explain this page" are answered about that page. Only bound parameters and
   the corpus's own titles reach the model.
 
+### Added — The barangays on a 3D map
+- `/barangays` opens with an interactive map: the 25 barangays raised in 3D by population,
+  households or DPWH projects over the terrain, with hover figures, a card for the selected
+  barangay, and a link to its profile. It is drawn in the site's own colours, light and dark.
+- Below it, every barangay in one ranked list (sortable by population, households, projects or
+  name) that highlights its barangay on the map, replacing the grid of cards.
+- Outlines come from an open PSGC-coded dataset via `scripts/boundaries.mjs` (checked against
+  PSA's 25 codes, area fields dropped), published at tier 2 as approximate. New ADR 0011: MapLibre
+  is bundled and lazy-loaded; basemap tiles (OpenFreeMap) and terrain (AWS) are the site's only
+  third-party requests, on this page only, and the privacy notice says so. Without JavaScript or
+  WebGL the page shows a server-drawn outline map instead. `/data/barangays.geojson` publishes
+  the joined data.
+- Source chips that sat together now share one chip, naming every publisher.
+
 ### Added — Poverty in Batangas (PSA)
 - Statistics shows PSA's full-year poverty incidence and threshold for the province of Batangas,
   with PSA's 95% intervals and the Region IV-A figure, for 2018, 2021 and 2023

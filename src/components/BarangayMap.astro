@@ -1,0 +1,367 @@
+---
+/**
+ * The barangay map: 25 outlines, raised in 3D by population, households or
+ * DPWH projects, over the terrain and the coastline.
+ *
+ * The page first renders a plain SVG map (every barangay a link, shaded by
+ * population), so it works without JavaScript and before anything loads. When
+ * the map scrolls into view, scripts/barangay-map.ts loads MapLibre, fetches
+ * the basemap and terrain tiles, and takes over. Colours come from the site's
+ * tokens, so the map follows the light and dark themes.
+ */
+import Icon from './Icon.astro';
+import { boundaries } from '../data/boundaries';
+import { barangayPages } from '../lib/barangay-pages';
+import { projectToSvg } from '../lib/geo';
+import { formatNumber } from '../lib/format';
+
+const byCode = new Map(barangayPages.map((b) => [b.psgc10, b]));
+const svg = projectToSvg(boundaries.features);
+const max = Math.max(...barangayPages.map((b) => b.census?.totalPopulation ?? 0));
+---
+
+<section class="bmap" data-bgy-map data-src="/data/barangays.geojson" aria-labelledby="bmap-title">
+  <h2 id="bmap-title" class="visually-hidden">Map of Calatagan’s barangays</h2>
+
+  <div class="bmap-stage">
+    <svg class="bmap-fallback" viewBox={`0 0 ${svg.width} ${svg.height}`} role="img" aria-labelledby="bmap-svg-title">
+      <title id="bmap-svg-title">Calatagan’s 25 barangays, shaded by 2024 population</title>
+      {svg.paths.map((p) => {
+        const b = byCode.get(p.psgc10)!;
+        const t = (b.census?.totalPopulation ?? 0) / max;
+        return (
+          <a href={`/barangays/${b.slug}`} data-psgc={b.psgc10}>
+            <title>{b.name}: {formatNumber(b.census?.totalPopulation ?? 0)} people</title>
+            <path d={p.d} style={`--t:${(0.12 + t * 0.78).toFixed(2)}`} />
+          </a>
+        );
+      })}
+      {svg.paths.map((p) => (
+        <text x={p.label[0]} y={p.label[1]} aria-hidden="true">{byCode.get(p.psgc10)!.name.replace(' (Pob.)', '')}</text>
+      ))}
+    </svg>
+    <div class="bmap-canvas" data-map-canvas aria-hidden="true"></div>
+
+    <div class="bmap-bar bmap-top" data-map-ui hidden>
+      <div class="seg" role="radiogroup" aria-label="Raise barangays by">
+        <button type="button" role="radio" aria-checked="true" data-metric="population">Population</button>
+        <button type="button" role="radio" aria-checked="false" data-metric="households">Households</button>
+        <button type="button" role="radio" aria-checked="false" data-metric="projects">DPWH projects</button>
+      </div>
+      <div class="bmap-tools">
+        <button type="button" class="tool" data-map-3d aria-pressed="true" data-tip="Flat or 3D view">3D</button>
+        <button type="button" class="tool" data-map-zoom="1" aria-label="Zoom in"><Icon name="plus" size="16" /></button>
+        <button type="button" class="tool" data-map-zoom="-1" aria-label="Zoom out"><span aria-hidden="true" class="minus"></span></button>
+        <button type="button" class="tool" data-map-reset aria-label="Reset the view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+      </div>
+    </div>
+
+    <div class="bmap-legend" data-map-ui hidden>
+      <span data-legend-label>Population, 2024</span>
+      <span class="ramp" aria-hidden="true"></span>
+      <span class="ends"><span data-legend-min>0</span><span data-legend-max>{formatNumber(max)}</span></span>
+    </div>
+
+    <div class="bmap-tip" data-map-tip hidden></div>
+
+    <aside class="bmap-card" data-map-card hidden aria-live="polite"></aside>
+
+    <p class="bmap-status" data-map-status hidden></p>
+  </div>
+</section>
+
+<script>
+  import '../scripts/barangay-map';
+</script>
+
+<style>
+  .bmap {
+    margin-block: 0 var(--sp-8);
+  }
+  .bmap-stage {
+    position: relative;
+    isolation: isolate;
+    height: clamp(26rem, 62vh, 40rem);
+    overflow: hidden;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-xl, 24px);
+    background: var(--c-bg-alt);
+  }
+  .bmap-fallback {
+    position: absolute;
+    inset: var(--sp-6);
+    width: calc(100% - 2 * var(--sp-6));
+    height: calc(100% - 2 * var(--sp-6));
+    transition: opacity 500ms var(--ease-out);
+  }
+  .bmap-fallback path {
+    fill: color-mix(in srgb, var(--c-accent) calc(var(--t) * 100%), var(--c-surface));
+    stroke: var(--c-surface);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    transition: fill var(--dur-1);
+  }
+  .bmap-fallback a:hover path,
+  .bmap-fallback a:focus-visible path {
+    fill: var(--c-clay, var(--c-accent-strong));
+  }
+  .bmap-fallback a:focus-visible {
+    outline: none;
+  }
+  .bmap-fallback text {
+    font: 600 11px var(--font-sans);
+    fill: var(--c-ink);
+    text-anchor: middle;
+    paint-order: stroke;
+    stroke: var(--c-surface);
+    stroke-width: 3px;
+    pointer-events: none;
+  }
+  .bmap-canvas {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 600ms var(--ease-out);
+  }
+  .bmap.ready .bmap-canvas {
+    opacity: 1;
+  }
+  .bmap.ready .bmap-fallback {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .bmap-bar {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  .bmap-top {
+    inset: var(--sp-4) var(--sp-4) auto;
+  }
+  .bmap [hidden] {
+    display: none !important;
+  }
+  .bmap-bar > * {
+    pointer-events: auto;
+  }
+  .seg,
+  .bmap-tools,
+  .bmap-legend,
+  .bmap-card,
+  .bmap-tip {
+    border: 1px solid var(--c-line);
+    background: color-mix(in srgb, var(--c-surface) 92%, transparent);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: saturate(1.4) blur(10px);
+  }
+  .seg {
+    display: inline-flex;
+    padding: 3px;
+    border-radius: 999px;
+  }
+  .seg button {
+    min-height: 34px;
+    padding: 0 var(--sp-3);
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--c-muted);
+    font: 600 var(--fs-xs) var(--font-sans);
+    cursor: pointer;
+    transition: background var(--dur-1), color var(--dur-1);
+  }
+  .seg button[aria-checked='true'] {
+    background: var(--c-accent);
+    color: var(--c-surface);
+  }
+  .seg button:not([aria-checked='true']):hover {
+    color: var(--c-ink);
+  }
+  .bmap-tools {
+    display: inline-flex;
+    padding: 3px;
+    border-radius: 999px;
+  }
+  .tool {
+    display: grid;
+    place-items: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 var(--sp-2);
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--c-ink);
+    font: 700 var(--fs-xs) var(--font-sans);
+    cursor: pointer;
+  }
+  .tool:hover {
+    background: var(--c-sunk);
+  }
+  .tool[aria-pressed='true'] {
+    color: var(--c-accent);
+  }
+  .minus {
+    width: 12px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+
+  .bmap-legend {
+    position: absolute;
+    z-index: 2;
+    left: var(--sp-4);
+    bottom: var(--sp-4);
+    display: grid;
+    gap: 6px;
+    width: min(15rem, 45%);
+    padding: var(--sp-3);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-2xs);
+    color: var(--c-muted);
+  }
+  .bmap-legend > span:first-child {
+    font-weight: 700;
+    color: var(--c-ink);
+  }
+  .ramp {
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--c-accent) 12%, var(--c-surface)), var(--c-accent));
+  }
+  .ends {
+    display: flex;
+    justify-content: space-between;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bmap-tip {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    top: 0;
+    padding: var(--sp-2) var(--sp-3);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-xs);
+    pointer-events: none;
+    white-space: nowrap;
+    transform: translate(var(--x, 0), var(--y, 0));
+  }
+  .bmap-tip :global(strong) {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--c-ink);
+  }
+  .bmap-tip :global(span) {
+    color: var(--c-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bmap-card {
+    position: absolute;
+    z-index: 2;
+    right: var(--sp-4);
+    bottom: var(--sp-4);
+    width: min(19rem, calc(100% - 2 * var(--sp-4)));
+    padding: var(--sp-4);
+    border-radius: var(--radius-lg);
+    animation: card-in var(--dur-2) var(--ease-out);
+  }
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+  .bmap-card :global(.c-name) {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    color: var(--c-ink);
+  }
+  .bmap-card :global(dl) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-2);
+    margin: var(--sp-3) 0;
+  }
+  .bmap-card :global(dt) {
+    font-size: var(--fs-2xs);
+    color: var(--c-muted);
+  }
+  .bmap-card :global(dd) {
+    margin: 0;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .bmap-card :global(.c-close) {
+    position: absolute;
+    top: var(--sp-2);
+    right: var(--sp-2);
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--c-muted);
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .bmap-card :global(.c-close:hover) {
+    background: var(--c-sunk);
+    color: var(--c-ink);
+  }
+
+  .bmap-status {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: var(--sp-4);
+    margin: 0;
+    padding: var(--sp-2) var(--sp-3);
+    border-radius: 999px;
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+    transform: translateX(-50%);
+  }
+
+  .bmap :global(.maplibregl-ctrl-attrib) {
+    font-size: 10px;
+    background: color-mix(in srgb, var(--c-surface) 85%, transparent);
+    color: var(--c-muted);
+  }
+  .bmap :global(.maplibregl-ctrl-attrib a) {
+    color: var(--c-muted);
+  }
+
+  @media (max-width: 40rem) {
+    .bmap-fallback text {
+      display: none;
+    }
+    .bmap-stage {
+      height: 30rem;
+      border-radius: var(--radius-lg);
+    }
+    .bmap-legend {
+      display: none;
+    }
+    .seg button {
+      padding: 0 var(--sp-2);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bmap-card {
+      animation: none;
+    }
+  }
+</style>

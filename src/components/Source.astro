@@ -1,11 +1,15 @@
 ---
 /**
- * Provenance for one civic record, as a small chip that opens in place.
+ * Provenance as a small chip that opens in place.
  *
  * Always visible: who published it, whether it was verified and when, and,
  * for tier 2, the caveat (one line, in full once opened). One click opens
  * the status, dates, note, method and every source with its locator and
  * checksum, so a primary source is never more than one interaction away.
+ *
+ * Records that sit together (a census and a project count under one list)
+ * share one chip: pass the first as `source` and the rest as `also`. The chip
+ * names every publisher and shows the weakest verification among them.
  */
 import type { DataSource } from '../data/types/provenance';
 import Freshness from './Freshness.astro';
@@ -13,27 +17,24 @@ import AgencyBadge, { agencyOf } from './AgencyBadge.astro';
 import Icon from './Icon.astro';
 import { formatDate } from '../lib/format';
 
-interface Props {
+interface Entry {
   source: DataSource;
-  /** Short name for what this block describes, used in the disclosure label. */
+  /** Short name for what this record describes ("the census figures"). */
   label?: string;
+}
+interface Props extends Entry {
+  /** Further records shown under the same chip. */
+  also?: Entry[];
   /**
    * Set false only where the page already states the note in full right
    * beside the figure, so the reader is not shown the same paragraph twice.
    */
   showNote?: boolean;
 }
-const { source, label = 'this data', showNote = true } = Astro.props;
-const [primary, ...others] = source.sources;
-const agency = agencyOf(primary.publisher);
+const { source, label = 'this data', also = [], showNote = true } = Astro.props;
+const entries: Required<Entry>[] = [{ source, label }, ...also.map((e) => ({ source: e.source, label: e.label ?? 'this data' }))];
+const many = entries.length > 1;
 
-const checked = formatDate(source.lastVerified);
-const verification =
-  source.verification === 'verified'
-    ? `Verified ${checked}`
-    : source.verification === 'reported'
-      ? `Reported ${checked}, not yet confirmed`
-      : `Unverified, last checked ${checked}`;
 const REFRESH: Record<DataSource['expectedRefresh'], string> = {
   quarterly: 'Updated quarterly',
   annual: 'Updated yearly',
@@ -43,13 +44,6 @@ const REFRESH: Record<DataSource['expectedRefresh'], string> = {
   irregular: 'Updated as sources change',
   none: 'Updated only when corrected',
 };
-// asOf is a date for most records, or a phrase ("Executive orders in force")
-// where the data describes a state rather than a day.
-const asOf = source.asOf
-  ? /^\d{4}-\d{2}(-\d{2})?$/.test(source.asOf)
-    ? `Data as of ${formatDate(source.asOf)}`
-    : source.asOf
-  : null;
 const TONES: Record<DataSource['status'], string> = {
   current: 'ok',
   'latest-official': 'ok',
@@ -58,44 +52,77 @@ const TONES: Record<DataSource['status'], string> = {
   draft: 'warn',
   unverified: 'warn',
 };
-const tone = source.verification === 'verified' ? TONES[source.status] : 'warn';
+const RANK = { verified: 0, reported: 1, unverified: 2 } as const;
+
+/** "Department of Public Works and Highways, via the BetterGov.ph …" → the agency itself. */
+const shortName = (publisher: string) => publisher.split(/,\s*(?:via|through)\b/i)[0].split(/\s+\(/)[0];
+const verificationOf = (s: DataSource) => {
+  const checked = formatDate(s.lastVerified);
+  return s.verification === 'verified'
+    ? `Verified ${checked}`
+    : s.verification === 'reported'
+      ? `Reported ${checked}, not yet confirmed`
+      : `Unverified, last checked ${checked}`;
+};
+// asOf is a date for most records, or a phrase ("Executive orders in force").
+const asOfOf = (s: DataSource) =>
+  s.asOf ? (/^\d{4}-\d{2}(-\d{2})?$/.test(s.asOf) ? `Data as of ${formatDate(s.asOf)}` : s.asOf) : null;
+
+const publishers = [...new Map(entries.map((e) => [shortName(e.source.sources[0].publisher), e.source.sources[0].publisher])).entries()];
+const extra = entries.reduce((n, e) => n + e.source.sources.length, 0) - publishers.length;
+const weakest = entries.map((e) => e.source).sort((a, b) => RANK[b.verification] - RANK[a.verification])[0];
+const allVerified = entries.every((e) => e.source.verification === 'verified');
+const summary = allVerified && many
+  ? `Verified ${formatDate(entries.map((e) => e.source.lastVerified).sort()[0])}`
+  : verificationOf(weakest);
+const tone = weakest.verification === 'verified' ? TONES[weakest.status] : 'warn';
+const caveats = entries.filter((e) => e.source.caveat).map((e) => e.source.caveat!);
+const described = entries.map((e) => e.label).join(' and ');
 ---
 
-<details class="provenance" aria-label={`Source for ${label}`}>
+<details class="provenance" aria-label={`Source for ${described}`}>
   <summary class="prov-chip">
-    <span class="prov-mark" aria-hidden="true">
-      {agency ? <AgencyBadge agency={agency} size="1.4rem" /> : <span class="prov-icon"><Icon name="shield" size="12" /></span>}
+    <span class="prov-marks" aria-hidden="true">
+      {publishers.map(([, full]) => {
+        const agency = agencyOf(full);
+        return agency ? <AgencyBadge agency={agency} size="1.4rem" /> : <span class="prov-icon"><Icon name="shield" size="12" /></span>;
+      })}
     </span>
-    <span class="prov-key">Source</span>
-    <span class="prov-pub">{primary.publisher}</span>
-    {others.length > 0 && <span class="prov-count">+{others.length}</span>}
-    <span class={`prov-state ${tone}`}><span class="dot" aria-hidden="true"></span>{verification}</span>
-    <span class="visually-hidden">: show method and sources for {label}</span>
+    <span class="prov-key">{many ? 'Sources' : 'Source'}</span>
+    <span class="prov-pub">{publishers.map(([short]) => short).join(' · ')}</span>
+    {extra > 0 && <span class="prov-count">+{extra}</span>}
+    <span class={`prov-state ${tone}`}><span class="dot" aria-hidden="true"></span>{summary}</span>
+    <span class="visually-hidden">: show method and sources for {described}</span>
     <Icon name="chevron-down" size="14" class="prov-chev" />
-    {source.caveat && (
-      <span class="prov-caveat"><Icon name="alert" size="13" /><span><span class="visually-hidden">Caveat: </span>{source.caveat}</span></span>
+    {caveats.length > 0 && (
+      <span class="prov-caveat"><Icon name="alert" size="13" /><span><span class="visually-hidden">Caveat: </span>{caveats.join(' ')}</span></span>
     )}
   </summary>
   <div class="prov-detail">
-    <p class="prov-status-line"><Freshness source={source} /></p>
-    <dl class="prov-facts">
-      {asOf && <div><dt>Data</dt><dd>{asOf}</dd></div>}
-      <div><dt>Checked</dt><dd>{verification}</dd></div>
-      <div><dt>Refresh</dt><dd>{REFRESH[source.expectedRefresh]}</dd></div>
-    </dl>
-    {showNote && source.note && <p>{source.note}</p>}
-    {source.methodology && <p>{source.methodology}</p>}
-    <ol class="prov-sources">
-      {source.sources.map((reference) => (
-        <li>
-          <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a>
-          <span class="ref-meta">
-            {[reference.publisher, reference.locator, `Accessed ${formatDate(reference.accessedOn)}`].filter(Boolean).join(' · ')}
-          </span>
-          {reference.sha256 && <span class="hash">SHA-256 {reference.sha256}</span>}
-        </li>
-      ))}
-    </ol>
+    {entries.map((e) => (
+      <section class="prov-entry">
+        {many && <p class="prov-for">For {e.label}</p>}
+        <p class="prov-status-line"><Freshness source={e.source} /></p>
+        <dl class="prov-facts">
+          {asOfOf(e.source) && <div><dt>Data</dt><dd>{asOfOf(e.source)}</dd></div>}
+          <div><dt>Checked</dt><dd>{verificationOf(e.source)}</dd></div>
+          <div><dt>Refresh</dt><dd>{REFRESH[e.source.expectedRefresh]}</dd></div>
+        </dl>
+        {showNote && e.source.note && <p>{e.source.note}</p>}
+        {e.source.methodology && <p>{e.source.methodology}</p>}
+        <ol class="prov-sources">
+          {e.source.sources.map((reference) => (
+            <li>
+              <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a>
+              <span class="ref-meta">
+                {[reference.publisher, reference.locator, `Accessed ${formatDate(reference.accessedOn)}`].filter(Boolean).join(' · ')}
+              </span>
+              {reference.sha256 && <span class="hash">SHA-256 {reference.sha256}</span>}
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
     <p class="prov-foot"><a href="/sources">About our sources</a></p>
   </div>
 </details>
@@ -144,8 +171,11 @@ const tone = source.verification === 'verified' ? TONES[source.status] : 'warn';
     outline: 2px solid var(--c-accent);
     outline-offset: 2px;
   }
-  .prov-mark {
+  .prov-marks {
     display: inline-flex;
+  }
+  .prov-marks > :global(*) + :global(*) {
+    margin-left: -6px;
   }
   .prov-icon {
     display: grid;
@@ -159,6 +189,25 @@ const tone = source.verification === 'verified' ? TONES[source.status] : 'warn';
   .prov-pub {
     font-weight: 600;
     color: var(--c-ink);
+    min-width: 0;
+  }
+  .prov-state {
+    white-space: nowrap;
+  }
+  .prov-entry {
+    display: grid;
+    gap: var(--sp-3);
+  }
+  .prov-entry + .prov-entry {
+    padding-top: var(--sp-4);
+    border-top: 1px dashed var(--c-line);
+  }
+  .prov-for {
+    color: var(--c-muted);
+    font-size: var(--fs-2xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
   .prov-count {
     color: var(--c-muted);
@@ -198,7 +247,7 @@ const tone = source.verification === 'verified' ? TONES[source.status] : 'warn';
     flex-basis: 100%;
     gap: 6px;
     align-items: flex-start;
-    padding: 0 var(--sp-2) 4px calc(1.4rem + var(--sp-2));
+    padding: 0 var(--sp-2) 4px var(--sp-2);
     color: var(--c-ink-2);
     line-height: 1.55;
   }
