@@ -34,6 +34,8 @@ export interface SyncResult {
   updated: number;
   removed: number;
   total: number;
+  /** Passages still to embed when a run stopped at its limit. */
+  remaining?: number;
 }
 
 const EMBED_BATCH = 50;
@@ -83,6 +85,10 @@ const setMeta = (env: Env, key: string, value: string) =>
     value,
   );
 
+/** Passages embedded per batch, and at most per run. */
+const BATCH = 32;
+const MAX_PER_RUN = 320;
+
 export async function sync(env: Env, { force = false } = {}): Promise<SyncResult> {
   const res = await fetch(new URL('/ask/corpus.json', env.SITE_URL), {
     headers: { Accept: 'application/json' },
@@ -113,18 +119,6 @@ export async function sync(env: Env, { force = false } = {}): Promise<SyncResult
   const changed = corpus.chunks.filter((c) => existing.get(c.id) !== c.hash || force);
   const removed = [...existing.keys()].filter((id) => !incoming.has(id));
 
-  // Vectors first: a passage is only written to D1 once it can be found by meaning too.
-  const vectors = await embed(env, changed.map(embeddingText));
-  for (let i = 0; i < changed.length; i += 500) {
-    await env.VECTORS.upsert(
-      changed.slice(i, i + 500).map((c, j) => ({ id: c.id, values: vectors[i + j], metadata: { url: c.url } })),
-    );
-  }
-
-  // Remove vectors before rows: if this fails, the rows (and the version) stay,
-  // and the next sync retries the same deletions. Vectorize takes 100 ids a call.
-  for (let i = 0; i < removed.length; i += 100) await env.VECTORS.deleteByIds(removed.slice(i, i + 100));
-
   const upsert = env.DB.prepare(
     `INSERT INTO chunks (id, hash, url, page, section, text) VALUES (?1, ?2, ?3, ?4, ?5, ?6)
      ON CONFLICT(id) DO UPDATE SET hash = ?2, url = ?3, page = ?4, section = ?5, text = ?6`,
@@ -133,16 +127,39 @@ export async function sync(env: Env, { force = false } = {}): Promise<SyncResult
   const addFts = env.DB.prepare('INSERT INTO chunks_fts (id, section, text) VALUES (?1, ?2, ?3)');
   const drop = env.DB.prepare('DELETE FROM chunks WHERE id = ?1');
 
-  const statements: D1PreparedStatement[] = [];
-  for (const c of changed) {
-    statements.push(
-      upsert.bind(c.id, c.hash, c.url, c.page, c.section, c.text),
-      dropFts.bind(c.id),
-      addFts.bind(c.id, [c.page, c.section, c.keywords].filter(Boolean).join(' '), c.text),
-    );
+  // In batches, each one finished before the next: vectors first (a passage is only written to
+  // D1 once it can be found by meaning too), then its rows. A run that stops part-way (the daily
+  // AI allowance, a timeout) keeps what it finished, and the next run starts where it stopped
+  // instead of re-embedding everything. A run does at most MAX_PER_RUN passages, so a large
+  // change is spread over a few cron runs and never spends the whole day's allowance at once.
+  const todo = changed.slice(0, MAX_PER_RUN);
+  for (let i = 0; i < todo.length; i += BATCH) {
+    const batch = todo.slice(i, i + BATCH);
+    const vectors = await embed(env, batch.map(embeddingText));
+    await env.VECTORS.upsert(batch.map((c, j) => ({ id: c.id, values: vectors[j], metadata: { url: c.url } })));
+    const statements: D1PreparedStatement[] = [];
+    for (const c of batch) {
+      statements.push(
+        upsert.bind(c.id, c.hash, c.url, c.page, c.section, c.text),
+        dropFts.bind(c.id),
+        addFts.bind(c.id, [c.page, c.section, c.keywords].filter(Boolean).join(' '), c.text),
+      );
+    }
+    await env.DB.batch(statements);
   }
-  for (const id of removed) statements.push(drop.bind(id), dropFts.bind(id));
-  for (let i = 0; i < statements.length; i += 90) await env.DB.batch(statements.slice(i, i + 90));
+  const added = todo.filter((c) => !existing.has(c.id)).length;
+  if (todo.length < changed.length) {
+    // Not finished: the version stays old, so the next run carries on with what is left.
+    await setMeta(env, 'checked_at', now).run();
+    return { version: corpus.version, changed: true, added, updated: todo.length - added, removed: 0, total: incoming.size, remaining: changed.length - todo.length };
+  }
+
+  // Remove vectors before rows: if this fails, the rows (and the version) stay,
+  // and the next sync retries the same deletions. Vectorize takes 100 ids a call.
+  for (let i = 0; i < removed.length; i += 100) await env.VECTORS.deleteByIds(removed.slice(i, i + 100));
+  const drops: D1PreparedStatement[] = [];
+  for (const id of removed) drops.push(drop.bind(id), dropFts.bind(id));
+  for (let i = 0; i < drops.length; i += 90) await env.DB.batch(drops.slice(i, i + 90));
 
   await env.DB.batch([
     setMeta(env, 'corpus_version', corpus.version),
@@ -151,12 +168,11 @@ export async function sync(env: Env, { force = false } = {}): Promise<SyncResult
     setMeta(env, 'corpus_generated_at', corpus.generatedAt),
   ]);
 
-  const added = changed.filter((c) => !existing.has(c.id)).length;
   return {
     version: corpus.version,
     changed: true,
     added,
-    updated: changed.length - added,
+    updated: todo.length - added,
     removed: removed.length,
     total: incoming.size,
   };

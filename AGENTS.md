@@ -199,7 +199,8 @@ from.
 - **Reader context:** `/chat` takes `context: { path, read }` (the page, and `?read=` document);
   `focus()` in `retrieve.ts` puts that page's and document's passages first.
 - **Worker** (`worker/`): hybrid retrieval (D1 FTS5 + bge-m3 in Vectorize, RRF), models NYO
-  `glm-5.3` → Workers AI SEA-LION → `gpt-oss-120b`, re-indexes changed passages every 30 min.
+  `glm-5.3` → Workers AI SEA-LION → `gpt-oss-120b`, re-indexes changed passages every 30 min, in saved batches (at most 320 a run, so a
+  large change spreads over several runs instead of spending the day's AI allowance at once).
 - **Guard** (`worker/src/guard.ts`, `numbers.ts`): figures must round from the passages; the
   officials/withheld lists must equal the CI lists (a test enforces it). Change both together.
 - **Never store** questions or answers. After changing the prompt, models or guard, run

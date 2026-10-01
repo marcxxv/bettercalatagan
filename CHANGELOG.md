@@ -108,6 +108,10 @@ emergency answer now gives the MDRRMO lines.
 - `worker/README.md` documents how to switch the assistant off and rotate secrets.
 
 ### Fixed
+- Assistant re-indexing embedded every changed passage before saving any, so a run that hit the
+  daily Workers AI allowance part-way lost all its work and the next cron run (every 30 minutes)
+  started over, spending the allowance again. It now saves in batches of 32 and does at most 320
+  passages a run; the next run continues where the last one stopped.
 - History: the contents rail stuck under the masthead ("Chapters" hidden when scrolling).
 
 ### Added — The Better LGU structure, sourced
