@@ -56,6 +56,12 @@ emergency answer now gives the MDRRMO lines.
   this document?" or "explain this page" are answered about that page. Only bound parameters and
   the corpus's own titles reach the model.
 
+### Added — Tourism recognition
+- Statistics › Tourism: Calatagan ranked Top 9 in overnight tourist arrivals for 2025 at the
+  CALABARZON Tourism Excellence Awards (16 September 2026). Source: the municipal tourism
+  office's Facebook post, published at tier 2 on the maintainer's attestation (ADR 0010); DOT's
+  own per-municipality statistics could not be read, so no arrival count is published.
+
 ### Added — The barangays on a 3D map
 - `/barangays` opens with an interactive map: the 25 barangays raised in 3D by population,
   households or DPWH projects over the terrain, with hover figures, a card for the selected

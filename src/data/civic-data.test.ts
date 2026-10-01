@@ -1,4 +1,5 @@
 import { poverty } from './poverty';
+import { recognitions } from './recognition';
 import { boundaries, boundariesSource } from './boundaries';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
@@ -33,6 +34,7 @@ const datasets: { name: string; record: Sourced<unknown> }[] = [
   { name: 'populationSeries', record: populationSeries },
   { name: 'barangayPopulation2024', record: barangayPopulation2024 },
   { name: 'poverty', record: poverty },
+  { name: 'recognitions', record: recognitions },
   { name: 'boundaries', record: { data: boundaries.features, source: boundariesSource } },
 ];
 
@@ -87,6 +89,10 @@ describe('publication safety', () => {
 
   it.each(datasets)('$name, if published, rests on more than a tertiary source', ({ record }) => {
     if (!isPublishable(record.source)) return;
+    // ADR 0010: an official account's post, attested by the maintainer, may stand at tier 2.
+    const attested =
+      record.source.tier === 2 && Boolean(record.source.attestation) && record.source.sources.some((s) => s.authority === 'social-media');
+    if (attested) return;
     const best = Math.min(...record.source.sources.map((s) => AUTHORITY_RANK[s.authority]));
     expect(best).toBeLessThanOrEqual(4);
   });

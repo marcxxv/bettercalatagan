@@ -9,6 +9,7 @@ import { annualSeries, financialsSource } from '../data/financials';
 import { incomeClassification, municipality } from '../data/municipality';
 import { barangayPopulation2024, population2024, populationSeries } from '../data/population';
 import { poverty } from '../data/poverty';
+import { recognitions } from '../data/recognition';
 import { formatDate, formatNumber, formatPeso, formatPesoMillions, ordinal } from '../lib/format';
 
 /**
@@ -70,6 +71,7 @@ const description = `Calatagan, Batangas in figures: ${formatNumber(pop.populati
           <li><a href="#people">People</a></li>
           <li><a href="#economy">Economy and finances</a></li>
           <li><a href="#competitiveness">Competitiveness</a></li>
+          <li><a href="#tourism">Tourism</a></li>
         </ul>
       </nav>
     </aside>
@@ -318,6 +320,24 @@ const description = `Calatagan, Batangas in figures: ${formatNumber(pop.populati
         </div>
         <Source source={competitivenessSource} label="the competitiveness index" />
       </section>
+
+      <section class="section" id="tourism" aria-labelledby="tourism-title">
+        <p class="eyebrow">Tourism</p>
+        <h2 id="tourism-title">Recognition</h2>
+        <ul class="awards">
+          {recognitions.data.map((r) => (
+            <li class="award">
+              <span class="award-rank" aria-hidden="true">9</span>
+              <div>
+                <p class="award-title">{r.title}</p>
+                <p>{r.body}</p>
+                <p class="small muted">Conferred {formatDate(r.conferredOn)} · {r.place}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <Source source={recognitions.source} label="the tourism ranking" />
+      </section>
     </div>
   </div>
 </Base>
@@ -334,6 +354,40 @@ const description = `Calatagan, Batangas in figures: ${formatNumber(pop.populati
     color: var(--c-muted);
     text-transform: none;
     letter-spacing: 0;
+  }
+  .awards {
+    list-style: none;
+    margin: var(--sp-4) 0;
+    padding: 0;
+  }
+  .award {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--sp-5);
+    align-items: start;
+    padding: var(--sp-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+  }
+  .award p {
+    margin: 0 0 var(--sp-2);
+  }
+  .award-rank {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: var(--c-accent-wash);
+    color: var(--c-accent);
+    font-family: var(--font-serif);
+    font-size: 1.9rem;
+  }
+  .award-title {
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    color: var(--c-ink);
   }
   .ranks {
     list-style: none;
