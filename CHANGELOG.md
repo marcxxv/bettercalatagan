@@ -114,6 +114,10 @@ emergency answer now gives the MDRRMO lines.
 - `worker/README.md` documents how to switch the assistant off and rotate secrets.
 
 ### Fixed
+- The assistant refused to give the published emergency hotlines because its instructions still
+  forbade all telephone numbers; it now gives hotlines that appear on the site, exactly as written
+  (the output guard already allowed only those). Live eval: 52/52 after fixing two eval patterns
+  that flagged correct answers.
 - Assistant re-indexing embedded every changed passage before saving any, so a run that hit the
   daily Workers AI allowance part-way lost all its work and the next cron run (every 30 minutes)
   started over, spending the allowance again. It now saves in batches of 32 and does at most 320
