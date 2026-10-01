@@ -88,15 +88,19 @@ const described = entries.map((e) => e.label).join(' and ');
         return agency ? <AgencyBadge agency={agency} size="1.4rem" /> : <span class="prov-icon"><Icon name="shield" size="12" /></span>;
       })}
     </span>
-    <span class="prov-key">{many ? 'Sources' : 'Source'}</span>
-    <span class="prov-pub">{publishers.map(([short]) => short).join(' · ')}</span>
-    {extra > 0 && <span class="prov-count">+{extra}</span>}
-    <span class={`prov-state ${tone}`}><span class="dot" aria-hidden="true"></span>{summary}</span>
+    <span class="prov-text">
+      <span class="prov-line">
+        <span class="prov-key">{many ? 'Sources' : 'Source'}</span>
+        <span class="prov-pub">{publishers.map(([short]) => short).join(' · ')}</span>
+        {extra > 0 && <span class="prov-count">+{extra}</span>}
+        <span class={`prov-state ${tone}`}><span class="dot" aria-hidden="true"></span>{summary}</span>
+      </span>
+      {caveats.length > 0 && (
+        <span class="prov-caveat"><Icon name="alert" size="13" /><span><span class="visually-hidden">Caveat: </span>{caveats.join(' ')}</span></span>
+      )}
+    </span>
     <span class="visually-hidden">: show method and sources for {described}</span>
-    <Icon name="chevron-down" size="14" class="prov-chev" />
-    {caveats.length > 0 && (
-      <span class="prov-caveat"><Icon name="alert" size="13" /><span><span class="visually-hidden">Caveat: </span>{caveats.join(' ')}</span></span>
-    )}
+    <span class="prov-chev-wrap" aria-hidden="true"><Icon name="chevron-down" size="14" class="prov-chev" /></span>
   </summary>
   <div class="prov-detail">
     {entries.map((e) => (
@@ -144,6 +148,10 @@ const described = entries.map((e) => e.label).join(' and ');
   .provenance:has(.prov-caveat) {
     border-radius: var(--radius-lg);
   }
+  .provenance:has(.prov-caveat) .prov-chip {
+    align-items: start;
+    padding-block: 8px;
+  }
   .provenance:hover {
     border-color: var(--c-line-strong);
   }
@@ -153,12 +161,12 @@ const described = entries.map((e) => e.label).join(' and ');
     box-shadow: var(--shadow-sm, none);
   }
   .prov-chip {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    gap: 4px var(--sp-2);
+    gap: var(--sp-2);
     min-height: 36px;
-    padding: 4px var(--sp-3) 4px 6px;
+    padding: 5px 6px;
     color: var(--c-muted);
     cursor: pointer;
     list-style: none;
@@ -217,10 +225,30 @@ const described = entries.map((e) => e.label).join(' and ');
     align-items: center;
     gap: 0.4em;
   }
-  .prov-state::before {
-    content: '·';
-    margin-right: 0.25em;
-    color: var(--c-line-strong);
+  .prov-text {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+  }
+  .prov-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px var(--sp-2);
+  }
+  .prov-state {
+    padding-left: var(--sp-1);
+  }
+  .prov-chev-wrap {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    transition: background var(--dur-1);
+  }
+  .provenance:hover .prov-chev-wrap {
+    background: var(--c-accent-wash);
   }
   .prov-state .dot {
     width: 0.5em;
@@ -235,7 +263,6 @@ const described = entries.map((e) => e.label).join(' and ');
     background: var(--c-warn);
   }
   .prov-chip :global(.prov-chev) {
-    margin-left: auto;
     color: var(--c-accent);
     transition: transform var(--dur-2) var(--ease-out);
   }
@@ -244,10 +271,9 @@ const described = entries.map((e) => e.label).join(' and ');
   }
   .prov-caveat {
     display: flex;
-    flex-basis: 100%;
     gap: 6px;
     align-items: flex-start;
-    padding: 0 var(--sp-2) 4px var(--sp-2);
+    padding-right: var(--sp-2);
     color: var(--c-ink-2);
     line-height: 1.55;
   }
@@ -328,15 +354,12 @@ const described = entries.map((e) => e.label).join(' and ');
     }
   }
   @media (max-width: 40rem) {
-    .prov-state::before {
-      display: none;
+    .prov-state {
+      padding-left: 0;
     }
     .provenance {
       width: auto;
       border-radius: var(--radius-lg);
-    }
-    .prov-caveat {
-      padding-left: 2px;
     }
     .provenance:not([open]) .prov-caveat > span {
       -webkit-line-clamp: 2;
