@@ -70,6 +70,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
       { href: '/services', label: 'Municipal services', blurb: 'Every service in the offices’ Citizen’s Charters, by topic', icon: 'layers' },
       { href: '/hotlines', label: 'Emergency hotlines', blurb: 'National hotlines set by law, and why local numbers are not listed', icon: 'alert' },
       { href: '/holidays', label: 'Holidays', blurb: 'National holidays and Calatagan’s own, by proclamation', icon: 'calendar' },
+      { href: '/resorts', label: 'Resort booking safety', blurb: 'Resort-published websites and social links, with evidence and scam precautions', icon: 'shield' },
     ],
   },
   {

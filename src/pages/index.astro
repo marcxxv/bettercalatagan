@@ -25,6 +25,7 @@ import { offices, publicServiceCount } from '../data/services';
 import { cmciYears, latestCmci } from '../data/competitiveness';
 import { inCalatagan } from '../data/infrastructure';
 import { holidays } from '../data/calendar';
+import { resorts } from '../data/resorts';
 
 const populationByCode = new Map(barangayPopulation2024.data.map((row) => [row.psgc10, row]));
 const barangayRows = [...barangays.data]
@@ -64,6 +65,7 @@ const counts: Record<string, string> = {
   '/procurement': 'Notices of award and bidding',
   '/hotlines': '911 and local lines',
   '/holidays': `${holidays.length} dates this year`,
+  '/resorts': `${resorts.length} resort websites · booking precautions`,
 };
 /** Plain-language shortcuts for the four things people most often come for. */
 const TASKS: { label: string; href: string; icon: Parameters<typeof Icon>[0]['name'] }[] = [
@@ -308,6 +310,16 @@ const jsonLd = [
           </li>
         ))}
       </ul>
+
+      <aside class="resort-safety" aria-labelledby="resort-safety-title">
+        <span class="resort-safety-icon" aria-hidden="true"><Icon name="shield" size="22" /></span>
+        <div>
+          <p class="eyebrow">Before you book</p>
+          <h3 id="resort-safety-title">Make sure you’re speaking to the resort.</h3>
+          <p>Fake pages impersonate real places. Compare the seller’s account with links published on the resort’s website, then confirm the reservation and payment instructions independently. A directory cannot guarantee a booking.</p>
+        </div>
+        <a class="link-arrow" href="/resorts">Check resort channels</a>
+      </aside>
 
       <div class="groups" data-stagger="80">
         {GROUPS.map((group) => (
@@ -1149,6 +1161,33 @@ const jsonLd = [
   .task:hover .task-arrow {
     transform: translateX(3px);
   }
+
+  .resort-safety {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-3) var(--sp-4);
+    margin-bottom: var(--sp-6);
+    padding: var(--sp-4) var(--sp-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-bg-alt);
+  }
+  .resort-safety-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: var(--tap);
+    height: var(--tap);
+    border-radius: var(--radius-md);
+    background: var(--c-accent-wash);
+    color: var(--c-accent-strong);
+  }
+  .resort-safety > div { flex: 1 1 20rem; }
+  .resort-safety .eyebrow { margin: 0 0 var(--sp-1); }
+  .resort-safety h3 { margin: 0 0 var(--sp-1); font-size: var(--fs-md); }
+  .resort-safety p:last-child { margin: 0; font-size: var(--fs-sm); color: var(--c-ink-2); }
+  .resort-safety > a { margin-left: auto; }
 
   .groups {
     display: grid;

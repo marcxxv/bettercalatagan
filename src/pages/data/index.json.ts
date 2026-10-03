@@ -9,6 +9,7 @@ import { dpwh, infrastructureSource } from '../../data/infrastructure';
 import { cmciYears, competitivenessSource } from '../../data/competitiveness';
 import { offices, servicesSource } from '../../data/services';
 import { holidays, holidaysSource, HOLIDAY_YEAR } from '../../data/calendar';
+import { resorts } from '../../data/resorts';
 import { API_VERSION, DISCLAIMER, LICENSE } from '../../lib/export';
 
 /**
@@ -93,6 +94,15 @@ export const GET: APIRoute = ({ site }) => {
       readiness_tier: holidaysSource.tier,
       expected_refresh: holidaysSource.expectedRefresh,
       primary_sources: ['Office of the President'],
+    },
+    {
+      id: 'resort-channels',
+      title: 'Resort-published booking and social channels (not a booking guarantee)',
+      url: `${base}/resorts.json`,
+      records: resorts.length,
+      evidence_model: 'tourism-channel observations, separate from civic-data readiness tiers',
+      expected_refresh: 'manual review; links may change at any time',
+      primary_sources: ['DOT CALABARZON dated roster', 'resort websites', 'separately hosted listing'],
     },
   ];
 

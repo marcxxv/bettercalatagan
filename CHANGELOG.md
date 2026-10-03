@@ -7,6 +7,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Resort-published channels and booking safety
+- `/resorts` lists four Calatagan resorts with dated website/social-link observations, per-entry
+  evidence and booking-scam precautions. Anam, Lago de Oro and Nawa are cross-referenced to DOT’s
+  CALABARZON roster dated 30 September 2026; this is not a live accreditation check. Valley O’Ville
+  is operator-confirmed, with its separately hosted listing corroborating name and town only; the
+  maintainer’s ownership of the resort is disclosed.
+- `/data/resorts.json` and the export catalogue expose the same sources and limitations without
+  assigning a civic-data readiness tier. The guide is in Services navigation, search and the home
+  exploration, and its links are validated at build time.
+
 ### Changed — Lighter source cards
 - **Source cards** (`Source.astro`) are now one quiet attribution block at reading width
   (46rem) instead of a full-width table: publisher and status on one line, the dates as one

@@ -8,6 +8,20 @@ Ranks refer to the evidence hierarchy in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## In use (published data rests on these)
 
+### Tourism-channel directory (separate from civic-data readiness tiers)
+
+Checked 2026-10-03. The [resort guide](src/pages/resorts.astro) links each resort’s exact evidence
+pages; its [data file](src/data/resorts.ts) preserves the links, channel paths and limitations.
+
+| Source | What it supports | Limit |
+| --- | --- | --- |
+| [DOT CALABARZON roster](https://docs.google.com/spreadsheets/d/e/2PACX-1vTtGgUSobqikBmsWRU-Lhe0wfH5ttk8jiT-bs44K7p7_7eSOJWxkffKMSRaqIbIm7-PL9TJh7Ky1J72/pubhtml/sheet?headers=false&gid=1809562489) (as of 2026-09-30) | Names, Calatagan location, listed website and dated validity for Anam Beach Resort, Lago de Oro and Nawa Wellness | Not a live status or a safe-booking guarantee. |
+| Resort websites: [Anam](https://anambeachresort.com/contact-us/), [Lago de Oro](https://lago-de-oro.com/), [Nawa](https://nawawellness.com/), [Valley O’Ville](https://www.valleyoville.com/) | Resort-site links to the listed channels, as checked 2026-10-03 | Operator-controlled sites do not independently establish social-account control; Anam’s conflicting Facebook links are withheld. |
+| [Valley O’Ville Airbnb listing](https://www.airbnb.com/rooms/1059337092910163675) | Separately hosted name and Calatagan town corroboration | Does not establish domain ownership, precise barangay, DOT status or safe payment. The site maintainer operates this resort. |
+| [PIA Batangas booking-scam notice](https://pia.gov.ph/news/resort-owners-govt-agencies-unite-to-expose-online-booking-scams-in-batangas/) | Background for the booking-safety precautions | Not evidence for any particular resort’s identity or channel. |
+
+### Civic records
+
 | Source | Publisher | Rank | Covers | Format | Notes |
 | --- | --- | --- | --- | --- | --- |
 | [BLGF MC No. 020.2024](https://blgf.gov.ph/wp-content/uploads/2024/12/04.-BLGF-MC-No.-020.2024.pdf) | Bureau of Local Government Finance | 1 | Income reclassification, effective 2025-01-01 | PDF (OCR text layer) | Annex A, p.13 of 32 lists Calatagan: previous `2nd`, new `1st`. SHA-256 recorded in `src/data/sources.ts`. |

@@ -1,0 +1,205 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import { directoryIssues, DOT_CALABARZON_ROSTER, resorts } from '../data/resorts';
+import { formatDate } from '../lib/format';
+import { SITE } from '../lib/site';
+
+const today = new Date().toISOString().slice(0, 10) as `${number}-${number}-${number}`;
+const issues = directoryIssues(resorts, today);
+if (issues.length) throw new Error(`Resort directory evidence check failed:\n${issues.join('\n')}`);
+const crumbs = [{ name: 'Resorts', href: '/resorts' }];
+---
+
+<Base
+  title="Resort websites and booking safety"
+  description="Calatagan resort websites and social links checked against dated sources, with booking-scam precautions and explicit gaps. A small, non-exhaustive directory."
+  {crumbs}
+>
+  <PageHeader
+    eyebrow="Places · Booking safety"
+    icon="lighthouse"
+    title="Find a resort’s published channels"
+    lede="A small, independently compiled directory of Calatagan resort websites and the social accounts linked from them. Each entry shows what was checked, when, and what remains uncertain."
+    {crumbs}
+  >
+    <dl slot="aside" class="aside-card">
+      <div><dt>Resorts listed</dt><dd class="figure">{resorts.length}</dd></div>
+      <div><dt>Last reviewed</dt><dd><time datetime={resorts[0].lastReviewed}>{formatDate(resorts[0].lastReviewed)}</time></dd></div>
+      <div><dt>Scope</dt><dd>Not a complete list of Calatagan resorts</dd></div>
+    </dl>
+  </PageHeader>
+
+  <div class="container wide page-body">
+    <section class="safety callout warn" aria-labelledby="safety-title">
+      <div class="safety-intro">
+        <p class="eyebrow">Before you send money</p>
+        <h2 id="safety-title">A familiar page is not proof of a booking.</h2>
+        <p>
+          Fake pages can impersonate real resorts, including with a blue check. Open the website from
+          a source you found independently, follow its own contact links, then confirm your dates and
+          payment instructions through that channel. Do not rely on a phone number, link or account
+          name supplied only in a message from a seller.
+        </p>
+        <p class="small">
+          <a href="https://pia.gov.ph/news/resort-owners-govt-agencies-unite-to-expose-online-booking-scams-in-batangas" rel="noopener noreferrer">Why this matters in Batangas — Philippine Information Agency</a>
+        </p>
+      </div>
+      <div class="safety-steps">
+        <h3><Icon name="shield" size="20" /> Three checks before paying</h3>
+        <ol>
+          <li><strong>Start outside the ad or chat.</strong> Use the resort website linked below, then follow its published channels.</li>
+          <li><strong>Confirm the actual reservation.</strong> Ask the resort through an independently obtained channel if it recognizes your dates and payment instructions.</li>
+          <li><strong>Pause on surprises.</strong> A changed account, urgent discount or new payment link deserves a second check. No directory can guarantee a transaction.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="directory section-block" id="directory" aria-labelledby="directory-title">
+      <div class="section-head split">
+        <div>
+          <p class="eyebrow">Checked channels</p>
+          <h2 id="directory-title">Calatagan resorts</h2>
+        </div>
+        <p class="lede">Alphabetical, not ranked or sponsored. Missing resorts are not presumed suspicious.</p>
+      </div>
+      <div class="dataset" style="--cols: minmax(0, 1.5fr) minmax(0, 1fr) 8rem 10rem">
+        <div class="dataset-head" aria-hidden="true">
+          <span>Resort & evidence</span><span>Linked channels</span><span>Checked</span><span>Website</span>
+        </div>
+        <ul class="dataset-rows">
+          {resorts.map((resort) => (
+            <li class="dataset-row resort-row" id={resort.id}>
+              <div class="cell main">
+                <h3 class="row-title">{resort.name}</h3>
+                <p class="row-sub"><Icon name="pin" size="14" /> {resort.locality}</p>
+                {resort.reviewNote && <p class="record-note"><strong>Note:</strong> {resort.reviewNote}</p>}
+                {resort.affiliation && <p class="record-note disclosure"><strong>Disclosure:</strong> {resort.affiliation}</p>}
+                <details class="row-more evidence">
+                  <summary>How these links were checked</summary>
+                  {resort.dotRecord && (
+                    <p class="dot-record">
+                      <strong>DOT roster record:</strong> <a href={resort.dotRecord.url} rel="noopener noreferrer">{resort.dotRecord.number}</a>.
+                      Listed in the September 30, 2026 CALABARZON roster with validity through October 31, 2026.
+                      This is a dated record, not a live accreditation or booking guarantee.
+                    </p>
+                  )}
+                  <ul>
+                    {resort.evidence.map((source) => (
+                      <li><a href={source.url} rel="noopener noreferrer">{source.label}</a> — {source.description}</li>
+                    ))}
+                  </ul>
+                </details>
+              </div>
+              <div class="cell channels">
+                <span class="cell-label">Linked channels</span>
+                <ul class="channel-list">
+                  {resort.channels.map((channel) => (
+                    <li><a href={channel.url} rel="noopener noreferrer">{channel.label}<span class="visually-hidden"> for {resort.name}</span> <span aria-hidden="true">↗</span></a></li>
+                  ))}
+                </ul>
+              </div>
+              <div class="cell checked">
+                <span class="cell-label">Checked</span>
+                <time datetime={resort.lastReviewed}>{formatDate(resort.lastReviewed)}</time>
+              </div>
+              <div class="cell row-actions">
+                <a class="website-link" href={resort.website} rel="noopener noreferrer" aria-label={`${resort.name} website, ${new URL(resort.website).hostname}`}>
+                  Website <Icon name="external" size="16" />
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <p class="dataset-foot">These are links observed in dated sources, not verified payment channels or endorsements.</p>
+      </div>
+    </section>
+
+    <section class="method section-block prose" id="method" aria-labelledby="method-title">
+      <p class="eyebrow">The limits of a directory</p>
+      <h2 id="method-title">What “checked” means here</h2>
+      <p>
+        For Anam Beach Resort, Lago de Oro and Nawa Wellness, the dated
+        <a href={DOT_CALABARZON_ROSTER} rel="noopener noreferrer">DOT CALABARZON roster</a>
+        lists their names, Calatagan locations and the websites shown here. For Valley O’Ville,
+        the website is confirmed by its operator, who maintains this project; the separately hosted
+        Airbnb listing corroborates the resort name and Calatagan location only. Ownership of
+        valleyoville.com has not been independently established. We checked each resort website
+        for the social and booking links it publishes, but an operator-controlled site cannot by
+        itself prove government accreditation or protect against impersonation. The DOT records
+        above reflect the September 30, 2026 roster, not live accreditation; check directly for
+        later changes, especially after October 31, 2026.
+      </p>
+      <p>
+        These are <strong>links and documented observations, not endorsements</strong>. We do not
+        accept payments, make reservations, verify payment accounts or promise that any channel will
+        remain under the same control. A listing's absence from this small directory does not mean
+        it is fake or unaccredited. When links conflict, we withhold the disputed link rather than
+        guess. The founder’s connection to Valley O’Ville is disclosed on its entry.
+      </p>
+      <p>
+        Found an impersonating page, a changed link or an error? <a href={`${SITE.repository}/issues/new/choose`} rel="noopener noreferrer">Report a correction</a>.
+        GitHub issues are public: do not post guest details, payment receipts, account numbers or
+        identity documents there. If you have already lost money, contact your payment provider and
+        report the incident to the relevant authorities promptly.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .safety {
+    display: grid;
+    gap: var(--sp-5);
+    margin: 0;
+  }
+  .safety h2 { max-width: 21ch; margin: 0 0 var(--sp-4); font-size: var(--fs-xl); }
+  .safety-intro > :last-child { margin-bottom: 0; }
+  .safety-steps {
+    padding: var(--sp-4) var(--sp-5);
+    border: 1px solid var(--c-warn-line);
+    border-radius: var(--radius-md);
+    background: var(--c-surface);
+  }
+  .safety-steps h3 { display: flex; align-items: center; gap: var(--sp-2); margin: 0 0 var(--sp-3); font-size: var(--fs-base); }
+  .safety-steps ol { padding-left: var(--sp-5); margin: 0; font-size: var(--fs-sm); }
+  .safety-steps li + li { margin-top: var(--sp-2); }
+  .directory { margin-top: var(--sp-8); }
+  .directory .section-head { align-items: end; }
+  .directory .lede { color: var(--c-muted); font-size: var(--fs-sm); }
+  .resort-row { align-items: start; padding-block: var(--sp-4); }
+  .resort-row .main { padding-top: var(--sp-1); }
+  .resort-row .row-title { font-size: var(--fs-base); font-weight: 700; }
+  .resort-row .row-sub { gap: var(--sp-1); }
+  .record-note { margin: var(--sp-3) 0 0; font-size: var(--fs-xs); line-height: 1.55; color: var(--c-ink-2); }
+  .disclosure { padding: var(--sp-2) var(--sp-3); border: 1px solid var(--c-line); border-radius: var(--radius-sm); background: var(--c-bg-alt); }
+  .evidence { margin-top: var(--sp-3); }
+  .evidence > summary { min-height: var(--tap); }
+  .evidence ul { margin: var(--sp-2) 0 0; padding-left: var(--sp-4); font-size: var(--fs-xs); line-height: 1.5; }
+  .evidence li + li { margin-top: var(--sp-2); }
+  .dot-record { margin: var(--sp-2) 0; padding: var(--sp-3); border-radius: var(--radius-sm); background: var(--c-bg-alt); font-size: var(--fs-xs); line-height: 1.5; }
+  .channel-list { display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-2); padding: 0; margin: 0; list-style: none; }
+  .channel-list li + li { margin-top: 0; }
+  .channel-list a { display: inline-flex; align-items: center; min-height: 36px; gap: var(--sp-1); padding: var(--sp-1) var(--sp-2); border: 1px solid var(--c-line); border-radius: var(--radius-sm); background: var(--c-surface); font-size: var(--fs-xs); font-weight: 600; text-decoration: none; }
+  .channel-list a:hover { border-color: var(--c-accent-line); background: var(--c-accent-wash); }
+  .checked { color: var(--c-muted); font-size: var(--fs-xs); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .website-link { display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2); min-height: var(--tap); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--c-accent-line); border-radius: var(--radius-sm); background: var(--c-accent-wash); color: var(--c-accent-strong); font-size: var(--fs-xs); font-weight: 700; text-decoration: none; }
+  .website-link:hover { border-color: var(--c-accent); background: var(--c-surface); }
+  .method { margin-top: var(--sp-9); }
+  .method h2 { margin-top: 0; }
+  .method p { overflow-wrap: anywhere; }
+  @media (min-width: 56rem) {
+    .safety { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--sp-6); padding: var(--sp-6); }
+  }
+  @media (max-width: 47.99rem) {
+    .resort-row > .main, .resort-row > .channels, .resort-row > .checked, .resort-row > .row-actions { grid-column: 1 / -1; }
+    .resort-row > .row-actions { grid-row: auto; justify-content: flex-start; margin-top: var(--sp-1); }
+    .channel-list { margin-top: var(--sp-1); }
+  }
+  @media (max-width: 25rem) {
+    .safety { padding: var(--sp-4); }
+    .safety-steps { padding: var(--sp-3); }
+    .resort-row .row-title { font-size: var(--fs-sm); }
+  }
+</style>

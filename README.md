@@ -1,6 +1,6 @@
-# Better Calatagan
+# BetterCalatagan
 
-> **Better Calatagan is an independent civic project and is not the official website of the
+> **BetterCalatagan is an independent civic project and is not the official website of the
 > Municipality of Calatagan.**
 >
 > It is not affiliated with, endorsed by, or operated by the municipal government of Calatagan,
@@ -36,9 +36,9 @@ cannot check.
 
 ## Current status
 
-Forty-four pages, grouped as the Better LGU portals group theirs (Services, Government,
-Statistics, Transparency) and counting a profile for each of the 25 barangays, and eight
-machine-readable datasets, guarded by a civic-data test suite that runs on every push. Every page
+Pages grouped as the Better LGU portals group theirs (Services, Government,
+Statistics, Transparency), including a profile for each of the 25 barangays; machine-readable
+datasets are guarded by tests that run on every push. Every page
 has an "Ask anything" box: instant search as you type, and, on Enter, an assistant that answers
 in English, Filipino or Taglish from the site's own pages only, citing each one. Its figures are
 checked against the pages in code before they are shown (see
@@ -56,6 +56,13 @@ checked against the pages in code before they are shown (see
 | DTI competitiveness — 2015–2024 | 1 | DTI CMCI ranking tables |
 | Municipal services — 119, from 18 offices | 2 | The offices' 2022 Citizen's Charters (archived) |
 | Holidays 2026 and national hotlines | 1 | Presidential proclamations; executive orders |
+
+The [resort booking-safety guide](src/pages/resorts.astro) lists four dated, resort-published
+websites and social/booking links. Its [JSON export](src/pages/data/resorts.json.ts) carries each
+entry’s evidence and review date but **does not** inherit the civic-data tiers above. The
+September 30, 2026 DOT CALABARZON roster is a dated observation, not live accreditation or proof
+that a booking or payment is safe. Valley O’Ville is run by this project’s maintainer; the entry
+discloses that interest and that independent evidence for domain ownership was not established.
 
 Every figure on the finances page records the spreadsheet cell it came from. Filings that do not
 reconcile against their own internal arithmetic are withheld, not flagged.

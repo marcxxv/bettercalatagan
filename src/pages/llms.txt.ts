@@ -44,13 +44,14 @@ ${WITHHELD.map((w) => `- ${w.fact}: ${w.reason}`).join('\n')}
 - [${OVERVIEW.label}](${url(OVERVIEW.href)}): ${OVERVIEW.blurb}
 ${NAV_GROUPS.map((group) => `\n### ${group.label}\n\n${group.items.map((item) => `- [${item.label}](${url(item.href)}): ${item.blurb}`).join('\n')}`).join('\n')}
 
-## Open data (JSON, with provenance on every record)
+## Open data (JSON; see each export's evidence model)
 
 - [Catalogue](${url('/data/index.json')})
 - [Municipality and census](${url('/data/municipality.json')})
 - [Financial statements](${url('/data/financials.json')})
 - [Full Disclosure filings](${url('/data/fdp-filings.json')})
 - [Archived documents](${url('/data/documents.json')})
+- [Resort-published channels](${url('/data/resorts.json')}) — tourism observations, not civic-data verification and not a booking guarantee; review dates and limitations are on [the resort guide](${url('/resorts')}).
 
 ## Citing
 

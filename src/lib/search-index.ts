@@ -23,6 +23,7 @@ import { holidays, hotlines, HOLIDAY_YEAR, localHotlines } from '../data/calenda
 import { barangayPages } from './barangay-pages';
 import { dpwhHeadline } from './dpwh-text';
 import { PAGES } from './site';
+import { resorts } from '../data/resorts';
 
 export interface SearchEntry {
   /** Title */
@@ -50,6 +51,16 @@ export function buildSearchIndex(): SearchEntry[] {
   // Pages
   for (const item of PAGES) {
     entries.push({ t: item.label, g: 'Pages', u: item.href, d: item.blurb });
+  }
+
+  for (const resort of resorts) {
+    entries.push({
+      t: resort.name,
+      g: 'Resort channels',
+      u: `/resorts#${resort.id}`,
+      d: `Resort-published links checked ${formatDate(resort.lastReviewed)}; not proof of a safe booking or live accreditation. ${resort.affiliation ?? ''}`.trim(),
+      k: `Calatagan resort booking website Facebook scam ${resort.locality}`,
+    });
   }
 
   // Facts: population and identity

@@ -9,6 +9,7 @@ import { barangayPages } from '../lib/barangay-pages';
 import { infrastructureSource } from '../data/infrastructure';
 import { competitivenessSource } from '../data/competitiveness';
 import { servicesSource } from '../data/services';
+import { resorts } from '../data/resorts';
 
 /**
  * Every HTML page, with `lastmod` taken from the date its content was last
@@ -25,6 +26,7 @@ const LASTMOD: Record<string, string> = {
   '/statistics': competitivenessSource.lastVerified,
   '/services': servicesSource.lastVerified,
   '/barangays': barangayPopulation2024.source.lastVerified,
+  '/resorts': resorts.map((entry) => entry.lastReviewed).sort().at(-1)!,
 };
 
 export const GET: APIRoute = ({ site }) => {

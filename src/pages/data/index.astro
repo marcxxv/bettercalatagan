@@ -12,6 +12,7 @@ import { dpwh, infrastructureSource } from '../../data/infrastructure';
 import { cmciYears, competitivenessSource } from '../../data/competitiveness';
 import { offices, servicesSource } from '../../data/services';
 import { holidays, holidaysSource } from '../../data/calendar';
+import { resorts } from '../../data/resorts';
 import { formatDate, formatNumber } from '../../lib/format';
 import { API_VERSION } from '../../lib/export';
 import { SITE } from '../../lib/site';
@@ -145,7 +146,7 @@ const jsonLd = [
     eyebrow="Open data"
     icon="database"
     title="Take the public record with you"
-    lede="Every dataset on this site is published as JSON with the same provenance you see on the page: its sources, the period it describes, when someone last checked it, and any caveat. Free to reuse with attribution."
+    lede="Civic datasets are published as JSON with sources, reference periods, human review dates and caveats. A separate resort-channel export has its own evidence model. Free to reuse with attribution."
     {crumbs}
   >
     <Fragment slot="meta">
@@ -184,18 +185,30 @@ const jsonLd = [
       ))}
     </ul>
 
+    <section class="tourism-export" aria-labelledby="tourism-export-title">
+      <p class="eyebrow">Separate evidence model</p>
+      <h2 id="tourism-export-title">Resort-published channels</h2>
+      <p>
+        {resorts.length} Calatagan resort entries, reviewed {formatDate(resorts[0].lastReviewed)}.
+        The <a href="/resorts">booking-safety guide</a> shows each source and limitation. This export
+        records observed links; it does not carry a civic-data readiness tier, confirm that an account
+        is still controlled by a resort, or guarantee a booking.
+      </p>
+      <a class="button primary small" href="/data/resorts.json"><Icon name="download" size="15" /> Open resort-channel JSON</a>
+    </section>
+
     <section class="how" aria-labelledby="how-title">
       <div>
         <p class="eyebrow">Using the data</p>
         <h2 id="how-title">One manifest, every dataset</h2>
         <p>
           Start at <a href="/data/index.json"><code>/data/index.json</code></a>. It lists every
-          dataset with its readiness tier and refresh cadence — and, just as usefully, what is
-          deliberately withheld and why.
+          dataset with its evidence model and refresh cadence — and, just as usefully, what is
+          deliberately withheld and why. Resort channels are listed separately from civic-data tiers.
         </p>
         <ul class="rules">
-          <li><strong>Provenance travels with the data.</strong> Each file’s <code>meta.provenance</code> names its sources, <code>as_of</code> and <code>last_verified</code>.</li>
-          <li><strong>Only tiers 1 and 2 are exported.</strong> Unverified records never leave the repository.</li>
+          <li><strong>Civic provenance travels with the data.</strong> Civic exports carry <code>meta.provenance</code> with sources, <code>as_of</code> and <code>last_verified</code>. The resort export carries per-entry evidence and review dates instead.</li>
+          <li><strong>Only civic tiers 1 and 2 are exported.</strong> Tier 3 and 4 civic records stay out of public output; the separate resort directory is not tiered.</li>
           <li><strong>Government documents are not relicensed.</strong> The CC BY 4.0 licence covers this project’s compilation only.</li>
         </ul>
       </div>
@@ -310,6 +323,15 @@ const jsonLd = [
   :global(.js) .js-only-inline {
     display: inline-flex;
   }
+  .tourism-export {
+    margin-top: var(--sp-6);
+    padding: var(--sp-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-bg-alt);
+  }
+  .tourism-export h2 { margin: var(--sp-1) 0 var(--sp-2); font-size: var(--fs-xl); }
+  .tourism-export p:not(.eyebrow) { max-width: var(--w-prose); }
   .how {
     display: grid;
     gap: var(--sp-6);
