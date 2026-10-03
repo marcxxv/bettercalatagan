@@ -57,12 +57,13 @@ checked against the pages in code before they are shown (see
 | Municipal services — 119, from 18 offices | 2 | The offices' 2022 Citizen's Charters (archived) |
 | Holidays 2026 and national hotlines | 1 | Presidential proclamations; executive orders |
 
-The [resort booking-safety guide](src/pages/resorts.astro) lists four dated, resort-published
+The [resort booking-safety guide](src/pages/resorts.astro) lists six dated, property-published
 websites and social/booking links. Its [JSON export](src/pages/data/resorts.json.ts) carries each
 entry’s evidence and review date but **does not** inherit the civic-data tiers above. The
 September 30, 2026 DOT CALABARZON roster is a dated observation, not live accreditation or proof
-that a booking or payment is safe. Valley O’Ville’s website is operator-confirmed; the entry
-discloses that this project’s maintainer also operates the resort.
+that a booking or payment is safe. Valley O’Ville’s website is operator-confirmed. The roster’s
+additional Aquaria/Crusoe and PlayaLolita entries are cross-checked against accessible sites;
+the listed Aquaria group URL is inaccessible, and PlayaLolita’s roster entry has no website.
 
 Every figure on the finances page records the spreadsheet cell it came from. Filings that do not
 reconcile against their own internal arithmetic are withheld, not flagged.

@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Icon from '../components/Icon.astro';
 import { directoryIssues, DOT_CALABARZON_ROSTER, resorts } from '../data/resorts';
+import type { ResortChannel } from '../data/resorts';
 import { formatDate } from '../lib/format';
 import { SITE } from '../lib/site';
 
@@ -10,6 +11,12 @@ const today = new Date().toISOString().slice(0, 10) as `${number}-${number}-${nu
 const issues = directoryIssues(resorts, today);
 if (issues.length) throw new Error(`Resort directory evidence check failed:\n${issues.join('\n')}`);
 const crumbs = [{ name: 'Resorts', href: '/resorts' }];
+const channelIcons: Record<ResortChannel['label'], Parameters<typeof Icon>[0]['name']> = {
+  Facebook: 'people',
+  Instagram: 'camera',
+  TikTok: 'play',
+  Airbnb: 'home',
+};
 ---
 
 <Base
@@ -21,7 +28,7 @@ const crumbs = [{ name: 'Resorts', href: '/resorts' }];
     eyebrow="Places · Booking safety"
     icon="lighthouse"
     title="Find a resort’s published channels"
-    lede="A small, independently compiled directory of Calatagan resort websites and the social accounts linked from them. Each entry shows what was checked, when, and what remains uncertain."
+    lede="A small, source-linked directory of Calatagan resort websites and the social accounts linked from them. Each entry shows what was checked, when, and what remains uncertain."
     {crumbs}
   >
     <dl slot="aside" class="aside-card">
@@ -75,7 +82,6 @@ const crumbs = [{ name: 'Resorts', href: '/resorts' }];
                 <h3 class="row-title">{resort.name}</h3>
                 <p class="row-sub"><Icon name="pin" size="14" /> {resort.locality}</p>
                 {resort.reviewNote && <p class="record-note"><strong>Note:</strong> {resort.reviewNote}</p>}
-                {resort.affiliation && <p class="record-note disclosure"><strong>Disclosure:</strong> {resort.affiliation}</p>}
                 <details class="row-more evidence">
                   <summary>How these links were checked</summary>
                   {resort.dotRecord && (
@@ -94,11 +100,16 @@ const crumbs = [{ name: 'Resorts', href: '/resorts' }];
               </div>
               <div class="cell channels">
                 <span class="cell-label">Linked channels</span>
-                <ul class="channel-list">
-                  {resort.channels.map((channel) => (
-                    <li><a href={channel.url} rel="noopener noreferrer">{channel.label}<span class="visually-hidden"> for {resort.name}</span> <span aria-hidden="true">↗</span></a></li>
-                  ))}
-                </ul>
+                {resort.channels.length ? (
+                  <ul class="channel-list" aria-label={`${resort.name} links published by the resort`}>
+                    {resort.channels.map((channel) => (
+                      <li><a href={channel.url} rel="noopener noreferrer">
+                        <Icon name={channelIcons[channel.label]} size="19" />
+                        {channel.label}<span class="visually-hidden"> for {resort.name}</span>
+                      </a></li>
+                    ))}
+                  </ul>
+                ) : <span class="no-channels">No social link confirmed</span>}
               </div>
               <div class="cell checked">
                 <span class="cell-label">Checked</span>
@@ -106,7 +117,7 @@ const crumbs = [{ name: 'Resorts', href: '/resorts' }];
               </div>
               <div class="cell row-actions">
                 <a class="website-link" href={resort.website} rel="noopener noreferrer" aria-label={`${resort.name} website, ${new URL(resort.website).hostname}`}>
-                  Website <Icon name="external" size="16" />
+                  <Icon name="globe" size="19" /> <span>Visit site</span> <Icon name="external" size="14" />
                 </a>
               </div>
             </li>
@@ -120,9 +131,11 @@ const crumbs = [{ name: 'Resorts', href: '/resorts' }];
       <p class="eyebrow">The limits of a directory</p>
       <h2 id="method-title">What “checked” means here</h2>
       <p>
-        For Anam Beach Resort, Lago de Oro and Nawa Wellness, the dated
+        For Anam Beach Resort, Aquaria Water Park (grouped with Crusoe Cabins in the roster), Lago de Oro, Nawa Wellness and PlayaLolita Beach Resort, the dated
         <a href={DOT_CALABARZON_ROSTER} rel="noopener noreferrer">DOT CALABARZON roster</a>
-        lists their names, Calatagan locations and the websites shown here. We checked each resort
+        lists their names and Calatagan locations. It lists the websites shown here for Anam, Lago de Oro and Nawa;
+        Aquaria’s roster link is currently inaccessible and PlayaLolita has no roster website. We matched their
+        accessible pages to other roster details. We checked each resort
         website for the social and booking links it publishes. A resort-published link does not,
         by itself, protect against impersonation or guarantee a booking. The DOT records above
         reflect the September 30, 2026 roster, not live accreditation; check directly for later
@@ -133,7 +146,7 @@ const crumbs = [{ name: 'Resorts', href: '/resorts' }];
         accept payments, make reservations, verify payment accounts or promise that any channel will
         remain under the same control. A listing's absence from this small directory does not mean
         it is fake or unaccredited. When links conflict, we withhold the disputed link rather than
-        guess. The founder’s connection to Valley O’Ville is disclosed on its entry.
+        guess.
       </p>
       <p>
         Found an impersonating page, a changed link or an error? <a href={`${SITE.repository}/issues/new/choose`} rel="noopener noreferrer">Report a correction</a>.
@@ -170,7 +183,6 @@ const crumbs = [{ name: 'Resorts', href: '/resorts' }];
   .resort-row .row-title { font-size: var(--fs-base); font-weight: 700; }
   .resort-row .row-sub { gap: var(--sp-1); }
   .record-note { margin: var(--sp-3) 0 0; font-size: var(--fs-xs); line-height: 1.55; color: var(--c-ink-2); }
-  .disclosure { padding: var(--sp-2) var(--sp-3); border: 1px solid var(--c-line); border-radius: var(--radius-sm); background: var(--c-bg-alt); }
   .evidence { margin-top: var(--sp-3); }
   .evidence > summary { min-height: var(--tap); }
   .evidence ul { margin: var(--sp-2) 0 0; padding-left: var(--sp-4); font-size: var(--fs-xs); line-height: 1.5; }
@@ -178,10 +190,11 @@ const crumbs = [{ name: 'Resorts', href: '/resorts' }];
   .dot-record { margin: var(--sp-2) 0; padding: var(--sp-3); border-radius: var(--radius-sm); background: var(--c-bg-alt); font-size: var(--fs-xs); line-height: 1.5; }
   .channel-list { display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-2); padding: 0; margin: 0; list-style: none; }
   .channel-list li + li { margin-top: 0; }
-  .channel-list a { display: inline-flex; align-items: center; min-height: 36px; gap: var(--sp-1); padding: var(--sp-1) var(--sp-2); border: 1px solid var(--c-line); border-radius: var(--radius-sm); background: var(--c-surface); font-size: var(--fs-xs); font-weight: 600; text-decoration: none; }
-  .channel-list a:hover { border-color: var(--c-accent-line); background: var(--c-accent-wash); }
+  .channel-list a { display: inline-flex; align-items: center; gap: var(--sp-1); min-height: var(--tap); padding: var(--sp-2); border: 1px solid var(--c-line); border-radius: var(--radius-sm); background: var(--c-surface); color: var(--c-ink); font-size: var(--fs-xs); font-weight: 600; text-decoration: none; }
+  .channel-list a:hover { border-color: var(--c-accent); box-shadow: var(--shadow-sm); }
+  .no-channels { font-size: var(--fs-xs); color: var(--c-muted); }
   .checked { color: var(--c-muted); font-size: var(--fs-xs); white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .website-link { display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2); min-height: var(--tap); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--c-accent-line); border-radius: var(--radius-sm); background: var(--c-accent-wash); color: var(--c-accent-strong); font-size: var(--fs-xs); font-weight: 700; text-decoration: none; }
+  .website-link { display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-1); min-height: var(--tap); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--c-accent-line); border-radius: var(--radius-sm); background: var(--c-accent-wash); color: var(--c-accent-strong); font-size: var(--fs-xs); font-weight: 700; text-decoration: none; white-space: nowrap; }
   .website-link:hover { border-color: var(--c-accent); background: var(--c-surface); }
   .method { margin-top: var(--sp-9); }
   .method h2 { margin-top: 0; }

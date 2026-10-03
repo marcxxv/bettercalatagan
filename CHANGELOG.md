@@ -8,19 +8,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added — Resort-published channels and booking safety
-- `/resorts` lists four Calatagan resorts with dated website/social-link observations, per-entry
-  evidence and booking-scam precautions. Anam, Lago de Oro and Nawa are cross-referenced to DOT’s
+- `/resorts` lists six Calatagan resorts with dated website/social-link observations, per-entry
+  evidence and booking-scam precautions. Anam, Aquaria/Crusoe, Lago de Oro, Nawa and PlayaLolita are cross-referenced to DOT’s
   CALABARZON roster dated 30 September 2026; this is not a live accreditation check. Valley O’Ville
-  is operator-confirmed, with its separately hosted listing corroborating name and town only; the
-  maintainer’s ownership of the resort is disclosed.
+  is operator-confirmed, with its separately hosted listing corroborating name and town only.
 - `/data/resorts.json` and the export catalogue expose the same sources and limitations without
   assigning a civic-data readiness tier. The guide is in Services navigation, search and the home
   exploration, and its links are validated at build time.
+- Generic pictograms accompany named channel links, the website action uses a globe, and the home
+  overview includes a direct resort-finding task. Entries with no corroborated social link say so.
 
 ### Changed — Valley O’Ville directory wording
-- Removed the Valley O’Ville row’s unnecessary DOT non-claim and the redundant domain-ownership
-  caveat. Its website is operator-confirmed; the maintainer’s connection to the resort remains
-  disclosed. DOT roster observations remain limited to the three resorts actually listed.
+- Removed the Valley O’Ville row’s unrelated DOT and booking-configuration notes, as well as the
+  redundant domain-ownership caveat. DOT roster observations remain limited to listed resorts.
 
 ### Changed — Lighter source cards
 - **Source cards** (`Source.astro`) are now one quiet attribution block at reading width

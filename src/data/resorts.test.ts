@@ -2,14 +2,30 @@ import { describe, expect, it } from 'vitest';
 import { directoryIssues, resorts } from './resorts';
 
 describe('resort channel directory', () => {
-  it('publishes four named Calatagan establishments without implying universal coverage', () => {
+  it('includes the additional resorts backed by the dated DOT roster and an accessible website', () => {
     expect(resorts.map((resort) => resort.name)).toEqual([
       'Anam Beach Resort',
+      'Aquaria Water Park',
       'Lago de Oro',
       'Nawa Wellness',
+      'PlayaLolita Beach Resort',
       'Valley O’Ville Family Resort',
     ]);
     expect(new Set(resorts.map((resort) => resort.id)).size).toBe(resorts.length);
+  });
+
+  it('attributes Aquaria’s channels only to Aquaria and keeps the combined DOT name in dated evidence', () => {
+    const aquaria = resorts.find((resort) => resort.id === 'aquaria-crusoe');
+    const playa = resorts.find((resort) => resort.id === 'playalolita');
+    expect(aquaria?.website).toBe('https://aquaria.landcolifestyleventures.com/');
+    expect(aquaria?.dotRecord).toMatchObject({ number: 'DOT-R4A-RES-02043-2024', listedName: 'AQUARIA WATER PARK & CRUSOE CABINS', rosterAsOf: '2026-09-30', listedValidUntil: '2026-10-31' });
+    expect(aquaria?.channels.map((channel) => channel.linkedFrom)).toEqual([
+      'https://aquaria.landcolifestyleventures.com/',
+      'https://aquaria.landcolifestyleventures.com/',
+    ]);
+    expect(playa?.website).toBe('https://www.playalolitaresort.com/en/');
+    expect(playa?.dotRecord).toMatchObject({ number: 'DOT-R4A-RES-03116-2026', rosterAsOf: '2026-09-30', listedValidUntil: '2026-10-31' });
+    expect(playa?.channels).toEqual([]);
   });
 
   it('rejects stale review dates, duplicate channels and evidence from an unrelated site', () => {
@@ -46,7 +62,7 @@ describe('resort channel directory', () => {
 
   it('keeps DOT claims separate from operator-owned sources', () => {
     const candidate = {
-      ...resorts[3],
+      ...resorts.find((resort) => resort.id === 'valley-o-ville')!,
       dotRecord: {
         number: 'invented', listedName: 'Valley O’Ville', rosterAsOf: '2026-09-30' as const,
         listedValidUntil: '2026-10-31' as const, url: 'https://www.valleyoville.com/' as const,
@@ -57,12 +73,12 @@ describe('resort channel directory', () => {
     expect(directoryIssues(resorts, '2026-10-03')).toEqual([]);
   });
 
-  it('shows Valley O’Ville without a DOT row claim or an unsupported domain-ownership caveat', () => {
+  it('shows Valley O’Ville without unrelated stay conditions or owner-identifying notes', () => {
     const valley = resorts.find((resort) => resort.id === 'valley-o-ville');
     expect(valley).toBeDefined();
     expect(valley?.dotRecord).toBeUndefined();
-    expect(valley?.reviewNote).not.toMatch(/DOT|accreditation|domain ownership/i);
+    expect(valley?.reviewNote).toBeUndefined();
     expect(valley?.evidence.map((source) => source.description).join(' ')).not.toMatch(/domain ownership/i);
-    expect(valley?.affiliation).toContain('maintainer');
+    expect(valley && 'affiliation' in valley).toBe(false);
   });
 });

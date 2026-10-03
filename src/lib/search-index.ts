@@ -58,7 +58,7 @@ export function buildSearchIndex(): SearchEntry[] {
       t: resort.name,
       g: 'Resort channels',
       u: `/resorts#${resort.id}`,
-      d: `Resort-published links checked ${formatDate(resort.lastReviewed)}; not proof of a safe booking or live accreditation. ${resort.affiliation ?? ''}`.trim(),
+      d: `Resort-published links checked ${formatDate(resort.lastReviewed)}; not proof of a safe booking or live accreditation.`,
       k: `Calatagan resort booking website Facebook scam ${resort.locality}`,
     });
   }

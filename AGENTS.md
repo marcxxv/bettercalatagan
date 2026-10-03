@@ -104,8 +104,7 @@ certs/                DILG intermediate certificate
 - `resorts.ts` is a distinct, manually reviewed tourism-channel directory: each link has an exact
   cited resort-site page and review date. The dated DOT roster supports only what it listed then;
   resort-published links do not prove social-account control, live accreditation or safe payment.
-  Valley O’Ville’s operator also maintains this project, so its affiliation and evidence limits
-  must stay visible. `/data/resorts.json` is exported without a civic-data readiness tier.
+  `/data/resorts.json` is exported without a civic-data readiness tier.
 - Exports: `/data/index.json` (catalogue), `/data/{municipality,financials,fdp-filings,documents}.json`,
   `/search.json` (ask/search index), `/llms.txt`, `/sitemap.xml`.
 - Pipelines, review flow and how to add a source: **`docs/data-pipelines.md`**.
@@ -294,7 +293,7 @@ indexed. Keep titles ≤ 60 characters and descriptions ≤ 160 where possible.
 - **New dataset:** follow "Adding a new source" in `docs/data-pipelines.md`.
 - **Resort channel corrections:** check the link on the exact resort-site page, independently
   corroborate what can be corroborated, update its `lastReviewed`, evidence/caveats and sources,
-  and preserve the operator-affiliation disclosure. Never silently turn this into a verified-resort
+  and retain clear evidence limits. Never silently turn this into a verified-resort
   badge or treat a dated DOT listing as a payment guarantee.
 - **New document link:** use `archiveReadAttrs(doc)` or `fdpReadAttrs(filing, period)` so it opens
   in the reader; keep `href` pointing at the original.

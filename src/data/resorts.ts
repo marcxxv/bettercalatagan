@@ -35,7 +35,6 @@ export interface ResortEntry {
     url: `https://${string}`;
   };
   reviewNote?: string;
-  affiliation?: string;
   lastReviewed: IsoDate;
 }
 
@@ -59,6 +58,23 @@ export const resorts: readonly ResortEntry[] = [
     ],
     dotRecord: { number: 'DOT-R4A-RES-03126-2026', listedName: 'ANAM BEACH RESORT', rosterAsOf: '2026-09-30', listedValidUntil: '2026-10-31', url: DOT_CALABARZON_ROSTER },
     reviewNote: 'Facebook link withheld: the resort website links two different Facebook profiles from its contact section and footer. Confirm the right page directly with the resort.',
+    lastReviewed: '2026-10-03',
+  },
+  {
+    id: 'aquaria-crusoe',
+    name: 'Aquaria Water Park',
+    locality: 'Sta. Ana, Calatagan',
+    website: 'https://aquaria.landcolifestyleventures.com/',
+    channels: [
+      { label: 'Facebook', url: 'https://www.facebook.com/aquariawaterpark', linkedFrom: 'https://aquaria.landcolifestyleventures.com/' },
+      { label: 'Instagram', url: 'https://www.instagram.com/aquariawaterpark/', linkedFrom: 'https://aquaria.landcolifestyleventures.com/' },
+    ],
+    evidence: [
+      { label: 'DOT CALABARZON resort roster', url: DOT_CALABARZON_ROSTER, description: 'Lists Aquaria Water Park & Crusoe Cabins in Sta. Ana, Calatagan, with a different, currently inaccessible legacy group website; roster dated September 30, 2026.' },
+      { label: 'Aquaria website', url: 'https://aquaria.landcolifestyleventures.com/', description: 'Names Aquaria Water Park in Calatagan and links the Facebook and Instagram accounts shown here. Its Crusoe Cabins link is a separate site, not checked here.' },
+    ],
+    dotRecord: { number: 'DOT-R4A-RES-02043-2024', listedName: 'AQUARIA WATER PARK & CRUSOE CABINS', rosterAsOf: '2026-09-30', listedValidUntil: '2026-10-31', url: DOT_CALABARZON_ROSTER },
+    reviewNote: 'The DOT roster groups Aquaria with Crusoe Cabins; this entry links only Aquaria’s site and channels. No separate Crusoe website or booking flow was checked.',
     lastReviewed: '2026-10-03',
   },
   {
@@ -95,6 +111,19 @@ export const resorts: readonly ResortEntry[] = [
     lastReviewed: '2026-10-03',
   },
   {
+    id: 'playalolita',
+    name: 'PlayaLolita Beach Resort',
+    locality: 'Bagong Silang, Calatagan',
+    website: 'https://www.playalolitaresort.com/en/',
+    channels: [],
+    evidence: [
+      { label: 'DOT CALABARZON resort roster', url: DOT_CALABARZON_ROSTER, description: 'Lists PlayaLolita Beach Resort in Bagong Silang, Calatagan, with address and phone number but no website; roster dated September 30, 2026.' },
+      { label: 'Resort contact page', url: 'https://www.playalolitaresort.com/en/contactus', description: 'Names PlayaLolita Beach Resort and matches the DOT roster’s lot numbers and phone number. No resort-published social link was confirmed.' },
+    ],
+    dotRecord: { number: 'DOT-R4A-RES-03116-2026', listedName: 'PLAYALOLITA BEACH RESORT', rosterAsOf: '2026-09-30', listedValidUntil: '2026-10-31', url: DOT_CALABARZON_ROSTER },
+    lastReviewed: '2026-10-03',
+  },
+  {
     id: 'valley-o-ville',
     name: 'Valley O’Ville Family Resort',
     locality: 'Carretunan, Calatagan',
@@ -109,8 +138,6 @@ export const resorts: readonly ResortEntry[] = [
       { label: 'Resort website', url: 'https://www.valleyoville.com/', description: 'Names the resort, states its Carretunan locality and links the channels shown here.' },
       { label: 'Airbnb listing', url: 'https://www.airbnb.com/rooms/1059337092910163675', description: 'Separately hosted listing corroborates the resort name and Calatagan locality.' },
     ],
-    reviewNote: 'The resort package includes four bedrooms; the separately bookable King En-Suite may have other guests on site. Confirm booking conditions directly.',
-    affiliation: 'The BetterCalatagan project maintainer also operates this resort. It receives the same channel checks and no preferred placement.',
     lastReviewed: '2026-10-03',
   },
 ];

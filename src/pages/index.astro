@@ -67,11 +67,12 @@ const counts: Record<string, string> = {
   '/holidays': `${holidays.length} dates this year`,
   '/resorts': `${resorts.length} resort websites · booking precautions`,
 };
-/** Plain-language shortcuts for the four things people most often come for. */
+/** Plain-language shortcuts for common visitor tasks. */
 const TASKS: { label: string; href: string; icon: Parameters<typeof Icon>[0]['name'] }[] = [
   { label: 'get a certificate or permit', href: '/services', icon: 'file' },
   { label: 'call for help', href: '/hotlines', icon: 'alert' },
   { label: 'find my barangay', href: '/barangays', icon: 'pin' },
+  { label: 'find a resort’s website', href: '/resorts', icon: 'lighthouse' },
   { label: 'see where the money goes', href: '/finances', icon: 'coins' },
 ];
 
