@@ -7,6 +7,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Search and resort discovery
+- Renamed the resort page and Services entry to “Calatagan resorts & booking tips” / “Resorts & booking tips,”
+  using a beach umbrella in place of the safety shield in navigation and the page heading.
+- Added an in-page search for resort names, barangays, domains and published channel types, with
+  live counts, shareable query URLs, clear and no-results states. The existing dataset and barangay
+  filters now match accents and punctuation consistently; results ease into view across filters and
+  site-search suggestions, while reduced-motion preferences disable those effects.
+
 ### Changed — Resort links and overview map
 - Facebook and Instagram resort links use the current complete logos from Meta’s brand asset packs;
   TikTok and Airbnb use the icon files supplied for this update. All four have screen-reader labels

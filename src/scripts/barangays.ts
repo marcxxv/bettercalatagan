@@ -2,6 +2,9 @@
  * The barangay explorer: sortable columns, a name/code search, and a
  * Poblacion filter. Without JavaScript the table is complete and alphabetical.
  */
+import { matchFilterText } from '../lib/filter-text';
+import { revealFilteredResults } from './reveal';
+
 const table = document.querySelector<HTMLTableElement>('table[data-sortable]');
 const tbody = table?.tBodies[0];
 if (table && tbody) {
@@ -32,19 +35,20 @@ if (table && tbody) {
     }
   }
 
-  function filter() {
-    const q = (search?.value ?? '').trim().toLowerCase();
+  function filter(animate = false) {
+    const q = search?.value ?? '';
     const view = views.find((v) => v.checked)?.value ?? 'all';
     let shown = 0;
     for (const row of rows) {
       const matchesView =
         view === 'all' || (view === 'pob' ? row.dataset.pob === '1' : row.dataset.pob === '0');
-      const ok = matchesView && (!q || (row.dataset.search ?? '').includes(q));
+      const ok = matchesView && matchFilterText(row.dataset.search ?? '', q);
       row.hidden = !ok;
       if (ok) shown += 1;
     }
     if (count) count.textContent = shown === rows.length ? `All ${rows.length} barangays` : `${shown} of ${rows.length} barangays`;
     if (empty) empty.hidden = shown !== 0;
+    if (shown > 0 && animate) revealFilteredResults(tbody!);
   }
 
   for (const th of headers) {
@@ -59,8 +63,8 @@ if (table && tbody) {
       sort();
     });
   }
-  search?.addEventListener('input', filter);
-  for (const v of views) v.addEventListener('change', filter);
+  search?.addEventListener('input', () => filter(true));
+  for (const v of views) v.addEventListener('change', () => filter(true));
 
   // Arriving from search with ?barangay=Name: highlight and scroll to the row.
   const wanted = new URLSearchParams(location.search).get('barangay');

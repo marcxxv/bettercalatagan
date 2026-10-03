@@ -21,4 +21,14 @@ describe('resort channel presentation', () => {
     expect(page).toContain('.website-heading { text-align: center; }');
     expect(page).toContain('.resort-row > .row-actions { justify-content: center; }');
   });
+
+  it('provides a progressively enhanced resort search with a count and empty state', () => {
+    expect(page).toContain('data-filter="resort-list"');
+    expect(page).toContain('name="q"');
+    expect(page).toContain('data-count-for="resort-list"');
+    expect(page).toContain('data-empty-for="resort-list"');
+    expect(page).toContain('id="resort-list"');
+    expect(page).toContain('data-search={resortSearchText(resort)}');
+    expect(page).toContain("import '../scripts/filter.ts'");
+  });
 });

@@ -57,7 +57,7 @@ checked against the pages in code before they are shown (see
 | Municipal services — 119, from 18 offices | 2 | The offices' 2022 Citizen's Charters (archived) |
 | Holidays 2026 and national hotlines | 1 | Presidential proclamations; executive orders |
 
-The [resort booking-safety guide](src/pages/resorts.astro) lists six dated, property-published
+The searchable [resorts and booking-tips guide](src/pages/resorts.astro) lists six dated, property-published
 websites and social/booking links. Its [JSON export](src/pages/data/resorts.json.ts) carries each
 entry’s evidence and review date but **does not** inherit the civic-data tiers above. The
 September 30, 2026 DOT CALABARZON roster is a dated observation, not live accreditation or proof

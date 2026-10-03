@@ -11,6 +11,9 @@
  * Without JavaScript every item is listed and the form is hidden.
  */
 
+import { matchFilterText } from '../lib/filter-text';
+import { revealFilteredResults } from './reveal';
+
 const escapeCss = (value: string) => ('escape' in CSS ? CSS.escape(value) : value.replace(/"/g, '\\"'));
 
 for (const form of document.querySelectorAll<HTMLFormElement>('form[data-filter]')) {
@@ -39,11 +42,10 @@ for (const form of document.querySelectorAll<HTMLFormElement>('form[data-filter]
 
   function apply(updateUrl = true) {
     const active = fields.filter((f) => f.value.trim() !== '');
-    const q = (active.find((f) => f.name === 'q')?.value ?? '').trim().toLowerCase();
-    const terms = q.split(/\s+/).filter(Boolean);
+    const q = active.find((f) => f.name === 'q')?.value ?? '';
     let shown = 0;
     for (const item of items) {
-      let ok = terms.every((t) => (item.dataset.search ?? '').includes(t));
+      let ok = matchFilterText(item.dataset.search ?? '', q);
       if (ok) {
         for (const f of active) {
           if (f.name === 'q') continue;
@@ -64,6 +66,7 @@ for (const form of document.querySelectorAll<HTMLFormElement>('form[data-filter]
           : `Showing <strong>${shown}</strong> of ${total} ${noun}`;
     }
     if (empty) empty.hidden = shown !== 0;
+    if (shown > 0 && updateUrl) revealFilteredResults(list);
 
     if (pills) {
       pills.replaceChildren(

@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Icon from '../components/Icon.astro';
 import { directoryIssues, DOT_CALABARZON_ROSTER, resorts } from '../data/resorts';
-import type { ResortChannel } from '../data/resorts';
+import type { ResortChannel, ResortEntry } from '../data/resorts';
 import { formatDate } from '../lib/format';
 import { SITE } from '../lib/site';
 
@@ -17,17 +17,24 @@ const channelLogos: Record<ResortChannel['label'], string> = {
   TikTok: '/icons/channels/tiktok.png',
   Airbnb: '/icons/channels/airbnb.svg',
 };
+const resortSearchText = (resort: ResortEntry) => [
+  resort.name,
+  resort.locality,
+  new URL(resort.website).hostname,
+  ...resort.channels.map((channel) => channel.label),
+  resort.dotRecord?.listedName ?? '',
+].join(' ').toLowerCase();
 ---
 
 <Base
-  title="Resort websites and booking safety"
+  title="Calatagan resorts & booking tips"
   description="Calatagan resort websites and social links checked against dated sources, with booking-scam precautions and explicit gaps. A small, non-exhaustive directory."
   {crumbs}
 >
   <PageHeader
-    eyebrow="Places · Booking safety"
-    icon="lighthouse"
-    title="Find a resort’s published channels"
+    eyebrow="Places · Find and book carefully"
+    icon="umbrella"
+    title="Calatagan resorts & booking tips"
     lede="A small, source-linked directory of Calatagan resort websites and the social accounts linked from them. Each entry shows what was checked, when, and what remains uncertain."
     {crumbs}
   >
@@ -71,13 +78,24 @@ const channelLogos: Record<ResortChannel['label'], string> = {
         </div>
         <p class="lede">Alphabetical, not ranked or sponsored. Missing resorts are not presumed suspicious.</p>
       </div>
+      <form class="toolbar resort-search" data-filter="resort-list" data-noun="resorts" role="search" aria-label="Search resorts" hidden>
+        <p class="field search">
+          <label for="resort-search">Search resorts</label>
+          <input type="search" id="resort-search" name="q" placeholder="Resort, barangay or website" autocomplete="off" />
+        </p>
+        <p class="field"><button class="button" type="reset">Clear search</button></p>
+      </form>
+      <div class="result-bar">
+        <p class="result-count" data-count-for="resort-list" role="status" aria-live="polite">Showing all <strong>{resorts.length}</strong> resorts</p>
+        <ul class="active-filters" data-pills-for="resort-list" aria-label="Active filters"></ul>
+      </div>
       <div class="dataset" style="--cols: minmax(0, 1.5fr) minmax(0, 1fr) 8rem 10rem">
         <div class="dataset-head" aria-hidden="true">
           <span>Resort & evidence</span><span>Linked channels</span><span>Checked</span><span class="website-heading">Website</span>
         </div>
-        <ul class="dataset-rows">
+        <ul class="dataset-rows" id="resort-list">
           {resorts.map((resort) => (
-            <li class="dataset-row resort-row" id={resort.id}>
+            <li class="dataset-row resort-row" id={resort.id} data-item data-search={resortSearchText(resort)}>
               <div class="cell main">
                 <h3 class="row-title">{resort.name}</h3>
                 <p class="row-sub"><Icon name="pin" size="14" /> {resort.locality}</p>
@@ -125,6 +143,11 @@ const channelLogos: Record<ResortChannel['label'], string> = {
         </ul>
         <p class="dataset-foot">These are links observed in dated sources, not verified payment channels or endorsements.</p>
       </div>
+      <div class="empty-state" data-empty-for="resort-list" hidden>
+        <Icon name="search" size="28" />
+        <strong>No resorts match that search.</strong>
+        <span>Try another name, barangay or website, or clear your search to see all {resorts.length}.</span>
+      </div>
     </section>
 
     <section class="method section-block prose" id="method" aria-labelledby="method-title">
@@ -156,6 +179,9 @@ const channelLogos: Record<ResortChannel['label'], string> = {
       </p>
     </section>
   </div>
+  <script>
+    import '../scripts/filter.ts';
+  </script>
 </Base>
 
 <style>
@@ -178,6 +204,12 @@ const channelLogos: Record<ResortChannel['label'], string> = {
   .directory { margin-top: var(--sp-8); }
   .directory .section-head { align-items: end; }
   .directory .lede { color: var(--c-muted); font-size: var(--fs-sm); }
+  .resort-search { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+  .resort-search .field.search { grid-column: auto; }
+  .resort-search[hidden] { display: none; }
+  @media (max-width: 39.99rem) {
+    .resort-search { grid-template-columns: 1fr; }
+  }
   .website-heading { text-align: center; }
   .resort-row { align-items: start; padding-block: var(--sp-4); }
   .resort-row > .row-actions { justify-content: center; }

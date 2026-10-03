@@ -206,6 +206,14 @@ const suggestions = ['Population', 'Balibago', 'Income 2025', 'National Tax Allo
   .search-results[hidden] {
     display: none;
   }
+  @media (prefers-reduced-motion: no-preference) {
+    .search-results:not([hidden]) > li {
+      animation: search-row-in 220ms var(--ease-out) both;
+    }
+    @keyframes search-row-in {
+      from { opacity: 0; transform: translateY(4px); }
+    }
+  }
   .search-results li + li {
     margin-top: 2px;
   }
