@@ -9,7 +9,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed — Search and resort discovery
 - Renamed the resort page and Services entry to “Calatagan resorts & booking tips” / “Resorts & booking tips,”
-  using a lighthouse in navigation, the overview shortcut and the page heading instead of a beach umbrella.
+  retaining the original safety shield in navigation, the overview shortcut and the page heading.
 - Added an in-page search for resort names, barangays, domains and published channel types, with
   live counts, shareable query URLs, clear and no-results states. The existing dataset and barangay
   filters now match accents and punctuation consistently; results ease into view across filters and
