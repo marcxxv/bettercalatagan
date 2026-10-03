@@ -11,11 +11,11 @@ const today = new Date().toISOString().slice(0, 10) as `${number}-${number}-${nu
 const issues = directoryIssues(resorts, today);
 if (issues.length) throw new Error(`Resort directory evidence check failed:\n${issues.join('\n')}`);
 const crumbs = [{ name: 'Resorts', href: '/resorts' }];
-const channelIcons: Record<ResortChannel['label'], Parameters<typeof Icon>[0]['name']> = {
-  Facebook: 'people',
-  Instagram: 'camera',
-  TikTok: 'play',
-  Airbnb: 'home',
+const channelLogos: Record<ResortChannel['label'], string> = {
+  Facebook: '/icons/channels/facebook.png',
+  Instagram: '/icons/channels/instagram.png',
+  TikTok: '/icons/channels/tiktok.png',
+  Airbnb: '/icons/channels/airbnb.svg',
 };
 ---
 
@@ -103,16 +103,9 @@ const channelIcons: Record<ResortChannel['label'], Parameters<typeof Icon>[0]['n
                   <ul class="channel-list" aria-label={`${resort.name} links published by the resort`}>
                     {resort.channels.map((channel) => (
                       <li>
-                        {channel.label === 'Facebook' || channel.label === 'Instagram' ? (
-                          <a class="brand-link" href={channel.url} rel="noopener noreferrer" aria-label={`${resort.name} on ${channel.label}`}>
-                            <img src={`/icons/channels/${channel.label.toLowerCase()}.png`} width="24" height="24" alt="" />
-                          </a>
-                        ) : (
-                          <a href={channel.url} rel="noopener noreferrer">
-                            <Icon name={channelIcons[channel.label]} size="19" />
-                            {channel.label}<span class="visually-hidden"> for {resort.name}</span>
-                          </a>
-                        )}
+                        <a class="brand-link" href={channel.url} rel="noopener noreferrer" aria-label={`${resort.name} on ${channel.label}`}>
+                          <img src={channelLogos[channel.label]} width="24" height="24" alt="" />
+                        </a>
                       </li>
                     ))}
                   </ul>

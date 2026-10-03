@@ -8,9 +8,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Changed — Resort links and overview map
-- Facebook and Instagram resort links use the current complete logos from Meta’s brand asset packs,
-  with screen-reader labels but no redundant visible platform names. Other channels retain named
-  links; website actions and the Website heading align centrally.
+- Facebook and Instagram resort links use the current complete logos from Meta’s brand asset packs;
+  TikTok and Airbnb use the icon files supplied for this update. All four have screen-reader labels
+  but no redundant visible platform names. Website actions and the Website heading align centrally.
 - Removed standalone resort-row notes; material conflicts and scope limits remain inside each
   entry’s expandable evidence. The overview reuses the interactive barangay map in a collapsible
   panel beside the 25-barangay table, with the SVG fallback intact.

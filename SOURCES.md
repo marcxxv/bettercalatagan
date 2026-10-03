@@ -20,6 +20,7 @@ pages; its [data file](src/data/resorts.ts) preserves the links, channel paths a
 | [Valley O’Ville Airbnb listing](https://www.airbnb.com/rooms/1059337092910163675) | Separately hosted name and Calatagan town corroboration | The website is operator-confirmed, not corroborated by this listing; it does not establish the precise barangay, DOT status or safe payment. |
 | [PIA Batangas booking-scam notice](https://pia.gov.ph/news/resort-owners-govt-agencies-unite-to-expose-online-booking-scams-in-batangas/) | Background for the booking-safety precautions | Not evidence for any particular resort’s identity or channel. |
 | [Meta Facebook logo pack](https://www.meta.com/brand/resources/facebook/logo/) and [Meta Instagram logo pack](https://www.meta.com/brand/resources/instagram/instagram-brand/) | Source of the scaled, unmodified Facebook and Instagram marks used for channel links | Their logos identify platforms only, not endorsements, account verification or booking safety. The original brand guidelines govern use. |
+| User-supplied `tik-tok.png` and `airbnb-tile.svg` | Source of the TikTok and Airbnb channel-link icons | Their logos identify platforms only, not endorsements, account verification or booking safety. |
 
 ### Civic records
 
