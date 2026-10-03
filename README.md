@@ -61,8 +61,8 @@ The [resort booking-safety guide](src/pages/resorts.astro) lists four dated, res
 websites and social/booking links. Its [JSON export](src/pages/data/resorts.json.ts) carries each
 entry’s evidence and review date but **does not** inherit the civic-data tiers above. The
 September 30, 2026 DOT CALABARZON roster is a dated observation, not live accreditation or proof
-that a booking or payment is safe. Valley O’Ville is run by this project’s maintainer; the entry
-discloses that interest and that independent evidence for domain ownership was not established.
+that a booking or payment is safe. Valley O’Ville’s website is operator-confirmed; the entry
+discloses that this project’s maintainer also operates the resort.
 
 Every figure on the finances page records the spreadsheet cell it came from. Filings that do not
 reconcile against their own internal arithmetic are withheld, not flagged.

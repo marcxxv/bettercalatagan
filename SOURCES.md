@@ -17,7 +17,7 @@ pages; its [data file](src/data/resorts.ts) preserves the links, channel paths a
 | --- | --- | --- |
 | [DOT CALABARZON roster](https://docs.google.com/spreadsheets/d/e/2PACX-1vTtGgUSobqikBmsWRU-Lhe0wfH5ttk8jiT-bs44K7p7_7eSOJWxkffKMSRaqIbIm7-PL9TJh7Ky1J72/pubhtml/sheet?headers=false&gid=1809562489) (as of 2026-09-30) | Names, Calatagan location, listed website and dated validity for Anam Beach Resort, Lago de Oro and Nawa Wellness | Not a live status or a safe-booking guarantee. |
 | Resort websites: [Anam](https://anambeachresort.com/contact-us/), [Lago de Oro](https://lago-de-oro.com/), [Nawa](https://nawawellness.com/), [Valley O’Ville](https://www.valleyoville.com/) | Resort-site links to the listed channels, as checked 2026-10-03 | Operator-controlled sites do not independently establish social-account control; Anam’s conflicting Facebook links are withheld. |
-| [Valley O’Ville Airbnb listing](https://www.airbnb.com/rooms/1059337092910163675) | Separately hosted name and Calatagan town corroboration | Does not establish domain ownership, precise barangay, DOT status or safe payment. The site maintainer operates this resort. |
+| [Valley O’Ville Airbnb listing](https://www.airbnb.com/rooms/1059337092910163675) | Separately hosted name and Calatagan town corroboration | The website is operator-confirmed, not corroborated by this listing; it does not establish the precise barangay, DOT status or safe payment. The site maintainer operates this resort. |
 | [PIA Batangas booking-scam notice](https://pia.gov.ph/news/resort-owners-govt-agencies-unite-to-expose-online-booking-scams-in-batangas/) | Background for the booking-safety precautions | Not evidence for any particular resort’s identity or channel. |
 
 ### Civic records

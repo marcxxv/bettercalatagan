@@ -56,4 +56,13 @@ describe('resort channel directory', () => {
     expect(directoryIssues([candidate], '2026-10-03')).toContainEqual(expect.stringContaining('DOT record lacks government roster evidence'));
     expect(directoryIssues(resorts, '2026-10-03')).toEqual([]);
   });
+
+  it('shows Valley O’Ville without a DOT row claim or an unsupported domain-ownership caveat', () => {
+    const valley = resorts.find((resort) => resort.id === 'valley-o-ville');
+    expect(valley).toBeDefined();
+    expect(valley?.dotRecord).toBeUndefined();
+    expect(valley?.reviewNote).not.toMatch(/DOT|accreditation|domain ownership/i);
+    expect(valley?.evidence.map((source) => source.description).join(' ')).not.toMatch(/domain ownership/i);
+    expect(valley?.affiliation).toContain('maintainer');
+  });
 });

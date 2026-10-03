@@ -107,10 +107,10 @@ export const resorts: readonly ResortEntry[] = [
     ],
     evidence: [
       { label: 'Resort website', url: 'https://www.valleyoville.com/', description: 'Names the resort, states its Carretunan locality and links the channels shown here.' },
-      { label: 'Airbnb listing', url: 'https://www.airbnb.com/rooms/1059337092910163675', description: 'Separately hosted listing corroborates the resort name and Calatagan locality; not proof of domain ownership or government accreditation.' },
+      { label: 'Airbnb listing', url: 'https://www.airbnb.com/rooms/1059337092910163675', description: 'Separately hosted listing corroborates the resort name and Calatagan locality.' },
     ],
-    reviewNote: 'No DOT accreditation claim is made here. The resort package includes four bedrooms; the separately bookable King En-Suite may have other guests on site. Confirm booking conditions directly.',
-    affiliation: 'The Better Calatagan project maintainer also operates this resort. It receives the same channel checks and no preferred placement.',
+    reviewNote: 'The resort package includes four bedrooms; the separately bookable King En-Suite may have other guests on site. Confirm booking conditions directly.',
+    affiliation: 'The BetterCalatagan project maintainer also operates this resort. It receives the same channel checks and no preferred placement.',
     lastReviewed: '2026-10-03',
   },
 ];

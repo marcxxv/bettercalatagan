@@ -17,6 +17,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   assigning a civic-data readiness tier. The guide is in Services navigation, search and the home
   exploration, and its links are validated at build time.
 
+### Changed — Valley O’Ville directory wording
+- Removed the Valley O’Ville row’s unnecessary DOT non-claim and the redundant domain-ownership
+  caveat. Its website is operator-confirmed; the maintainer’s connection to the resort remains
+  disclosed. DOT roster observations remain limited to the three resorts actually listed.
+
 ### Changed — Lighter source cards
 - **Source cards** (`Source.astro`) are now one quiet attribution block at reading width
   (46rem) instead of a full-width table: publisher and status on one line, the dates as one
