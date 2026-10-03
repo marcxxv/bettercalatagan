@@ -73,7 +73,7 @@ const channelIcons: Record<ResortChannel['label'], Parameters<typeof Icon>[0]['n
       </div>
       <div class="dataset" style="--cols: minmax(0, 1.5fr) minmax(0, 1fr) 8rem 10rem">
         <div class="dataset-head" aria-hidden="true">
-          <span>Resort & evidence</span><span>Linked channels</span><span>Checked</span><span>Website</span>
+          <span>Resort & evidence</span><span>Linked channels</span><span>Checked</span><span class="website-heading">Website</span>
         </div>
         <ul class="dataset-rows">
           {resorts.map((resort) => (
@@ -81,7 +81,6 @@ const channelIcons: Record<ResortChannel['label'], Parameters<typeof Icon>[0]['n
               <div class="cell main">
                 <h3 class="row-title">{resort.name}</h3>
                 <p class="row-sub"><Icon name="pin" size="14" /> {resort.locality}</p>
-                {resort.reviewNote && <p class="record-note"><strong>Note:</strong> {resort.reviewNote}</p>}
                 <details class="row-more evidence">
                   <summary>How these links were checked</summary>
                   {resort.dotRecord && (
@@ -103,10 +102,18 @@ const channelIcons: Record<ResortChannel['label'], Parameters<typeof Icon>[0]['n
                 {resort.channels.length ? (
                   <ul class="channel-list" aria-label={`${resort.name} links published by the resort`}>
                     {resort.channels.map((channel) => (
-                      <li><a href={channel.url} rel="noopener noreferrer">
-                        <Icon name={channelIcons[channel.label]} size="19" />
-                        {channel.label}<span class="visually-hidden"> for {resort.name}</span>
-                      </a></li>
+                      <li>
+                        {channel.label === 'Facebook' || channel.label === 'Instagram' ? (
+                          <a class="brand-link" href={channel.url} rel="noopener noreferrer" aria-label={`${resort.name} on ${channel.label}`}>
+                            <img src={`/icons/channels/${channel.label.toLowerCase()}.png`} width="24" height="24" alt="" />
+                          </a>
+                        ) : (
+                          <a href={channel.url} rel="noopener noreferrer">
+                            <Icon name={channelIcons[channel.label]} size="19" />
+                            {channel.label}<span class="visually-hidden"> for {resort.name}</span>
+                          </a>
+                        )}
+                      </li>
                     ))}
                   </ul>
                 ) : <span class="no-channels">No social link confirmed</span>}
@@ -178,11 +185,12 @@ const channelIcons: Record<ResortChannel['label'], Parameters<typeof Icon>[0]['n
   .directory { margin-top: var(--sp-8); }
   .directory .section-head { align-items: end; }
   .directory .lede { color: var(--c-muted); font-size: var(--fs-sm); }
+  .website-heading { text-align: center; }
   .resort-row { align-items: start; padding-block: var(--sp-4); }
+  .resort-row > .row-actions { justify-content: center; }
   .resort-row .main { padding-top: var(--sp-1); }
   .resort-row .row-title { font-size: var(--fs-base); font-weight: 700; }
   .resort-row .row-sub { gap: var(--sp-1); }
-  .record-note { margin: var(--sp-3) 0 0; font-size: var(--fs-xs); line-height: 1.55; color: var(--c-ink-2); }
   .evidence { margin-top: var(--sp-3); }
   .evidence > summary { min-height: var(--tap); }
   .evidence ul { margin: var(--sp-2) 0 0; padding-left: var(--sp-4); font-size: var(--fs-xs); line-height: 1.5; }
@@ -192,6 +200,8 @@ const channelIcons: Record<ResortChannel['label'], Parameters<typeof Icon>[0]['n
   .channel-list li + li { margin-top: 0; }
   .channel-list a { display: inline-flex; align-items: center; gap: var(--sp-1); min-height: var(--tap); padding: var(--sp-2); border: 1px solid var(--c-line); border-radius: var(--radius-sm); background: var(--c-surface); color: var(--c-ink); font-size: var(--fs-xs); font-weight: 600; text-decoration: none; }
   .channel-list a:hover { border-color: var(--c-accent); box-shadow: var(--shadow-sm); }
+  .channel-list .brand-link { display: grid; place-items: center; width: var(--tap); height: var(--tap); padding: 0; background: #fff; }
+  .brand-link img { display: block; width: 24px; height: 24px; }
   .no-channels { font-size: var(--fs-xs); color: var(--c-muted); }
   .checked { color: var(--c-muted); font-size: var(--fs-xs); white-space: nowrap; font-variant-numeric: tabular-nums; }
   .website-link { display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-1); min-height: var(--tap); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--c-accent-line); border-radius: var(--radius-sm); background: var(--c-accent-wash); color: var(--c-accent-strong); font-size: var(--fs-xs); font-weight: 700; text-decoration: none; white-space: nowrap; }

@@ -7,6 +7,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Resort links and overview map
+- Facebook and Instagram resort links use the current complete logos from Meta’s brand asset packs,
+  with screen-reader labels but no redundant visible platform names. Other channels retain named
+  links; website actions and the Website heading align centrally.
+- Removed standalone resort-row notes; material conflicts and scope limits remain inside each
+  entry’s expandable evidence. The overview reuses the interactive barangay map in a collapsible
+  panel beside the 25-barangay table, with the SVG fallback intact.
+
 ### Added — Resort-published channels and booking safety
 - `/resorts` lists six Calatagan resorts with dated website/social-link observations, per-entry
   evidence and booking-scam precautions. Anam, Aquaria/Crusoe, Lago de Oro, Nawa and PlayaLolita are cross-referenced to DOT’s
@@ -15,7 +23,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `/data/resorts.json` and the export catalogue expose the same sources and limitations without
   assigning a civic-data readiness tier. The guide is in Services navigation, search and the home
   exploration, and its links are validated at build time.
-- Generic pictograms accompany named channel links, the website action uses a globe, and the home
+- Generic pictograms accompany other named channel links, the website action uses a globe, and the home
   overview includes a direct resort-finding task. Entries with no corroborated social link say so.
 
 ### Changed — Valley O’Ville directory wording

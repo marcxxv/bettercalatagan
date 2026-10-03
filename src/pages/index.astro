@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Source from '../components/Source.astro';
 import Contours from '../components/Contours.astro';
 import Icon from '../components/Icon.astro';
+import BarangayMap from '../components/BarangayMap.astro';
 import ColumnChart from '../components/ColumnChart.astro';
 import HeroCarousel from '../components/HeroCarousel.astro';
 import AgencyBadge, { type AgencyKey } from '../components/AgencyBadge.astro';
@@ -429,6 +430,14 @@ const jsonLd = [
           municipal total exactly. Search by name or code, and sort by any column.
         </p>
       </header>
+
+      <details class="overview-map">
+        <summary><Icon name="pin" size="20" /> Explore the {barangays.data.length} barangays on a map <Icon name="chevron-down" size="18" /></summary>
+        <div class="overview-map-body">
+          <BarangayMap />
+          <p class="small muted">Approximate outlines; select a barangay to open its profile. <a href="/barangays#map-sources">Map sources and the full directory</a>.</p>
+        </div>
+      </details>
 
       <div class="brgy-tools">
         <p class="field search">
@@ -1327,6 +1336,31 @@ const jsonLd = [
   }
 
   /* ---------- Barangays ---------- */
+  .overview-map {
+    margin-bottom: var(--sp-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    overflow: clip;
+  }
+  .overview-map > summary {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-height: var(--tap);
+    padding: var(--sp-3) var(--sp-5);
+    color: var(--c-accent-strong);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+  .overview-map > summary::-webkit-details-marker { display: none; }
+  .overview-map > summary:hover { background: var(--c-accent-wash); }
+  .overview-map > summary :global(.icon:last-child) { margin-left: auto; transition: transform var(--dur-1); }
+  .overview-map[open] > summary :global(.icon:last-child) { transform: rotate(180deg); }
+  .overview-map-body { padding: 0 var(--sp-5) var(--sp-4); }
+  .overview-map-body :global(.bmap) { margin-bottom: var(--sp-3); }
+  .overview-map-body > p { margin: 0; }
   .brgy-tools {
     display: none;
     flex-wrap: wrap;

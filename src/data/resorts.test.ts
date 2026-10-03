@@ -77,8 +77,14 @@ describe('resort channel directory', () => {
     const valley = resorts.find((resort) => resort.id === 'valley-o-ville');
     expect(valley).toBeDefined();
     expect(valley?.dotRecord).toBeUndefined();
-    expect(valley?.reviewNote).toBeUndefined();
+    expect(valley && 'reviewNote' in valley).toBe(false);
     expect(valley?.evidence.map((source) => source.description).join(' ')).not.toMatch(/domain ownership/i);
     expect(valley && 'affiliation' in valley).toBe(false);
+  });
+
+  it('keeps row-level warnings in the cited evidence instead of separate notes', () => {
+    expect(resorts.every((resort) => !('reviewNote' in resort))).toBe(true);
+    expect(resorts.find((resort) => resort.id === 'anam-beach-resort')?.evidence.map((source) => source.description).join(' ')).toContain('conflicting Facebook');
+    expect(resorts.find((resort) => resort.id === 'aquaria-crusoe')?.evidence.map((source) => source.description).join(' ')).toContain('Crusoe Cabins');
   });
 });

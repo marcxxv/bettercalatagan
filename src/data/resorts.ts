@@ -34,7 +34,6 @@ export interface ResortEntry {
     listedValidUntil: IsoDate;
     url: `https://${string}`;
   };
-  reviewNote?: string;
   lastReviewed: IsoDate;
 }
 
@@ -54,10 +53,9 @@ export const resorts: readonly ResortEntry[] = [
     ],
     evidence: [
       { label: 'DOT CALABARZON resort roster', url: DOT_CALABARZON_ROSTER, description: 'Names Anam Beach Resort in Calatagan and links this website; roster dated September 30, 2026.' },
-      { label: 'Resort contact page', url: 'https://anambeachresort.com/contact-us/', description: 'Links the Instagram and TikTok accounts shown here.' },
+      { label: 'Resort contact page', url: 'https://anambeachresort.com/contact-us/', description: 'Links the Instagram and TikTok accounts shown here. Its contact section and footer link conflicting Facebook profiles, so neither is listed.' },
     ],
     dotRecord: { number: 'DOT-R4A-RES-03126-2026', listedName: 'ANAM BEACH RESORT', rosterAsOf: '2026-09-30', listedValidUntil: '2026-10-31', url: DOT_CALABARZON_ROSTER },
-    reviewNote: 'Facebook link withheld: the resort website links two different Facebook profiles from its contact section and footer. Confirm the right page directly with the resort.',
     lastReviewed: '2026-10-03',
   },
   {
@@ -71,10 +69,9 @@ export const resorts: readonly ResortEntry[] = [
     ],
     evidence: [
       { label: 'DOT CALABARZON resort roster', url: DOT_CALABARZON_ROSTER, description: 'Lists Aquaria Water Park & Crusoe Cabins in Sta. Ana, Calatagan, with a different, currently inaccessible legacy group website; roster dated September 30, 2026.' },
-      { label: 'Aquaria website', url: 'https://aquaria.landcolifestyleventures.com/', description: 'Names Aquaria Water Park in Calatagan and links the Facebook and Instagram accounts shown here. Its Crusoe Cabins link is a separate site, not checked here.' },
+      { label: 'Aquaria website', url: 'https://aquaria.landcolifestyleventures.com/', description: 'Names Aquaria Water Park in Calatagan and links the Facebook and Instagram accounts shown here. The DOT roster groups it with Crusoe Cabins, whose separate website and booking flow were not checked here.' },
     ],
     dotRecord: { number: 'DOT-R4A-RES-02043-2024', listedName: 'AQUARIA WATER PARK & CRUSOE CABINS', rosterAsOf: '2026-09-30', listedValidUntil: '2026-10-31', url: DOT_CALABARZON_ROSTER },
-    reviewNote: 'The DOT roster groups Aquaria with Crusoe Cabins; this entry links only Aquaria’s site and channels. No separate Crusoe website or booking flow was checked.',
     lastReviewed: '2026-10-03',
   },
   {
@@ -88,10 +85,9 @@ export const resorts: readonly ResortEntry[] = [
     ],
     evidence: [
       { label: 'DOT CALABARZON resort roster', url: DOT_CALABARZON_ROSTER, description: 'Names Lago de Oro in Calatagan and links its website; roster dated September 30, 2026.' },
-      { label: 'Resort website', url: 'https://lago-de-oro.com/', description: 'Links the Facebook and Instagram accounts shown here.' },
+      { label: 'Resort website', url: 'https://lago-de-oro.com/', description: 'Links the Facebook and Instagram accounts shown here. The site still shows an older October 31, 2025 DOT expiry, conflicting with the dated roster’s October 31, 2026 validity. Ask DOT for current status.' },
     ],
     dotRecord: { number: 'DOT-R4A-RES-00583-2022', listedName: 'LAGO DE ORO', rosterAsOf: '2026-09-30', listedValidUntil: '2026-10-31', url: DOT_CALABARZON_ROSTER },
-    reviewNote: 'The DOT roster lists validity through October 31, 2026, but the resort website still displays an older October 31, 2025 expiry. Ask DOT for current status; neither date verifies a booking channel.',
     lastReviewed: '2026-10-03',
   },
   {
