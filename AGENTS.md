@@ -33,6 +33,9 @@ Breaking any of these is a defect, whatever else improves.
    show the supplied seal as a captioned stylised rendition, never as site branding or proof of
    government affiliation. `RotatingSeal.astro` rotates automatically with two identical faces and a
    reduced-motion fallback; its SVG embeds raster artwork, rather than claiming vector paths.
+   The face asset stays unchanged when refining depth. A 64-panel gold sidewall and capped body
+   supply visible thickness; fixed metal colours and bevel lighting are artwork material colours,
+   while surrounding text continues to use theme tokens.
 5. **Provenance fields mean what they say.** `asOf` = period the data describes; `lastVerified` =
    when a *person* checked the source; `accessedOn` = when a URL was actually opened. Scripts
    never set `lastVerified`. Never set `accessedOn` for a URL you did not open.

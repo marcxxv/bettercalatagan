@@ -7,6 +7,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Seal depth and finish
+- Kept the existing face artwork unchanged and gave the rotating seal a substantial gold body:
+  a 64-panel sidewall, capped faces and metallic bevel lighting. Increased its display size and
+  slowed its automatic turn to 24 seconds; reduced-motion still shows a static seal.
+
 ### Added — Calatagan seal illustration
 - Added the maintainer-supplied seal as a captioned dimensional rendition beside the overview
   history section. It rotates automatically left to right with readable identical front and back

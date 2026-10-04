@@ -1,6 +1,19 @@
+---
+// Tangent panels form a solid sidewall, including when the seal turns edge-on.
+const rim = Array.from({ length: 64 }, (_, i) => ({
+  angle: (i * 360) / 64,
+  light: 0.65 + 0.35 * Math.cos((i * Math.PI * 2) / 64 - Math.PI / 4),
+}));
+---
+
 <figure class="seal">
   <div class="seal-stage" role="img" aria-label="Stylised three-dimensional rendition of the Calatagan municipal seal">
     <div class="seal-disc" aria-hidden="true">
+      <span class="seal-core seal-core-front"></span>
+      <span class="seal-core seal-core-back"></span>
+      {rim.map(({ angle, light }) => (
+        <span class="seal-rim" style={`--rim-angle: ${angle}deg; --rim-light: ${light}`} />
+      ))}
       <img class="seal-face seal-front" src="/images/calatagan-seal-3d.svg" width="640" height="640" alt="" loading="lazy" decoding="async" />
       <img class="seal-face seal-back" src="/images/calatagan-seal-3d.svg" width="640" height="640" alt="" loading="lazy" decoding="async" />
     </div>
@@ -18,9 +31,11 @@
     text-align: center;
   }
   .seal-stage {
-    width: clamp(9rem, 18vw, 12rem);
+    --seal-size: clamp(10rem, 20vw, 14rem);
+    --seal-depth: calc(var(--seal-size) * 0.13);
+    width: var(--seal-size);
     aspect-ratio: 1;
-    perspective: 700px;
+    perspective: 1000px;
     order: -1;
   }
   .seal-disc {
@@ -28,7 +43,27 @@
     height: 100%;
     position: relative;
     transform-style: preserve-3d;
-    animation: seal-turn 18s linear infinite;
+    animation: seal-turn 24s linear infinite;
+  }
+  .seal-core {
+    position: absolute;
+    inset: 2.5%;
+    border-radius: 50%;
+    background: #b58a36;
+  }
+  .seal-core-front { transform: translateZ(calc(var(--seal-depth) / 2 - 0.2px)); }
+  .seal-core-back { transform: translateZ(calc(var(--seal-depth) / -2 + 0.2px)); }
+  .seal-rim {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(var(--seal-size) * 0.047);
+    height: var(--seal-depth);
+    /* This gradient models the metal's bevel highlights, not a page decoration. */
+    background: linear-gradient(0deg, #77541d, #e8bd65 8%, #fff0b2 14%, #bd8e37 22%, #d8aa52 48%, #e8c77e 72%, #fff0b2 86%, #bd8e37 94%, #77541d);
+    filter: brightness(var(--rim-light));
+    transform: translate(-50%, -50%) rotateZ(var(--rim-angle)) translateY(calc(var(--seal-size) * -0.475)) rotateX(90deg);
+    backface-visibility: hidden;
   }
   .seal-face {
     position: absolute;
@@ -38,9 +73,9 @@
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
-  .seal-front { transform: translateZ(2px); }
+  .seal-front { transform: translateZ(calc(var(--seal-depth) / 2)); }
   /* An independent back face keeps the lettering readable after a half-turn. */
-  .seal-back { transform: rotateY(180deg) translateZ(2px); }
+  .seal-back { transform: rotateY(180deg) translateZ(calc(var(--seal-depth) / 2)); }
   figcaption { color: var(--c-ink-2); font-size: var(--fs-xs); line-height: 1.5; }
   figcaption span { color: var(--c-muted); }
   @keyframes seal-turn { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
