@@ -6,6 +6,7 @@ import Icon from '../components/Icon.astro';
 import BarangayMap from '../components/BarangayMap.astro';
 import ColumnChart from '../components/ColumnChart.astro';
 import HeroCarousel from '../components/HeroCarousel.astro';
+import RotatingSeal from '../components/RotatingSeal.astro';
 import AgencyBadge, { type AgencyKey } from '../components/AgencyBadge.astro';
 import { barangays } from '../data/barangays';
 import {
@@ -573,6 +574,7 @@ const jsonLd = [
   <!-- ============ History ============ -->
   <section class="section" aria-labelledby="history-title">
     <div class="container wide">
+      <div class="history-intro">
       <header class="section-head split">
         <div>
           <p class="eyebrow">History</p>
@@ -583,6 +585,8 @@ const jsonLd = [
           lighthouse for ships bound for Manila; a town merged into Balayan, then restored.
         </p>
       </header>
+      <RotatingSeal />
+      </div>
       <ol class="rail-timeline" data-animate data-stagger="90">
         {milestones.map((m) => (
           <li data-reveal>
@@ -1559,6 +1563,17 @@ const jsonLd = [
     align-items: center;
     gap: var(--sp-4);
     margin: 0;
+  }
+  .history-intro {
+    display: grid;
+    gap: var(--sp-6);
+    align-items: center;
+    margin-bottom: var(--sp-8);
+  }
+  .history-intro .section-head { margin-bottom: 0; }
+  @media (min-width: 48rem) {
+    .history-intro { grid-template-columns: minmax(0, 1fr) 15rem; }
+    .history-intro .section-head { display: block; }
   }
 
   /* ---------- Money ---------- */

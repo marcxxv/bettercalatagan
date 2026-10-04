@@ -2,6 +2,9 @@
 
 **Status:** Accepted · 2026-09-25 · Superseded in part by [0006](0006-editorial-redesign.md)
 
+Update 2026-10-04: [0012](0012-captioned-seal-illustration.md) permits a captioned seal illustration
+in the overview history section; the prohibition on official-looking site branding remains.
+
 ## Context
 
 The launch design was a plain, functional stylesheet. It worked, but it said nothing about the

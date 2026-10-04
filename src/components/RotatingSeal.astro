@@ -1,0 +1,67 @@
+<figure class="seal">
+  <label class="seal-control">
+    <input type="checkbox" checked aria-label="Rotate the Calatagan seal" />
+    <span>Rotate seal</span>
+  </label>
+  <div class="seal-stage" role="img" aria-label="Stylised three-dimensional rendition of the Calatagan municipal seal">
+    <div class="seal-disc" aria-hidden="true">
+      <img class="seal-face seal-front" src="/images/calatagan-seal-3d.svg" width="640" height="640" alt="" loading="lazy" decoding="async" />
+      <img class="seal-face seal-back" src="/images/calatagan-seal-3d.svg" width="640" height="640" alt="" loading="lazy" decoding="async" />
+    </div>
+  </div>
+  <figcaption>Calatagan municipal seal<br /><span>Stylised rendition · independent civic project</span></figcaption>
+</figure>
+
+<style>
+  .seal {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-3);
+    text-align: center;
+  }
+  .seal-stage {
+    width: clamp(9rem, 18vw, 12rem);
+    aspect-ratio: 1;
+    perspective: 700px;
+    order: -1;
+  }
+  .seal-disc {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: seal-turn 18s linear infinite;
+  }
+  .seal-face {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .seal-front { transform: translateZ(2px); }
+  /* An independent back face keeps the lettering readable after a half-turn. */
+  .seal-back { transform: rotateY(180deg) translateZ(2px); }
+  .seal:has(input:not(:checked)) .seal-disc { animation-play-state: paused; }
+  .seal-control {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-height: var(--tap);
+    cursor: pointer;
+    color: var(--c-ink-2);
+    font-size: var(--fs-xs);
+  }
+  input { accent-color: var(--c-accent); }
+  input:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 4px; }
+  figcaption { color: var(--c-ink-2); font-size: var(--fs-xs); line-height: 1.5; }
+  figcaption span { color: var(--c-muted); }
+  @keyframes seal-turn { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    .seal-disc { animation: none; }
+    .seal-control { display: none; }
+  }
+</style>

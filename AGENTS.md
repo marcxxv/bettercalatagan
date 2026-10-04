@@ -29,7 +29,10 @@ Breaking any of these is a defect, whatever else improves.
    in HTML. No biographies, evaluations or characterisations of anyone.
 4. **Independence is explicit.** Never imitate an official government site: no seals, crests or
    "official" claims. The banner "An independent civic project — not an official government
-   website" stays.
+   website" stays. Maintainer-authorised exception (ADR 0012): the overview history section may
+   show the supplied seal as a captioned stylised rendition, never as site branding or proof of
+   government affiliation. `RotatingSeal.astro` uses two identical faces, a pause control and a
+   reduced-motion fallback; its SVG embeds raster artwork, rather than claiming vector paths.
 5. **Provenance fields mean what they say.** `asOf` = period the data describes; `lastVerified` =
    when a *person* checked the source; `accessedOn` = when a URL was actually opened. Scripts
    never set `lastVerified`. Never set `accessedOn` for a URL you did not open.
