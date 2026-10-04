@@ -9,8 +9,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added — Calatagan seal illustration
 - Added the maintainer-supplied seal as a captioned dimensional rendition beside the overview
-  history section. It rotates left to right with readable identical front and back faces, a
-  pause control and a static reduced-motion fallback. A self-contained SVG embeds optimised
+  history section. It rotates automatically left to right with readable identical front and back
+  faces and a static reduced-motion fallback. A self-contained SVG embeds optimised
   transparent raster artwork; no new runtime dependency or external request is required.
 
 

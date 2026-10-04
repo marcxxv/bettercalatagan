@@ -11,8 +11,9 @@ existing site mark, masthead, favicons and independence banner. This is not a ve
 artwork asset or evidence for civic facts.
 
 Use CSS perspective and two backface-hidden image planes, separated by a small depth offset.
-Rotate the back plane by 180 degrees so its text remains readable. Provide a native checkbox
-to pause/resume the animation and disable animation under `prefers-reduced-motion`. No Three.js
+Rotate the back plane by 180 degrees so its text remains readable. Per the maintainer's explicit
+request, rotation runs automatically with no checkbox or other control; disable animation under
+`prefers-reduced-motion`. No Three.js
 or new runtime dependency is needed for this effect; this is a dimensional image presentation,
 not an exported volumetric mesh.
 
