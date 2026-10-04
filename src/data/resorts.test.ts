@@ -87,4 +87,16 @@ describe('resort channel directory', () => {
     expect(resorts.find((resort) => resort.id === 'anam-beach-resort')?.evidence.map((source) => source.description).join(' ')).toContain('conflicting Facebook');
     expect(resorts.find((resort) => resort.id === 'aquaria-crusoe')?.evidence.map((source) => source.description).join(' ')).toContain('Crusoe Cabins');
   });
+
+  it('publishes contact details with phone numbers and source attribution for each resort', () => {
+    for (const resort of resorts) {
+      expect(resort.contact).toBeDefined();
+      expect(resort.contact?.phone.length).toBeGreaterThan(0);
+      expect(resort.contact?.source).toBeTruthy();
+    }
+    const valley = resorts.find((resort) => resort.id === 'valley-o-ville');
+    expect(valley?.contact?.phone).toContain('(0994) 870 8678');
+    expect(valley?.contact?.phone).toContain('(043) 333 1959');
+    expect(valley?.contact?.email).toBe('info@valleyoville.com');
+  });
 });

@@ -22,6 +22,8 @@ const resortSearchText = (resort: ResortEntry) => [
   resort.locality,
   new URL(resort.website).hostname,
   ...resort.channels.map((channel) => channel.label),
+  ...(resort.contact?.phone ?? []),
+  resort.contact?.email ?? '',
   resort.dotRecord?.listedName ?? '',
 ].join(' ').toLowerCase();
 ---
@@ -99,6 +101,19 @@ const resortSearchText = (resort: ResortEntry) => [
               <div class="cell main">
                 <h3 class="row-title">{resort.name}</h3>
                 <p class="row-sub"><Icon name="pin" size="14" /> {resort.locality}</p>
+                {resort.contact && (
+                  <div class="resort-contact">
+                    <ul class="contact-list" aria-label={`Contact details for ${resort.name}`}>
+                      {resort.contact.phone.map((num) => (
+                        <li><a href={`tel:${num.replace(/\s+/g, '')}`}>{num}</a></li>
+                      ))}
+                      {resort.contact.email && (
+                        <li><a href={`mailto:${resort.contact.email}`}>{resort.contact.email}</a></li>
+                      )}
+                    </ul>
+                    <span class="contact-source">Source: {resort.contact.source}</span>
+                  </div>
+                )}
                 <details class="row-more evidence">
                   <summary>How these links were checked</summary>
                   {resort.dotRecord && (
@@ -216,6 +231,12 @@ const resortSearchText = (resort: ResortEntry) => [
   .resort-row .main { padding-top: var(--sp-1); }
   .resort-row .row-title { font-size: var(--fs-base); font-weight: 700; }
   .resort-row .row-sub { gap: var(--sp-1); }
+  .resort-contact { margin-top: var(--sp-2); }
+  .contact-list { display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-2); padding: 0; margin: 0; list-style: none; }
+  .contact-list li + li { margin-top: 0; }
+  .contact-list a { display: inline-flex; align-items: center; min-height: 1.75rem; padding: 0.125rem var(--sp-2); border: 1px solid var(--c-line); border-radius: var(--radius-sm); background: var(--c-bg-alt); color: var(--c-ink); font-size: var(--fs-xs); font-weight: 500; font-variant-numeric: tabular-nums; text-decoration: none; }
+  .contact-list a:hover { border-color: var(--c-accent); color: var(--c-accent-strong); }
+  .contact-source { display: block; margin-top: 0.25rem; font-size: 0.6875rem; color: var(--c-muted); }
   .evidence { margin-top: var(--sp-3); }
   .evidence > summary { min-height: var(--tap); }
   .evidence ul { margin: var(--sp-2) 0 0; padding-left: var(--sp-4); font-size: var(--fs-xs); line-height: 1.5; }

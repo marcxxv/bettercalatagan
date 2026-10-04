@@ -19,12 +19,20 @@ export interface ResortEvidence {
   description: string;
 }
 
+export interface ResortContact {
+  phone: readonly string[];
+  email?: string;
+  /** Where these contact details were obtained. */
+  source: string;
+}
+
 export interface ResortEntry {
   id: string;
   name: string;
   locality: string;
   website: `https://${string}`;
   channels: readonly ResortChannel[];
+  contact?: ResortContact;
   evidence: readonly ResortEvidence[];
   /** A historical snapshot of what the DOT roster said, never a live badge. */
   dotRecord?: {
@@ -51,6 +59,10 @@ export const resorts: readonly ResortEntry[] = [
       { label: 'Instagram', url: 'https://www.instagram.com/anambeachresortofficial/', linkedFrom: 'https://anambeachresort.com/contact-us/' },
       { label: 'TikTok', url: 'https://www.tiktok.com/@anambeachresortofficial', linkedFrom: 'https://anambeachresort.com/contact-us/' },
     ],
+    contact: {
+      phone: ['+63 917 168 9871'],
+      source: 'DOT CALABARZON roster (September 30, 2026)',
+    },
     evidence: [
       { label: 'DOT CALABARZON resort roster', url: DOT_CALABARZON_ROSTER, description: 'Names Anam Beach Resort in Calatagan and links this website; roster dated September 30, 2026.' },
       { label: 'Resort contact page', url: 'https://anambeachresort.com/contact-us/', description: 'Links the Instagram and TikTok accounts shown here. Its contact section and footer link conflicting Facebook profiles, so neither is listed.' },
@@ -67,6 +79,11 @@ export const resorts: readonly ResortEntry[] = [
       { label: 'Facebook', url: 'https://www.facebook.com/aquariawaterpark', linkedFrom: 'https://aquaria.landcolifestyleventures.com/' },
       { label: 'Instagram', url: 'https://www.instagram.com/aquariawaterpark/', linkedFrom: 'https://aquaria.landcolifestyleventures.com/' },
     ],
+    contact: {
+      phone: ['+63 2 8836 5055', '+63 999 225 3333'],
+      email: 'info.casobe@millennial-resorts.com',
+      source: 'DOT CALABARZON roster and resort website footer',
+    },
     evidence: [
       { label: 'DOT CALABARZON resort roster', url: DOT_CALABARZON_ROSTER, description: 'Lists Aquaria Water Park & Crusoe Cabins in Sta. Ana, Calatagan, with a different, currently inaccessible legacy group website; roster dated September 30, 2026.' },
       { label: 'Aquaria website', url: 'https://aquaria.landcolifestyleventures.com/', description: 'Names Aquaria Water Park in Calatagan and links the Facebook and Instagram accounts shown here. The DOT roster groups it with Crusoe Cabins, whose separate website and booking flow were not checked here.' },
@@ -83,6 +100,10 @@ export const resorts: readonly ResortEntry[] = [
       { label: 'Facebook', url: 'https://web.facebook.com/lagodeoro/', linkedFrom: 'https://lago-de-oro.com/' },
       { label: 'Instagram', url: 'https://www.instagram.com/lagodeoro_official/', linkedFrom: 'https://lago-de-oro.com/' },
     ],
+    contact: {
+      phone: ['+63 926 694 5590', '+63 917 504 2685'],
+      source: 'DOT CALABARZON roster (September 30, 2026)',
+    },
     evidence: [
       { label: 'DOT CALABARZON resort roster', url: DOT_CALABARZON_ROSTER, description: 'Names Lago de Oro in Calatagan and links its website; roster dated September 30, 2026.' },
       { label: 'Resort website', url: 'https://lago-de-oro.com/', description: 'Links the Facebook and Instagram accounts shown here. The site still shows an older October 31, 2025 DOT expiry, conflicting with the dated roster’s October 31, 2026 validity. Ask DOT for current status.' },
@@ -99,6 +120,10 @@ export const resorts: readonly ResortEntry[] = [
       { label: 'Facebook', url: 'https://www.facebook.com/nawawellness', linkedFrom: 'https://nawawellness.com/' },
       { label: 'Instagram', url: 'https://www.instagram.com/nawawellness/', linkedFrom: 'https://nawawellness.com/' },
     ],
+    contact: {
+      phone: ['+63 906 605 9553'],
+      source: 'DOT CALABARZON roster (September 30, 2026)',
+    },
     evidence: [
       { label: 'DOT CALABARZON resort roster', url: DOT_CALABARZON_ROSTER, description: 'Names Nawa Wellness Resorts in Calatagan and links this website; roster dated September 30, 2026.' },
       { label: 'Resort website', url: 'https://nawawellness.com/', description: 'Links the Facebook and Instagram accounts shown here.' },
@@ -112,6 +137,10 @@ export const resorts: readonly ResortEntry[] = [
     locality: 'Bagong Silang, Calatagan',
     website: 'https://www.playalolitaresort.com/en/',
     channels: [],
+    contact: {
+      phone: ['+63 920 287 5220', '+63 43 772 5495'],
+      source: 'DOT CALABARZON roster and resort contact page',
+    },
     evidence: [
       { label: 'DOT CALABARZON resort roster', url: DOT_CALABARZON_ROSTER, description: 'Lists PlayaLolita Beach Resort in Bagong Silang, Calatagan, with address and phone number but no website; roster dated September 30, 2026.' },
       { label: 'Resort contact page', url: 'https://www.playalolitaresort.com/en/contactus', description: 'Names PlayaLolita Beach Resort and matches the DOT roster’s lot numbers and phone number. No resort-published social link was confirmed.' },
@@ -130,6 +159,11 @@ export const resorts: readonly ResortEntry[] = [
       { label: 'TikTok', url: 'https://www.tiktok.com/@valleyoville', linkedFrom: 'https://www.valleyoville.com/' },
       { label: 'Airbnb', url: 'https://www.airbnb.com/h/valleyoville', linkedFrom: 'https://www.valleyoville.com/' },
     ],
+    contact: {
+      phone: ['(0994) 870 8678', '(043) 333 1959'],
+      email: 'info@valleyoville.com',
+      source: 'Resort operator',
+    },
     evidence: [
       { label: 'Resort website', url: 'https://www.valleyoville.com/', description: 'Names the resort, states its Carretunan locality and links the channels shown here.' },
       { label: 'Airbnb listing', url: 'https://www.airbnb.com/rooms/1059337092910163675', description: 'Separately hosted listing corroborates the resort name and Calatagan locality.' },
