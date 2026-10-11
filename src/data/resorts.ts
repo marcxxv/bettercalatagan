@@ -48,6 +48,9 @@ export interface ResortEntry {
 export const DOT_CALABARZON_ROSTER =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vTtGgUSobqikBmsWRU-Lhe0wfH5ttk8jiT-bs44K7p7_7eSOJWxkffKMSRaqIbIm7-PL9TJh7Ky1J72/pubhtml/sheet?headers=false&gid=1809562489';
 
+export const RESORT_DISCLOSURE =
+  'A project maintainer has an operational affiliation with Valley O’Ville Family Resort. Its website and contact details are operator-confirmed; the separately hosted listing corroborates its name and locality only. All entries follow the same published evidence criteria and alphabetical order; the affiliation is not evidence of booking safety or accreditation.';
+
 /** Curated, alphabetical; absence from this small list is not a warning about a resort. */
 export const resorts: readonly ResortEntry[] = [
   {
@@ -165,7 +168,7 @@ export const resorts: readonly ResortEntry[] = [
       source: 'Resort operator',
     },
     evidence: [
-      { label: 'Resort website', url: 'https://www.valleyoville.com/', description: 'Names the resort, states its Carretunan locality and links the channels shown here.' },
+      { label: 'Resort website', url: 'https://www.valleyoville.com/', description: 'Names the resort and states its Carretunan locality. Links Facebook, Instagram and TikTok; publishes the Airbnb URL in its structured data.' },
       { label: 'Airbnb listing', url: 'https://www.airbnb.com/rooms/1059337092910163675', description: 'Separately hosted listing corroborates the resort name and Calatagan locality.' },
     ],
     lastReviewed: '2026-10-03',

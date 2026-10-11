@@ -1,0 +1,248 @@
+{
+  "F01": [
+    {
+      "file": "src/pages/about.astro",
+      "line": 42,
+      "region": "It uses its own independent branding"
+    },
+    {
+      "file": "src/components/SiteHeader.astro",
+      "line": 34,
+      "region": "seal"
+    }
+  ],
+  "F02": [
+    {
+      "file": "src/pages/infrastructure.astro",
+      "line": 86,
+      "region": "lede="
+    },
+    {
+      "file": "src/pages/procurement.astro",
+      "line": 57,
+      "region": "lede="
+    },
+    {
+      "file": "src/pages/documents.astro",
+      "line": 73,
+      "region": "lede="
+    },
+    {
+      "file": "src/pages/transparency.astro",
+      "line": 86,
+      "region": "lede="
+    }
+  ],
+  "F03": [
+    {
+      "file": "src/data/financials.ts",
+      "line": 38,
+      "region": "verification:"
+    },
+    {
+      "file": "src/pages/finances.astro",
+      "line": 458,
+      "region": "internally reconciled quarterly"
+    },
+    {
+      "file": "src/lib/search-index.ts",
+      "line": 203,
+      "region": "internally reconciled quarterly"
+    },
+    {
+      "file": "src/pages/llms.txt.ts",
+      "line": 34,
+      "region": "cumulative year to date"
+    }
+  ],
+  "F04": [
+    {
+      "file": "src/pages/finances.astro",
+      "line": 134,
+      "region": "creator:"
+    },
+    {
+      "file": "src/pages/infrastructure.astro",
+      "line": 65,
+      "region": "creator:"
+    },
+    {
+      "file": "src/lib/export.ts",
+      "line": 19,
+      "region": "github.com/marcxxv"
+    }
+  ],
+  "F05": [
+    {
+      "file": "src/pages/about.astro",
+      "line": 130,
+      "region": "id=\"privacy\""
+    },
+    {
+      "file": "src/data/documents.ts",
+      "line": 39,
+      "region": "note:"
+    }
+  ],
+  "F06": [
+    {
+      "file": "src/data/resorts.ts",
+      "line": 51,
+      "region": "export const RESORT_DISCLOSURE"
+    },
+    {
+      "file": "src/pages/resorts.astro",
+      "line": 171,
+      "region": "RESORT_DISCLOSURE}"
+    },
+    {
+      "file": "src/pages/data/resorts.json.ts",
+      "line": 17,
+      "region": "conflict_of_interest:"
+    }
+  ],
+  "F07": [
+    {
+      "file": "docs/reporting.md",
+      "line": 7,
+      "region": "## Private channel"
+    },
+    {
+      "file": "src/pages/about.astro",
+      "line": 233,
+      "region": "A private reporting channel"
+    }
+  ],
+  "F08": [
+    {
+      "file": "worker/src/guard.ts",
+      "line": 129,
+      "region": "export class OutputGuard"
+    },
+    {
+      "file": "worker/src/chat.ts",
+      "line": 90,
+      "region": "const guard ="
+    },
+    {
+      "file": "worker/src/numbers.ts",
+      "line": 97,
+      "region": "export function supported"
+    },
+    {
+      "file": "worker/src/model.ts",
+      "line": 157,
+      "region": "console.warn('model failed"
+    }
+  ],
+  "F09": [
+    {
+      "file": "src/data/boundaries.ts",
+      "line": 39,
+      "region": "lastVerified:"
+    },
+    {
+      "file": "src/data/competitiveness.ts",
+      "line": 40,
+      "region": "lastVerified:"
+    },
+    {
+      "file": "src/data/documents.ts",
+      "line": 30,
+      "region": "lastVerified:"
+    },
+    {
+      "file": "src/data/fdp.ts",
+      "line": 32,
+      "region": "lastVerified:"
+    },
+    {
+      "file": "src/data/financials.ts",
+      "line": 37,
+      "region": "lastVerified:"
+    },
+    {
+      "file": "src/data/infrastructure.ts",
+      "line": 38,
+      "region": "lastVerified:"
+    },
+    {
+      "file": "src/data/population.ts",
+      "line": 24,
+      "region": "lastVerified:"
+    },
+    {
+      "file": "src/data/poverty.ts",
+      "line": 41,
+      "region": "lastVerified:"
+    }
+  ],
+  "F10": [
+    {
+      "file": "worker/package.json",
+      "line": 17,
+      "region": "\"wrangler\":"
+    },
+    {
+      "file": "package-lock.json",
+      "line": 3559,
+      "region": "\"node_modules/braces\":"
+    }
+  ],
+  "F11": [
+    {
+      "file": ".github/workflows/ci.yml",
+      "line": 14,
+      "region": "name: Typecheck, lint"
+    }
+  ],
+  "F12": [
+    {
+      "file": "src/components/SiteHeader.astro",
+      "line": 113,
+      "region": "summary aria-label=\"Menu\""
+    },
+    {
+      "file": "src/components/Source.astro",
+      "line": 198,
+      "region": "overflow-wrap: anywhere"
+    },
+    {
+      "file": "src/styles/global.css",
+      "line": 1455,
+      "region": ".row-sub a {"
+    },
+    {
+      "file": "src/components/BarangayMap.astro",
+      "line": 32,
+      "region": "role=\"group\""
+    },
+    {
+      "file": "src/scripts/barangay-map.ts",
+      "line": 239,
+      "region": "canvas.inert = false"
+    },
+    {
+      "file": "src/pages/data/index.astro",
+      "line": 215,
+      "region": "tabindex=\"0\"><code>"
+    }
+  ],
+  "F13": [
+    {
+      "file": "public/images/README.md",
+      "line": 12,
+      "region": "underlying municipal identity"
+    },
+    {
+      "file": "public/icons/channels/README.md",
+      "line": 1,
+      "region": "# Third-party"
+    },
+    {
+      "file": "LICENSES.md",
+      "line": 46,
+      "region": "## Artwork"
+    }
+  ]
+}

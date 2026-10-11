@@ -81,16 +81,17 @@ export async function answer(env: Env, request: ChatRequest, stream: Stream, can
   const query = retrievalQuery(history, question);
   const [found, focused] = await Promise.all([
     retrieve(env, query),
-    focus(env, context, query).catch((e) => (console.warn('focus failed', String(e)), { passages: [], note: null })),
+    focus(env, context, query).catch(() => (console.warn('focus failed'), { passages: [], note: null })),
   ]);
   const passages = withFocus(focused.passages, found);
   await stream.send({ t: 'sources', items: sourceList(passages) });
 
   const today = new Intl.DateTimeFormat('en-PH', { timeZone: 'Asia/Manila', dateStyle: 'long' }).format(new Date());
   const guard = new OutputGuard(
-    figurePool(...passages.map((p) => p.text), question, ...history.map((t) => t.content), today),
+    figurePool(...passages.map((p) => p.text)),
     canary,
     phoneNumbers(passages.map((p) => p.text).join('\n')),
+    passages.map((p) => p.text),
   );
 
   let tokens = 0;
@@ -115,13 +116,8 @@ export async function answer(env: Env, request: ChatRequest, stream: Stream, can
       else if (verdict.emit) await stream.send({ t: 'delta', text: verdict.emit });
     }
   } catch (error) {
-    if (error instanceof ModelError && error.refusal) {
-      await stream.send({ t: 'reset' });
-      await stream.send({ t: 'delta', text: error.refusal });
-      await stream.send({ t: 'done', grounded: true });
-      return;
-    }
-    console.error('answer failed', String(error));
+    // Provider errors/refusals can echo submitted text; never display or log their bodies.
+    console.error('answer failed', error instanceof ModelError ? error.status : 'internal');
     await stream.send({ t: 'reset' });
     await stream.send({ t: 'delta', text: UNAVAILABLE[lang] });
     await stream.send({ t: 'done', grounded: false });
@@ -130,7 +126,7 @@ export async function answer(env: Env, request: ChatRequest, stream: Stream, can
   }
 
   if (withdrawn) {
-    // Logged without the question or the answer: only which rule fired (and, for figures, which figure).
+    // Only a fixed rule identifier: rejected figures can themselves contain private data.
     console.warn('answer withdrawn', withdrawn);
     await stream.send({ t: 'reset' });
     await stream.send({ t: 'delta', text: WITHDRAWN[lang] });

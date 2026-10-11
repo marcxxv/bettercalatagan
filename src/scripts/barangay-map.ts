@@ -235,6 +235,13 @@ async function start() {
   }
 
   map.on('load', () => {
+    // Do not expose the invisible loading canvas or its controls to keyboard users.
+    canvas.inert = false;
+    canvas.removeAttribute('aria-hidden');
+    const fallback = root!.querySelector<SVGElement>('.bmap-fallback')!;
+    if (fallback.contains(document.activeElement)) map.getCanvas().focus();
+    fallback.setAttribute('aria-hidden', 'true');
+    for (const link of fallback.querySelectorAll('a')) link.setAttribute('tabindex', '-1');
     addOverlay();
     repaint();
     root.classList.add('ready');

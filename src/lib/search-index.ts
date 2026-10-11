@@ -200,7 +200,7 @@ export function buildSearchIndex(): SearchEntry[] {
     t: 'Quarterly statements on file',
     g: 'Answers',
     u: '/finances#quarters',
-    a: `${verifiedFilings.length} verified quarterly statements`,
+    a: `${verifiedFilings.length} internally reconciled quarterly statements, reported and not audited`,
     s: SRE,
     k: 'sre quarterly statements filings',
   });

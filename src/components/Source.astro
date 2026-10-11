@@ -61,7 +61,7 @@ const verificationOf = (s: DataSource) => {
   return s.verification === 'verified'
     ? `Verified ${checked}`
     : s.verification === 'reported'
-      ? `Reported ${checked}, not yet confirmed`
+      ? `Reported · reviewed ${checked}`
       : `Unverified, last checked ${checked}`;
 };
 // asOf is a date for most records, or a phrase ("Executive orders in force").
@@ -195,12 +195,14 @@ const described = entries.map((e) => e.label).join(' and ');
     color: var(--c-accent);
   }
   .prov-pub {
+    overflow-wrap: anywhere;
     font-weight: 600;
     color: var(--c-ink);
     min-width: 0;
   }
   .prov-state {
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
   .prov-entry {
     display: grid;

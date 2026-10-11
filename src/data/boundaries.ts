@@ -36,7 +36,7 @@ const retrieved = boundaries.retrievedAt.slice(0, 10) as `${number}-${number}-${
 export const boundariesSource: DataSource = {
   sources: [{ ...BARANGAY_BOUNDARIES, accessedOn: retrieved }],
   asOf: 'PSGC codes as of 31 December 2023',
-  lastVerified: retrieved,
+  lastVerified: '2026-09-30', // Maintainer review date; retrieval never advances this.
   verification: 'reported',
   status: 'current',
   tier: 2,

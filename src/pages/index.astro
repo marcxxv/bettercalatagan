@@ -104,7 +104,7 @@ const manifesto: Token[] = [
   { mark: 'arrow' },
   'gathers the town’s public record and gives answers only from',
   { mark: 'sources' },
-  'official sources. It’s free, runs no ads, tracks no one, and shows',
+  'published sources. It’s free, runs no ads or behavioural analytics, and shows',
   { mark: 'check' },
   'where every figure came from.',
 ];
@@ -216,10 +216,11 @@ const jsonLd = [
         <span class="lock"><Icon name="eye-off" size="26" /></span>
       </div>
       <div class="f-copy">
-        <h2>Nothing to sign in to. <br />Nothing tracked.</h2>
+        <h2>Nothing to sign in to. <br />No advertising or analytics.</h2>
         <p>
-          No accounts, no cookies, no analytics, no advertising. The site is plain pages and open
-          data — what you look up stays with you{ASK.endpoint ? ', and questions you ask are answered, not kept' : ''}.
+          Plain pages and open data, with search that runs in your browser.
+          {ASK.endpoint ? ' Questions asked of the assistant go to Cloudflare and an AI provider.' : ''}
+          Hosting and optional outside services are explained in the privacy notice.
         </p>
         <a class="link-arrow" href="/about#privacy">How this site works</a>
       </div>

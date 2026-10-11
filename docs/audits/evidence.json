@@ -1,0 +1,202 @@
+{
+  "date": "2026-10-11",
+  "baseline": "a0770d902ffda0e4299ce010d3bd7f06b953f395",
+  "branch": "codex/prepublication-hardening",
+  "sources": [
+    {
+      "name": "ra7160",
+      "url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/53542",
+      "status": 200,
+      "bytes": 728582
+    },
+    {
+      "name": "ra8491",
+      "url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/4626",
+      "status": 200,
+      "bytes": 53534
+    },
+    {
+      "name": "ra8293",
+      "url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/4371",
+      "status": 200,
+      "bytes": 254996
+    },
+    {
+      "name": "disini",
+      "url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/1/56650",
+      "status": 200,
+      "bytes": 849132
+    },
+    {
+      "name": "borjal",
+      "url": "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/1/29796",
+      "status": 200,
+      "bytes": 84844
+    },
+    {
+      "name": "production",
+      "url": "https://bettercalatagan.vercel.app",
+      "status": 200,
+      "bytes": 352522
+    },
+    {
+      "name": "fdp-list",
+      "url": "https://fdpp.dilg.gov.ph/fdpp/report/index?region_filter=04&province_filter=010&lgu_filter=08&document_filter=&year_filter=&quarter_filter=&docperiod_filter=&page=1",
+      "status": 200,
+      "bytes": 99596
+    },
+    {
+      "name": "sre-latest",
+      "url": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=264250",
+      "status": 200,
+      "bytes": 13855
+    },
+    {
+      "name": "psa-metadata",
+      "url": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/1A/PO_2024/0041A6DTPH3.px",
+      "error": "URLError: <urlopen error [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:1129)>"
+    },
+    {
+      "name": "dpwh-record",
+      "url": "https://api.dpwh.bettergov.ph/projects/26DB0003",
+      "status": 200,
+      "bytes": 1753
+    },
+    {
+      "name": "cmci",
+      "url": "https://cmci.dti.gov.ph/lgu-profile.php?lgu=Calatagan",
+      "status": 200,
+      "bytes": 189848
+    },
+    {
+      "name": "archive-index",
+      "url": "https://web.archive.org/cdx/search/cdx?url=calatagan.gov.ph/*&output=json&filter=statuscode:200&filter=mimetype:application/pdf&collapse=urlkey&limit=1",
+      "status": 200,
+      "bytes": 262
+    },
+    {
+      "name": "anam",
+      "url": "https://anambeachresort.com/contact-us/",
+      "status": 200,
+      "bytes": 198621
+    },
+    {
+      "name": "aquaria",
+      "url": "https://aquaria.landcolifestyleventures.com/",
+      "status": 200,
+      "bytes": 52545
+    },
+    {
+      "name": "lago",
+      "url": "https://lago-de-oro.com/",
+      "status": 200,
+      "bytes": 43316
+    },
+    {
+      "name": "nawa",
+      "url": "https://nawawellness.com/",
+      "status": 200,
+      "bytes": 224689
+    },
+    {
+      "name": "playa",
+      "url": "https://www.playalolitaresort.com/en/contactus",
+      "status": 200,
+      "bytes": 27478
+    },
+    {
+      "name": "valley",
+      "url": "https://www.valleyoville.com/",
+      "status": 200,
+      "bytes": 82327
+    },
+    {
+      "name": "dot-roster",
+      "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTtGgUSobqikBmsWRU-Lhe0wfH5ttk8jiT-bs44K7p7_7eSOJWxkffKMSRaqIbIm7-PL9TJh7Ky1J72/pubhtml/sheet?headers=false&gid=1809562489",
+      "status": 200,
+      "bytes": 6000000
+    },
+    {
+      "name": "psa-node-retry",
+      "url": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/1A/PO_2024/0041A6DTPH3.px",
+      "status": 200,
+      "comparison": "78 numeric values, zero mismatches"
+    }
+  ],
+  "sre_comparison": {
+    "period": {
+      "quarter": 2,
+      "year": 2026
+    },
+    "cells": 128,
+    "mismatches": []
+  },
+  "browser": {
+    "content_checks": 80,
+    "whole_site_checks": 184,
+    "axe_violations": 0,
+    "overflow": 0,
+    "page_errors_content_pass": 0,
+    "full_page_screenshots": 40,
+    "assistant_fixture": {
+      "citation_rendered": true,
+      "conversation_cleared": true,
+      "axe_violations": 0
+    },
+    "map_ready_fixture": {
+      "status": {
+        "canvasInert": false,
+        "canvasHidden": null,
+        "fallbackHidden": "true",
+        "fallbackLinks": 25,
+        "metric": "true",
+        "flat": "false"
+      },
+      "violations": [],
+      "scope": "Real MapLibre with empty local tile fixtures; not verification of live tile services."
+    },
+    "external_limits": "Model and tile fixtures are not live-service verification."
+  },
+  "secret_scan": {
+    "historical_blobs_scanned": 680,
+    "findings": [],
+    "limits": "Pattern scan only; no credential values emitted; ignored local files and provider account settings excluded."
+  },
+  "leak_scan": {
+    "files": 62,
+    "matches": 0,
+    "patterns": "CI withheld list and official surnames; no values reproduced here."
+  },
+  "preserved": "Generated/staging datasets, seal component and image assets unchanged. Two existing iCloud conflict copies excluded.",
+  "dependencies": {
+    "root_baseline_high": 8,
+    "root_remaining_high": 5,
+    "root_runtime_findings": 0,
+    "worker_baseline_high": 3,
+    "worker_remaining_findings": 0
+  },
+  "external_settings": {
+    "github_secret_scanning": "enabled",
+    "github_push_protection": "enabled",
+    "dependabot_security_updates": "enabled",
+    "main_branch_protection": "404 Branch not protected",
+    "rulesets": [],
+    "provider_retention": "unconfirmed",
+    "private_reporting_email": "not supplied; setup required"
+  },
+  "production_mutations": [],
+  "commands": {
+    "npm ci (root)": "pass",
+    "npm ci (Worker)": "pass; npm install-script policy warning documented",
+    "npm run check": "pass; 313 tests, 26 files, typecheck/lint/build",
+    "npm run validate:data": "pass; 235 tests, 11 files",
+    "npm run typecheck (Worker)": "pass",
+    "worker eval hardening fixture": "9/9 pass; no live providers",
+    "git diff --check": "pass"
+  },
+  "current_file_secret_scan": {
+    "files": 66,
+    "findings": [],
+    "limits": "Pattern scan of review files only; values not printed."
+  }
+}

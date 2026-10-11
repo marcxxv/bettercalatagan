@@ -2,8 +2,7 @@
  * National infrastructure projects in Calatagan, from DPWH's own contract
  * records.
  *
- * DPWH publishes every contract it lets. The pipeline (`scripts/dpwh.mjs`)
- * reads them through BetterGov.ph's open mirror of that publication and keeps
+ * The pipeline (`scripts/dpwh.mjs`) reads available contract records through BetterGov.ph's open mirror of that publication and keeps
  * a contract only when its own description places the work in Calatagan,
  * Batangas. Work on the Nasugbu–Lian–Calatagan national road whose description
  * gives kilometre posts but no municipality is kept apart, and so is the odd
@@ -36,15 +35,15 @@ export const infrastructureSource: DataSource = {
     { ...DPWH_TRANSPARENCY_BETTERGOV, accessedOn: retrieved },
   ],
   asOf: `DPWH infrastructure years ${Math.min(...years)}–${Math.max(...years)}`,
-  lastVerified: retrieved,
+  lastVerified: '2026-09-30', // Maintainer review date; retrieval never advances this.
   verification: 'reported',
   status: 'current',
   tier: 2,
   expectedRefresh: 'quarterly',
   methodology:
-    'Every DPWH contract whose record mentions Calatagan was read, then kept only if its own description places the work in Calatagan, Batangas ("…, CALATAGAN, BATANGAS"). Contracts on the Nasugbu–Lian–Calatagan national road that give kilometre posts but no municipality, and packages that bundle Calatagan with another municipality, are listed separately and not counted. Barangays are read from the description. The rule is tested against real descriptions (scripts/lib/dpwh-location.test.ts).',
+    'The pipeline searches the available BetterGov.ph DPWH API records for Calatagan, then keeps a project in the municipal count only if its description places the work in Calatagan, Batangas. Contracts on the Nasugbu–Lian–Calatagan national road that give kilometre posts but no municipality, and packages that bundle Calatagan with another municipality, are listed separately and not counted. Barangays are read from the description. The rule is tested against real descriptions (scripts/lib/dpwh-location.test.ts).',
   caveat:
-    'These are DPWH’s own published figures, read through BetterGov.ph’s mirror of them; they are contract budgets, not audited spending, and progress is as DPWH last reported it. A project is placed in Calatagan only when DPWH’s description says so; a few described vaguely may be missed.',
+    'These are records attributed to DPWH, accessed through BetterGov.ph’s derivative API; completeness and fidelity to the primary register have not been established. Amounts are contract budgets, not audited spending, and progress is as recorded at retrieval. A project is counted in Calatagan only when its description says so; ambiguous or unavailable records may be missed.',
   note: 'These are national government projects implemented by DPWH (mostly its Batangas 1st District Engineering Office), not projects of the municipal government.',
 };
 

@@ -68,7 +68,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     blurb: 'What each municipal office provides, and who to call',
     items: [
       { href: '/services', label: 'Municipal services', blurb: 'Every service in the offices’ Citizen’s Charters, by topic', icon: 'layers' },
-      { href: '/hotlines', label: 'Emergency hotlines', blurb: 'National hotlines set by law, and why local numbers are not listed', icon: 'alert' },
+      { href: '/hotlines', label: 'Emergency hotlines', blurb: 'National hotlines and a dated, maintainer-attested local list', icon: 'alert' },
       { href: '/holidays', label: 'Holidays', blurb: 'National holidays and Calatagan’s own, by proclamation', icon: 'calendar' },
       { href: '/resorts', label: 'Resorts & booking tips', blurb: 'Find resort-published websites and social links, with evidence and booking precautions', icon: 'shield' },
     ],
@@ -98,9 +98,9 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     href: '/transparency',
     blurb: 'Where public money goes, and the documents behind it',
     items: [
-      { href: '/infrastructure', label: 'Infrastructure', blurb: 'Every DPWH project located in Calatagan, with budgets and status', icon: 'flag' },
+      { href: '/infrastructure', label: 'Infrastructure', blurb: 'DPWH projects identified in available records, with budgets and status', icon: 'flag' },
       { href: '/procurement', label: 'Procurement', blurb: 'Notices of award and bidding on record', icon: 'file' },
-      { href: '/transparency', label: 'Disclosures', blurb: 'Every Full Disclosure Policy filing, readable on the site', icon: 'file' },
+      { href: '/transparency', label: 'Disclosures', blurb: 'Full Disclosure Policy filings indexed from the DILG portal', icon: 'file' },
       { href: '/documents', label: 'Archive', blurb: 'Documents saved from the municipality’s former website', icon: 'archive' },
     ],
   },

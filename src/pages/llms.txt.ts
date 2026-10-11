@@ -31,7 +31,7 @@ ${SITE.independence} For official services contact the Municipality of Calatagan
 - ${m.name}, ${m.province}, Region ${m.region} (${m.regionName}), Philippines. PSGC ${m.psgc10}. ${m.barangayCount} barangays.
 - Population ${n(p.population)} (${p.census}, reference date ${p.referenceDate}), ${n(p.households)} households. Source: Philippine Statistics Authority OpenSTAT. Last verified ${population2024.source.lastVerified}.
 - Income class: ${incomeClassification.data.incomeClass === 1 ? '1st' : incomeClassification.data.incomeClass} class municipality. Source: DOF Department Order No. 074.2024 via BLGF MC No. 020.2024.
-- Municipal finances: ${verifiedFilings.length} quarterly Statements of Receipts and Expenditures whose own totals reconcile, extracted cell by cell from DILG Full Disclosure Policy filings. Last verified ${financialsSource.lastVerified}.
+- Municipal finances: ${verifiedFilings.length} quarterly Statements of Receipts and Expenditures whose own totals reconcile, extracted cell by cell from DILG Full Disclosure Policy filings. Reported, not audited; cumulative year to date, so quarters must not be added together. Last reviewed ${financialsSource.lastVerified}.
 - Full Disclosure Policy: ${fdpDataset.recordCount} filings indexed from the DILG portal. Last verified ${fdpSource.lastVerified}.
 - Archive: ${archivedDocuments.documentCount} documents from the former municipal website (calatagan.gov.ph, now offline), preserved by the Internet Archive. Historical record, not current policy. Last verified ${documentsSource.lastVerified}.
 

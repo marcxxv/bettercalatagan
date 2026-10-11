@@ -16,7 +16,7 @@ export const LICENSE = {
     'CC BY 4.0 — applies to this compilation (selection, arrangement, identifiers, extraction and provenance metadata) by BetterCalatagan.',
   source_documents:
     'NOT covered by the above. Cited government documents remain the works of their issuing agencies under Philippine law and are not relicensed here. Obtain them from the issuing agency and observe its terms.',
-  attribution: 'BetterCalatagan (bettercalatagan.org)',
+  attribution: 'BetterCalatagan (https://github.com/marcxxv/bettercalatagan)',
 } as const;
 
 export const DISCLAIMER =

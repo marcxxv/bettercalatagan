@@ -3,6 +3,9 @@
 **Status:** Accepted · 2026-09-30 · Revisits [0002](0002-static-astro-no-backend.md) (no backend, no AI)
 and extends [0006](0006-editorial-redesign.md) (answer-first search)
 
+Update 2026-10-11: [0013](0013-prepublication-evidence-and-answer-validation.md) replaces
+partial text streaming with complete answer validation and tightens grounding and logging.
+
 ## Context
 
 ADR 0002 ruled out a backend and AI, and said that genuinely dynamic behaviour should be decided

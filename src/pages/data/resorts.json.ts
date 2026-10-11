@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { directoryIssues, resorts } from '../../data/resorts';
+import { directoryIssues, resorts, RESORT_DISCLOSURE } from '../../data/resorts';
 import { API_VERSION, LICENSE } from '../../lib/export';
 
 export const GET: APIRoute = () => {
@@ -14,6 +14,7 @@ export const GET: APIRoute = () => {
       dataset: 'resort-channels',
       last_reviewed: resorts.map((entry) => entry.lastReviewed).sort().at(-1),
       evidence_model: 'tourism channels — separate from civic-data verification tiers',
+      conflict_of_interest: RESORT_DISCLOSURE,
       disclaimer: 'A dated directory of resort-published links, not a booking guarantee or a live accreditation check. Confirm a reservation and payment details independently. Absence from this directory is not evidence of fraud.',
       license: LICENSE,
     },

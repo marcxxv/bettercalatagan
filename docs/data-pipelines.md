@@ -26,6 +26,9 @@ Rules that hold for every pipeline:
    cover all 25 barangays and reconcile to the municipal total. A source outage cannot delete data.
 5. **A human verifies.** Scripts set retrieval times (`retrievedAt`, `generatedAt`); only a person
    sets `lastVerified` in `src/data/*.ts`, after reading the source.
+   Review dates are explicit literals, never derived from generated timestamps. A refresh PR
+   must include the human review/date change when the refreshed data has actually been checked;
+   a successful pipeline or a merge alone does not verify the originating record's truth.
 
 ## The pipelines
 

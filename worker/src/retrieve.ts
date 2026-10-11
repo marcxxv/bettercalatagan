@@ -111,8 +111,8 @@ async function semantic(env: Env, query: string, limit: number): Promise<string[
  */
 export async function retrieve(env: Env, query: string, { k = 8, budget = 11_000 } = {}): Promise<Passage[]> {
   const [lex, sem] = await Promise.all([
-    lexical(env, query, 24).catch((e) => (console.warn('lexical retrieval failed', e), [] as string[])),
-    semantic(env, query, 24).catch((e) => (console.warn('semantic retrieval failed', e), [] as string[])),
+    lexical(env, query, 24).catch(() => (console.warn('lexical retrieval failed'), [] as string[])),
+    semantic(env, query, 24).catch(() => (console.warn('semantic retrieval failed'), [] as string[])),
   ]);
   const ids = fuse([lex, sem]).slice(0, k * 3);
   if (!ids.length) return [];

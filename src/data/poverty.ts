@@ -38,7 +38,7 @@ const source: DataSource = {
     { ...PSA_POVERTY_FAMILIES, accessedOn: retrieved },
   ],
   asOf: `Full-year ${latestYear} estimates`,
-  lastVerified: retrieved,
+  lastVerified: '2026-09-30', // Maintainer review date; retrieval never advances this.
   verification: 'verified',
   status: 'latest-official',
   tier: 1,

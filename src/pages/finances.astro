@@ -131,13 +131,18 @@ const jsonLd = [
     description: `Line items from ${verifiedFilings.length} quarterly Statements of Receipts and Expenditures the Municipality of Calatagan filed with the DILG Full Disclosure Policy Portal, each traced to its worksheet cell and checked against the filing’s own totals. Reported figures, not audited.`,
     url: new URL('/finances', origin).toString(),
     isAccessibleForFree: true,
-    creator: { '@type': 'GovernmentOrganization', name: 'Municipality of Calatagan, Batangas' },
+    creator: { '@id': new URL('/#publisher', origin).toString() },
     publisher: { '@type': 'Organization', name: SITE.name },
     ...(oldest && latest
       ? { temporalCoverage: `${oldest.documentPeriod.year}/${latest.documentPeriod.year}` }
       : {}),
     spatialCoverage: { '@type': 'Place', name: 'Calatagan, Batangas, Philippines' },
-    isBasedOn: financialsSource.sources.map((s) => s.url),
+    isBasedOn: financialsSource.sources.map((s) => ({
+      '@type': 'CreativeWork', url: s.url, name: s.name,
+      author: { '@type': 'GovernmentOrganization', name: 'Municipality of Calatagan, Batangas' },
+      publisher: { '@type': 'Organization', name: s.publisher },
+    })),
+    creditText: 'Municipality of Calatagan SRE filings published through DILG; cell extraction and compilation by BetterCalatagan.',
     distribution: [
       {
         '@type': 'DataDownload',
@@ -450,7 +455,7 @@ const jsonLd = [
         <div class="table-wrap" role="region" aria-labelledby="quarters-caption" tabindex="0">
           <table class="sticky-first">
             <caption id="quarters-caption">
-              {verifiedFilings.length} verified quarterly statements, cumulative year to date, in pesos
+              {verifiedFilings.length} internally reconciled quarterly statements, cumulative year to date, in pesos
               <span class="scroll-hint">Scroll sideways to see every column.</span>
             </caption>
             <thead>

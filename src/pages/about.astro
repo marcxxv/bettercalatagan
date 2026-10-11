@@ -39,14 +39,15 @@ const crumbs = [{ name: 'About', href: '/about' }];
         <h2 id="independent-title">Independent, and not the municipality</h2>
         <p class="statement">{SITE.independence}</p>
         <p>
-          It does not use the municipal seal, coat of arms or any government branding, and nothing
-          on it should be read as an official statement. For official business, go to the
+          It uses its own independent branding. The municipal seal appears solely as a stylised
+          historical illustration, not as the site's identity or evidence of government
+          authorisation or endorsement. Nothing here is an official statement. For official business, go to the
           municipal hall. Where a figure here and the government document it cites differ, the
           document is authoritative.
         </p>
         <p>
-          It is part of the <a href="https://bettergov.ph">BetterGov.ph</a> Better LGU community of
-          volunteer-built civic sites.
+          It is inspired by the <a href="https://bettergov.ph">BetterGov.ph</a> Better LGU community of
+          volunteer-built civic sites and is independently maintained.
         </p>
       </section>
 
@@ -80,7 +81,8 @@ const crumbs = [{ name: 'About', href: '/about' }];
           </li>
         </ul>
         <p>
-          The site is static: no accounts, no tracking, no analytics, no database. The data is
+          The pages are static, with no accounts, advertising or behavioural analytics.
+          The optional assistant uses a separate service and database, described below. The data is
           available as <a href="/data/index.json">open JSON</a>, with the same provenance.
         </p>
         <p>
@@ -100,16 +102,17 @@ const crumbs = [{ name: 'About', href: '/about' }];
           </p>
           <ul>
             <li>
-              <strong>It knows only what this site publishes.</strong> Every time the site is
+              <strong>It is instructed to use this site's published evidence.</strong> Every time the site is
               rebuilt, its pages are split into passages and indexed. The assistant is given the
               passages that match your question and is told to answer from them alone, citing each
               one; each citation links to the page it came from.
             </li>
             <li>
-              <strong>Its answers are checked before you see them.</strong> Every figure in an
-              answer must match a figure in the passages it was given. An answer that states a
-              number the site does not, names an official whose incumbency is unverified, or gives
-              a phone number or e-mail address is withdrawn and replaced, not shown with a warning.
+              <strong>Complete answers are checked before you see them.</strong> Numeric values
+              are compared with the published passages the answer cites, and citation numbers are
+              checked. Unsupported figures, listed unverified officials, unapproved contacts and
+              certain unsafe claims cause the answer to be replaced. These checks cannot prove
+              that every sentence is true or that a figure has been interpreted correctly.
             </li>
             <li>
               <strong>Some questions are never sent to it.</strong> Who holds office today is
@@ -127,42 +130,49 @@ const crumbs = [{ name: 'About', href: '/about' }];
       <section class="section" id="privacy" aria-labelledby="privacy-title">
         <h2 id="privacy-title">Privacy</h2>
         <p>
-          There is nothing to sign in to and nothing to track you with: no accounts, no cookies, no
-          analytics, no advertising{ASK.turnstileSiteKey ? '' : ' and no third-party scripts'}.
+          BetterCalatagan has no accounts, advertising or behavioural analytics. It sets no
+          application cookies{ASK.turnstileSiteKey ? '; the optional Turnstile check uses Cloudflare’s own technology' : ''}.
           Pages are static files; search runs in your browser against a file this site publishes,
           so what you type into search is never sent anywhere.
         </p>
         {ASK.endpoint && (
           <p>
-            A question you <em>ask</em> the assistant is different: it is sent to the assistant’s
+            A question you <em>ask</em> the assistant, along with recent conversation messages and
+            the page or document you are viewing, is sent to the assistant’s
             service on Cloudflare and to the AI model provider that writes the answer (NYO, with
-            Cloudflare Workers AI as a fallback). Those providers process it outside the Philippines,
-            under their own terms. BetterCalatagan does not save your questions or its answers in any
-            database, and keeps no record of who asked. To limit abuse, it counts requests against a
-            code derived from your IP address that changes daily and is deleted when the count
-            expires.
+            Cloudflare Workers AI as a fallback). Those providers process it under their own terms, potentially outside the Philippines. BetterCalatagan does not save your questions or its answers in any
+            database. Its database holds public source passages, temporary request counts tied to
+            a daily-changing code derived from your IP address and a random session identifier,
+            and daily usage totals. Expired request counts are removed by scheduled cleanup;
+            daily usage totals are kept for up to 90 days. Provider logging and retention are
+            governed by their own terms and settings; this site cannot promise they keep no copy.
             {ASK.turnstileSiteKey &&
               ' The first time you ask, Cloudflare Turnstile checks that you are not an automated script; it loads only then.'}
-            {' '}The conversation is kept in your browser tab until you close it.
+            {' '}The conversation is kept in your browser tab until you clear it or close the tab.
+            Do not send personal, payment, medical or confidential information to the assistant.
           </p>
         )}
         <p>
-          One page loads outside services: the map on the <a href="/barangays">Barangays</a> page.
+          Interactive maps on the overview, <a href="/barangays">Barangays</a> page and barangay
+          profiles load outside services.
           When you scroll to it, your browser fetches map tiles from OpenFreeMap and elevation
           tiles from Amazon Web Services, which see your IP address like any website you visit.
-          Nothing else on the site does, and the page shows a plain outline map without them.
+          Each map also has a plain outline view that works without those services.
         </p>
         <p>
-          Like any web service, the site’s host (Vercel) and Cloudflare keep short-lived technical
-          logs of requests, such as IP addresses, for security and operations. If you use voice
+          The site’s host (Vercel) and assistant host (Cloudflare) may process request metadata,
+          including IP addresses, in technical logs for security and operations. Their retention
+          depends on provider settings and terms. Document-reader requests also pass through the
+          host to DILG or the Internet Archive; opening external links contacts those sites. If you use voice
           input, your browser’s own speech service (in Chrome, Google’s) turns your speech into
           text; the site receives only the text. Questions about your data, or a request to correct
-          or remove something that concerns you, can be sent through the
-          <a href="#contribute">corrections</a> form below.
+          or remove something that concerns you, are covered by the
+          <a href="#contribute">reporting guidance</a> below.
         </p>
         <p>
-          The only thing the site remembers is your light or dark theme, if you choose one, stored
-          in your own browser’s local storage. Clearing your browser data removes it.
+          Your chosen light or dark theme is stored in your browser’s local storage. The assistant
+          also uses tab storage for its session and conversation when enabled. Clearing the
+          conversation or your browser data removes the corresponding local records.
         </p>
       </section>
 
@@ -219,8 +229,11 @@ const crumbs = [{ name: 'About', href: '/about' }];
           because the project cannot tell the difference.
         </p>
         <p>
-          A request to remove personal information about you is different: it needs no source, and
-          the item comes down first while the request is looked at.
+          GitHub issues are public. Do not post personal information, identity documents, payment
+          records, legal notices or security exploit details there. A private reporting channel
+          has not yet been configured; do not submit sensitive material through the public issue form.
+          Privacy and removal requests are assessed for urgency and supporting context;
+          credible risks may justify restricting an item while it is reviewed. Removal is not automatic.
         </p>
         <p>
           <a class="button primary" href={`${SITE.repository}/issues/new/choose`}>Report a correction</a>

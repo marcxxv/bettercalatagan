@@ -6,10 +6,8 @@
  * instructions, and two kinds of question are answered deterministically
  * without the model at all (who holds office, and emergencies).
  *
- * Output: the model's text is streamed through `OutputGuard`, which holds back
- * the last few words until they are complete and checks everything before it
- * is released. On a violation the answer is withdrawn and replaced, rather
- * than shown with a warning.
+ * Output: `OutputGuard` buffers the complete model answer and validates it
+ * before release. On a violation only a fixed fallback is shown.
  */
 import { figures, unsupported, type Figure } from './numbers';
 
@@ -28,7 +26,7 @@ export const WITHHELD_VALUES = ['419-0150', 'mayorsoffice1011', '@gmail.com', '@
 
 export const MAX_QUESTION = 600;
 
-export type Intent = 'officials' | 'emergency' | 'injection' | 'empty' | 'too-long';
+export type Intent = 'officials' | 'emergency' | 'injection' | 'allegation' | 'empty' | 'too-long';
 
 const OFFICIAL_NAME = new RegExp(`\\b(${UNVERIFIED_OFFICIALS.join('|')})\\b`, 'i');
 
@@ -53,6 +51,9 @@ export function screen(question: string): Intent | null {
   if (!text) return 'empty';
   if (text.length > MAX_QUESTION) return 'too-long';
   if (INJECTION.some((re) => re.test(text))) return 'injection';
+  // Decline requests to manufacture accusations, while keeping neutral record queries open.
+  if (/\b(stole|stolen|embezzled|secretly connected|nagnakaw|ninakaw)\b/i.test(text) ||
+      /\b(prove|name|identify|which|sino)\b.{0,80}\b(corrupt|corruption|kurakot)\b/i.test(text)) return 'allegation';
   if (EMERGENCY.test(text) && !/\b(budget|spend|spent|fund|funds|pondo|gastos|how much|magkano)\b/i.test(text)) {
     return 'emergency';
   }
@@ -63,6 +64,13 @@ export function screen(question: string): Intent | null {
 /** The fixed answers, in the reader's language where it is clearly Filipino. */
 export function fixedAnswer(intent: Intent, filipino: boolean): { text: string; url?: string } {
   switch (intent) {
+    case 'allegation':
+      return {
+        text: filipino
+          ? 'Hindi sapat ang badyet, bilang ng bidder o nawawalang tala para magparatang ng pagnanakaw o katiwalian. Maaari kong ipaliwanag ang mga iniulat na halaga at limitasyon ng mga tala; hindi ako gagawa ng paratang tungkol sa isang tao o kompanya.'
+          : 'A budget, bidder count or missing record does not establish theft, corruption or a secret relationship. I can explain reported figures and the limits of the records; I cannot manufacture an allegation about a person or company.',
+        url: '/procurement',
+      };
     case 'officials':
       return {
         text: filipino
@@ -115,76 +123,57 @@ export function phoneNumbers(text: string): Set<string> {
 export type Verdict = { ok: true; emit: string } | { ok: false; reason: string };
 
 /**
- * Checks streamed text before it reaches the reader.
- *
- * The last two words (and any figure whose scale word may still be arriving,
- * as in "₱237.9 | million") are held back, so a figure or a name is only
- * released once it can be checked whole.
+ * Buffers a bounded complete answer. No model text is emitted until all checks pass.
+ * A value occurring in a cited passage is a numeric match, not proof of semantic entailment.
  */
 export class OutputGuard {
   private text = '';
-  private released = 0;
+  private released = '';
 
   constructor(
     private readonly pool: readonly Figure[],
     private readonly canary: string,
     /** Phone numbers the site itself publishes (hotlines); any other number is withdrawn. */
     private readonly publishedPhones: ReadonlySet<string> = new Set(),
+    private readonly passageTexts?: readonly string[],
   ) {}
 
   push(delta: string): Verdict {
-    this.text = normaliseCitations(this.text + delta);
-    const cut = this.boundary();
-    if (cut <= this.released) return { ok: true, emit: '' };
-    return this.release(cut);
+    this.text = normaliseCitations((this.text + delta).normalize('NFKC'));
+    if (this.text.length > 24_000) return { ok: false, reason: 'answer-too-long' };
+    return { ok: true, emit: '' };
   }
 
   finish(): Verdict {
     this.text = this.text.trimEnd();
-    return this.release(this.text.length, true);
+    const reason = this.violation();
+    if (reason) return { ok: false, reason };
+    this.released = this.text;
+    return { ok: true, emit: this.text };
   }
 
   get output(): string {
-    return this.text.slice(0, this.released);
+    return this.released;
   }
 
-  private release(cut: number, final = false): Verdict {
-    const reason = this.violation(cut, final);
-    if (reason) return { ok: false, reason };
-    const emit = this.text.slice(this.released, cut);
-    this.released = cut;
-    return { ok: true, emit };
-  }
-
-  /** Where it is safe to release up to: before the last two words, and never straight after a number. */
-  private boundary(): number {
-    const text = this.text;
-    let cut = text.length;
-    for (let words = 0; words < 2 && cut > 0; words++) {
-      const head = text.slice(0, cut);
-      const lastSpace = head.search(/\s\S*\s*$/);
-      cut = lastSpace < 0 ? 0 : lastSpace;
-    }
-    while (cut > this.released) {
-      const head = text.slice(0, cut);
-      const token = /\S*$/.exec(head)?.[0] ?? '';
-      if (!/\d/.test(token)) break;
-      cut -= token.length;
-      cut = head.slice(0, cut).trimEnd().length;
-    }
-    return cut;
-  }
-
-  private violation(cut: number, final: boolean): string | null {
-    const head = this.text.slice(0, cut);
+  private violation(): string | null {
+    const head = this.text;
     if (this.canary && head.includes(this.canary)) return 'canary';
     if (OFFICIAL_NAME.test(head)) return 'official-name';
     for (const value of WITHHELD_VALUES) if (head.includes(value)) return 'withheld-value';
     if (EMAIL.test(head)) return 'contact-detail';
     for (const number of phoneNumbers(head)) if (!this.publishedPhones.has(number)) return 'contact-detail';
-    // Figures are read from the whole text so scale words after the cut are seen.
-    const bad = unsupported(this.text, this.pool, final ? Infinity : cut);
-    if (bad.length) return `unsupported-figure:${bad.map((f) => f.raw).join(',')}`;
+    if (/\b(?:stole|embezzled|secretly connected|nagnakaw|ninakaw)\b/i.test(head) ||
+        /\b(?:is|was|are|were)\s+(?:a\s+)?(?:corrupt|thief|crook)\b/i.test(head)) return 'unsupported-allegation';
+    let pool = this.pool;
+    if (this.passageTexts) {
+      const cites = [...head.matchAll(/\[(\d+)\]/g)].map((m) => Number(m[1]));
+      if (cites.some((n) => !Number.isSafeInteger(n) || n < 1 || n > this.passageTexts!.length)) return 'invalid-citation';
+      if (!cites.length) return 'missing-citation';
+      pool = figurePool(...[...new Set(cites)].map((n) => this.passageTexts![n - 1]));
+    }
+    const bad = unsupported(head, pool);
+    if (bad.length) return 'unsupported-figure';
     return null;
   }
 }
@@ -200,7 +189,7 @@ export function normaliseCitations(text: string): string {
     .replace(/\[(\d+)\s*,\s*(\d+)\]/g, '[$1][$2]');
 }
 
-/** The pool of figures an answer may use: everything in the passages, the conversation and today's date. */
+/** The pool of figures an answer may use: published passages only. */
 export function figurePool(...texts: string[]): Figure[] {
   return texts.flatMap((t) => figures(t));
 }

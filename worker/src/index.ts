@@ -64,7 +64,7 @@ export default {
       try {
         return json(await sync(env, { force: url.searchParams.get('force') === '1' }));
       } catch (error) {
-        console.error('admin sync failed', String(error));
+        console.error('admin sync failed', error instanceof Error ? error.name : 'internal');
         return json({ error: 'sync_failed' }, 502);
       }
     }
@@ -119,7 +119,7 @@ export default {
     ctx.waitUntil(
       answer(env, chat, stream, canary, abort.signal)
         .catch(async (error) => {
-          console.error('chat failed', String(error));
+          console.error('chat failed', error instanceof Error ? error.name : 'internal');
           await stream.send({ t: 'error', code: 'failed', message: 'Something went wrong. Please try again.' });
         })
         .finally(() => stream.close()),
@@ -133,7 +133,7 @@ export default {
         sync(env).then((r) => r.changed && console.log('corpus synced', JSON.stringify(r))),
         cleanup(env),
       ]).then((results) => {
-        for (const r of results) if (r.status === 'rejected') console.error('scheduled task failed', String(r.reason));
+        for (const r of results) if (r.status === 'rejected') console.error('scheduled task failed', r.reason instanceof Error ? r.reason.name : 'internal');
       }),
     );
   },

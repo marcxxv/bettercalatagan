@@ -5,13 +5,14 @@
 >
 > It is not affiliated with, endorsed by, or operated by the municipal government of Calatagan,
 > the Provincial Government of Batangas, or any national government agency. It does not use the
-> municipal seal or coat of arms as its identity.
+> municipal seal or coat of arms as its identity. A captioned stylised seal appears solely
+> as a historical illustration; it does not indicate government authorisation or endorsement.
 
 A civic-information portal for the **Municipality of Calatagan, Batangas, Philippines** that
 collects public information from government sources and shows, for every figure, where it came
 from and how well it has been checked.
 
-Part of the [BetterGov.ph](https://bettergov.ph) / Better LGU community.
+Inspired by the [BetterGov.ph](https://bettergov.ph) / Better LGU community.
 Directory entry: [Calatagan, Batangas](https://lgu.bettergov.ph).
 
 ---
@@ -40,9 +41,10 @@ Pages grouped as the Better LGU portals group theirs (Services, Government,
 Statistics, Transparency), including a profile for each of the 25 barangays; machine-readable
 datasets are guarded by tests that run on every push. Every page
 has an "Ask anything" box: instant search as you type, and, on Enter, an assistant that answers
-in English, Filipino or Taglish from the site's own pages only, citing each one. Its figures are
-checked against the pages in code before they are shown (see
-[ADR 0006](docs/adr/0006-editorial-redesign.md) and [ADR 0007](docs/adr/0008-grounded-assistant.md)).
+in English, Filipino or Taglish using retrieved site passages. Complete answers are buffered;
+citation numbers and numeric values are checked against the cited passages before release.
+These checks do not establish semantic accuracy or eliminate AI errors (see
+[ADR 0006](docs/adr/0006-editorial-redesign.md) and [ADR 0008](docs/adr/0008-grounded-assistant.md)).
 
 | Dataset | Tier | Basis |
 | --- | --- | --- |
@@ -67,6 +69,10 @@ the listed Aquaria group URL is inaccessible, and PlayaLolita’s roster entry h
 
 Every figure on the finances page records the spreadsheet cell it came from. Filings that do not
 reconcile against their own internal arithmetic are withheld, not flagged.
+Arithmetic reconciliation verifies internal consistency, not the truth of the LGU's filing.
+DPWH coverage is limited to records available through the derivative API and the location filter.
+A maintainer has an operational affiliation with Valley O’Ville; its listing follows the same
+published evidence criteria and is not an independent booking or accreditation certification.
 
 **Not published, and why:** land area (PSA's own table reports a figure implying ten times its
 neighbours' density), elected officials (an election result is not proof of present incumbency),
@@ -106,7 +112,8 @@ rather than disabling verification.
 
 The site builds to static HTML: no CMS, no authentication, no analytics, and search runs in the
 browser against a prebuilt index. Documents open in an in-site reader through host-level
-pass-through rewrites to the Internet Archive and DILG; nothing is stored. The one moving part is
+pass-through rewrites to the Internet Archive and DILG; the host may cache responses, but no
+separate local mirror is maintained. The one moving part is
 the assistant, a Cloudflare Worker in [`worker/`](worker/README.md) that the site uses only when
 built with `PUBLIC_ASK_ENDPOINT` (see [`.env.example`](.env.example)); without it every page works
 exactly as before. The build writes the assistant's knowledge, `/ask/corpus.json`, from the

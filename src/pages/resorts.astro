@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Icon from '../components/Icon.astro';
-import { directoryIssues, DOT_CALABARZON_ROSTER, resorts } from '../data/resorts';
+import { directoryIssues, DOT_CALABARZON_ROSTER, resorts, RESORT_DISCLOSURE } from '../data/resorts';
 import type { ResortChannel, ResortEntry } from '../data/resorts';
 import { formatDate } from '../lib/format';
 import { SITE } from '../lib/site';
@@ -168,6 +168,7 @@ const resortSearchText = (resort: ResortEntry) => [
     <section class="method section-block prose" id="method" aria-labelledby="method-title">
       <p class="eyebrow">The limits of a directory</p>
       <h2 id="method-title">What “checked” means here</h2>
+      <p>{RESORT_DISCLOSURE}</p>
       <p>
         For Anam Beach Resort, Aquaria Water Park (grouped with Crusoe Cabins in the roster), Lago de Oro, Nawa Wellness and PlayaLolita Beach Resort, the dated
         <a href={DOT_CALABARZON_ROSTER} rel="noopener noreferrer">DOT CALABARZON roster</a>

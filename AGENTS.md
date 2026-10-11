@@ -38,7 +38,8 @@ Breaking any of these is a defect, whatever else improves.
    while surrounding text continues to use theme tokens.
 5. **Provenance fields mean what they say.** `asOf` = period the data describes; `lastVerified` =
    when a *person* checked the source; `accessedOn` = when a URL was actually opened. Scripts
-   never set `lastVerified`. Never set `accessedOn` for a URL you did not open.
+   never set `lastVerified`. Review dates in data modules are explicit literals, never derived
+   from generated timestamps. Never set `accessedOn` for a URL you did not open.
 6. **Publish disagreements; don't pick winners silently.** See CONTRIBUTING.md.
 7. **Never disable TLS verification.** DILG's missing intermediate certificate is supplied from
    `certs/`.
@@ -111,6 +112,8 @@ certs/                DILG intermediate certificate
   cited resort-site page and review date. The dated DOT roster supports only what it listed then;
   resort-published links do not prove social-account control, live accreditation or safe payment.
   `/data/resorts.json` is exported without a civic-data readiness tier.
+  `RESORT_DISCLOSURE` is shared by the page and export and identifies the maintainer's
+  operational affiliation with Valley O’Ville without certifying its bookings or accreditation.
 - Exports: `/data/index.json` (catalogue), `/data/{municipality,financials,fdp-filings,documents}.json`,
   `/search.json` (ask/search index), `/llms.txt`, `/sitemap.xml`.
 - Pipelines, review flow and how to add a source: **`docs/data-pipelines.md`**.
@@ -171,7 +174,8 @@ width so its `thead` sticks to the page. Selects are `appearance: none` (Safari)
 **Components** (`src/components/`): `SiteHeader`, `SiteFooter` (giant wordmark), `PageHeader`
 (rounded panel with eyebrow, icon, lede, aside slot), `HeroCarousel` (home scenes, hero ask
 `data-hero-ask`), `AskBar` (floating 448×56 ask bar; hides when the hero ask is visible or a
-dialog is open; grows on hover), `SearchDialog` (⌘K), `DocViewer` (reader), `BarangayMap` (SVG fallback + lazy MapLibre 3D map, `scripts/barangay-map.ts`), `Source` (provenance chip;
+dialog is open; grows on hover), `SearchDialog` (⌘K), `DocViewer` (reader), `BarangayMap` (linked SVG group + lazy MapLibre 3D map, `scripts/barangay-map.ts`;
+loading canvas stays inert, then fallback links leave the tab order when the live map is ready), `Source` (provenance chip;
 `also` groups records that sit together), `Cites`, `Freshness`, `AgencyBadge` (PSA/DILG/BLGF/DOF/NHCP/IA marks), `Mark` (inline logo,
 theme-aware), `Icon` (stroke icon set; add names to the `IconName` union), charts `ColumnChart`,
 `LineChart`, `Donut`, `Contours` (decorative topography).
@@ -213,8 +217,17 @@ from.
   large change spreads over several runs instead of spending the day's AI allowance at once).
 - **Guard** (`worker/src/guard.ts`, `numbers.ts`): figures must round from the passages; the
   officials/withheld lists must equal the CI lists (a test enforces it). Change both together.
+  ADR 0013 buffers complete model answers (24,000 characters maximum) before release;
+  citation numbers and all numeric values are checked against published cited passages only,
+  never against user questions or history; signs, peso markers and code text are checked too.
+  Checks do not prove semantic accuracy. Log fixed
+  categories, never provider response bodies or rejected values.
 - **Never store** questions or answers. After changing the prompt, models or guard, run
   `node worker/eval/run.mjs` against a Worker.
+  Keep isolated test Workers separate from production D1/Vectorize. A fixture eval is not a
+  live provider evaluation; run the live regression set on the reviewed Worker before rollout.
+  Sensitive reports: `docs/reporting.md` records the currently missing private inbox and
+  the handling process. Never invent a contact address or request sensitive data in public issues.
 
 ## 7. Document reader
 
@@ -228,7 +241,7 @@ Any link carrying `readAttrs()` / `archiveReadAttrs()` / `fdpReadAttrs()` from
 - Legacy `.doc` cannot be rendered; it shows a "Get file" link.
 - Bytes come through same-origin pass-through rewrites: `/wayback/*` → `web.archive.org/web/*`
   (with `id_` for raw captures) and `/fdp-file/:id` → DILG download (`vercel.json`; mirrored in
-  `astro.config.mjs` for dev/preview). Nothing is stored. ADR 0007.
+  `astro.config.mjs` for dev/preview). The host may cache responses; no maintained mirror is stored. ADR 0007, clarified by 0013.
 - `?read=<id>` deep-links a document. Renderers load only on first open.
 
 ## 8. SEO

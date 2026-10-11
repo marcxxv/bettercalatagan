@@ -11,5 +11,7 @@ describe('resort-channel export', () => {
     expect(body.data.resorts).toHaveLength(6);
     expect(body.data.resorts.find((entry: { id: string }) => entry.id === 'valley-o-ville').dotRecord).toBeUndefined();
     expect(body.meta.disclaimer).toContain('not a booking guarantee');
+    expect(body.meta.conflict_of_interest).toContain('operational affiliation');
+    expect(body.meta.conflict_of_interest).toContain('operator-confirmed');
   });
 });

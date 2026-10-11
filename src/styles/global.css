@@ -1453,6 +1453,9 @@ details > summary::-webkit-details-marker {
   color: var(--c-muted);
 }
 .row-sub a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   color: var(--c-accent);
 }
 .cell {

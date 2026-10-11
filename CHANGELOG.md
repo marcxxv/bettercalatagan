@@ -7,6 +7,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Pre-publication hardening
+- Aligned independence copy with the retained historical seal; corrected privacy descriptions
+  for the separate assistant database, request counts, browser storage, providers and maps.
+- Qualified DPWH/disclosure coverage and bidder interpretations; attributed extracted financial
+  and DPWH compilations to BetterCalatagan while retaining original source-agency credits.
+- Shared the Valley O’Ville operational-affiliation disclosure between the resort guide and JSON;
+  documented the missing private reporting inbox without publishing a placeholder.
+- Kept existing review dates as literals so automated retrieval never advances human verification.
+- Buffered complete assistant answers before release; excluded user messages from numeric
+  grounding, checked counts, signs, peso markers and citation numbers, screened accusation requests, and removed
+  provider bodies and rejected values from answer/error logs. See ADR 0013 for limits.
+- Corrected the narrow-screen menu label, source-chip wrapping and barangay-link target sizes; made the JSON example keyboard-scrollable
+  and prevented hidden map controls from receiving focus while retaining accessible SVG links.
+- Added a minimal page CSP and sandboxed FDP responses while retaining bounded reader rewrites.
+- Applied compatible dependency security updates; remaining advisory findings and validation
+  are recorded in `docs/audits/2026-10-11-report.md`.
+
 ### Changed — Seal depth and finish
 - Kept the existing face artwork unchanged and gave the rotating seal a substantial gold body:
   a 64-panel sidewall, capped faces and metallic bevel lighting. Increased its display size and

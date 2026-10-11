@@ -29,7 +29,7 @@ const max = Math.max(...barangayPages.map((b) => b.census?.totalPopulation ?? 0)
   <h2 id="bmap-title" class="visually-hidden">{focus ? `${byCode.get(focus)?.name} on the map of Calatagan` : 'Map of Calatagan’s barangays'}</h2>
 
   <div class="bmap-stage">
-    <svg class="bmap-fallback" viewBox={`0 0 ${svg.width} ${svg.height}`} role="img" aria-labelledby="bmap-svg-title">
+    <svg class="bmap-fallback" viewBox={`0 0 ${svg.width} ${svg.height}`} role="group" aria-labelledby="bmap-svg-title">
       <title id="bmap-svg-title">Calatagan’s 25 barangays, shaded by 2024 population</title>
       {svg.paths.map((p) => {
         const b = byCode.get(p.psgc10)!;
@@ -45,7 +45,7 @@ const max = Math.max(...barangayPages.map((b) => b.census?.totalPopulation ?? 0)
         <text x={p.label[0]} y={p.label[1]} aria-hidden="true">{byCode.get(p.psgc10)!.name.replace(' (Pob.)', '')}</text>
       ))}
     </svg>
-    <div class="bmap-canvas" data-map-canvas aria-hidden="true"></div>
+    <div class="bmap-canvas" data-map-canvas aria-hidden="true" inert></div>
 
     <div class="bmap-bar bmap-top" data-map-ui hidden>
       <div class="seg" role="radiogroup" aria-label="Raise barangays by">

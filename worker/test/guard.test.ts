@@ -74,12 +74,13 @@ describe('OutputGuard', () => {
     expect(run(new OutputGuard(pool, 'BC-canary'), words(answer))).toEqual({ out: answer, reason: null });
   });
 
-  it('holds a number back until its scale word has arrived', () => {
+  it('holds the entire answer until final validation, including split scale words', () => {
     const guard = new OutputGuard(pool, 'BC-canary');
     const early = guard.push('Income was ₱237.9 ');
-    expect(early).toEqual({ ok: true, emit: 'Income' });
+    expect(early).toEqual({ ok: true, emit: '' });
     const later = guard.push('million in the first half of the year');
-    expect(later).toEqual({ ok: true, emit: ' was ₱237.9 million in the first half of' });
+    expect(later).toEqual({ ok: true, emit: '' });
+    expect(guard.finish().ok).toBe(true);
   });
 
   it('withdraws an answer with a figure the passages do not support', () => {

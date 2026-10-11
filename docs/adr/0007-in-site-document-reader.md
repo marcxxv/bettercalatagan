@@ -49,3 +49,5 @@ Every trigger is a real link to the original, so without JavaScript, or on a mod
 - The reader shows sources unaltered. It is not a mirror: if the Archive or DILG removes a file,
   it stops opening here too, which is the honest outcome for a provenance-first site
   ([0001](0001-provenance-first-civic-data.md)).
+
+**Update (2026-10-11):** [ADR 0013](0013-prepublication-evidence-and-answer-validation.md) clarifies that host caching is configured in `vercel.json`; “nothing is stored” above means no maintained application mirror, not no infrastructure copy.

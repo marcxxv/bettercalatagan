@@ -5,10 +5,9 @@
  * fine; one that writes "₱240 million", adds two quarters together, or recalls
  * a population from training data is not. So each figure the answer writes is
  * read together with the precision it was written at, and accepted only if a
- * figure in the passages (or the question) rounds to it.
- *
- * Small whole numbers (under 100: "25 barangays", "Q2", "8 members") are not
- * checked; they are too common to police and too small to mislead.
+ * figure in the published, cited passages rounds to it. All numeric values
+ * are checked, including small counts. Peso markers and signs are kept separate. This does not verify other units, period
+ * attribution or the truth of a sentence; those still require source review.
  */
 
 export interface Figure {
@@ -17,6 +16,7 @@ export interface Figure {
   /** Half of this is the rounding tolerance implied by how the figure was written. */
   unit: number;
   percent: boolean;
+  peso: boolean;
   /** Whether the figure is significant enough to check. */
   checked: boolean;
   raw: string;
@@ -42,15 +42,14 @@ const NUMBER =
   /(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d+))?(?:\s?(%|percent\b|porsiyento\b|thousand\b|libo\b|million\b|milyon\b|billion\b|bilyon\b|mn\b|bn\b|[kmb](?![a-z])))?/gi;
 
 /**
- * Blank out what is not prose (citation markers, link targets, code), keeping
+ * Blank out citation markers and link targets, keeping
  * every other character at its offset so positions still line up.
  */
 export function prose(text: string): string {
   const blank = (m: string) => ' '.repeat(m.length);
   return text
     .replace(/\]\([^)]*\)/g, blank)
-    .replace(/\[\d+(?:\s*[,–-]\s*\d+)*\]/g, blank)
-    .replace(/`[^`]*`/g, blank);
+    .replace(/\[\d+(?:\s*[,–-]\s*\d+)*\]/g, blank);
 }
 
 export function figures(text: string): Figure[] {
@@ -74,12 +73,18 @@ export function figures(text: string): Figure[] {
       unit = whole.includes(',') && trailing >= 3 ? 1000 : 1;
     } else unit = 1;
 
-    const value = base * scale;
+    const start = match.index ?? 0;
+    const prefix = text.slice(Math.max(0, start - 12), start);
+    const tail = text.slice(start + raw.length, start + raw.length + 12);
+    const peso = /(?:₱|PHP|pesos?)\s*[-−]?\s*$/i.test(prefix) || /^\s*pesos?\b/i.test(tail);
+    const negative = /[-−]\s*$/.test(prefix) || /[-−]\s*(?:₱|PHP)\s*$/i.test(prefix);
+    const value = base * scale * (negative ? -1 : 1);
     out.push({
       value,
       unit: unit * scale,
       percent,
-      checked: percent || Boolean(decimals) || value >= 100,
+      peso,
+      checked: true,
       raw: raw.trim(),
       start: match.index ?? 0,
       end: (match.index ?? 0) + raw.length,
@@ -91,7 +96,7 @@ export function figures(text: string): Figure[] {
 /** True if some figure in the pool, rounded to the answer's precision, equals it. */
 export function supported(figure: Figure, pool: readonly Figure[]): boolean {
   const tolerance = figure.unit / 2 + Math.abs(figure.value) * 1e-9;
-  return pool.some((known) => known.percent === figure.percent && Math.abs(known.value - figure.value) <= tolerance);
+  return pool.some((known) => known.percent === figure.percent && (!figure.peso || known.peso) && Math.abs(known.value - figure.value) <= tolerance);
 }
 
 /** Figures in `answer` that no figure in `pool` supports. */

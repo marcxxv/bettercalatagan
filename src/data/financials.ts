@@ -34,8 +34,8 @@ const totalChecks = verifiedFilings.reduce((sum, f) => sum + f.reconciliation.to
 export const financialsSource: DataSource = {
   sources: [FDPP_LISTING],
   asOf: periodRange(),
-  lastVerified: sreDataset.generatedAt.slice(0, 10) as `${number}-${number}-${number}`,
-  verification: 'verified',
+  lastVerified: '2026-09-22', // Maintainer review date; retrieval never advances this.
+  verification: 'reported',
   status: 'latest-official',
   tier: 2,
   expectedRefresh: 'quarterly',

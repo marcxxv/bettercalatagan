@@ -97,6 +97,11 @@ office. Confirm current incumbency separately before describing anyone as the pr
 
 ## Making a change
 
+GitHub issues are public. Do not post sensitive personal information, legal notices,
+payment records or security exploit details. A private reporting inbox has not yet
+been configured. See [reporting and review process](docs/reporting.md); this setup
+requirement must be resolved before inviting sensitive reports.
+
 1. Fork and branch.
 2. Add or amend the record, with its full provenance envelope.
 3. Add a line to `CHANGELOG.md` under *Unreleased* — this changelog tracks **data** changes, not

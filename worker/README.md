@@ -1,7 +1,7 @@
 # The Better Calatagan assistant (Cloudflare Worker)
 
 Answers questions from the site’s own published pages, with citations. Design and reasoning:
-[ADR 0007](../docs/adr/0008-grounded-assistant.md).
+[ADR 0008](../docs/adr/0008-grounded-assistant.md).
 
 ```
 Browser ──POST /session──▶ Worker ──▶ signed session token (Turnstile first, if configured)
@@ -17,10 +17,14 @@ Cron (every 30 min) ─────▶ fetch SITE_URL/ask/corpus.json → re-emb
 | `src/corpus.ts` | Syncing the index with the published corpus |
 | `src/prompt.ts` | The instructions (no backticks inside the prompt text) |
 | `src/model.ts` | Model chain: NYO first, Workers AI fallback |
-| `src/guard.ts`, `src/numbers.ts` | Input screening, fixed answers, the streaming output guard, numeric grounding |
+| `src/guard.ts`, `src/numbers.ts` | Input screening, fixed answers, complete-answer validation, numeric grounding |
 | `src/limits.ts`, `src/session.ts` | Rate limits, token budget, session tokens, Turnstile |
 | `schema.sql` | D1 tables (no questions or answers are stored) |
 | `eval/` | Regression questions and the runner |
+
+Model answers are buffered (at most 24,000 characters) and released only after validation
+against cited published passages. Fixed fallbacks replace rejected answers and provider refusals.
+This checks numeric matches and bounded rules, not semantic truth. See [ADR 0013](../docs/adr/0013-prepublication-evidence-and-answer-validation.md).
 
 ## Resources (account “Primary”)
 

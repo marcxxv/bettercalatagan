@@ -154,7 +154,7 @@ export async function* complete(
       if (started) throw error;
       if (error instanceof ModelError && error.refusal) throw error;
       lastError = error;
-      console.warn('model failed, trying the next', `${spec.provider}:${spec.model}`, String(error));
+      console.warn('model failed, trying the next', `${spec.provider}:${spec.model}`, error instanceof ModelError ? error.status : 'internal');
     } finally {
       clearTimeout(timer);
       signal.removeEventListener('abort', abort);

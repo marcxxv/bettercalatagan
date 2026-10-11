@@ -62,11 +62,15 @@ const jsonLd = [
     description,
     url: new URL('/infrastructure', origin).toString(),
     isAccessibleForFree: true,
-    creator: { '@type': 'Organization', name: 'Department of Public Works and Highways' },
+    creator: { '@id': new URL('/#publisher', origin).toString() },
     publisher: { '@type': 'Organization', name: SITE.name },
     temporalCoverage: `${Math.min(...years)}/${Math.max(...years)}`,
     spatialCoverage: { '@type': 'Place', name: 'Calatagan, Batangas, Philippines' },
-    isBasedOn: infrastructureSource.sources.map((s) => s.url),
+    isBasedOn: infrastructureSource.sources.map((s) => ({
+      '@type': 'CreativeWork', url: s.url, name: s.name,
+      publisher: { '@type': 'Organization', name: s.publisher },
+    })),
+    creditText: 'DPWH contract records accessed through BetterGov.ph; selection and location classification by BetterCalatagan.',
     distribution: [
       { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: new URL('/data/infrastructure.json', origin).toString() },
     ],
@@ -79,7 +83,7 @@ const jsonLd = [
     eyebrow="Transparency"
     icon="flag"
     title="National infrastructure in Calatagan"
-    lede="Roads, school buildings, covered courts, water systems and bridges: every contract the Department of Public Works and Highways describes as being in Calatagan, with its budget, contractor and status, as DPWH published it."
+    lede="Roads, school buildings, covered courts, water systems and bridges identified in available DPWH contract records through BetterGov.ph, with reported budgets, contractors and status. This is not a complete register of works in Calatagan."
     {crumbs}
   >
     <dl slot="aside" class="aside-card">
@@ -122,7 +126,7 @@ const jsonLd = [
       <p class="callout-title"><Icon name="info" size="18" /> National projects, not municipal ones</p>
       <p>
         These are DPWH contracts, mostly let by its Batangas 1st District Engineering Office. They are
-        national government spending in Calatagan, separate from the municipality’s own budget on the
+        national government contracts identified in Calatagan, separate from the municipality’s own budget on the
         <a href="/finances">Finances</a> page. Amounts are contract budgets, not audited spending.
       </p>
     </div>
@@ -158,7 +162,7 @@ const jsonLd = [
     </section>
 
     <section class="section-block" id="projects" aria-labelledby="projects-title">
-      <p class="eyebrow">Every contract</p>
+      <p class="eyebrow">Available contracts</p>
       <h2 id="projects-title">Projects</h2>
 
       <form class="toolbar" data-filter="project-list" data-noun="projects" role="search" aria-label="Filter projects" style="--filter-cols: 4" hidden>

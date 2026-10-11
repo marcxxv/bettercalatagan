@@ -27,7 +27,7 @@ export const WAYBACK_CALATAGAN: SourceReference = {
 export const documentsSource: DataSource = {
   sources: [WAYBACK_CALATAGAN],
   asOf: yearRange(),
-  lastVerified: archivedDocuments.generatedAt.slice(0, 10) as `${number}-${number}-${number}`,
+  lastVerified: '2026-09-22', // Maintainer review date; retrieval never advances this.
   verification: 'verified',
   status: 'archived',
   tier: 2,
@@ -36,7 +36,7 @@ export const documentsSource: DataSource = {
     'Built from the Internet Archive CDX index for calatagan.gov.ph, keeping successful captures of document files and discarding plugin assets and duplicate captures. Each entry keeps the URL it had on the municipal site, the archive URL, the capture date and the archive’s content digest. Documents are classified from the filename the municipality chose; anything that does not match a pattern is listed as "Other" rather than guessed at.',
   caveat:
     'These documents come from the municipality’s former website, which is offline. They are a historical record: none should be read as the municipality’s current position, current fees, or current procedure. Where a document states its own period, that is shown.',
-  note: 'Indexed and linked, not mirrored. The Internet Archive already preserves these files; PDFs open in the reader on this site by passing the Archive’s own copy straight through, and nothing is stored here.',
+  note: 'Indexed and linked, not mirrored. The Internet Archive already preserves these files; PDFs open in the reader on this site by passing the Archive’s own copy straight through, without a maintained local mirror. The host may cache these responses.',
 };
 
 export const documents: Sourced<ArchivedDocument[]> = {

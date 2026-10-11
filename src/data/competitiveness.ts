@@ -37,7 +37,7 @@ export const competitivenessSource: DataSource = {
     { ...DTI_CMCI_PROFILE, accessedOn: retrieved },
   ],
   asOf: `CMCI ${cmciYears[0].year}–${latestCmci.year}`,
-  lastVerified: retrieved,
+  lastVerified: '2026-09-30', // Maintainer review date; retrieval never advances this.
   verification: 'verified',
   status: 'latest-official',
   tier: 1,

@@ -36,8 +36,23 @@ Philippines (R.A. No. 8293) and the rules each agency applies to its own publica
   a claim of ownership.
 - **Attribute always.** Every citation names the issuing agency.
 
-If you are an agency and want a mirrored document removed or corrected, open an issue and it will
-be handled promptly.
+Public factual corrections can be reported through GitHub issues. Do not post personal data,
+legal notices or confidential material there. A private reporting channel is not yet configured;
+see `docs/reporting.md` for the setup requirement and review process.
+
+The document reader passes source bytes through the host, which may cache responses according to
+`vercel.json`. This is not a separately maintained preservation mirror or a grant of reuse rights.
+
+## Artwork, marks and map services
+
+Agency marks credit sources and do not indicate endorsement. The municipal seal rendition is
+maintainer-supplied historical artwork; its underlying municipal identity is not relicensed.
+Reproduction restrictions and the supplied reference's rights require separate review.
+See `public/images/README.md` and `docs/audits/2026-10-11-report.md`.
+Channel marks are third-party assets, not project-owned CC BY material. Their origins are recorded
+in `public/icons/channels/README.md`; use remains subject to the platforms' applicable terms.
+Fonts keep their separate OFL licences. Map outlines retain their source attribution; OpenFreeMap
+and AWS terrain tiles are external services, not assets licensed by this repository.
 
 ## Third-party document hosts
 

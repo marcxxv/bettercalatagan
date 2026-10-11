@@ -19,8 +19,9 @@ describe('figures', () => {
     expect(figures('1890')[0].unit).toBe(1);
   });
 
-  it('does not check small whole numbers', () => {
-    expect(figures('25 barangays in Q2').every((f) => !f.checked)).toBe(true);
+  it('checks small whole numbers too', () => {
+    expect(figures('25 barangays in Q2').every((f) => f.checked)).toBe(true);
+    expect(unsupported('99 barangays', figures('25 barangays'))).toHaveLength(1);
   });
 });
 
@@ -40,6 +41,16 @@ describe('supported', () => {
 
   it('keeps percentages and amounts apart', () => {
     expect(supported(figures('61')[0], pool)).toBe(false);
+  });
+
+  it('checks code, signs and peso context instead of borrowing population', () => {
+    expect(unsupported('`987654321`', pool)).toHaveLength(1);
+    expect(unsupported('₱60,420', pool)).toHaveLength(1);
+    expect(unsupported('PHP 60,420', pool)).toHaveLength(1);
+    expect(unsupported('60,420 pesos', pool)).toHaveLength(1);
+    expect(unsupported('−₱237.9 million', pool)).toHaveLength(1);
+    expect(unsupported('₱-237.9 million', pool)).toHaveLength(1);
+    expect(unsupported('−5', figures('Balance: −5'))).toEqual([]);
   });
 
   it('ignores citation markers and link targets', () => {

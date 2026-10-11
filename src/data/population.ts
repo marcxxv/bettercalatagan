@@ -17,12 +17,11 @@ import type { DataSource, Sourced } from './types/provenance.js';
 /** Throws at build time if the generated file does not match the schema. */
 export const psaPopulation = psaPopulationSchema.parse(raw);
 
-const accessedOn = psaPopulation.retrievedAt.slice(0, 10) as `${number}-${number}-${number}`;
 
 const census2024Source: DataSource = {
   sources: [PSA_OPENSTAT_CENSUS_2024, PSA_BATANGAS_POPCEN_2024],
   asOf: '1 July 2024',
-  lastVerified: accessedOn,
+  lastVerified: '2026-09-24', // Maintainer review date; retrieval never advances this.
   verification: 'verified',
   status: 'latest-official',
   tier: 1,
@@ -75,7 +74,7 @@ export const populationSeries: Sourced<typeof psaPopulation.populationSeries> = 
   source: {
     sources: [PSA_OPENSTAT_SERIES],
     asOf: '2015, 2020 and 2024 census reference dates',
-    lastVerified: accessedOn,
+    lastVerified: '2026-09-24', // Maintainer review date; retrieval never advances this.
     verification: 'verified',
     status: 'latest-official',
     tier: 1,

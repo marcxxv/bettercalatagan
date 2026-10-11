@@ -79,7 +79,10 @@ describe('sessions', () => {
     const { token } = await issue('secret');
     expect(await verify('secret', token)).toMatch(/^[0-9a-f-]{36}$/);
     expect(await verify('other', token)).toBeNull();
-    expect(await verify('secret', `${token.slice(0, -2)}xx`)).toBeNull();
+    const [payload, signature] = token.split('.');
+    // Change a significant byte, rather than random trailing base64 padding bits.
+    const tampered = `${payload}.${signature[0] === 'A' ? 'B' : 'A'}${signature.slice(1)}`;
+    expect(await verify('secret', tampered)).toBeNull();
     expect(await verify('secret', token, Date.now() + 3 * 60 * 60 * 1000)).toBeNull();
     expect(await verify('secret', null)).toBeNull();
   });
