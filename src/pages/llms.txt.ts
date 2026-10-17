@@ -51,7 +51,7 @@ ${NAV_GROUPS.map((group) => `\n### ${group.label}\n\n${group.items.map((item) =>
 - [Financial statements](${url('/data/financials.json')})
 - [Full Disclosure filings](${url('/data/fdp-filings.json')})
 - [Archived documents](${url('/data/documents.json')})
-- [Resort-published channels](${url('/data/resorts.json')}) — tourism observations, not civic-data verification and not a booking guarantee; review dates and limitations are on [the resort guide](${url('/resorts')}).
+- [Resort-published channels](${url('/data/resorts.json')}) — tourism observations, not civic-data verification and not a booking guarantee; review dates and limitations are on [the resort directory](${url('/resorts')}).
 
 ## Citing
 

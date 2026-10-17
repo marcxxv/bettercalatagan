@@ -7,6 +7,34 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Home hero scene dots and a history beam
+- The home hero’s six scenes now carry a small position indicator: one dot per scene, the active
+  one widening into an accent pill, and clicking a dot jumps to that scene (keyboard accessible,
+  hidden without JavaScript). The history page’s header takes the same slow lighthouse-beam sweep
+  the not-found page uses, which suits the Cape Santiago story.
+
+### Changed — Explicit light and dark themes
+- Removed the “system” theme option: the site now has two modes, light (the default) and dark,
+  chosen with the header toggle and remembered in the browser. It no longer follows
+  `prefers-color-scheme`, so dark styles live in one `:root[data-theme='dark']` block instead of
+  two, the map retheme listener and one page-level media override are gone, and `theme-color`
+  follows the chosen theme (ADR 0014, amending 0006).
+
+### Fixed — Highlight colour on menus in dark mode
+- Menu, dialog and popover highlights used the page-level accent wash, which is nearly the same
+  value as the panel it sat on in dark mode, so hovering a navy Services ▾ item or the selected
+  search result barely showed. Added `--c-wash-raised` and `--c-sunk-raised` for content on a
+  raised surface and used them for the menu hover, the current-page item and its icon chip, the
+  “how to tell” icon, the selected search result and the assistant’s mark and source cards. Light
+  mode is unchanged.
+
+### Changed — Resort directory naming
+- Renamed the resort entry in the Services navigation, the page itself and the overview to
+  “Resort directory” (from “Resorts & booking tips”), keeping the original safety shield in
+  navigation, the overview shortcut and the page heading, so the label reads as a checked listing
+  of resort-published links rather than booking advice. Aligned the page title, metadata,
+  cross-references, the data catalogue and llms.txt; safety guidance and evidence are unchanged.
+
 ### Changed — Pre-publication hardening
 - Aligned independence copy with the retained historical seal; corrected privacy descriptions
   for the separate assistant database, request counts, browser storage, providers and maps.
@@ -37,8 +65,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 
 ### Changed — Search and resort discovery
-- Renamed the resort page and Services entry to “Calatagan resorts & booking tips” / “Resorts & booking tips,”
-  retaining the original safety shield in navigation, the overview shortcut and the page heading.
 - Added an in-page search for resort names, barangays, domains and published channel types, with
   live counts, shareable query URLs, clear and no-results states. The existing dataset and barangay
   filters now match accents and punctuation consistently; results ease into view across filters and

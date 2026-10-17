@@ -67,7 +67,7 @@ const counts: Record<string, string> = {
   '/procurement': 'Notices of award and bidding',
   '/hotlines': '911 and local lines',
   '/holidays': `${holidays.length} dates this year`,
-  '/resorts': `${resorts.length} resort websites · booking precautions`,
+  '/resorts': `${resorts.length} resort websites, checked and dated`,
 };
 /** Plain-language shortcuts for common visitor tasks. */
 const TASKS: { label: string; href: string; icon: Parameters<typeof Icon>[0]['name'] }[] = [
@@ -318,7 +318,7 @@ const jsonLd = [
       <aside class="resort-safety" aria-labelledby="resort-safety-title">
         <span class="resort-safety-icon" aria-hidden="true"><Icon name="shield" size="22" /></span>
         <div>
-          <p class="eyebrow">Before you book</p>
+          <p class="eyebrow">Before you pay</p>
           <h3 id="resort-safety-title">Make sure you’re speaking to the resort.</h3>
           <p>Fake pages impersonate real places. Compare the seller’s account with links published on the resort’s website, then confirm the reservation and payment instructions independently. A directory cannot guarantee a booking.</p>
         </div>

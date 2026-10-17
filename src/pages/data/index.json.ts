@@ -97,7 +97,7 @@ export const GET: APIRoute = ({ site }) => {
     },
     {
       id: 'resort-channels',
-      title: 'Resort-published booking and social channels (not a booking guarantee)',
+      title: 'Resort directory: resort-published website and social channels (not a booking guarantee)',
       url: `${base}/resorts.json`,
       records: resorts.length,
       evidence_model: 'tourism-channel observations, separate from civic-data readiness tiers',

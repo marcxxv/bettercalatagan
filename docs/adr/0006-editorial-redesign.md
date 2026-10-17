@@ -24,7 +24,9 @@ screen recording supplied by the maintainer.
 **Look.** Light and editorial. `--c-bg` near-white, rounded grey panels (`--c-panel`) that open
 each page with the masthead floating over them, near-black navy ink, and a single interactive
 accent (`--c-accent`, navy blue). Reef teal, harbour gold and earthenware clay are kept for data
-and status only. Dark mode is fully supported and follows the system unless the reader chooses.
+and status only. Dark mode is fully supported and follows the system unless the reader chooses
+(amended by [0014](0014-explicit-light-and-dark-themes.md): light is the explicit default and the
+site no longer follows the system).
 
 **Type.** Source Serif 4 with its **optical-size axis** (self-hosted, `opsz` + `wght`), so large
 headings automatically use the high-contrast display cut; set at weight 400 with tight tracking.

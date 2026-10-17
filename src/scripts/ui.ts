@@ -10,29 +10,27 @@ if (motionOK) root.classList.add('js-motion');
 
 /* ---------- Theme ---------- */
 
-type ThemeChoice = 'system' | 'light' | 'dark';
+type ThemeChoice = 'light' | 'dark';
 const THEME_KEY = 'bc-theme';
 
 function readTheme(): ThemeChoice {
   try {
-    const value = localStorage.getItem(THEME_KEY);
-    return value === 'light' || value === 'dark' ? value : 'system';
+    return localStorage.getItem(THEME_KEY) === 'dark' ? 'dark' : 'light';
   } catch {
-    return 'system';
+    return 'light';
   }
 }
 
 function applyTheme(choice: ThemeChoice) {
-  if (choice === 'system') root.removeAttribute('data-theme');
-  else root.setAttribute('data-theme', choice);
+  root.setAttribute('data-theme', choice);
   try {
-    if (choice === 'system') localStorage.removeItem(THEME_KEY);
-    else localStorage.setItem(THEME_KEY, choice);
+    localStorage.setItem(THEME_KEY, choice);
   } catch {
     /* storage unavailable: the choice lasts for this page only */
   }
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (meta) meta.content = choice === 'dark' ? '#0a0f17' : '#fbfbfa';
   const labels: Record<ThemeChoice, string> = {
-    system: 'Theme: match system',
     light: 'Theme: light',
     dark: 'Theme: dark',
   };
@@ -46,8 +44,7 @@ function applyTheme(choice: ThemeChoice) {
 applyTheme(readTheme());
 for (const button of document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]')) {
   button.addEventListener('click', () => {
-    const order: ThemeChoice[] = ['system', 'light', 'dark'];
-    const next = order[(order.indexOf(readTheme()) + 1) % order.length];
+    const next: ThemeChoice = readTheme() === 'dark' ? 'light' : 'dark';
     root.classList.add('theme-switching');
     applyTheme(next);
     window.setTimeout(() => root.classList.remove('theme-switching'), 420);

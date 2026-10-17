@@ -10,8 +10,8 @@
  * Every text pairing below was measured against WCAG 2.2 AA (4.5:1 text,
  * 3:1 non-text) in both themes; see docs/adr/0006-editorial-redesign.md.
  *
- * Theme: follows the system unless the reader picks one, in which case
- * <html data-theme="light|dark"> overrides it.
+ * Theme: explicit — light (the default) or dark, chosen by the reader and
+ * written by the page as <html data-theme="light|dark">.
  *
  * Breakpoints (literal values in media queries):
  *   30rem (480px) · 40rem (640px) · 48rem (768px) · 64rem (1024px) · 80rem (1280px)
@@ -95,6 +95,11 @@
   --logo-ink: #1a3aa8;
   --logo-bg: #ffffff;
 
+  /* Washes for content sitting on a raised surface (menus, dialogs, popovers),
+     where the page-level washes would be too close to the panel in dark mode. */
+  --c-wash-raised: #e8edf8;
+  --c-sunk-raised: #ebebe7;
+
   /* Typography */
   --font-serif: 'Source Serif 4', 'Source Serif Pro', Georgia, 'Times New Roman', serif;
   --font-sans: 'Public Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
@@ -166,70 +171,6 @@
 
 /* ---------- Dark ---------- */
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    color-scheme: dark;
-    --c-bg: #0a0f17;
-    --c-bg-alt: #0f1621;
-    --c-surface: #121a26;
-    --c-raised: #172130;
-    --c-sunk: #1a2433;
-    --c-panel: #111925;
-    --c-panel-2: #0d141e;
-    --c-ink: #eef1f5;
-    --c-ink-2: #c6ccd5;
-    --c-muted: #9aa3b0;
-    --c-navy: #f3f5f8;
-    --c-accent: #9db7f2;
-    --c-accent-strong: #c3d3f7;
-    --c-accent-wash: #16223b;
-    --c-accent-line: #2d4478;
-    --c-teal: #5fd0c3;
-    --c-teal-wash: #0e3434;
-    --c-gold: #e6b448;
-    --c-gold-ink: #f0c66b;
-    --c-clay: #f0a07c;
-    --c-clay-wash: #3a2016;
-    --c-line: #222c3a;
-    --c-line-strong: #334052;
-    --c-control: #6c7888;
-    --c-ok: #74d39a;
-    --c-ok-wash: #11301f;
-    --c-warn: #f0c66b;
-    --c-warn-bg: #2a220f;
-    --c-warn-line: #8f6f25;
-    --c-danger: #ff9d8f;
-    --c-band: #111925;
-    --c-band-2: #0d141e;
-    --c-band-ink: #eef1f5;
-    --c-band-muted: #b3bcc8;
-    --c-band-line: rgb(238 241 245 / 0.1);
-    --c-band-accent: #9db7f2;
-    --c-band-gold: #f0c66b;
-    --contour: rgb(238 241 245 / 0.06);
-    --contour-major: rgb(157 183 242 / 0.12);
-    --beam: rgb(240 198 107 / 0.08);
-    --c-ink-panel: #05080d;
-    --c-s1: #9db7f2;
-    --c-s2: #5fd0c3;
-    --c-s3: #e6b448;
-    --c-s4: #f0a07c;
-    --c-s5: #5b6f96;
-    --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
-    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 12px -4px rgb(0 0 0 / 0.4);
-    --shadow-md: 0 18px 40px -18px rgb(0 0 0 / 0.7);
-    --shadow-lg: 0 36px 70px -24px rgb(0 0 0 / 0.8);
-    --shadow-bar: 0 10px 40px -8px rgb(0 0 0 / 0.7);
-    --go-bg: #9db7f2;
-    --go-ink: #0a0f17;
-    --go-hover: #c3d3f7;
-    --hit-hover: rgb(255 255 255 / 0.04);
-    --check-ink: #0a6660;
-    --logo-ink: #9db7f2;
-    --logo-bg: #0f1622;
-  }
-}
-
 :root[data-theme='dark'] {
   color-scheme: dark;
   --c-bg: #0a0f17;
@@ -291,4 +232,7 @@
   --check-ink: #0a6660;
   --logo-ink: #9db7f2;
   --logo-bg: #0f1622;
+  /* Lighter than the page washes: these sit on --c-raised (#172130). */
+  --c-wash-raised: #26344d;
+  --c-sunk-raised: #242f42;
 }

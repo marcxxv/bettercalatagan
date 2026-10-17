@@ -137,13 +137,12 @@ purposeful and respects `prefers-reduced-motion`.
 `--c-clay(-wash)`, `--c-ok`, `--c-warn(-bg|-line)`, `--c-danger`, spacing `--sp-1…10`, type
 `--fs-2xs…display`, `--radius-*`, `--shadow-*`, `--dur-1…3`, `--ease-out`, `--tap` (44px).
 Component tokens exist for theme-sensitive parts (`--go-*` ask arrow, `--logo-ink/--logo-bg`,
-`--hit-hover`, `--check-ink`).
+`--hit-hover`, `--check-ink`, `--c-wash-raised/--c-sunk-raised` for content on raised surfaces).
 
-**Dark mode** has three switches and every theme colour must be defined for all three:
-light `:root`; `@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) }`;
-`:root[data-theme='dark']`. A colour set only under `[data-theme=dark]` is a bug (it misses
-system dark). Theme choice is stored in `localStorage['bc-theme']` and applied pre-paint in
-`Base.astro`. Light is the default.
+**Theme** is explicit: two switches, and every theme colour must be defined in both — light
+`:root` (the default) and `:root[data-theme='dark']`. The reader's choice is stored in
+`localStorage['bc-theme']` and applied pre-paint in `Base.astro`; the page never follows
+`prefers-color-scheme` (ADR 0014). `theme-color` follows the chosen theme from the same script.
 
 **Avoid (rejected before):** coloured left-stripe panels ("AI-slop" border-left accents),
 gradients-as-decoration, glassmorphism, stock hero photos, a back-to-top button, anything that

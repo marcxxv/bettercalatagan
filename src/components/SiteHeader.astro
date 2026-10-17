@@ -104,7 +104,6 @@ const groupCurrent = (items: readonly { href: string }[]) => items.some((item) =
         <Icon name="search" size="19" />
       </button>
       <button class="icon-button js-only theme-toggle" type="button" data-theme-toggle aria-label="Change theme">
-        <span class="t-system"><Icon name="monitor" size="19" /></span>
         <span class="t-light"><Icon name="sun" size="19" /></span>
         <span class="t-dark"><Icon name="moon" size="19" /></span>
       </button>
@@ -145,7 +144,6 @@ const groupCurrent = (items: readonly { href: string }[]) => items.some((item) =
             </ul>
             <p class="menu-theme js-only">
               <button type="button" class="button small" data-theme-toggle aria-label="Change theme">
-                <span class="t-system"><Icon name="monitor" size="16" /> System theme</span>
                 <span class="t-light"><Icon name="sun" size="16" /> Light theme</span>
                 <span class="t-dark"><Icon name="moon" size="16" /> Dark theme</span>
               </button>
@@ -253,7 +251,7 @@ const groupCurrent = (items: readonly { href: string }[]) => items.some((item) =
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: var(--c-accent-wash);
+    background: var(--c-wash-raised);
     color: var(--c-accent);
   }
   .tell-panel strong {
@@ -556,11 +554,11 @@ const groupCurrent = (items: readonly { href: string }[]) => items.some((item) =
   }
   .drop-panel a:hover,
   .drop-panel a:focus-visible {
-    background: var(--c-accent-wash);
+    background: var(--c-wash-raised);
     color: var(--c-ink);
   }
   .drop-panel a[aria-current='page'] {
-    background: var(--c-sunk);
+    background: var(--c-sunk-raised);
     color: var(--c-ink);
   }
   .drop-icon {
@@ -569,7 +567,7 @@ const groupCurrent = (items: readonly { href: string }[]) => items.some((item) =
     width: 34px;
     height: 34px;
     border-radius: var(--radius-sm);
-    background: var(--c-sunk);
+    background: var(--c-sunk-raised);
     color: var(--c-accent);
   }
   .drop-text {
@@ -620,8 +618,7 @@ const groupCurrent = (items: readonly { href: string }[]) => items.some((item) =
     align-items: center;
     gap: var(--sp-2);
   }
-  [data-theme-toggle]:not([data-state]) .t-system,
-  [data-theme-toggle][data-state='system'] .t-system,
+  [data-theme-toggle]:not([data-state]) .t-light,
   [data-theme-toggle][data-state='light'] .t-light,
   [data-theme-toggle][data-state='dark'] .t-dark {
     display: inline-flex;

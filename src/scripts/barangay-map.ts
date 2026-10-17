@@ -387,7 +387,6 @@ async function start() {
     });
   };
   new MutationObserver(retheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', retheme);
 
   // Keep the canvas sized to its frame (the page layout can change under it).
   new ResizeObserver(() => map.resize()).observe(canvas);

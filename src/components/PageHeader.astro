@@ -14,16 +14,18 @@ interface Props {
   lede?: string;
   crumbs?: Crumb[];
   icon?: IconName;
+  /** Add the slow lighthouse-beam sweep to the contours (the history page). */
+  beam?: boolean;
 }
 
-const { title, eyebrow, lede, crumbs = [], icon } = Astro.props;
+const { title, eyebrow, lede, crumbs = [], icon, beam = false } = Astro.props;
 const hasMeta = Astro.slots.has('meta');
 const hasAside = Astro.slots.has('aside');
 ---
 
 <header class="page-header on-band">
   <div class="panel">
-    <Contours lines={12} focus={0.78} />
+    <Contours lines={12} focus={0.78} beam={beam} />
     <div class:list={['ph-inner', { 'has-aside': hasAside }]}>
       <div class="ph-main">
         {crumbs.length > 0 && (
