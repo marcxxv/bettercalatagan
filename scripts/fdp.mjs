@@ -163,7 +163,10 @@ async function request(url, { retries = 4 } = {}) {
       return response;
     } catch (error) {
       lastError = error;
-      if (attempt < retries) await sleep(600 * 2 ** attempt);
+      // A connection that never opens (the portal unreachable for a while, as
+      // seen from GitHub's runners in November 2026) needs a longer wait than
+      // a busy server: 5, 10, 20, 40 seconds.
+      if (attempt < retries) await sleep(5_000 * 2 ** attempt);
     }
   }
   throw lastError ?? new Error('request failed');
