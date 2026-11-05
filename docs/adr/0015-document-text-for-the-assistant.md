@@ -37,5 +37,7 @@ published nor trustworthy.
 
 - `/ask/corpus.json` grows by the extracted text; the Worker re-indexes it over several runs
   (at most 320 passages a run).
-- Answers can quote historical documents; the passage text says each is a historical record.
+- Answers can quote historical documents, including the 2022 charters' fees and processing times that
+  the pages themselves deliberately do not restate. Every document passage says it is a dated historical
+  record whose fees, requirements and times may have changed, and to confirm with the office.
 - A document whose pages were all withheld or scanned can only be described, not quoted.

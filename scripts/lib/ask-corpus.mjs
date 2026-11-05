@@ -355,7 +355,7 @@ export async function recordPassages(dir = GENERATED) {
             url: `/documents?read=${d.id}#page=${pg.page}${parts.length > 1 ? `-${i + 1}` : ''}`,
             page: 'Archived document text',
             section: `${d.title} — page ${pg.page}`,
-            text: `From the archived document “${d.title}” (${when}; a historical record), page ${pg.page}:\n${part.trim()}`,
+            text: `From the archived document “${d.title}” (${when}; a historical record), page ${pg.page}. Any fee, requirement, schedule or processing time below is as the municipality published it then and may have changed; say so, and suggest confirming with the office.\n${part.trim()}`,
             keywords: d.filename.replace(/[._-]+/g, ' '),
           });
         });
