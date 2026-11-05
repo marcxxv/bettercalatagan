@@ -324,8 +324,11 @@ export async function recordPassages(dir = GENERATED) {
     load('fdp-filings.json'),
   ]);
   const passages = [];
+  // Page text of archived PDFs (scripts/document-text.mjs, ADR 0015); absent until extracted.
+  const texts = await load('document-text.json').then((t) => t.documents).catch(() => ({}));
 
   for (const d of archive.documents) {
+    const text = texts[d.id];
     const when = d.publishedYear ? `${d.publishedMonth ? `${MONTHS[d.publishedMonth - 1]} ` : ''}${d.publishedYear}` : 'undated';
     const lines = [
       `Archived document from the former municipal website calatagan.gov.ph: “${d.title}”.`,
@@ -333,9 +336,31 @@ export async function recordPassages(dir = GENERATED) {
       `Captured by the Internet Archive on ${d.capturedAt}. It is a historical record, not the municipality’s current position.`,
       d.inspected
         ? `Opened and checked by a maintainer on ${d.inspected.inspectedOn}${d.inspected.pages ? ` (${d.inspected.pages} pages)` : ''}: ${d.inspected.summary}`
-        : 'Not yet opened by a maintainer: it is described by its filename only, and the site does not summarise its contents.',
-    ];
+        : 'Not yet opened by a maintainer; any summary of it comes from its text, quoted page by page, not from a maintainer’s reading.',
+      text?.status === 'text'
+        ? `Its text layer was read for ${text.pages.length} of ${text.pageCount} pages${text.pagesWithheld ? ` (${text.pagesWithheld} withheld because they name officials or contact details)` : ''}${text.pagesWithoutText ? `; ${text.pagesWithoutText} are scanned images without text` : ''}.`
+        : text?.status === 'no-text-layer'
+          ? 'It is a scanned image without a text layer, so its contents cannot be read or quoted here; open the document to read it.'
+          : text?.status === 'all-withheld'
+            ? 'Its pages name officials or contact details, which this site withholds, so its text is not quoted here.'
+            : null,
+    ].filter(Boolean);
     passages.push({ url: `/documents?read=${d.id}`, page: 'Archived documents', section: d.title, text: lines.join('\n'), keywords: d.filename.replace(/[._-]+/g, ' ') });
+    // The document's own words, one passage per page (split if long), deep-linked to the page.
+    if (text?.status === 'text') {
+      for (const pg of text.pages) {
+        const parts = pg.text.length > 1600 ? pg.text.match(/[\s\S]{1,1500}(?:\s|$)/g) ?? [pg.text] : [pg.text];
+        parts.forEach((part, i) => {
+          passages.push({
+            url: `/documents?read=${d.id}#page=${pg.page}${parts.length > 1 ? `-${i + 1}` : ''}`,
+            page: 'Archived document text',
+            section: `${d.title} — page ${pg.page}`,
+            text: `From the archived document “${d.title}” (${when}; a historical record), page ${pg.page}:\n${part.trim()}`,
+            keywords: d.filename.replace(/[._-]+/g, ' '),
+          });
+        });
+      }
+    }
   }
 
   for (const p of dpwh.projects) {

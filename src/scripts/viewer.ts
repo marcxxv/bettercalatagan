@@ -358,7 +358,46 @@ if (dialog) {
     document.body.classList.remove('viewer-open');
   }
 
+  /* ---------- Ask about this document (the assistant docked beside it) ---------- */
+  const askToggle = $('[data-v-ask-toggle]') as HTMLButtonElement;
+  const askSide = $('[data-v-ask]');
+  // Only when the assistant is configured on this build (AskPanel renders #ask-panel).
+  const askAvailable = Boolean(document.querySelector('#ask-panel'));
+  askToggle.hidden = !askAvailable;
+  let askModule: Promise<typeof import('./ask')> | null = null;
+  const setAsk = (show: boolean) => {
+    askSide.hidden = !show;
+    dialog.classList.toggle('with-ask', show);
+    askToggle.setAttribute('aria-pressed', String(show));
+    // The document column changed width: refit the pages.
+    window.dispatchEvent(new Event('resize'));
+    if (show) {
+      askModule ??= import('./ask');
+      void askModule.then((m) => m.dockAsk(askSide));
+    } else askToggle.focus({ preventScroll: true });
+  };
+  askToggle.addEventListener('click', () => setAsk(askSide.hidden));
+  askSide.addEventListener('ask:dock-close', () => setAsk(false));
+  // A source citing a page of the open document turns the reader to that page
+  // instead of leaving it; other sources open as usual.
+  askSide.addEventListener('click', (event) => {
+    const link = (event.target as Element).closest<HTMLAnchorElement>('a[href]');
+    if (!link || link.origin !== location.origin) return;
+    const url = new URL(link.href);
+    const page = Number(/page=(\d+)/.exec(url.hash)?.[1]);
+    if (url.searchParams.get('read') === opener?.dataset.id && page) {
+      event.preventDefault();
+      event.stopPropagation();
+      goTo(page);
+    }
+  }, { capture: true });
+
   dialog.addEventListener('close', () => {
+    // The conversation goes back to its own panel; it is kept for next time.
+    if (askModule) void askModule.then((m) => m.undockAsk());
+    askSide.hidden = true;
+    dialog.classList.remove('with-ask');
+    askToggle.setAttribute('aria-pressed', 'false');
     cleanup();
     const url = new URL(location.href);
     if (url.searchParams.has('read')) {

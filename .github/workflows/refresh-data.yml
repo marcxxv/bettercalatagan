@@ -58,6 +58,12 @@ jobs:
         continue-on-error: true
         run: npm run archive:index
 
+      - name: Text of newly archived PDFs (for the assistant)
+        id: doctext
+        if: steps.archive.outcome == 'success'
+        continue-on-error: true
+        run: npm run documents:text
+
       - name: DPWH infrastructure projects (via the BetterGov.ph DPWH API)
         id: dpwh
         continue-on-error: true

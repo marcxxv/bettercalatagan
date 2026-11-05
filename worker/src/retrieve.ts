@@ -171,6 +171,24 @@ export async function focus(env: Env, ctx: ReaderContext, query: string): Promis
       passages.push(row);
       doc = row.section;
     }
+    // The open document's own pages (ADR 0015): those matching the question,
+    // or its opening pages when nothing matches ("summarise this").
+    const pagesOf = `%?read=${ctx.read}#page=%`;
+    const match = ftsQuery(query);
+    const matched = match
+      ? (
+          await env.DB.prepare(
+            `SELECT c.id, c.url, c.page, c.section, c.text FROM chunks_fts f JOIN chunks c ON c.id = f.id
+             WHERE chunks_fts MATCH ?2 AND c.url LIKE ?1 ORDER BY bm25(chunks_fts, 0.0, 2.5, 1.0) LIMIT 4`,
+          )
+            .bind(pagesOf, match)
+            .all<Passage>()
+        ).results
+      : [];
+    const pages = matched.length
+      ? matched
+      : (await env.DB.prepare('SELECT id, url, page, section, text FROM chunks WHERE url LIKE ?1 ORDER BY length(url), url LIMIT 3').bind(pagesOf).all<Passage>()).results;
+    passages.push(...pages);
   }
   if (ctx.path) {
     const match = ftsQuery(query);

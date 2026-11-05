@@ -409,7 +409,7 @@ for (const chip of panel.querySelectorAll<HTMLButtonElement>('[data-ask-suggest]
 panel.addEventListener('click', (event) => {
   if (event.target === panel) void close();
 });
-panel.querySelector('[data-ask-close]')!.addEventListener('click', () => void close());
+panel.querySelector('[data-ask-close]')?.addEventListener('click', () => void close());
 panel.addEventListener('cancel', (event) => {
   event.preventDefault();
   void close();
@@ -475,6 +475,10 @@ function animateOpen() {
 }
 
 async function close() {
+  if (dock) {
+    dock.dispatchEvent(new CustomEvent('ask:dock-close'));
+    return;
+  }
   if (!panel.open) return;
   controller?.abort();
   if (!MOTION.matches || !panel.animate) return panel.close();
@@ -520,4 +524,71 @@ export function openAsk(question = '', from: HTMLElement | null = null) {
     if (last >= 0) scrollToTurn(last);
     input.focus();
   }
+}
+
+/* ---------- Docked beside a document (DocViewer's sidebar) ---------- */
+
+/**
+ * The conversation's parts are moved, not copied, so the one conversation and
+ * every listener go with them; undocking puts them back in the panel.
+ */
+let dock: HTMLElement | null = null;
+const dockedParts = [...panel.querySelectorAll<HTMLElement>(':scope > .ap-head, :scope > .ap-log, :scope > .ap-compose, :scope > [data-ask-status], :scope > [data-ask-challenge]')];
+const closeButton = panel.querySelector<HTMLElement>('[data-ask-close]')!;
+const emptyTitle = empty.querySelector('h3');
+const emptyText = empty.querySelector('p');
+const chips = [...empty.querySelectorAll<HTMLButtonElement>('[data-ask-suggest]')];
+const siteCopy = {
+  title: emptyTitle?.textContent ?? '',
+  text: emptyText?.textContent ?? '',
+  chips: chips.map((c) => c.dataset.askSuggest ?? ''),
+  close: closeButton.getAttribute('aria-label') ?? 'Close',
+};
+const DOC_CHIPS = [
+  'Summarise this document',
+  'What does it require, and what does it cost?',
+  'What dates and amounts does it mention?',
+  'Which other documents relate to this?',
+];
+
+function useCopy(docked: boolean) {
+  if (emptyTitle) emptyTitle.textContent = docked ? 'Ask about this document' : siteCopy.title;
+  if (emptyText) {
+    emptyText.textContent = docked
+      ? 'Answers come from the text of this document and the rest of the site’s records, and link to the page they rest on. Scanned pages without a text layer cannot be read; the assistant will say so.'
+      : siteCopy.text;
+  }
+  chips.forEach((chip, i) => {
+    const text = docked ? DOC_CHIPS[i] : siteCopy.chips[i];
+    chip.hidden = !text;
+    if (text) {
+      chip.dataset.askSuggest = text;
+      chip.textContent = text;
+    }
+  });
+  closeButton.setAttribute('aria-label', docked ? 'Hide the assistant' : siteCopy.close);
+}
+
+/** Show the conversation inside `container` (beside an open document), optionally asking `question`. */
+export function dockAsk(container: HTMLElement, question = '') {
+  if (panel.open) panel.close();
+  if (dock !== container) {
+    container.append(...dockedParts);
+    dock = container;
+    useCopy(true);
+  }
+  if (question.trim()) void send(question);
+  else {
+    const last = turns.length - 1;
+    if (last >= 0) scrollToTurn(last);
+    input.focus({ preventScroll: true });
+  }
+}
+
+/** Return the conversation to its own panel (the reader closed). The conversation is kept. */
+export function undockAsk() {
+  if (!dock) return;
+  panel.append(...dockedParts);
+  dock = null;
+  useCopy(false);
 }

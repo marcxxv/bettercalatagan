@@ -7,6 +7,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Ask about a document, beside the document
+- The reader has “Ask about this document”: the assistant opens in a sidebar beside the document (a bottom
+  sheet on narrow screens), with document-specific suggestions. Hiding it keeps the conversation and
+  returns the full-width document; closing the reader returns the conversation to its usual panel. A
+  citation of the open document turns the reader to that page.
+- The assistant can now answer from what archived documents say: `scripts/document-text.mjs` extracted the
+  text layer of 63 archived PDFs (678 pages) from the Internet Archive into `document-text.json`, published
+  as page-linked passages. 127 are scanned images with no text and are described as such; 19 were withheld
+  whole. Pages naming unverified officials or carrying contact details are dropped, and personal names
+  are replaced with “[name withheld]” (`scripts/lib/withheld.mjs`, tested to match the guard's lists).
+  With a document open, the assistant reads that document's matching pages first. See ADR 0015.
+
 ### Changed — Disclosure grid opens filings directly
 - In “What was filed, and when”, a cell with one filing opens it in the reader; a cell with several opens a
   small menu of them (unavailable ones marked), each opening in the reader, with “Show in the list below”

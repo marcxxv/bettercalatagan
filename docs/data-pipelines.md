@@ -64,6 +64,14 @@ documents (`INSPECTED`) live in `scripts/documents.mjs` so a rebuild keeps them.
 - The DILG server omits an intermediate TLS certificate; scripts pass
   `NODE_EXTRA_CA_CERTS=certs/dilg-intermediates.pem`. **Never disable TLS verification.**
 
+### Archived document text (ADR 0015)
+
+`npm run documents:text` reads each eligible archived PDF's raw bytes from the Internet Archive and
+extracts its text layer page by page into `document-text.json` (only documents not yet extracted;
+`node scripts/document-text.mjs` redoes all). Pages naming unverified officials, carrying withheld
+values or any phone number or e-mail address are dropped. Scanned PDFs are marked `no-text-layer`.
+The weekly refresh runs it after the archive index.
+
 ### SRE extraction
 
 Rows are located by **label**, never row number; every value records its sheet and cell; each

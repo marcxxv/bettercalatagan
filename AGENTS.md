@@ -225,8 +225,12 @@ from.
   as its own passage. New pages are picked up automatically; mark decoration `aria-hidden`.
   `recordPassages()` adds one passage per archived document, DPWH contract and DILG filing from
   `src/data/generated/`; a new record dataset should be added there too.
+- **Document text** (ADR 0015): `scripts/document-text.mjs` extracts archived PDFs' text layers into
+  `document-text.json` (withheld pages dropped via `scripts/lib/withheld.mjs`, kept equal to the guard by a
+  test); each page is a passage at `/documents?read=<id>#page=<n>`. The reader's "Ask about this document"
+  docks the conversation in a sidebar (`dockAsk`/`undockAsk` in `ask.ts`).
 - **Reader context:** `/chat` takes `context: { path, read }` (the page, and `?read=` document);
-  `focus()` in `retrieve.ts` puts that page's and document's passages first.
+  `focus()` in `retrieve.ts` puts that page's and document's passages (and its best-matching pages) first.
 - **Worker** (`worker/`): hybrid retrieval (D1 FTS5 + bge-m3 in Vectorize, RRF), models NYO
   `glm-5.3` → Workers AI SEA-LION → `gpt-oss-120b`, re-indexes changed passages every 30 min, in saved batches (at most 320 a run, so a
   large change spreads over several runs instead of spending the day's AI allowance at once).
