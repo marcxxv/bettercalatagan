@@ -12,6 +12,9 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  # For the fallback below: an issue can carry the review when the repository
+  # does not let Actions open pull requests.
+  issues: write
 
 concurrency:
   group: refresh-data
@@ -100,11 +103,14 @@ jobs:
             echo "| Internet Archive | $ARCHIVE |"
             echo "| DPWH projects | $DPWH |"
             echo "| DTI CMCI | $CMCI |"
+            echo "| PSA poverty | $POVERTY |"
           } >> "$RUNNER_TEMP/report.md"
           cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Open or update the review pull request
+        id: pr
         if: steps.report.outputs.substantive == 'true'
+        continue-on-error: true
         uses: peter-evans/create-pull-request@v7
         with:
           branch: data/refresh
@@ -116,3 +122,47 @@ jobs:
             src/data/generated
             data/staging
           labels: data
+
+      # The branch is pushed before the pull request is created, so when the
+      # repository forbids Actions from opening pull requests the changes are
+      # still waiting on data/refresh. Put the report and a one-click link in
+      # an issue instead, so the review step still reaches a person.
+      - name: Fall back to a review issue
+        if: steps.report.outputs.substantive == 'true' && steps.pr.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          git ls-remote --exit-code --heads origin data/refresh >/dev/null
+          {
+            echo "The weekly refresh found changes, but GitHub did not let the workflow open a pull request"
+            echo "(Settings → Actions → General → \"Allow GitHub Actions to create and approve pull requests\")."
+            echo
+            echo "**Review and merge:** https://github.com/$REPO/compare/main...data/refresh?expand=1"
+            echo
+            cat "$RUNNER_TEMP/report.md"
+          } > "$RUNNER_TEMP/issue.md"
+          title='Data refresh ready for review'
+          number=$(gh issue list --repo "$REPO" --state open --search "\"$title\" in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --repo "$REPO" --body-file "$RUNNER_TEMP/issue.md"
+            gh issue comment "$number" --repo "$REPO" --body "Updated by run $GITHUB_SERVER_URL/$REPO/actions/runs/$GITHUB_RUN_ID."
+          else
+            gh issue create --repo "$REPO" --title "$title" --body-file "$RUNNER_TEMP/issue.md"
+          fi
+
+      # A source that fails is reported above and must not pass quietly: the
+      # DILG step failed for weeks in October 2026 while every run looked fine.
+      # Ending red makes GitHub notify the maintainer.
+      - name: Fail if any source failed
+        if: always()
+        env:
+          OUTCOMES: >-
+            ${{ steps.fdp.outcome }} ${{ steps.sre.outcome }} ${{ steps.psa.outcome }}
+            ${{ steps.archive.outcome }} ${{ steps.dpwh.outcome }} ${{ steps.cmci.outcome }}
+            ${{ steps.poverty.outcome }}
+        run: |
+          case " $OUTCOMES " in
+            *" failure "*) echo "::error::At least one source failed; see the Source runs table in the summary."; exit 1 ;;
+          esac

@@ -107,9 +107,14 @@ classifies by the filename the municipality chose (unmatched → `other`, never 
 3. Writes the change report (ignores retrieval timestamps) plus a table of each source's outcome.
 4. **Only if something substantive changed**, opens or updates the pull request on branch
    `data/refresh`. That pull request is the review step. Merging publishes.
+5. If GitHub refuses to let the workflow open the pull request, the branch is still pushed and the
+   workflow opens or updates an issue, "Data refresh ready for review", with the report and a
+   compare link to open the pull request by hand.
+6. Ends **red** if any source failed, so GitHub notifies the maintainer. (In October 2026 the
+   DILG step failed for four weeks behind green runs after DILG changed certificate issuer.)
 
-Repository setting required once: *Settings → Actions → General → Workflow permissions →
-"Allow GitHub Actions to create and approve pull requests".*
+Repository setting recommended once: *Settings → Actions → General → Workflow permissions →
+"Allow GitHub Actions to create and approve pull requests".* Without it, step 5 applies.
 
 ### Reviewing a refresh pull request
 
