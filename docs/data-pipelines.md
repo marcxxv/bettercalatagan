@@ -72,6 +72,13 @@ extracts its text layer page by page into `document-text.json` (only documents n
 values or any phone number or e-mail address are dropped. Scanned PDFs are marked `no-text-layer`.
 The weekly refresh runs it after the archive index.
 
+Scanned PDFs (`no-text-layer`) are read by OCR with `NYO_API_KEY=… npm run documents:ocr`
+(`scripts/document-ocr.mjs`): each page is rendered locally with poppler's `pdftoppm` and transcribed
+word for word by a vision model on the NYO API (`OCR_MODEL`, default `minicpm-v-4.5`, fallback
+`gemma-3-27b`). The same withheld filters and name redaction apply; records get `method: "ocr"` and
+their passages say the text was machine-read and may contain recognition errors. Run it locally (it
+needs the key and poppler); it is not part of the weekly workflow.
+
 ### SRE extraction
 
 Rows are located by **label**, never row number; every value records its sheet and cell; each

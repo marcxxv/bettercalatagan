@@ -16,7 +16,8 @@ published nor trustworthy.
 - **A pipeline extracts the text layer** of eligible archived PDFs
   (`scripts/document-text.mjs`, `npm run documents:text`) into
   `src/data/generated/document-text.json`. Nothing is reworded. Scanned pages without a text
-  layer are recorded as such and never guessed at (no OCR).
+  layer are recorded as such; `scripts/document-ocr.mjs` then reads them with a vision model on the
+  NYO API (amended 2026-11-05), marked `method: "ocr"` and labelled as machine-read in every passage.
 - **Withheld means withheld.** A page containing a withheld value, an unverified official's
   surname, a telephone number or an e-mail address is dropped whole; the count is recorded.
   The lists live in `scripts/lib/withheld.mjs` and a test keeps them equal to the guard's.

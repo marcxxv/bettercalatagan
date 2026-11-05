@@ -30,7 +30,8 @@
     "boundaries:fetch": "node scripts/boundaries.mjs fetch",
     "data:refresh": "npm run fdp:stage && npm run fdp:promote && npm run fdp:extract && npm run psa:fetch && npm run archive:index && npm run dpwh:fetch && npm run cmci:fetch && npm run poverty:fetch",
     "data:report": "node scripts/data-report.mjs",
-    "documents:text": "node scripts/document-text.mjs --missing"
+    "documents:text": "node scripts/document-text.mjs --missing",
+    "documents:ocr": "node scripts/document-ocr.mjs"
   },
   "dependencies": {
     "astro": "^7.4.4",

@@ -338,7 +338,7 @@ export async function recordPassages(dir = GENERATED) {
         ? `Opened and checked by a maintainer on ${d.inspected.inspectedOn}${d.inspected.pages ? ` (${d.inspected.pages} pages)` : ''}: ${d.inspected.summary}`
         : 'Not yet opened by a maintainer; any summary of it comes from its text, quoted page by page, not from a maintainer’s reading.',
       text?.status === 'text'
-        ? `Its text layer was read for ${text.pages.length} of ${text.pageCount} pages${text.pagesWithheld ? ` (${text.pagesWithheld} withheld because they name officials or contact details)` : ''}${text.pagesWithoutText ? `; ${text.pagesWithoutText} are scanned images without text` : ''}.`
+        ? `${text.method === 'ocr' ? 'It is a scanned image; its text was machine-read (OCR)' : 'Its text layer was read'} for ${text.pages.length} of ${text.pageCount} pages${text.pagesWithheld ? ` (${text.pagesWithheld} withheld because they name officials or contact details)` : ''}${text.pagesWithoutText ? `; ${text.pagesWithoutText} are scanned images without text` : ''}.`
         : text?.status === 'no-text-layer'
           ? 'It is a scanned image without a text layer, so its contents cannot be read or quoted here; open the document to read it.'
           : text?.status === 'all-withheld'
@@ -355,7 +355,7 @@ export async function recordPassages(dir = GENERATED) {
             url: `/documents?read=${d.id}#page=${pg.page}${parts.length > 1 ? `-${i + 1}` : ''}`,
             page: 'Archived document text',
             section: `${d.title} — page ${pg.page}`,
-            text: `From the archived document “${d.title}” (${when}; a historical record), page ${pg.page}. Any fee, requirement, schedule or processing time below is as the municipality published it then and may have changed; say so, and suggest confirming with the office.\n${part.trim()}`,
+            text: `From the archived document “${d.title}” (${when}; a historical record), page ${pg.page}${text.method === 'ocr' ? ', machine-read from a scanned image (recognition errors are possible; check the page itself before relying on a figure)' : ''}. Any fee, requirement, schedule or processing time below is as the municipality published it then and may have changed; say so, and suggest confirming with the office.\n${part.trim()}`,
             keywords: d.filename.replace(/[._-]+/g, ' '),
           });
         });

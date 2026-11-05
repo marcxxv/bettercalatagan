@@ -20,6 +20,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The assistant explains general terms and processes in plain words (a Citizen's Charter, a bid security,
   R.A. 9184), gives neutral practical guidance, and answers what it can instead of refusing outright. Facts
   and figures about Calatagan still come only from the site, and every number is still checked.
+- Added `npm run documents:ocr` (`scripts/document-ocr.mjs`): reads the 127 scanned archived PDFs (135 pages)
+  with a vision model on the NYO API, applies the same withheld filters and name redaction, and labels the
+  passages as machine-read. Run locally with `NYO_API_KEY`.
 
 ### Fixed — Assistant withdrew plain-language explanations
 - Asking for a simple explanation of a document (“in layman's terms, what does this imply?”) was withdrawn
