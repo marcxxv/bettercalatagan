@@ -746,7 +746,7 @@ const jsonLd = [
     max-width: calc(var(--w-wide) + var(--gutter) * 1.5);
     margin-inline: auto;
     border-radius: var(--radius-2xl);
-    background: linear-gradient(180deg, var(--c-panel) 0%, var(--c-panel-2) 100%);
+    background: var(--c-panel);
     padding: calc(var(--header-h) + clamp(2rem, 1rem + 5vw, 5.5rem)) var(--gutter) clamp(2rem, 1rem + 3vw, 4rem);
   }
   .hero-inner {
@@ -847,7 +847,7 @@ const jsonLd = [
     stroke-width: 2.4;
   }
   .pill-check {
-    background: radial-gradient(circle at 35% 30%, #e1f1ee, #b8e3dc);
+    background: color-mix(in srgb, var(--c-ok) 18%, var(--c-surface));
     color: var(--check-ink);
   }
   .pill-seals {
@@ -898,7 +898,7 @@ const jsonLd = [
     box-shadow: var(--shadow-md);
   }
   .f-stack {
-    background: linear-gradient(160deg, #e8edf8, #f7f7f5);
+    background: var(--c-accent-wash);
   }
   .stack-card {
     position: absolute;
@@ -981,7 +981,7 @@ const jsonLd = [
     box-shadow: var(--shadow-lg);
   }
   .f-night {
-    background: radial-gradient(120% 90% at 50% 0%, #1a2b52, #070d1a 70%);
+    background: #0c1530;
   }
   .f-night svg {
     width: 100%;
@@ -1004,7 +1004,7 @@ const jsonLd = [
   .f-ring {
     display: grid;
     place-items: center;
-    background: linear-gradient(160deg, #f7f7f5, #efefec);
+    background: var(--c-panel);
   }
   .ring-orbit {
     position: absolute;
@@ -1705,7 +1705,7 @@ const jsonLd = [
     gap: var(--sp-5);
     padding: var(--sp-6);
     border-radius: var(--radius-xl);
-    background: linear-gradient(180deg, var(--c-panel), var(--c-panel-2));
+    background: var(--c-panel);
   }
   .class-badge {
     display: grid;

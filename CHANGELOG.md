@@ -7,6 +7,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Flat colours instead of decorative gradients
+- Removed decorative gradients: page header panels, home feature tiles and panels, the 404 panel,
+  the header contour glow, and the bars on Finances and Documents now use flat theme colours. Several
+  home tiles used fixed light colours and now follow dark mode. Gradients that carry meaning stay:
+  the map's colour scale and the disclosure progress ring.
+
 ### Added — Interactive infrastructure map
 - The infrastructure page has a 3D barangay map of DPWH projects: barangays rise by all projects, by
   total contract budget, or by one type of work (flood control, roads, bridges, water, buildings). The
