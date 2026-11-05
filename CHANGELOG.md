@@ -57,6 +57,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The refresh now ends red when any source fails, so a failure is noticed, and when GitHub will not let
   it open the review pull request it opens a “Data refresh ready for review” issue with the report and a
   one-click link instead. The source table also lists PSA poverty.
+- Found that the DILG portal now times out from outside the Philippines (GitHub's runners and a
+  Singapore server), so the weekly run cannot refresh DILG filings; documented the local refresh in
+  `docs/data-pipelines.md`. Connection retries now back off for up to about 75 seconds.
 - DILG moved its certificate to GlobalSign GCC R46 OV TLS CA 2025, so every DILG step had failed
   since mid-October. Added that intermediate (from GlobalSign's published AIA URL, verified to chain
   to GlobalSign Root R46) beside the old one in `certs/dilg-intermediates.pem`; TLS verification

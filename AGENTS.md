@@ -304,6 +304,8 @@ indexed. Keep titles ≤ 60 characters and descriptions ≤ 160 where possible.
   often blocked by the network policy. Don't fake data around it; say what you could not reach.
 - The DILG portal regenerates XLSX per request, so byte hashes are useless; the fingerprint hashes
   the zip central directory (ADR 0004). ~15% of DILG downloads return HTTP 500 at any time.
+- `fdpp.dilg.gov.ph` refuses connections from outside the Philippines (GitHub runners and a Singapore
+  server time out; a Philippine connection works, 5 Nov 2026). Refresh DILG from a Philippine machine.
 - `calatagan.gov.ph` is offline (no A record). The Internet Archive is the only copy.
 - PSA's website has a bot wall; PSA OpenSTAT (PxWeb API) does not.
 - The PSA land-area value is suspected wrong (10.50 vs 101.50 km²) and is withheld; never publish

@@ -113,6 +113,13 @@ classifies by the filename the municipality chose (unmatched → `other`, never 
 6. Ends **red** if any source failed, so GitHub notifies the maintainer. (In October 2026 the
    DILG step failed for four weeks behind green runs after DILG changed certificate issuer.)
 
+**DILG is reachable only from the Philippines (observed 5 November 2026).** GitHub's runners (US)
+and a Singapore server both time out connecting to `fdpp.dilg.gov.ph`, while a Philippine
+connection works. The weekly run therefore marks the DILG step failed (and ends red) until it runs
+somewhere in the Philippines. Until then, refresh DILG from a Philippine machine:
+`npm run fdp:stage && npm run fdp:promote && npm run fdp:extract`, then `npm run data:report` and
+commit through review as usual.
+
 Repository setting recommended once: *Settings → Actions → General → Workflow permissions →
 "Allow GitHub Actions to create and approve pull requests".* Without it, step 5 applies.
 
