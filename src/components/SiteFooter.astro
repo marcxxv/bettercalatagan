@@ -1,7 +1,8 @@
 ---
 import Mark from './Mark.astro';
 import { GOVERNMENT_LINKS, NAV_GROUPS, NETWORK_LINKS, SITE } from '../lib/site';
-import { barangayPopulation2024 } from '../data/population';
+import { barangayPopulation2024, psaPopulation } from '../data/population';
+import { dpwh } from '../data/infrastructure';
 import { fdpSource } from '../data/fdp';
 import { financialsSource } from '../data/financials';
 import { formatDate } from '../lib/format';
@@ -12,6 +13,9 @@ const year = new Date().getUTCFullYear();
 const lastChecked = [barangayPopulation2024.source.lastVerified, fdpSource.lastVerified, financialsSource.lastVerified]
   .sort()
   .at(-1)!;
+// The most recent automated re-read of the sources (the weekly refresh). Kept
+// apart from the human review date above, which retrieval never advances.
+const lastRead = [dpwh.retrievedAt, psaPopulation.retrievedAt].map((d) => d.slice(0, 10)).sort().at(-1)!;
 
 const links = [
   ...NAV_GROUPS.filter((group) => group.label !== 'About').map((group) => ({ href: group.href, label: group.label })),
@@ -104,7 +108,8 @@ const leaf = 'M0 0 C 3 -4, 3 -10, 0 -14 C -3 -10, -3 -4, 0 0 Z';
       <li><a href="/about#privacy">Privacy: no tracking</a></li>
       <li><a href={SITE.repository}>Source code</a></li>
       <li><a href={`${SITE.repository}/issues/new/choose`}>Report a correction</a></li>
-      <li>Data last verified <time datetime={lastChecked}>{formatDate(lastChecked)}</time></li>
+      <li>Sources re-read <time datetime={lastRead}>{formatDate(lastRead)}</time></li>
+      <li>Last reviewed by a person <time datetime={lastChecked}>{formatDate(lastChecked)}</time></li>
     </ul>
     <p class="legal">
       {SITE.independence} © {year} BetterCalatagan contributors. Code under MIT; this project’s own

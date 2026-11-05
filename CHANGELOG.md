@@ -17,6 +17,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Barangay profiles show their DPWH projects by type of work (each a link to the filtered list), with
   type icons, status colours and progress bars, matching the infrastructure page.
 - Added the Presidential Communications Office logo for holiday proclamations.
+- The footer shows both “Sources re-read” (the latest automated retrieval) and “Last reviewed by a
+  person”, so a reader can see the data is current without the review date being advanced.
+- The five “at a glance” figures on the home page each open their detail (population, households by
+  barangay, all barangays, income class, disclosures), lifting on hover.
+- Holiday proclamation links fit on one line.
 
 ### Changed — Source cards
 - Source chips are now cards instead of pale pills: the publishing agency's logo, its name, the human
