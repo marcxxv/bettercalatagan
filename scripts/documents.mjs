@@ -20,6 +20,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { titleFrom } from './lib/doc-title.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_PATH = resolve(ROOT, 'src/data/generated/archived-documents.json');
@@ -101,15 +102,6 @@ function statusOf(filename, uploadYear) {
   return uploadYear ? 'archived' : 'archived';
 }
 
-/** Turns "Construction-of-Water-System-Phase-III-at-Pob.II-Aug-282018.pdf" into prose. */
-function titleFrom(filename) {
-  return filename
-    .replace(/\.[a-z0-9]+$/i, '')
-    .replace(/^\d+\.\s*/, '')
-    .replace(/[-_]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
 
 const archiveUrl = (timestamp, original) => `https://web.archive.org/web/${timestamp}/${original}`;
 

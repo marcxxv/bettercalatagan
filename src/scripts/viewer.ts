@@ -40,6 +40,8 @@ if (dialog) {
   let current = 1;
   let opener: HTMLElement | null = null;
   let session = 0;
+  /** Who the open document is fetched from, for progress and error messages. */
+  let source = 'the Internet Archive';
   let type = 'pdf';
 
   async function loadPdfJs(): Promise<PdfJs> {
@@ -167,10 +169,42 @@ if (dialog) {
     { passive: true },
   );
 
+  /**
+   * Fetches through the same-origin pass-through, retrying when the source is
+   * slow or briefly failing. The Internet Archive can take a minute to serve a
+   * capture it has not served lately, and a gateway may give up first; the
+   * host caches each file once it arrives, so a retry usually succeeds.
+   */
+  async function fetchWithRetry(src: string, mine: number): Promise<Response> {
+    const waits = [2_000, 5_000];
+    let lastError: unknown = null;
+    for (let attempt = 0; attempt <= waits.length; attempt += 1) {
+      const slow = window.setTimeout(() => {
+        if (mine === session) progress.textContent = `Still fetching from ${source}…`;
+      }, 6_000);
+      try {
+        const response = await fetch(src);
+        if (response.ok) return response;
+        lastError = new Error(`HTTP ${response.status}`);
+        if (response.status < 500 && response.status !== 429) break;
+      } catch (error) {
+        lastError = error;
+      } finally {
+        window.clearTimeout(slow);
+      }
+      if (mine !== session) throw new Error('superseded');
+      if (attempt < waits.length) {
+        progress.textContent = `${source[0].toUpperCase()}${source.slice(1)} is slow to respond — trying again (${attempt + 2} of ${waits.length + 1})…`;
+        await new Promise((resolve) => window.setTimeout(resolve, waits[attempt]));
+        if (mine !== session) throw new Error('superseded');
+      }
+    }
+    throw lastError ?? new Error('fetch failed');
+  }
+
   /** Reads a response body while reporting progress. */
   async function fetchBytes(src: string, mine: number): Promise<Uint8Array> {
-    const response = await fetch(src);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const response = await fetchWithRetry(src, mine);
     const total = Number(response.headers.get('content-length')) || 0;
     if (!response.body) return new Uint8Array(await response.arrayBuffer());
     const reader = response.body.getReader();
@@ -199,7 +233,10 @@ if (dialog) {
   async function openPdf(src: string, trigger: HTMLElement, mine: number) {
     const lib = await loadPdfJs();
     if (mine !== session) return;
-    const task = lib.getDocument({ url: src, disableAutoFetch: true });
+    // Downloaded through the retrying fetch, then parsed from memory.
+    const data = await fetchBytes(src, mine);
+    if (mine !== session) return;
+    const task = lib.getDocument({ data });
     loadingTask = task;
     task.onProgress = ({ loaded, total }: { loaded: number; total: number }) => {
       if (total) progress.textContent = `${Math.round((loaded / total) * 100)}%`;
@@ -264,7 +301,7 @@ if (dialog) {
     zoom = 0;
     type = trigger.dataset.type ?? 'pdf';
     dialog!.dataset.type = type;
-    const source = trigger.dataset.source || 'the Internet Archive';
+    source = trigger.dataset.source || 'the Internet Archive';
     dialog!.querySelectorAll('[data-v-source]').forEach((n) => (n.textContent = source));
     $('[data-v-title]').textContent = trigger.dataset.title ?? 'Document';
     $('[data-v-meta]').textContent = trigger.dataset.meta ?? '';
@@ -328,8 +365,24 @@ if (dialog) {
       url.searchParams.delete('read');
       history.replaceState(null, '', url);
     }
-    opener?.focus({ preventScroll: true });
+    // Focus goes back to the link that opened the reader. After a mouse or
+    // touch close it should not wear a keyboard focus ring (Safari and some
+    // Chrome versions show one for script-moved focus), so mark it until the
+    // reader next moves focus by keyboard; after a keyboard close the ring stays.
+    if (opener) {
+      if (lastInput === 'pointer') {
+        opener.classList.add('focus-quiet');
+        opener.addEventListener('blur', () => opener?.classList.remove('focus-quiet'), { once: true });
+      }
+      opener.focus({ preventScroll: true, focusVisible: lastInput === 'keyboard' } as FocusOptions);
+    }
   });
+  // How the reader was last operated: decides whether returned focus shows a ring.
+  let lastInput: 'pointer' | 'keyboard' = 'pointer';
+  document.addEventListener('pointerdown', () => (lastInput = 'pointer'), { capture: true, passive: true });
+  document.addEventListener('keydown', (event) => {
+    if (!event.metaKey && !event.ctrlKey) lastInput = 'keyboard';
+  }, { capture: true });
   window.addEventListener('popstate', () => {
     if (dialog.open && !new URL(location.href).searchParams.has('read')) dialog.close();
   });

@@ -7,6 +7,17 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed — Document reader and archived titles
+- The reader now retries when the Internet Archive is slow or briefly fails (it can take over a minute
+  to serve a file it has not served lately), says so while it waits, and loads PDFs through that same
+  retrying download. Reader links use the host's single-slash form, saving a redirect before each fetch.
+- After closing the reader with a mouse or touch, the link that opened it no longer shows a focus ring;
+  after a keyboard close the ring stays, as keyboard users need it.
+- Archived document titles are separated where the municipality's filenames ran words together
+  (“OFFICE OFTHE MUNICIPAL AGRICULTURE” → “OFFICE OF THE MUNICIPAL AGRICULTURE”, “UlatSaBayan” →
+  “Ulat Sa Bayan”, “Mar 272018” → “Mar 27 2018”) by `scripts/lib/doc-title.mjs` (tested); the original
+  filenames are unchanged.
+
 ### Security — Dependencies patched and kept patched
 - Cleared all 28 Dependabot advisories: in-range updates (undici, vite, fast-uri, @vitest/mocker), Zod 3 →
   4 (schema code adjusted for `z.record`), the linter's minimatch pinned to 11, and wrangler 4.157 in the

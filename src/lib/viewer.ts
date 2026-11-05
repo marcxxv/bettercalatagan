@@ -19,7 +19,9 @@ export const isReadable = (fileType: string): fileType is ReadableType =>
  */
 export function readerSrc(archiveUrl: string): string | null {
   const match = archiveUrl.match(/^https:\/\/web\.archive\.org\/web\/(\d{14})\/(.+)$/);
-  return match ? `/wayback/${match[1]}id_/${match[2]}` : null;
+  // One slash after the scheme: the host collapses "//" with a redirect, which
+  // costs a round trip before the (often slow) Archive request even starts.
+  return match ? `/wayback/${match[1]}id_/${match[2].replace(/^(https?:)\/\//, '$1/')}` : null;
 }
 
 /** The same-origin path for a DILG Full Disclosure Policy Portal filing. */

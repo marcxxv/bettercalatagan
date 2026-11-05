@@ -8,7 +8,7 @@ import { archiveReadAttrs, fdpReadAttrs, readerSrc } from './viewer';
 describe('reader links', () => {
   it('maps a Wayback capture to its raw-bytes path', () => {
     expect(readerSrc('https://web.archive.org/web/20220806072203/http://calatagan.gov.ph/a.pdf')).toBe(
-      '/wayback/20220806072203id_/http://calatagan.gov.ph/a.pdf',
+      '/wayback/20220806072203id_/http:/calatagan.gov.ph/a.pdf',
     );
     expect(readerSrc('https://example.org/a.pdf')).toBeNull();
   });

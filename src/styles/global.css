@@ -1832,3 +1832,16 @@ details.data-table[open]::details-content {
     transition: none;
   }
 }
+
+/* Focus handed back by a script after a mouse or touch action (the document
+   reader closing): no keyboard ring, no hover look. Removed on blur. */
+.focus-quiet:focus,
+.focus-quiet:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.icon-action.focus-quiet:focus-visible:not(:hover) {
+  border-color: var(--c-line-strong);
+  background: var(--c-surface);
+  color: var(--c-ink-2);
+}
