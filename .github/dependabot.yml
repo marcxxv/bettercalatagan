@@ -10,6 +10,11 @@ updates:
       day: monday
       timezone: Asia/Manila
     open-pull-requests-limit: 5
+    # Major versions need a hand migration (ESLint 10, TypeScript 7 …); they are
+    # not proposed automatically. Security updates still arrive regardless.
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
     groups:
       minor-and-patch:
         update-types: [minor, patch]
@@ -20,6 +25,11 @@ updates:
       day: monday
       timezone: Asia/Manila
     open-pull-requests-limit: 5
+    # Major versions need a hand migration (ESLint 10, TypeScript 7 …); they are
+    # not proposed automatically. Security updates still arrive regardless.
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
     groups:
       minor-and-patch:
         update-types: [minor, patch]

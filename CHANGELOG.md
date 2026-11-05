@@ -50,6 +50,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - To stop them accumulating: a CI job fails on any advisory (every push, and weekly without one), and
   Dependabot opens grouped weekly update PRs for both packages and the GitHub Actions.
 - Added `scripts/local-dilg-refresh.sh` for refreshing DILG from a Philippine connection.
+- Applied the routine updates Dependabot proposed (Astro 7.4, MapLibre 6.16, PDF.js 6.5, GitHub Actions
+  checkout/setup-node v7, create-pull-request v8). Dependabot no longer proposes major versions, which
+  need a hand migration; security updates still arrive.
 
 ### Added — Offices of government
 - The Government page lists Calatagan's offices as the Local Government Code (RA 7160, read from the
