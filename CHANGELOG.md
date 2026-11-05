@@ -7,6 +7,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Interactive infrastructure map
+- The infrastructure page has a 3D barangay map of DPWH projects: barangays rise by all projects, by
+  total contract budget, or by one type of work (flood control, roads, bridges, water, buildings). The
+  hover tip and the selected barangay's card follow the chosen type, each contract linking to its row.
+  Without JavaScript the map is an outline shaded by project count, each barangay linking to its
+  filtered list. (`BarangayMap mode="works"`; per-barangay `budget` and `k_<kind>` counts in
+  `/data/barangays.geojson`.)
+
 ### Fixed — Document reader and archived titles
 - The reader now retries when the Internet Archive is slow or briefly fails (it can take over a minute
   to serve a file it has not served lately), says so while it waits, and loads PDFs through that same

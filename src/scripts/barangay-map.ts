@@ -13,7 +13,16 @@
  */
 import type { ExpressionSpecification, Map as MapLibreMap, MapGeoJSONFeature, StyleSpecification } from 'maplibre-gl';
 
-type Metric = 'population' | 'households' | 'projects';
+type Metric =
+  | 'population'
+  | 'households'
+  | 'projects'
+  | 'budget'
+  | 'k_flood'
+  | 'k_road'
+  | 'k_bridge'
+  | 'k_water'
+  | 'k_building';
 type Kind = 'flood' | 'water' | 'bridge' | 'road' | 'building' | 'other';
 interface Work {
   id: string;
@@ -42,6 +51,12 @@ interface Props {
   population: number;
   households: number;
   projects: number;
+  budget: number;
+  k_flood: number;
+  k_road: number;
+  k_bridge: number;
+  k_water: number;
+  k_building: number;
   share: number | null;
   label: [number, number];
   works: Work[];
@@ -51,7 +66,15 @@ const LABELS: Record<Metric, string> = {
   population: 'Population, 2024',
   households: 'Households, 2024',
   projects: 'DPWH projects named',
+  budget: 'DPWH contract budgets',
+  k_flood: 'Flood control and drainage projects',
+  k_road: 'Road projects',
+  k_bridge: 'Bridge projects',
+  k_water: 'Water and sanitation projects',
+  k_building: 'Building and facility projects',
 };
+/** The kind of work a metric isolates, if any. */
+const kindOfMetric = (m: Metric): Kind | null => (m.startsWith('k_') ? (m.slice(2) as Kind) : null);
 /** Tallest barangay, in metres of extrusion: tall enough to read, not a skyline. */
 const PEAK = 650;
 const HOME = { center: [120.645, 13.855] as [number, number], zoom: 11, pitch: 52, bearing: -18 };
@@ -189,7 +212,8 @@ async function start() {
     type: 'FeatureCollection',
     features: data.features.map((f) => ({ type: 'Feature', properties: f.properties, geometry: { type: 'Point', coordinates: f.properties.label } })),
   };
-  let metric: Metric = 'population';
+  let metric: Metric = (root.dataset.metric as Metric | undefined) ?? 'population';
+  const worksMode = root.dataset.mode === 'works';
   let threeD = true;
   let p = palette();
 
@@ -266,7 +290,9 @@ async function start() {
     map.setPaintProperty('bgy-fill', 'fill-extrusion-color', shade());
     map.setPaintProperty('bgy-fill', 'fill-extrusion-height', height());
     root!.querySelector('[data-legend-label]')!.textContent = LABELS[metric];
-    root!.querySelector('[data-legend-max]')!.textContent = fmt.format(maxOf(metric));
+    root!.querySelector('[data-legend-max]')!.textContent = metric === 'budget' ? peso(maxOf(metric)) : fmt.format(maxOf(metric));
+    // An open card follows the chosen kind of work.
+    if (selected) select(selected, { fly: false });
   }
 
   map.on('load', () => {
@@ -303,8 +329,15 @@ async function start() {
     for (const row of rows()) row.classList.toggle('is-mapped', row.dataset.psgc === id);
   };
 
-  const describe = (f: Props) =>
-    `<strong>${f.name}</strong><span>${fmt.format(f.population)} people · ${fmt.format(f.households)} households · ${f.projects} DPWH ${f.projects === 1 ? 'project' : 'projects'}</span>`;
+  const describe = (f: Props) => {
+    if (!worksMode) {
+      return `<strong>${f.name}</strong><span>${fmt.format(f.population)} people · ${fmt.format(f.households)} households · ${f.projects} DPWH ${f.projects === 1 ? 'project' : 'projects'}</span>`;
+    }
+    const kind = kindOfMetric(metric);
+    const n = kind ? f[metric] : f.projects;
+    const what = kind ? (KINDS.find(([k]) => k === kind)?.[n === 1 ? 1 : 2] ?? 'projects') : n === 1 ? 'DPWH project' : 'DPWH projects';
+    return `<strong>${f.name}</strong><span>${fmt.format(n)} ${what}${f.budget ? ` · ${peso(f.budget)} in all contracts` : ''}</span>`;
+  };
 
   const frame = (id: string) => {
     const f = data.features.find((x) => x.properties.psgc10 === id);
@@ -346,7 +379,8 @@ async function start() {
 
     // What DPWH built here: a breakdown by kind, then the newest few, each
     // linking to its full contract on the infrastructure page.
-    const works = f.works ?? [];
+    const kindFilter = kindOfMetric(metric);
+    const works = (f.works ?? []).filter((w) => !kindFilter || w.kind === kindFilter);
     if (works.length) {
       const kinds = el('ul', 'c-kinds');
       kinds.setAttribute('aria-label', 'DPWH projects by kind');
@@ -390,7 +424,7 @@ async function start() {
     const links = el('p', 'c-links');
     if (works.length) {
       const all = el('a', 'link-arrow', works.length > CARD_WORKS ? `All ${works.length} projects` : 'In the project list');
-      all.href = `/infrastructure?barangay=${f.slug}#projects`;
+      all.href = `/infrastructure?barangay=${f.slug}${kindFilter ? `&kind=${kindFilter}` : ''}#projects`;
       links.append(all);
     }
     // On a barangay's own profile, its card needs no link back to the page you are on.

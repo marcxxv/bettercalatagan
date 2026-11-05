@@ -3,7 +3,7 @@ import { boundaries } from '../../data/boundaries';
 import { barangayPages } from '../../lib/barangay-pages';
 import { labelPoint } from '../../lib/geo';
 import { dpwhHeadline } from '../../lib/dpwh-text';
-import { projectKind } from '../../lib/project-kind';
+import { projectKind, KIND_LABELS, type ProjectKind } from '../../lib/project-kind';
 
 /**
  * The map's data: each barangay's outline with its census counts and DPWH
@@ -25,6 +25,12 @@ export const GET: APIRoute = () => {
         population: b.census?.totalPopulation ?? 0,
         households: b.census?.households ?? 0,
         projects: b.projects.length,
+        // Sum of listed contract budgets (pesos), and a count per kind of work,
+        // so the infrastructure map can raise barangays by either.
+        budget: b.projectBudget,
+        ...Object.fromEntries(
+          (Object.keys(KIND_LABELS) as ProjectKind[]).map((k) => [`k_${k}`, b.projects.filter((p) => projectKind(p) === k).length]),
+        ),
         // Newest first; the map card shows a few and links to the full list.
         works: [...b.projects]
           .sort((x, y) => (y.infraYear ?? 0) - (x.infraYear ?? 0) || (y.budget ?? 0) - (x.budget ?? 0))

@@ -4,6 +4,7 @@ import PageHeader from '../components/PageHeader.astro';
 import Source from '../components/Source.astro';
 import Icon from '../components/Icon.astro';
 import ColumnChart from '../components/ColumnChart.astro';
+import BarangayMap from '../components/BarangayMap.astro';
 import {
   byYear,
   dpwh,
@@ -162,6 +163,17 @@ const jsonLd = [
           </li>
         ))}
       </ul>
+    </section>
+
+    <section class="section-block" id="map" aria-labelledby="map-title">
+      <p class="eyebrow">Where</p>
+      <h2 id="map-title">Projects on the map</h2>
+      <p class="muted">
+        Each barangay rises by the DPWH projects whose description names it: all of them, by contract
+        budget, or one type of work. Select a barangay for its contracts. Projects described only as
+        “Calatagan”, and national-road segments, are not placed on the map.
+      </p>
+      <BarangayMap mode="works" />
     </section>
 
     <section class="section-block" id="by-year" aria-labelledby="by-year-title">
