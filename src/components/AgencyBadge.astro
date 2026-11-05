@@ -1,11 +1,13 @@
 ---
 /**
- * A round badge for a source agency.
+ * A round credit badge for a source agency.
  *
  * If the agency's own logo file has been added to public/agencies/ (for
- * example public/agencies/psa.png), it is shown; otherwise the badge shows the
+ * example public/agencies/psa.png), it is shown; otherwise the tile shows the
  * agency's initials. Logos are added by maintainers from each agency's official
  * source — never redrawn here — and appear only to credit where data comes from.
+ * The frame is a plain white circle (no ring, no crest): it crops the agency's
+ * mark rather than imitating one.
  */
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -16,7 +18,9 @@ export const AGENCIES = {
   blgf: { initials: 'BLGF', name: 'Bureau of Local Government Finance' },
   dof: { initials: 'DOF', name: 'Department of Finance' },
   nhcp: { initials: 'NHCP', name: 'National Historical Commission of the Philippines' },
-  ia: { initials: 'IA', name: 'Internet Archive' },
+  // The archive's mark is a temple, not a round seal, so it is inset to stay whole
+  // inside the circular crop.
+  ia: { initials: 'IA', name: 'Internet Archive', inset: 0.66 },
 } as const;
 export type AgencyKey = keyof typeof AGENCIES;
 
@@ -38,11 +42,12 @@ interface Props {
 }
 const { agency, size = '2.25rem', class: className } = Astro.props;
 const info = AGENCIES[agency];
+const inset = 'inset' in info ? info.inset : 0.94;
 const file = ['svg', 'png', 'webp'].map((ext) => `${agency}.${ext}`).find((f) => existsSync(join(process.cwd(), 'public', 'agencies', f)));
 ---
 
-<span class:list={['agency', className, { 'has-logo': file }]} style={`--size:${size}`} title={info.name}>
-  {file ? <img src={`/agencies/${file}`} alt={info.name} width="64" height="64" loading="lazy" decoding="async" /> : <span class="ini" aria-hidden="true">{info.initials}</span>}
+<span class:list={['agency', className, { 'has-logo': file }]} style={`--size:${size};--logo-inset:${inset}`} title={info.name}>
+  {file ? <img src={`/agencies/${file}`} alt={info.name} width="256" height="256" loading="lazy" decoding="async" /> : <span class="ini" aria-hidden="true">{info.initials}</span>}
   {!file && <span class="visually-hidden">{info.name}</span>}
 </span>
 
@@ -54,8 +59,10 @@ const file = ['svg', 'png', 'webp'].map((ext) => `${agency}.${ext}`).find((f) =>
     width: var(--size);
     height: var(--size);
     border-radius: 50%;
-    background: radial-gradient(circle at 40% 35%, #ffffff, #eef1f8);
-    box-shadow: 0 0 0 1.5px #d79f22, 0 2px 8px rgb(11 18 32 / 0.18);
+    background: #fff;
+    box-shadow:
+      0 0 0 1px rgb(11 18 32 / 0.14),
+      0 1px 3px rgb(11 18 32 / 0.14);
     color: #1b3c8c;
     font-family: var(--font-serif);
     font-weight: 600;
@@ -67,13 +74,9 @@ const file = ['svg', 'png', 'webp'].map((ext) => `${agency}.${ext}`).find((f) =>
     font-size: calc(var(--size) * 0.3);
     line-height: 1;
   }
-  .agency.has-logo {
-    background: #fff;
-    box-shadow: 0 0 0 1px rgb(11 18 32 / 0.12), 0 2px 8px rgb(11 18 32 / 0.18);
-  }
   .agency img {
-    width: 88%;
-    height: 88%;
+    width: calc(100% * var(--logo-inset));
+    height: calc(100% * var(--logo-inset));
     object-fit: contain;
   }
 </style>

@@ -45,7 +45,10 @@ The document reader passes source bytes through the host, which may cache respon
 
 ## Artwork, marks and map services
 
-Agency marks credit sources and do not indicate endorsement. The municipal seal rendition is
+Agency marks credit sources and do not indicate endorsement. Each agency's logo is used as
+published by that agency (or, where its site serves only a horizontal lockup or blocks automated
+access, from a Wikimedia Commons reproduction of the same artwork) and is never redrawn: files and
+per-file origins are in `public/agencies/README.md`. The municipal seal rendition is
 maintainer-supplied historical artwork; its underlying municipal identity is not relicensed.
 Reproduction restrictions and the supplied reference's rights require separate review.
 See `public/images/README.md` and `docs/audits/2026-10-11-report.md`.
