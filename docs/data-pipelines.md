@@ -62,7 +62,7 @@ documents (`INSPECTED`) live in `scripts/documents.mjs` so a rebuild keeps them.
   checksum with a failure (keeps `lastKnownGoodAt`), records resubmissions in
   `supersededFdppIds`.
 - The DILG server omits an intermediate TLS certificate; scripts pass
-  `NODE_EXTRA_CA_CERTS=certs/geotrust-tls-rsa-ca-g1.pem`. **Never disable TLS verification.**
+  `NODE_EXTRA_CA_CERTS=certs/dilg-intermediates.pem`. **Never disable TLS verification.**
 
 ### SRE extraction
 

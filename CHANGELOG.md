@@ -7,6 +7,22 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Data — Refresh of 5 November 2026 (DPWH, DILG)
+- DPWH (via the DPWH infrastructure transparency data): two new Nasugbu–Lian–Calatagan Road
+  contracts for procurement (26DB0221, ₱48.0M ABC; 26DB0475, ₱2.3M ABC); 26DB0036 awarded to LLEB
+  Construction and Trading (₱15.3M, 5.3% complete, started 1 September 2026); 25DB0160, the Brgy.
+  Talisay multi-purpose building, now completed (18 January 2026); 25DB0052 lists four bidders.
+- DILG Full Disclosure Policy Portal: the 2023 Annual Procurement Plan, previously a source error,
+  now downloads (XLSX). All 156 filings re-read; 14 SREs still reconcile. Other datasets unchanged.
+- `lastVerified` dates are unchanged: they record a person's review, not a retrieval.
+
+### Fixed — Weekly data refresh
+- DILG moved its certificate to GlobalSign GCC R46 OV TLS CA 2025, so every DILG step had failed
+  since mid-October. Added that intermediate (from GlobalSign's published AIA URL, verified to chain
+  to GlobalSign Root R46) beside the old one in `certs/dilg-intermediates.pem`; TLS verification
+  stays on. The workflow also cannot open its review PR until the repository allows GitHub Actions
+  to create pull requests (Settings → Actions → General).
+
 ### Changed — Seal as a turning 3D medallion
 - The overview seal is now a real three-dimensional gold medallion (three.js) that turns on its
   own, slowly — one turn every 24 seconds — with no buttons. It can be dragged, and slows while the

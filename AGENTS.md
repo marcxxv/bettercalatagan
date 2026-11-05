@@ -89,7 +89,7 @@ data/staging/         FDP staging file (committed)
 docs/adr/             decisions 0001–0011; docs/data-pipelines.md runbook
 worker/               the assistant: Cloudflare Worker, D1 + Vectorize, eval set (worker/README.md)
 public/               logo*.svg, favicons, og/*.png, fonts/ (self-hosted), agencies/ (badges)
-certs/                DILG intermediate certificate
+certs/                TLS intermediates: dilg-intermediates.pem (DILG, old + current), SC E-Library
 ```
 
 ## 4. Data model and flow

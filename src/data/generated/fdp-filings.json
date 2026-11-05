@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-22T15:02:15.371Z",
+  "generatedAt": "2026-11-05T03:37:43.193Z",
   "lgu": "Calatagan, Batangas",
   "listingUrl": "https://fdpp.dilg.gov.ph/fdpp/report/index?region_filter=04&province_filter=010&lgu_filter=08&document_filter=&year_filter=&quarter_filter=&docperiod_filter=&page=1",
   "portalReportedTotal": 156,
@@ -24,7 +24,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2026-q2-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Municipal Hall Calatagan",
         "Calatagan Public Market",
@@ -34,7 +34,7 @@
         "quarter": 3,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -54,7 +54,7 @@
       "formSlug": "ldrrmf-utilization",
       "httpStatus": 200,
       "id": "fdp-2026-q2-ldrrmf-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "MUNICIPAL HALL CALATAGAN",
         "CALATAGAN PUBLIC MARKET",
@@ -64,7 +64,7 @@
         "quarter": 3,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -84,7 +84,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2026-q2-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "MUNICIPAL HALL CALATAGAN",
         "CALATAGAN PUBLIC MARKET",
@@ -94,7 +94,7 @@
         "quarter": 3,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -114,7 +114,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2026-q2-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "MUNICIPAL HALL CALATAGAN",
         "CALATAGAN PUBLIC MARKET",
@@ -124,7 +124,7 @@
         "quarter": 3,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -144,7 +144,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2026-q2-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "MUNICIPAL HALL CALATAGAN",
         "CALATAGAN PUBLIC MARKET",
@@ -154,7 +154,7 @@
         "quarter": 3,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -174,7 +174,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2026-q2-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "MUNICIPAL HALL CALATAGAN",
         "CALATAGAN PUBLIC MARKET",
@@ -184,7 +184,7 @@
         "quarter": 3,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -204,7 +204,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2026-q2-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "MUNICIPAL HALL CALATAGAN",
         "CALATAGAN PUBLIC MARKET",
@@ -214,7 +214,7 @@
         "quarter": 3,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -234,7 +234,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2026-q2-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "CALATAGAN MUNICIPAL HALL",
         "CALATAGAN PUBLIC MARKET",
@@ -244,7 +244,7 @@
         "quarter": 3,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -264,7 +264,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2026-q2-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "MUNICIPAL HALL CALATAGAN",
         "CALATAGAN PUBLIC MARKET",
@@ -274,7 +274,7 @@
         "quarter": 3,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -294,7 +294,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2026-q2-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "MUNICIPAL HALL CALATAGAN",
         "CALATAGAN PUBLIC MARKET",
@@ -304,7 +304,7 @@
         "quarter": 3,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -324,7 +324,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2026-q1-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -334,7 +334,7 @@
         "quarter": 2,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -354,7 +354,7 @@
       "formSlug": "ldrrmf-utilization",
       "httpStatus": 200,
       "id": "fdp-2026-q1-ldrrmf-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -364,7 +364,7 @@
         "quarter": 2,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -384,7 +384,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2026-q1-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -394,7 +394,7 @@
         "quarter": 2,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -414,7 +414,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2026-q1-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -424,7 +424,7 @@
         "quarter": 2,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -444,7 +444,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2026-q1-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -454,7 +454,7 @@
         "quarter": 2,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -474,7 +474,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2026-q1-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Muncipal Hall",
         "Calatagan Public Market",
@@ -484,7 +484,7 @@
         "quarter": 2,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -504,7 +504,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2026-q1-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -514,7 +514,7 @@
         "quarter": 2,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -534,7 +534,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2026-q1-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -544,7 +544,7 @@
         "quarter": 2,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -564,7 +564,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2026-q1-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -574,7 +574,7 @@
         "quarter": 2,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -594,7 +594,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2026-q1-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calagan Public Market",
@@ -604,7 +604,7 @@
         "quarter": 2,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -630,7 +630,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -656,7 +656,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -676,7 +676,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2025-q4-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Municipal Hall Calatagan",
         "Calatagan Public Market",
@@ -686,7 +686,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -706,7 +706,7 @@
       "formSlug": "ldrrmf-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q4-ldrrmf-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -716,7 +716,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -742,7 +742,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -762,7 +762,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q4-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -772,7 +772,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -792,7 +792,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2025-q4-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -802,7 +802,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -822,7 +822,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q4-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -832,7 +832,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -852,7 +852,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2025-q4-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -862,7 +862,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -882,7 +882,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2025-q4-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calataga Municipal Hall",
         "Calatagan Public Market",
@@ -892,7 +892,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -912,7 +912,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q4-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -922,7 +922,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -942,7 +942,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2025-q4-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -952,7 +952,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -972,7 +972,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2025-q3-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Municipal Hall Calatagan",
         "Calatagan Public Market",
@@ -982,7 +982,7 @@
         "quarter": 4,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1002,7 +1002,7 @@
       "formSlug": "ldrrmf-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q3-ldrrmf-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Municipal Hall Calatagan",
         "Calatagan Public Market",
@@ -1012,7 +1012,7 @@
         "quarter": 4,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1032,7 +1032,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2025-q3-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Municipal Hall Calatagan",
         "Calatagan Public Market",
@@ -1042,7 +1042,7 @@
         "quarter": 4,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1062,7 +1062,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q3-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Municipal Hall Calatagan",
         "Calatagan Public Market",
@@ -1072,7 +1072,7 @@
         "quarter": 4,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1092,7 +1092,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2025-q3-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Municipal Hall Calatagan",
         "Calatagan Public Market",
@@ -1102,7 +1102,7 @@
         "quarter": 4,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1122,7 +1122,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q3-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Municipal Hall Calatagan",
         "Calatagan Public Market",
@@ -1132,7 +1132,7 @@
         "quarter": 4,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -1158,7 +1158,7 @@
         "quarter": 4,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1178,7 +1178,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2025-q3-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Municipal Hall Calatagan",
         "Calatagan Public Market",
@@ -1188,7 +1188,7 @@
         "quarter": 4,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1208,7 +1208,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q3-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Municipal Hall Calatagan",
         "Calatagan Public Market",
@@ -1218,7 +1218,7 @@
         "quarter": 4,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1238,7 +1238,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2025-q3-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Municipal Hall Calatagan",
         "Calatagan Public Market",
@@ -1248,7 +1248,7 @@
         "quarter": 4,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1268,7 +1268,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2025-q2-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1284,7 +1284,7 @@
         "quarter": 3,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -1316,7 +1316,7 @@
         "quarter": 3,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1336,7 +1336,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2025-q2-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1352,7 +1352,7 @@
         "quarter": 3,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1372,7 +1372,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q2-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1388,7 +1388,7 @@
         "quarter": 3,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -1420,7 +1420,7 @@
         "quarter": 3,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1440,7 +1440,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q2-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1456,7 +1456,7 @@
         "quarter": 3,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1476,7 +1476,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2025-q2-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1492,7 +1492,7 @@
         "quarter": 3,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1512,7 +1512,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2025-q2-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1528,7 +1528,7 @@
         "quarter": 3,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -1560,7 +1560,7 @@
         "quarter": 3,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1580,7 +1580,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2025-q2-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1596,7 +1596,7 @@
         "quarter": 3,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1616,7 +1616,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2025-q1-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1632,7 +1632,7 @@
         "quarter": 2,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1652,7 +1652,7 @@
       "formSlug": "ldrrmf-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q1-ldrrmf-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1668,7 +1668,7 @@
         "quarter": 2,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1688,7 +1688,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2025-q1-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1704,7 +1704,7 @@
         "quarter": 2,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1724,7 +1724,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q1-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1740,7 +1740,7 @@
         "quarter": 2,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1760,7 +1760,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2025-q1-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1776,7 +1776,7 @@
         "quarter": 2,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1796,7 +1796,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q1-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1812,7 +1812,7 @@
         "quarter": 2,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1832,7 +1832,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2025-q1-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1848,7 +1848,7 @@
         "quarter": 2,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1868,7 +1868,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2025-q1-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1884,7 +1884,7 @@
         "quarter": 2,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1904,7 +1904,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2025-q1-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1920,7 +1920,7 @@
         "quarter": 2,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -1940,7 +1940,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2025-q1-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -1956,7 +1956,7 @@
         "quarter": 2,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -1988,7 +1988,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -2020,7 +2020,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2040,7 +2040,7 @@
       "formSlug": "gad-accomplishment-report",
       "httpStatus": 200,
       "id": "fdp-2025-gad-accomplishment-report",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "Calatagan Municipal Hall",
         "Calatagan Public Market",
@@ -2050,7 +2050,7 @@
         "quarter": 2,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -2076,7 +2076,7 @@
         "quarter": 1,
         "year": 2026
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2096,7 +2096,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2024-q4-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2112,7 +2112,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2132,7 +2132,7 @@
       "formSlug": "ldrrmf-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q4-ldrrmf-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2148,7 +2148,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2168,7 +2168,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2024-q4-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2184,7 +2184,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2204,7 +2204,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q4-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2220,7 +2220,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2240,7 +2240,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2024-q4-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2256,7 +2256,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2276,7 +2276,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q4-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2292,7 +2292,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2312,7 +2312,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2024-q4-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2328,7 +2328,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2348,7 +2348,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2024-q4-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2364,7 +2364,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2384,7 +2384,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q4-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2400,7 +2400,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2420,7 +2420,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2024-q4-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2436,7 +2436,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2456,7 +2456,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2024-q3-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2472,7 +2472,7 @@
         "quarter": 4,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2492,7 +2492,7 @@
       "formSlug": "ldrrmf-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q3-ldrrmf-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2508,7 +2508,7 @@
         "quarter": 4,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2528,7 +2528,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2024-q3-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2544,7 +2544,7 @@
         "quarter": 4,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2564,7 +2564,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q3-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2580,7 +2580,7 @@
         "quarter": 4,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2600,7 +2600,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2024-q3-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2616,7 +2616,7 @@
         "quarter": 4,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2636,7 +2636,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q3-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "THIS WAS POSTED IN THREE (3) CONSPICUOUS PLACES: 1. PUBLIC MARKET BARANGAY 4",
         "CALATAGAN",
@@ -2652,7 +2652,7 @@
         "quarter": 4,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2672,7 +2672,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2024-q3-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2688,7 +2688,7 @@
         "quarter": 4,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2708,7 +2708,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2024-q3-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2724,7 +2724,7 @@
         "quarter": 4,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2744,7 +2744,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q3-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2760,7 +2760,7 @@
         "quarter": 4,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2780,7 +2780,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2024-q3-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2796,7 +2796,7 @@
         "quarter": 4,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2816,7 +2816,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2024-q2-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2832,7 +2832,7 @@
         "quarter": 3,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2852,7 +2852,7 @@
       "formSlug": "ldrrmf-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q2-ldrrmf-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2868,7 +2868,7 @@
         "quarter": 3,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2888,7 +2888,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2024-q2-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2904,7 +2904,7 @@
         "quarter": 3,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2924,7 +2924,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q2-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2940,7 +2940,7 @@
         "quarter": 3,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2960,7 +2960,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2024-q2-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -2976,7 +2976,7 @@
         "quarter": 3,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -2996,7 +2996,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q2-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3012,7 +3012,7 @@
         "quarter": 3,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3032,7 +3032,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2024-q2-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3048,7 +3048,7 @@
         "quarter": 3,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3068,7 +3068,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2024-q2-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3084,7 +3084,7 @@
         "quarter": 3,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3104,7 +3104,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q2-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3120,7 +3120,7 @@
         "quarter": 3,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3140,7 +3140,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2024-q2-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3156,7 +3156,7 @@
         "quarter": 3,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3176,7 +3176,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2024-q1-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3192,7 +3192,7 @@
         "quarter": 2,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3212,7 +3212,7 @@
       "formSlug": "ldrrmf-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q1-ldrrmf-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3228,7 +3228,7 @@
         "quarter": 2,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3248,7 +3248,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2024-q1-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3264,7 +3264,7 @@
         "quarter": 2,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3284,7 +3284,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q1-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3300,7 +3300,7 @@
         "quarter": 2,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3320,7 +3320,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2024-q1-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3336,7 +3336,7 @@
         "quarter": 2,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3356,7 +3356,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q1-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3372,7 +3372,7 @@
         "quarter": 2,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3392,7 +3392,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2024-q1-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3408,7 +3408,7 @@
         "quarter": 2,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3428,7 +3428,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2024-q1-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3444,7 +3444,7 @@
         "quarter": 2,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3464,7 +3464,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2024-q1-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3480,7 +3480,7 @@
         "quarter": 2,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3500,7 +3500,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2024-q1-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3516,7 +3516,7 @@
         "quarter": 2,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -3548,7 +3548,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3568,7 +3568,7 @@
       "formSlug": "annual-procurement-plan",
       "httpStatus": 200,
       "id": "fdp-2024-annual-procurement-plan",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3584,7 +3584,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -3616,7 +3616,7 @@
         "quarter": 2,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -3648,7 +3648,7 @@
         "quarter": 1,
         "year": 2025
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3668,7 +3668,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2023-q4-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3684,7 +3684,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3704,7 +3704,7 @@
       "formSlug": "ldrrmf-utilization",
       "httpStatus": 200,
       "id": "fdp-2023-q4-ldrrmf-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3720,7 +3720,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3740,7 +3740,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2023-q4-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3756,7 +3756,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3776,7 +3776,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2023-q4-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3792,7 +3792,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3812,7 +3812,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2023-q4-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3828,7 +3828,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3848,7 +3848,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2023-q4-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3864,7 +3864,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3884,7 +3884,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2023-q4-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3900,7 +3900,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3920,7 +3920,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2023-q4-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3936,7 +3936,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -3956,7 +3956,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2023-q4-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -3972,7 +3972,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -4004,7 +4004,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4024,7 +4024,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2023-q3-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4040,7 +4040,7 @@
         "quarter": 4,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4060,7 +4060,7 @@
       "formSlug": "ldrrmf-utilization",
       "httpStatus": 200,
       "id": "fdp-2023-q3-ldrrmf-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4076,7 +4076,7 @@
         "quarter": 4,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4096,7 +4096,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2023-q3-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4112,7 +4112,7 @@
         "quarter": 4,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4132,7 +4132,7 @@
       "formSlug": "nta-20-percent-utilization",
       "httpStatus": 200,
       "id": "fdp-2023-q3-nta-20-percent-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4148,7 +4148,7 @@
         "quarter": 4,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4168,7 +4168,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2023-q3-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4184,7 +4184,7 @@
         "quarter": 4,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4204,7 +4204,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2023-q3-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4220,7 +4220,7 @@
         "quarter": 4,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4240,7 +4240,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2023-q3-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4256,7 +4256,7 @@
         "quarter": 4,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4276,7 +4276,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2023-q3-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4292,7 +4292,7 @@
         "quarter": 4,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4312,7 +4312,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2023-q3-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4328,7 +4328,7 @@
         "quarter": 4,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4348,7 +4348,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2023-q3-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4364,7 +4364,7 @@
         "quarter": 4,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4384,7 +4384,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2023-q2-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4400,7 +4400,7 @@
         "quarter": 3,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -4432,7 +4432,7 @@
         "quarter": 3,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4452,7 +4452,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2023-q2-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4468,7 +4468,7 @@
         "quarter": 3,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -4500,7 +4500,7 @@
         "quarter": 3,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4520,7 +4520,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2023-q2-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
         "Calatagan",
@@ -4536,7 +4536,7 @@
         "quarter": 3,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4556,7 +4556,7 @@
       "formSlug": "sef-utilization",
       "httpStatus": 200,
       "id": "fdp-2023-q2-sef-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4572,7 +4572,7 @@
         "quarter": 3,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -4604,7 +4604,7 @@
         "quarter": 3,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4624,7 +4624,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2023-q2-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4640,7 +4640,7 @@
         "quarter": 3,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -4672,7 +4672,7 @@
         "quarter": 3,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4692,7 +4692,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2023-q2-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Public Market Barangay 4",
         "Calatagan",
@@ -4708,7 +4708,7 @@
         "quarter": 3,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4728,7 +4728,7 @@
       "formSlug": "bid-results",
       "httpStatus": 200,
       "id": "fdp-2023-q1-bid-results",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
         "Calatagan",
@@ -4744,7 +4744,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -4776,7 +4776,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4796,7 +4796,7 @@
       "formSlug": "manpower-complement",
       "httpStatus": 200,
       "id": "fdp-2023-q1-manpower-complement",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
         "Calatagan",
@@ -4812,7 +4812,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -4844,7 +4844,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4864,7 +4864,7 @@
       "formSlug": "quarterly-statement-of-cash-flow",
       "httpStatus": 200,
       "id": "fdp-2023-q1-quarterly-statement-of-cash-flow",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
         "Calatagan",
@@ -4880,7 +4880,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -4912,7 +4912,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4932,7 +4932,7 @@
       "formSlug": "statement-of-indebtedness",
       "httpStatus": 200,
       "id": "fdp-2023-q1-statement-of-indebtedness",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
         "Calatagan",
@@ -4948,7 +4948,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -4968,7 +4968,7 @@
       "formSlug": "statement-of-receipts-and-expenditures",
       "httpStatus": 200,
       "id": "fdp-2023-q1-statement-of-receipts-and-expenditures",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
         "Calatagan",
@@ -4984,7 +4984,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -5004,7 +5004,7 @@
       "formSlug": "trust-fund-utilization",
       "httpStatus": 200,
       "id": "fdp-2023-q1-trust-fund-utilization",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
         "Calatagan",
@@ -5020,7 +5020,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -5040,7 +5040,7 @@
       "formSlug": "unliquidated-cash-advances",
       "httpStatus": 200,
       "id": "fdp-2023-q1-unliquidated-cash-advances",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
         "Calatagan",
@@ -5056,7 +5056,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -5088,10 +5088,13 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
-      "availability": "source-error",
+      "availability": "available",
+      "byteLength": 8454726,
+      "contentSha256": "cca13aaa38d010aac3e37c97aa29fc9a6d763b8e8f3642cb6c6bd95006086450",
+      "contentType": "application/vnd.ms-excel",
       "documentPeriod": {
         "quarter": null,
         "year": 2023
@@ -5099,13 +5102,14 @@
       "downloadUrl": "https://fdpp.dilg.gov.ph/fdpp/report/document-download?id=5549",
       "error": "The operation was aborted due to timeout",
       "fdppId": 5549,
-      "fileType": null,
+      "fileType": "xlsx",
       "firstSeenAt": "2026-09-22T15:02:15.371Z",
       "formCadence": "annual",
       "formLabel": "Annual Procurement Plan",
       "formSlug": "annual-procurement-plan",
-      "httpStatus": null,
+      "httpStatus": 200,
       "id": "fdp-2023-annual-procurement-plan",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1.Public Market Barangay 4",
         "Calatagan",
@@ -5121,7 +5125,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -5141,7 +5145,7 @@
       "formSlug": "gad-accomplishment-report",
       "httpStatus": 200,
       "id": "fdp-2023-gad-accomplishment-report",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1. Municipal Building",
         "Barangay 2",
@@ -5155,7 +5159,7 @@
         "quarter": 2,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "source-error",
@@ -5187,7 +5191,7 @@
         "quarter": 1,
         "year": 2024
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -5207,7 +5211,7 @@
       "formSlug": "gad-accomplishment-report",
       "httpStatus": 200,
       "id": "fdp-2022-gad-accomplishment-report",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three (3) conspicuous places: 1.Public Market Poblacion IV",
         "Calatagan",
@@ -5223,7 +5227,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     },
     {
       "availability": "available",
@@ -5243,7 +5247,7 @@
       "formSlug": "supplemental-procurement-plan",
       "httpStatus": 200,
       "id": "fdp-2022-supplemental-procurement-plan",
-      "lastKnownGoodAt": "2026-09-22T15:02:15.371Z",
+      "lastKnownGoodAt": "2026-11-05T03:37:43.193Z",
       "postingLocations": [
         "This was posted in three 3 conspicuous places: 1.Public Market Barangay 4",
         "Calatagan",
@@ -5259,7 +5263,7 @@
         "quarter": 2,
         "year": 2023
       },
-      "retrievedAt": "2026-09-22T15:02:15.371Z"
+      "retrievedAt": "2026-11-05T03:37:43.193Z"
     }
   ],
   "schemaVersion": "1.0.0"

@@ -17961,7 +17961,7 @@
   ],
   "form": "statement-of-receipts-and-expenditures",
   "formReference": "FDP Form 3 (BLGF MC 023-2019 Annex A)",
-  "generatedAt": "2026-09-22T15:12:34.408Z",
+  "generatedAt": "2026-11-05T03:40:17.103Z",
   "lgu": "Calatagan, Batangas",
   "methodology": "Each filing was downloaded from the DILG portal and parsed directly. Line items are located by their label in column A or B, never by row number, and every value records the cell it came from. A filing is marked verified only when all of the form’s own internal identities hold and every expected label was found.",
   "psgc": "0401008000",
