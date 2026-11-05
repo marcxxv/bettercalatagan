@@ -1,6 +1,6 @@
 ---
 /**
- * Provenance as a small chip that opens in place.
+ * Provenance as a source card that opens in place.
  *
  * Always visible: who published it, whether it was verified and when, and,
  * for tier 2, the caveat (one line, in full once opened). One click opens
@@ -78,29 +78,38 @@ const summary = allVerified && many
 const tone = weakest.verification === 'verified' ? TONES[weakest.status] : 'warn';
 const caveats = entries.filter((e) => e.source.caveat).map((e) => e.source.caveat!);
 const described = entries.map((e) => e.label).join(' and ');
+// The latest date a source URL was actually opened (pipelines record it on
+// every refresh). Shown only when it is newer than the human review, so a
+// reader sees both "reviewed" (a person) and "re-read" (the latest retrieval).
+const reread = entries.flatMap((e) => e.source.sources.map((r) => r.accessedOn)).filter(Boolean).sort().at(-1);
+const reviewed = entries.map((e) => e.source.lastVerified).sort()[0];
+const showReread = reread && reread > reviewed;
+const lead = publishers[0];
+const leadAgency = agencyOf(lead[1]);
 ---
 
 <details class="provenance" aria-label={`Source for ${described}`}>
   <summary class="prov-chip">
     <span class="prov-marks" aria-hidden="true">
-      {publishers.map(([, full]) => {
+      {leadAgency ? <AgencyBadge agency={leadAgency} size="2.5rem" /> : <span class="prov-icon"><Icon name="shield" size="18" /></span>}
+      {publishers.slice(1).map(([, full]) => {
         const agency = agencyOf(full);
-        return agency ? <AgencyBadge agency={agency} size="1.4rem" /> : <span class="prov-icon"><Icon name="shield" size="12" /></span>;
+        return agency ? <AgencyBadge agency={agency} size="1.35rem" class="prov-sub" /> : null;
       })}
     </span>
     <span class="prov-text">
-      <span class="prov-line">
-        <span class="prov-key">{many ? 'Sources' : 'Source'}</span>
-        <span class="prov-pub">{publishers.map(([short]) => short).join(' · ')}</span>
-        {extra > 0 && <span class="prov-count">+{extra}</span>}
+      <span class="prov-key">{many ? 'Sources' : 'Source'}{extra > 0 && <span class="prov-count"> · {extra + publishers.length} references</span>}</span>
+      <span class="prov-pub">{publishers.map(([short]) => short).join(' · ')}</span>
+      <span class="prov-meta">
         <span class={`prov-state ${tone}`}><span class="dot" aria-hidden="true"></span>{summary}</span>
+        {showReread && <span class="prov-reread"><Icon name="refresh" size="12" />Re-read from source {formatDate(reread)}</span>}
       </span>
-      {caveats.length > 0 && (
-        <span class="prov-caveat"><Icon name="alert" size="13" /><span><span class="visually-hidden">Caveat: </span>{caveats.join(' ')}</span></span>
-      )}
     </span>
     <span class="visually-hidden">: show method and sources for {described}</span>
-    <span class="prov-chev-wrap" aria-hidden="true"><Icon name="chevron-down" size="14" class="prov-chev" /></span>
+    <span class="prov-chev-wrap" aria-hidden="true"><Icon name="chevron-down" size="16" class="prov-chev" /></span>
+    {caveats.length > 0 && (
+      <span class="prov-caveat"><Icon name="alert" size="14" /><span><span class="visually-hidden">Caveat: </span>{caveats.join(' ')}</span></span>
+    )}
   </summary>
   <div class="prov-detail">
     {entries.map((e) => (
@@ -115,15 +124,21 @@ const described = entries.map((e) => e.label).join(' and ');
         {showNote && e.source.note && <p>{e.source.note}</p>}
         {e.source.methodology && <p>{e.source.methodology}</p>}
         <ol class="prov-sources">
-          {e.source.sources.map((reference) => (
-            <li>
-              <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a>
-              <span class="ref-meta">
-                {[reference.publisher, reference.locator, `Accessed ${formatDate(reference.accessedOn)}`].filter(Boolean).join(' · ')}
-              </span>
-              {reference.sha256 && <span class="hash">SHA-256 {reference.sha256}</span>}
-            </li>
-          ))}
+          {e.source.sources.map((reference) => {
+            const agency = agencyOf(reference.publisher);
+            return (
+              <li>
+                <span class="ref-mark" aria-hidden="true">{agency ? <AgencyBadge agency={agency} size="1.75rem" /> : <span class="prov-icon small"><Icon name="file" size="13" /></span>}</span>
+                <span class="ref-body">
+                  <a href={reference.url} rel="noopener noreferrer nofollow">{reference.name}</a>
+                  <span class="ref-meta">
+                    {[reference.publisher, reference.locator, `Accessed ${formatDate(reference.accessedOn)}`].filter(Boolean).join(' · ')}
+                  </span>
+                  {reference.sha256 && <span class="hash">SHA-256 {reference.sha256}</span>}
+                </span>
+              </li>
+            );
+          })}
         </ol>
       </section>
     ))}
@@ -133,76 +148,198 @@ const described = entries.map((e) => e.label).join(' and ');
 
 <style>
   .provenance {
-    width: fit-content;
+    /* Lets the open/close height animate where the browser supports it. */
+    interpolate-size: allow-keywords;
     max-width: min(46rem, 100%);
     margin-block: var(--sp-4) var(--sp-6);
     border: 1px solid var(--c-line);
-    border-radius: 999px;
+    border-radius: var(--radius-lg);
     background: var(--c-surface);
+    box-shadow: 0 1px 2px rgb(11 18 32 / 0.04);
     font-size: var(--fs-xs);
     line-height: 1.5;
+    overflow: clip;
     transition:
       border-color var(--dur-2) var(--ease-out),
-      box-shadow var(--dur-2) var(--ease-out);
-  }
-  .provenance:has(.prov-caveat) {
-    border-radius: var(--radius-lg);
-  }
-  .provenance:has(.prov-caveat) .prov-chip {
-    align-items: start;
-    padding-block: 8px;
+      box-shadow var(--dur-2) var(--ease-out),
+      transform var(--dur-2) var(--ease-out);
   }
   .provenance:hover {
     border-color: var(--c-line-strong);
+    box-shadow: var(--shadow-sm, 0 2px 8px rgb(11 18 32 / 0.08));
   }
   .provenance[open] {
-    width: auto;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm, none);
+    border-color: var(--c-accent-line, var(--c-line-strong));
+    box-shadow: var(--shadow-md, var(--shadow-sm));
+  }
+  .provenance::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size var(--dur-3) var(--ease-out),
+      content-visibility var(--dur-3) allow-discrete;
+  }
+  .provenance[open]::details-content {
+    block-size: auto;
   }
   .prov-chip {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    gap: var(--sp-2);
-    min-height: 36px;
-    padding: 5px 6px;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-3) var(--sp-3) var(--sp-3);
     color: var(--c-muted);
     cursor: pointer;
     list-style: none;
-    border-radius: inherit;
   }
   .prov-chip::-webkit-details-marker {
     display: none;
   }
   .prov-chip:focus-visible {
     outline: 2px solid var(--c-accent);
-    outline-offset: 2px;
+    outline-offset: -2px;
+    border-radius: var(--radius-lg);
   }
   .prov-marks {
+    position: relative;
     display: inline-flex;
+    align-items: flex-end;
+    transition: transform var(--dur-2) var(--ease-out);
   }
-  .prov-marks > :global(*) + :global(*) {
-    margin-left: -6px;
+  .provenance:hover .prov-marks {
+    transform: scale(1.04);
+  }
+  .prov-marks > :global(.prov-sub) {
+    margin-left: -0.7rem;
+    margin-bottom: -0.15rem;
   }
   .prov-icon {
     display: grid;
     place-items: center;
-    width: 1.4rem;
-    height: 1.4rem;
-    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 28%;
     background: var(--c-accent-wash);
     color: var(--c-accent);
   }
-  .prov-pub {
-    overflow-wrap: anywhere;
-    font-weight: 600;
-    color: var(--c-ink);
+  .prov-icon.small {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  .prov-text {
+    display: grid;
+    gap: 1px;
     min-width: 0;
   }
-  .prov-state {
-    white-space: normal;
+  .prov-key {
+    color: var(--c-muted);
+    font-size: var(--fs-2xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .prov-count {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+  .prov-pub {
+    color: var(--c-ink);
+    font-size: var(--fs-sm);
+    font-weight: 650;
+    line-height: 1.35;
     overflow-wrap: anywhere;
+  }
+  .prov-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px var(--sp-3);
+    color: var(--c-ink-2);
+  }
+  .prov-state,
+  .prov-reread {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+  .prov-reread {
+    color: var(--c-muted);
+  }
+  .prov-state .dot {
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background: var(--c-muted);
+  }
+  .prov-state.ok .dot {
+    background: var(--c-ok);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-ok) 18%, transparent);
+  }
+  .prov-state.warn .dot {
+    background: var(--c-warn);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-warn) 18%, transparent);
+  }
+  .prov-chev-wrap {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--c-line);
+    border-radius: 50%;
+    transition:
+      background var(--dur-1),
+      border-color var(--dur-1);
+  }
+  .provenance:hover .prov-chev-wrap {
+    background: var(--c-wash-raised, var(--c-accent-wash));
+    border-color: var(--c-accent-line, var(--c-line-strong));
+  }
+  .prov-chip :global(.prov-chev) {
+    color: var(--c-accent);
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+  .provenance[open] .prov-chip :global(.prov-chev) {
+    transform: rotate(180deg);
+  }
+  .prov-caveat {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: var(--sp-2);
+    align-items: flex-start;
+    margin: var(--sp-1) calc(-1 * var(--sp-3)) calc(-1 * var(--sp-3));
+    padding: var(--sp-2) var(--sp-4) var(--sp-3);
+    border-top: 1px solid var(--c-warn-line, var(--c-line));
+    background: var(--c-warn-bg, transparent);
+    color: var(--c-ink-2);
+    line-height: 1.55;
+    text-wrap: pretty;
+  }
+  .prov-caveat :global(.icon) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--c-warn);
+  }
+  .prov-detail {
+    display: grid;
+    gap: var(--sp-3);
+    padding: var(--sp-4);
+    border-top: 1px solid var(--c-line);
+    background: var(--c-bg-alt, var(--c-surface));
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+  }
+  .provenance[open] .prov-detail {
+    animation: prov-in var(--dur-3) var(--ease-out);
+  }
+  @keyframes prov-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+  .prov-detail p {
+    margin: 0;
   }
   .prov-entry {
     display: grid;
@@ -218,96 +355,6 @@ const described = entries.map((e) => e.label).join(' and ');
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-  }
-  .prov-count {
-    color: var(--c-muted);
-  }
-  .prov-state {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
-  }
-  .prov-text {
-    display: grid;
-    gap: 2px;
-    min-width: 0;
-  }
-  .prov-line {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 2px var(--sp-2);
-  }
-  .prov-state {
-    padding-left: var(--sp-1);
-  }
-  .prov-chev-wrap {
-    display: grid;
-    place-items: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    transition: background var(--dur-1);
-  }
-  .provenance:hover .prov-chev-wrap {
-    background: var(--c-accent-wash);
-  }
-  .prov-state .dot {
-    width: 0.5em;
-    height: 0.5em;
-    border-radius: 50%;
-    background: var(--c-muted);
-  }
-  .prov-state.ok .dot {
-    background: var(--c-ok);
-  }
-  .prov-state.warn .dot {
-    background: var(--c-warn);
-  }
-  .prov-chip :global(.prov-chev) {
-    color: var(--c-accent);
-    transition: transform var(--dur-2) var(--ease-out);
-  }
-  .provenance[open] .prov-chip :global(.prov-chev) {
-    transform: rotate(180deg);
-  }
-  .prov-caveat {
-    display: flex;
-    gap: 6px;
-    align-items: flex-start;
-    padding-right: var(--sp-2);
-    color: var(--c-ink-2);
-    line-height: 1.55;
-  }
-  .prov-caveat :global(.icon) {
-    flex: none;
-    margin-top: 2px;
-    color: var(--c-warn);
-  }
-  .provenance:not([open]) .prov-caveat > span {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .prov-detail {
-    display: grid;
-    gap: var(--sp-3);
-    margin: 0 var(--sp-4) var(--sp-4);
-    padding-top: var(--sp-3);
-    border-top: 1px solid var(--c-line);
-    color: var(--c-ink-2);
-    font-size: var(--fs-sm);
-    animation: prov-in var(--dur-2) var(--ease-out);
-  }
-  @keyframes prov-in {
-    from {
-      opacity: 0;
-      transform: translateY(-4px);
-    }
-  }
-  .prov-detail p {
-    margin: 0;
   }
   .prov-facts {
     display: flex;
@@ -328,12 +375,28 @@ const described = entries.map((e) => e.label).join(' and ');
   }
   .prov-sources {
     display: grid;
-    gap: var(--sp-3);
+    gap: var(--sp-2);
     margin: 0;
-    padding-left: 1.2em;
+    padding: 0;
+    list-style: none;
   }
-  .prov-sources li + li {
-    margin-top: 0;
+  .prov-sources li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--sp-3);
+    align-items: start;
+    padding: var(--sp-2) var(--sp-3);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-md, 10px);
+    background: var(--c-surface);
+  }
+  .ref-body {
+    display: grid;
+    min-width: 0;
+  }
+  .ref-body a {
+    font-weight: 600;
+    overflow-wrap: anywhere;
   }
   .ref-meta {
     display: block;
@@ -351,20 +414,25 @@ const described = entries.map((e) => e.label).join(' and ');
     font-size: var(--fs-xs);
   }
   @media (prefers-reduced-motion: reduce) {
-    .prov-detail {
+    .provenance,
+    .provenance::details-content,
+    .prov-marks {
+      transition: none;
+    }
+    .provenance[open] .prov-detail {
       animation: none;
+    }
+    .provenance:hover .prov-marks {
+      transform: none;
     }
   }
   @media (max-width: 40rem) {
-    .prov-state {
-      padding-left: 0;
+    .prov-chip {
+      gap: var(--sp-2);
+      padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-3);
     }
-    .provenance {
-      width: auto;
-      border-radius: var(--radius-lg);
-    }
-    .provenance:not([open]) .prov-caveat > span {
-      -webkit-line-clamp: 2;
+    .prov-caveat {
+      margin: var(--sp-1) calc(-1 * var(--sp-2)) calc(-1 * var(--sp-2)) calc(-1 * var(--sp-3));
     }
   }
 </style>

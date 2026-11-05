@@ -14,6 +14,7 @@ import { boundaries } from '../data/boundaries';
 import { barangayPages } from '../lib/barangay-pages';
 import { projectToSvg } from '../lib/geo';
 import { formatNumber } from '../lib/format';
+import { KIND_ICONS } from '../lib/project-kind';
 
 interface Props {
   /** A barangay's PSGC code: the map opens on it, selected, and the outline map marks it. */
@@ -70,6 +71,9 @@ const max = Math.max(...barangayPages.map((b) => b.census?.totalPopulation ?? 0)
     <div class="bmap-tip" data-map-tip hidden></div>
 
     <aside class="bmap-card" data-map-card hidden aria-live="polite"></aside>
+    {Object.entries(KIND_ICONS).map(([kind, name]) => (
+      <template data-kind-icon={kind}><Icon name={name} size="15" /></template>
+    ))}
 
     <p class="bmap-status" data-map-status hidden></p>
   </div>
@@ -340,6 +344,131 @@ const max = Math.max(...barangayPages.map((b) => b.census?.totalPopulation ?? 0)
     color: var(--c-ink);
   }
 
+
+  .bmap-card {
+    max-height: calc(100% - 2 * var(--sp-4) - 3rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  .bmap-card :global(.c-kinds) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0 0 var(--sp-3);
+    padding: 0;
+    list-style: none;
+  }
+  .bmap-card :global(.c-kinds a) {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 9px 2px 5px;
+    border: 1px solid var(--c-line);
+    border-radius: 999px;
+    background: var(--c-surface);
+    color: var(--c-ink-2);
+    font-size: var(--fs-2xs);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+    transition: border-color var(--dur-1), background var(--dur-1);
+  }
+  .bmap-card :global(.c-kinds a:hover) {
+    border-color: var(--c-accent-line, var(--c-line-strong));
+    background: var(--c-wash-raised, var(--c-sunk));
+    color: var(--c-ink);
+  }
+  .bmap-card :global(.c-kinds .icon),
+  .bmap-card :global(.c-work .icon) {
+    color: var(--c-accent);
+  }
+  .bmap-card :global(.c-works) {
+    display: grid;
+    gap: 2px;
+    margin: 0 calc(-1 * var(--sp-2)) var(--sp-3);
+    padding: 0;
+    list-style: none;
+  }
+  .bmap-card :global(.c-work) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 2px var(--sp-2);
+    padding: var(--sp-2);
+    border-radius: var(--radius-md);
+    color: inherit;
+    text-decoration: none;
+    transition: background var(--dur-1), transform var(--dur-1) var(--ease-out);
+    animation: work-in var(--dur-3) var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 45ms);
+  }
+  .bmap-card :global(.c-work:hover),
+  .bmap-card :global(.c-work:focus-visible) {
+    background: var(--c-wash-raised, var(--c-sunk));
+    transform: translateX(2px);
+  }
+  .bmap-card :global(.c-work-icon) {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--c-wash-raised, var(--c-accent-wash));
+    grid-row: span 2;
+  }
+  .bmap-card :global(.c-work-title) {
+    color: var(--c-ink);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .bmap-card :global(.c-work-meta) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px var(--sp-2);
+    color: var(--c-muted);
+    font-size: var(--fs-2xs);
+    font-variant-numeric: tabular-nums;
+  }
+  .bmap-card :global(.c-bar) {
+    flex: 1 0 3rem;
+    max-width: 5rem;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--c-line);
+    overflow: hidden;
+  }
+  .bmap-card :global(.c-bar > span) {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--c-ok);
+    transform-origin: left;
+    animation: bar-grow 700ms var(--ease-out) both;
+    animation-delay: calc(150ms + var(--i, 0) * 45ms);
+  }
+  .bmap-card :global(.c-links) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-1) var(--sp-4);
+    font-size: var(--fs-xs);
+  }
+  @keyframes work-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+  @keyframes bar-grow {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
   .bmap-status {
     position: absolute;
     z-index: 2;
@@ -380,7 +509,9 @@ const max = Math.max(...barangayPages.map((b) => b.census?.totalPopulation ?? 0)
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .bmap-card {
+    .bmap-card,
+    .bmap-card :global(.c-work),
+    .bmap-card :global(.c-bar > span) {
       animation: none;
     }
   }

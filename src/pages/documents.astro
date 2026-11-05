@@ -112,7 +112,7 @@ const jsonLd = [
     <section class="section-block" aria-labelledby="kinds-title">
       <p class="eyebrow">What is here</p>
       <h2 id="kinds-title">{formatNumber(archivedDocuments.documentCount)} documents by kind</h2>
-      <p class="muted js-block">Select a kind to list just those documents.</p>
+      <p class="muted js-only">Select a kind to list just those documents.</p>
       <ul class="kinds" data-animate>
         {documentKinds.map(({ kind, count }, i) => (
           <li>

@@ -6,7 +6,6 @@ import Icon from '../components/Icon.astro';
 import ColumnChart from '../components/ColumnChart.astro';
 import {
   byYear,
-  categories,
   dpwh,
   inCalatagan,
   infrastructureSource,
@@ -20,6 +19,7 @@ import { barangayPages } from '../lib/barangay-pages';
 import { formatDate, formatNumber, formatPeso, formatPesoMillions } from '../lib/format';
 import { SITE } from '../lib/site';
 import { dpwhHeadline, dpwhTitle } from '../lib/dpwh-text';
+import { KIND_ICONS, KIND_LABELS, projectKind, type ProjectKind } from '../lib/project-kind';
 
 /**
  * National infrastructure in Calatagan: every DPWH contract whose own
@@ -50,6 +50,17 @@ const search = (p: DpwhProject) =>
     .toLowerCase();
 
 const slugOf = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+// Grouped by the work itself (lib/project-kind.ts); DPWH's own category stays on each row.
+const kindOf = new Map(inCalatagan.map((p) => [p.contractId, projectKind(p)]));
+const kinds = (Object.keys(KIND_LABELS) as ProjectKind[])
+  .map((kind) => {
+    const projects = inCalatagan.filter((p) => kindOf.get(p.contractId) === kind);
+    return { kind, projects, budget: totalBudget(projects) };
+  })
+  .filter((k) => k.projects.length > 0)
+  .sort((a, b) => b.budget - a.budget);
+const kindMax = Math.max(...kinds.map((k) => k.budget));
 
 const description = `${inCalatagan.length} DPWH infrastructure projects located in Calatagan, Batangas (${Math.min(...years)}–${Math.max(...years)}): budgets, contractors, status and barangay, from DPWH’s own records.`;
 
@@ -133,6 +144,28 @@ const jsonLd = [
 
     <Source source={infrastructureSource} label="these projects" />
 
+    <section class="section-block" id="by-kind" aria-labelledby="by-kind-title">
+      <p class="eyebrow">By type of work</p>
+      <h2 id="by-kind-title">What the contracts build</h2>
+      <p class="muted">
+        Grouped from each contract’s own description (DPWH’s category is kept on every row).
+        <span class="js-only">Select a type to list just those projects.</span>
+      </p>
+      <ul class="kind-grid" data-stagger="60">
+        {kinds.map((k) => (
+          <li data-reveal>
+            <button type="button" class="kind-tile" data-set-filter={`kind=${k.kind}`} data-for="project-list" aria-pressed="false" data-kind-tile>
+              <span class="kt-icon" aria-hidden="true"><Icon name={KIND_ICONS[k.kind]} size="22" /></span>
+              <span class="kt-label">{KIND_LABELS[k.kind]}</span>
+              <span class="kt-count"><strong>{formatNumber(k.projects.length)}</strong> {k.projects.length === 1 ? 'project' : 'projects'}</span>
+              <span class="kt-budget">{k.budget ? formatPesoMillions(k.budget) : 'Budgets not listed'}</span>
+              <span class="kt-bar" aria-hidden="true"><span data-grow style={`width:${((k.budget / kindMax) * 100).toFixed(1)}%`}></span></span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </section>
+
     <section class="section-block" id="by-year" aria-labelledby="by-year-title">
       <p class="eyebrow">By year</p>
       <h2 id="by-year-title">Contract budgets by DPWH infrastructure year</h2>
@@ -185,10 +218,10 @@ const jsonLd = [
           </select>
         </p>
         <p class="field">
-          <label for="p-category">Type</label>
-          <select id="p-category" name="category">
+          <label for="p-kind">Type of work</label>
+          <select id="p-kind" name="kind">
             <option value="">All types</option>
-            {categories.map((c) => <option value={slugOf(c)}>{c}</option>)}
+            {kinds.map((k) => <option value={k.kind}>{KIND_LABELS[k.kind]} ({k.projects.length})</option>)}
           </select>
         </p>
         <p class="field">
@@ -223,10 +256,12 @@ const jsonLd = [
               data-year={String(p.infraYear ?? '')}
               data-status={slugOf(p.status)}
               data-category={slugOf(p.category ?? 'Other')}
+              data-kind={kindOf.get(p.contractId)}
               data-barangay={p.barangays.length === 1 ? barangayName.get(p.barangays[0])?.slug : p.barangays.length ? 'multiple' : ''}
               data-search={search(p)}
             >
-              <div class="cell main">
+              <div class="cell main has-kind">
+                <span class="kind-mark" data-tip={KIND_LABELS[kindOf.get(p.contractId)!]}><Icon name={KIND_ICONS[kindOf.get(p.contractId)!]} size="16" /><span class="visually-hidden">{KIND_LABELS[kindOf.get(p.contractId)!]}: </span></span>
                 <p class="row-title" title={dpwhTitle(p.description)}>{dpwhHeadline(p.description).headline}</p>
                 <p class="row-sub">
                   {p.barangays.map((code) => {
@@ -257,6 +292,9 @@ const jsonLd = [
               <span class="cell">
                 <span class="cell-label">Status</span>
                 <span class:list={['chip', statusTone(p.status)]}><span class="dot"></span>{p.status}{p.progress !== null && p.status !== 'Completed' && p.progress > 0 ? ` · ${p.progress}%` : ''}</span>
+                {p.progress !== null && p.status !== 'Completed' && p.progress > 0 && (
+                  <span class="progress" aria-hidden="true"><span data-grow style={`width:${Math.min(100, p.progress)}%`}></span></span>
+                )}
               </span>
               <span class="cell num">
                 <span class="cell-label">Budget</span>
@@ -343,3 +381,135 @@ const jsonLd = [
     import '../scripts/filter.ts';
   </script>
 </Base>
+
+<style>
+  .kind-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+    gap: var(--sp-3);
+    margin: var(--sp-4) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .kind-tile {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px var(--sp-3);
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: var(--sp-4);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      border-color var(--dur-2) var(--ease-out),
+      box-shadow var(--dur-2) var(--ease-out),
+      transform var(--dur-2) var(--ease-out);
+  }
+  .kind-tile:hover {
+    border-color: var(--c-line-strong);
+    box-shadow: var(--shadow-md, var(--shadow-sm));
+    transform: translateY(-2px);
+  }
+  .kind-tile:active {
+    transform: translateY(0) scale(0.99);
+  }
+  .kind-tile:focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 2px;
+  }
+  .kind-tile[aria-pressed='true'] {
+    border-color: var(--c-accent);
+    box-shadow: 0 0 0 1px var(--c-accent), var(--shadow-sm);
+  }
+  .kt-icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 12px;
+    background: var(--c-accent-wash);
+    color: var(--c-accent);
+    grid-row: span 3;
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+  .kind-tile:hover .kt-icon {
+    transform: rotate(-4deg) scale(1.06);
+  }
+  .kind-tile[aria-pressed='true'] .kt-icon {
+    background: var(--c-accent);
+    color: var(--c-surface);
+  }
+  .kt-label {
+    font-weight: 650;
+    line-height: 1.3;
+  }
+  .kt-count,
+  .kt-budget {
+    color: var(--c-muted);
+    font-size: var(--fs-xs);
+    font-variant-numeric: tabular-nums;
+  }
+  .kt-count strong {
+    color: var(--c-ink);
+  }
+  .kt-bar {
+    grid-column: 1 / -1;
+    height: 4px;
+    margin-top: var(--sp-3);
+    border-radius: 999px;
+    background: var(--c-sunk);
+    overflow: hidden;
+  }
+  .kt-bar > span,
+  .progress > span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--c-accent);
+  }
+  .has-kind {
+    position: relative;
+    padding-left: calc(28px + var(--sp-3));
+  }
+  .kind-mark {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--c-accent-wash);
+    color: var(--c-accent);
+  }
+  .progress {
+    display: block;
+    width: min(100%, 7rem);
+    height: 4px;
+    margin-top: 6px;
+    border-radius: 999px;
+    background: var(--c-sunk);
+    overflow: hidden;
+  }
+  .progress > span {
+    background: var(--c-accent);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kind-tile,
+    .kt-icon {
+      transition: none;
+    }
+    .kind-tile:hover,
+    .kind-tile:hover .kt-icon {
+      transform: none;
+    }
+  }
+</style>

@@ -14,6 +14,27 @@
 import type { ExpressionSpecification, Map as MapLibreMap, MapGeoJSONFeature, StyleSpecification } from 'maplibre-gl';
 
 type Metric = 'population' | 'households' | 'projects';
+type Kind = 'flood' | 'water' | 'bridge' | 'road' | 'building' | 'other';
+interface Work {
+  id: string;
+  kind: Kind;
+  title: string;
+  status: string;
+  year: number | null;
+  budget: number | null;
+  progress: number | null;
+}
+/** Plural labels for the card's breakdown, in the order they are listed. */
+const KINDS: [Kind, string, string][] = [
+  ['flood', 'flood control', 'flood control'],
+  ['road', 'road', 'roads'],
+  ['bridge', 'bridge', 'bridges'],
+  ['water', 'water system', 'water systems'],
+  ['building', 'building', 'buildings'],
+  ['other', 'other', 'other'],
+];
+/** How many projects the card lists before linking to the rest. */
+const CARD_WORKS = 4;
 interface Props {
   psgc10: string;
   name: string;
@@ -23,6 +44,7 @@ interface Props {
   projects: number;
   share: number | null;
   label: [number, number];
+  works: Work[];
 }
 
 const LABELS: Record<Metric, string> = {
@@ -41,6 +63,19 @@ let pending: string | null = null;
 let webgl = true;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fmt = new Intl.NumberFormat('en-PH');
+const peso = (n: number) =>
+  n >= 1e6 ? `₱${(n / 1e6).toLocaleString('en-PH', { maximumFractionDigits: 1 })}M` : `₱${fmt.format(Math.round(n))}`;
+const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, text?: string) => {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+};
+/** An icon rendered server-side into a <template> (Icon.astro), cloned here. */
+const kindIcon = (kind: Kind) => {
+  const t = root?.querySelector<HTMLTemplateElement>(`template[data-kind-icon="${kind}"]`);
+  return t ? t.content.cloneNode(true) : document.createTextNode('');
+};
 
 /** A token as an rgb() string MapLibre accepts, whatever colour syntax the CSS used. */
 function token(expr: string): string {
@@ -307,10 +342,64 @@ async function start() {
       div.append(Object.assign(document.createElement('dt'), { textContent: k }), Object.assign(document.createElement('dd'), { textContent: v }));
       dl.append(div);
     }
-    const link = Object.assign(document.createElement('a'), { href: `/barangays/${f.slug}`, className: 'link-arrow', textContent: 'Open the barangay profile' });
-    // On a barangay's own profile, its card needs no link back to the page you are on.
     card.append(close, name, dl);
-    if (id !== root!.dataset.focus) card.append(link);
+
+    // What DPWH built here: a breakdown by kind, then the newest few, each
+    // linking to its full contract on the infrastructure page.
+    const works = f.works ?? [];
+    if (works.length) {
+      const kinds = el('ul', 'c-kinds');
+      kinds.setAttribute('aria-label', 'DPWH projects by kind');
+      for (const [kind, one, many] of KINDS) {
+        const n = works.filter((w) => w.kind === kind).length;
+        if (!n) continue;
+        const li = el('li');
+        const a = el('a');
+        a.href = `/infrastructure?barangay=${f.slug}&kind=${kind}#projects`;
+        a.append(kindIcon(kind), `${n} ${n === 1 ? one : many}`);
+        li.append(a);
+        kinds.append(li);
+      }
+      const list = el('ul', 'c-works');
+      list.setAttribute('aria-label', 'Latest DPWH projects');
+      works.slice(0, CARD_WORKS).forEach((w, i) => {
+        const li = el('li');
+        const a = el('a', 'c-work');
+        a.href = `/infrastructure#contract-${w.id}`;
+        a.style.setProperty('--i', String(i));
+        const icon = el('span', 'c-work-icon');
+        icon.append(kindIcon(w.kind));
+        const meta = el('span', 'c-work-meta');
+        meta.append([w.year, w.status, w.budget !== null ? peso(w.budget) : null].filter(Boolean).join(' · '));
+        if (w.progress !== null && w.status !== 'Completed' && w.progress > 0) {
+          const bar = el('span', 'c-bar');
+          bar.setAttribute('role', 'img');
+          bar.setAttribute('aria-label', `${w.progress}% complete`);
+          const fill = el('span');
+          fill.style.width = `${Math.min(100, w.progress)}%`;
+          bar.append(fill);
+          meta.append(bar);
+        }
+        a.append(icon, el('span', 'c-work-title', w.title), meta);
+        li.append(a);
+        list.append(li);
+      });
+      card.append(kinds, list);
+    }
+
+    const links = el('p', 'c-links');
+    if (works.length) {
+      const all = el('a', 'link-arrow', works.length > CARD_WORKS ? `All ${works.length} projects` : 'In the project list');
+      all.href = `/infrastructure?barangay=${f.slug}#projects`;
+      links.append(all);
+    }
+    // On a barangay's own profile, its card needs no link back to the page you are on.
+    if (id !== root!.dataset.focus) {
+      const profile = el('a', 'link-arrow', 'Barangay profile');
+      profile.href = `/barangays/${f.slug}`;
+      links.append(profile);
+    }
+    if (links.childElementCount) card.append(links);
     card.hidden = false;
     if (fly) frame(id);
   };

@@ -1,13 +1,13 @@
 ---
 /**
- * A round credit badge for a source agency.
+ * A credit tile for a source agency.
  *
  * If the agency's own logo file has been added to public/agencies/ (for
  * example public/agencies/psa.png), it is shown; otherwise the tile shows the
  * agency's initials. Logos are added by maintainers from each agency's official
  * source — never redrawn here — and appear only to credit where data comes from.
- * The frame is a plain white circle (no ring, no crest): it crops the agency's
- * mark rather than imitating one.
+ * The frame is a plain white rounded square (no ring, no crest), so it presents
+ * the agency's mark rather than imitating a seal.
  */
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -21,6 +21,10 @@ export const AGENCIES = {
   // The archive's mark is a temple, not a round seal, so it is inset to stay whole
   // inside the circular crop.
   ia: { initials: 'IA', name: 'Internet Archive', inset: 0.66 },
+  dpwh: { initials: 'DPWH', name: 'Department of Public Works and Highways' },
+  // A wordmark, not a round seal: inset so it reads at small sizes.
+  dti: { initials: 'DTI', name: 'Department of Trade and Industry', inset: 0.74 },
+  sc: { initials: 'SC', name: 'Supreme Court of the Philippines' },
 } as const;
 export type AgencyKey = keyof typeof AGENCIES;
 
@@ -31,7 +35,10 @@ export function agencyOf(publisher: string): AgencyKey | null {
   if (/Interior and Local Government|DILG/i.test(publisher)) return 'dilg';
   if (/Department of Finance/i.test(publisher)) return 'dof';
   if (/Historical Commission/i.test(publisher)) return 'nhcp';
-  if (/Internet Archive/i.test(publisher)) return 'ia';
+  if (/Public Works and Highways/i.test(publisher)) return 'dpwh';
+  if (/Trade and Industry/i.test(publisher)) return 'dti';
+  if (/^Supreme Court/i.test(publisher)) return 'sc';
+  if (/^Internet Archive/i.test(publisher)) return 'ia';
   return null;
 }
 
@@ -58,7 +65,7 @@ const file = ['svg', 'png', 'webp'].map((ext) => `${agency}.${ext}`).find((f) =>
     flex: none;
     width: var(--size);
     height: var(--size);
-    border-radius: 50%;
+    border-radius: 28%;
     background: #fff;
     box-shadow:
       0 0 0 1px rgb(11 18 32 / 0.14),

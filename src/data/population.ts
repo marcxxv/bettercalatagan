@@ -17,9 +17,18 @@ import type { DataSource, Sourced } from './types/provenance.js';
 /** Throws at build time if the generated file does not match the schema. */
 export const psaPopulation = psaPopulationSchema.parse(raw);
 
+/**
+ * The pipeline opens both OpenSTAT tables on every refresh (scripts/psa.mjs
+ * TABLE_2024, TABLE_SERIES), so their accessedOn is that retrieval date. The
+ * human review date (lastVerified) is separate and never derived from it.
+ */
+const retrieved = psaPopulation.retrievedAt.slice(0, 10) as `${number}-${number}-${number}`;
+const OPENSTAT_CENSUS = { ...PSA_OPENSTAT_CENSUS_2024, accessedOn: retrieved };
+const OPENSTAT_SERIES = { ...PSA_OPENSTAT_SERIES, accessedOn: retrieved };
+
 
 const census2024Source: DataSource = {
-  sources: [PSA_OPENSTAT_CENSUS_2024, PSA_BATANGAS_POPCEN_2024],
+  sources: [OPENSTAT_CENSUS, PSA_BATANGAS_POPCEN_2024],
   asOf: '1 July 2024',
   lastVerified: '2026-09-24', // Maintainer review date; retrieval never advances this.
   verification: 'verified',
@@ -72,7 +81,7 @@ export const population2024: Sourced<{
 export const populationSeries: Sourced<typeof psaPopulation.populationSeries> = {
   data: psaPopulation.populationSeries,
   source: {
-    sources: [PSA_OPENSTAT_SERIES],
+    sources: [OPENSTAT_SERIES],
     asOf: '2015, 2020 and 2024 census reference dates',
     lastVerified: '2026-09-24', // Maintainer review date; retrieval never advances this.
     verification: 'verified',

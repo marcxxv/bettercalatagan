@@ -180,10 +180,10 @@ const jsonLd = [
   <section class="features" aria-label="How BetterCalatagan works">
     <article class="feature" data-reveal>
       <div class="f-visual f-stack" aria-hidden="true">
-        <div class="stack-card s1"><span>Census</span><strong>PSA</strong></div>
-        <div class="stack-card s2"><span>Filings</span><strong>DILG</strong></div>
-        <div class="stack-card s3"><span>Income class</span><strong>BLGF</strong></div>
-        <div class="stack-card s4"><span>Former website</span><strong>Archive</strong></div>
+        <div class="stack-card s1"><AgencyBadge agency="psa" size="2.1rem" class="stack-mark" /><span>Census</span><strong>PSA</strong></div>
+        <div class="stack-card s2"><AgencyBadge agency="dilg" size="2.1rem" class="stack-mark" /><span>Filings</span><strong>DILG</strong></div>
+        <div class="stack-card s3"><AgencyBadge agency="blgf" size="2.1rem" class="stack-mark" /><span>Income class</span><strong>BLGF</strong></div>
+        <div class="stack-card s4"><AgencyBadge agency="ia" size="2.1rem" class="stack-mark" /><span>Former website</span><strong>Archive</strong></div>
         <div class="stack-core"><Icon name="layers" size="30" /></div>
       </div>
       <div class="f-copy">
@@ -911,11 +911,31 @@ const jsonLd = [
     box-shadow: var(--shadow-md);
     transition: transform 900ms var(--ease-out);
   }
-  .stack-card span {
+  .stack-card {
+    grid-template-columns: auto 1fr;
+    column-gap: 12px;
+    align-items: center;
+  }
+  .stack-card :global(.stack-mark) {
+    grid-row: span 2;
+  }
+  @media (max-width: 30rem) {
+    .stack-card {
+      column-gap: 8px;
+      padding: 14px;
+    }
+    .stack-card :global(.stack-mark) {
+      --size: 1.6rem !important;
+    }
+    .stack-card > span {
+      white-space: nowrap;
+    }
+  }
+  .stack-card > span {
     font-size: var(--fs-xs);
     color: var(--c-muted);
   }
-  .stack-card strong {
+  .stack-card > strong {
     font-family: var(--font-serif);
     font-size: clamp(1.2rem, 0.9rem + 1vw, 1.7rem);
     font-weight: 400;

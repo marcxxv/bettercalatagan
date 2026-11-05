@@ -7,6 +7,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Source cards
+- Source chips are now cards instead of pale pills: the publishing agency's logo, its name, the human
+  review date and, when the pipeline has re-read the source since, “Re-read from source <date>”. The
+  caveat always shows in full and wraps (it was cut to one line), and the card opens smoothly to the
+  method and a list of references, each with its agency's mark.
+- Added the DPWH, DTI and Supreme Court logos (Wikimedia Commons; origins in
+  `public/agencies/README.md`); agency tiles are rounded squares everywhere, as documented. The home
+  page's “Scattered records” cards show each agency's mark.
+- PSA OpenSTAT references record the pipeline's retrieval date as `accessedOn` (the tables are opened on
+  every refresh), so census cards show when PSA was last read. `lastVerified` is unchanged.
+
+### Added — Infrastructure by type of work, and a richer map card
+- Infrastructure: “What the contracts build” tiles (roads, buildings, flood control and drainage,
+  bridges, water and sanitation) with counts, budgets and bars; selecting one filters the list. The
+  list filters by type of work instead of DPWH's mixed category/funding labels, each row carries a type
+  icon, and ongoing contracts show a progress bar. Types are read from each contract's description
+  (`lib/project-kind.ts`, tested); DPWH's category stays on every row.
+- Barangay map: selecting a barangay now shows its projects by type (each a link to that filtered list)
+  and its newest contracts with status, budget and progress, each linking to the full contract.
+
 ### Data — Refresh of 5 November 2026 (DPWH, DILG)
 - DPWH (via the DPWH infrastructure transparency data): two new Nasugbu–Lian–Calatagan Road
   contracts for procurement (26DB0221, ₱48.0M ABC; 26DB0475, ₱2.3M ABC); 26DB0036 awarded to LLEB

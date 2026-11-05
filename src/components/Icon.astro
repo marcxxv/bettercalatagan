@@ -52,7 +52,13 @@ export type IconName =
   | 'receipt'
   | 'id-card'
   | 'hand'
-  | 'sort';
+  | 'sort'
+  | 'refresh'
+  | 'road'
+  | 'droplet'
+  | 'waves'
+  | 'bridge'
+  | 'building';
 
 interface Props {
   name: IconName;
@@ -95,6 +101,12 @@ const PATHS: Record<IconName, string> = {
   check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
   alert:
     '<path d="M10.3 4.2 2.6 17.6A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-2.9L13.7 4.2a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4.5"/><path d="M12 17.2v.1"/>',
+  refresh: '<path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3.5V8h4.5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20.5V16h-4.5"/>',
+  road: '<path d="M8 3 4 21"/><path d="m16 3 4 18"/><path d="M12 4v3M12 10.5v3M12 17v3"/>',
+  droplet: '<path d="M12 3.5S5.5 10.4 5.5 14.5a6.5 6.5 0 0 0 13 0C18.5 10.4 12 3.5 12 3.5z"/><path d="M9 15a3 3 0 0 0 3 3"/>',
+  waves: '<path d="M3 8c1.5 0 1.5-1.5 3-1.5S7.5 8 9 8s1.5-1.5 3-1.5S13.5 8 15 8s1.5-1.5 3-1.5S19.5 8 21 8"/><path d="M3 13c1.5 0 1.5-1.5 3-1.5s1.5 1.5 3 1.5 1.5-1.5 3-1.5 1.5 1.5 3 1.5 1.5-1.5 3-1.5 1.5 1.5 3 1.5"/><path d="M3 18c1.5 0 1.5-1.5 3-1.5s1.5 1.5 3 1.5 1.5-1.5 3-1.5 1.5 1.5 3 1.5 1.5-1.5 3-1.5 1.5 1.5 3 1.5"/>',
+  bridge: '<path d="M2 9h20"/><path d="M4 19a8 7 0 0 1 16 0"/><path d="M4 9v10M20 9v10"/><path d="M8.5 9v4M12 9v3M15.5 9v4"/>',
+  building: '<rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7h1.5M13.5 7H15M9 11h1.5M13.5 11H15M9 15h1.5M13.5 15H15"/><path d="M10.5 21v-2.5h3V21"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>',
   download: '<path d="M12 4v11"/><path d="m7 10.5 5 5 5-5"/><path d="M4.5 20h15"/>',
   'chevron-down': '<path d="m6 9 6 6 6-6"/>',

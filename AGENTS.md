@@ -175,12 +175,19 @@ width so its `thead` sticks to the page. Selects are `appearance: none` (Safari)
 (rounded panel with eyebrow, icon, lede, aside slot), `HeroCarousel` (home scenes, hero ask
 `data-hero-ask`), `AskBar` (floating 448×56 ask bar; hides when the hero ask is visible or a
 dialog is open; grows on hover), `SearchDialog` (⌘K), `DocViewer` (reader), `BarangayMap` (linked SVG group + lazy MapLibre 3D map, `scripts/barangay-map.ts`;
-loading canvas stays inert, then fallback links leave the tab order when the live map is ready), `Source` (provenance chip;
+loading canvas stays inert, then fallback links leave the tab order when the live map is ready), `Source` (provenance card: the lead agency's logo, publisher, review date and — when newer — the latest
+`accessedOn` as "re-read from source"; the caveat always shows in full; opens to method and references;
 `also` groups records that sit together), `Cites`, `Freshness`, `AgencyBadge` (the agency's own
-mark — PSA/DILG/BLGF/DOF/NHCP/IA — in a plain white rounded tile, never a ring or crest; files and
+mark — PSA/DILG/BLGF/DOF/NHCP/IA/DPWH/DTI/SC — in a plain white rounded-square tile, never a ring or crest; files and
 their origins in `public/agencies/README.md`), `Mark` (inline logo,
 theme-aware), `Icon` (stroke icon set; add names to the `IconName` union), charts `ColumnChart`,
 `LineChart`, `Donut`, `Contours` (decorative topography).
+
+**Project kinds** (`lib/project-kind.ts`): DPWH contracts are grouped as flood control, water, bridge,
+road or building by reading the work segment of the description first (`dpwhHeadline`), then DPWH's
+category. It is a reading aid; DPWH's category stays on every row. It drives the infrastructure "By type
+of work" tiles, the `kind` filter, row icons and the map card's per-barangay breakdown, which lists the
+newest projects from `/data/barangays.geojson` (`works`) and links to `/infrastructure#contract-<id>`.
 
 **Client behaviour** lives in `src/scripts/ui.ts` via data attributes: `data-tip` tooltips,
 `data-spy` scrollspy, `data-copy`, `data-reveal`/`data-grow`/`data-animate`/`data-stagger`,
