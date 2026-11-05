@@ -81,7 +81,7 @@ export const archivedDocumentsSchema = z
     cdxQuery: z.string().min(1),
     generatedAt: z.string().datetime(),
     documentCount: z.number().int().nonnegative(),
-    countsByKind: z.record(z.number().int().nonnegative()),
+    countsByKind: z.record(z.string(), z.number().int().nonnegative()),
     documents: z.array(archivedDocumentSchema),
   })
   .strict()

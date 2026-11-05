@@ -118,7 +118,10 @@ and a Singapore server both time out connecting to `fdpp.dilg.gov.ph`, while a P
 connection works. The weekly run therefore marks the DILG step failed (and ends red) until it runs
 somewhere in the Philippines. Until then, refresh DILG from a Philippine machine:
 `npm run fdp:stage && npm run fdp:promote && npm run fdp:extract`, then `npm run data:report` and
-commit through review as usual.
+commit through review as usual. `scripts/local-dilg-refresh.sh` does all of this in a separate
+worktree (`~/.cache/bettercalatagan-dilg`), pushes `data/dilg-refresh` only when something changed and
+opens a "DILG refresh ready for review" issue; it never pushes to `main`. It can be scheduled weekly
+with a macOS LaunchAgent (the maintainer installs it).
 
 Repository setting recommended once: *Settings → Actions → General → Workflow permissions →
 "Allow GitHub Actions to create and approve pull requests".* Without it, step 5 applies.

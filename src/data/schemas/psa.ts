@@ -21,7 +21,7 @@ export const psaPopulationSchema = z
       name: z.string().trim().min(1),
       publisher: z.literal('Philippine Statistics Authority'),
       api: z.string().url().startsWith('https://'),
-      tables: z.record(z.string().url().startsWith('https://')),
+      tables: z.record(z.string(), z.string().url().startsWith('https://')),
     }),
     retrievedAt: z.string().datetime(),
     /** PSA's own definitions of the measures, verbatim from the table's NOTEX. */

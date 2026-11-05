@@ -5,11 +5,30 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  # New advisories appear without any push; check weekly so they surface.
+  schedule:
+    - cron: '43 0 * * 1' # Mondays 08:43 Philippine time
 
 permissions:
   contents: read
 
 jobs:
+  audit:
+    name: Dependency audit (site and assistant)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Any known advisory, in runtime or tooling dependencies, fails CI so it
+      # is fixed while it is one advisory rather than twenty-eight.
+      - name: Site
+        run: npm audit --audit-level=low
+      - name: Assistant worker
+        working-directory: worker
+        run: npm audit --audit-level=low
+
   check:
     name: Typecheck, lint, civic-data tests, build
     runs-on: ubuntu-latest

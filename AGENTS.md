@@ -49,7 +49,7 @@ Breaking any of these is a defect, whatever else improves.
 
 ## 2. Stack and commands
 
-Astro 7 (static output, no adapter), TypeScript, Zod, Vitest, ESLint. Node ≥ 22.12. No
+Astro 7 (static output, no adapter), TypeScript, Zod 4 (`z.record` takes key and value schemas), Vitest, ESLint. Node ≥ 22.12. No
 framework runtime, no Tailwind, no analytics, and the site itself has no backend or database
 (ADR 0002). The one exception to "no third-party requests" is the barangay map (ADR 0011). Runtime deps: `astro`, `zod`, `pdfjs-dist`, `fflate`, `maplibre-gl` (barangay map, lazy-loaded), `three` (seal medallion, lazy-loaded). The one piece of server code is
 the assistant, a Cloudflare Worker in `worker/` with its own `package.json` (ADR 0008, §6).
@@ -65,7 +65,9 @@ the assistant, a Cloudflare Worker in `worker/` with its own `package.json` (ADR
 | `npm i --no-save playwright && node scripts/brand.mjs` | Re-render favicon, app icons and OG images from `public/logo-mark.svg` |
 
 CI (`.github/workflows/ci.yml`) runs typecheck, lint, tests, data validation, build,
-generated-data-unchanged, withheld-value leak check and officials check on every push and PR.
+generated-data-unchanged, withheld-value leak check and officials check on every push and PR, plus a
+`npm audit` job (site and `worker/`, any severity) on every push and weekly; `.github/dependabot.yml`
+opens grouped weekly update PRs. Keep both audits at zero; fix advisories when they appear.
 `.github/workflows/refresh-data.yml` refreshes data weekly and opens a review PR.
 
 ## 3. Repository map

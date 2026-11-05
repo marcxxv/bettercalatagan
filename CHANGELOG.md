@@ -7,6 +7,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Security — Dependencies patched and kept patched
+- Cleared all 28 Dependabot advisories: in-range updates (undici, vite, fast-uri, @vitest/mocker), Zod 3 →
+  4 (schema code adjusted for `z.record`), the linter's minimatch pinned to 11, and wrangler 4.157 in the
+  assistant worker. `npm audit` reports 0 for the site and the worker.
+- To stop them accumulating: a CI job fails on any advisory (every push, and weekly without one), and
+  Dependabot opens grouped weekly update PRs for both packages and the GitHub Actions.
+- Added `scripts/local-dilg-refresh.sh` for refreshing DILG from a Philippine connection.
+
 ### Added — Offices of government
 - The Government page lists Calatagan's offices as the Local Government Code (RA 7160, read from the
   Official Gazette's copy) creates them: Municipal Mayor, Vice-Mayor and the Sangguniang Bayan; and in each
