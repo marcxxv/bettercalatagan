@@ -7,6 +7,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Disclosure grid opens filings directly
+- In “What was filed, and when”, a cell with one filing opens it in the reader; a cell with several opens a
+  small menu of them (unavailable ones marked), each opening in the reader, with “Show in the list below”
+  for the previous filter. The page no longer jumps to the list on every click.
+
 ### Changed — Charts: steady labels, toggleable series; agency marks back to circles
 - Chart labels stay about 12–13 px on any screen; they had scaled with the chart, growing large on wide
   pages and tiny on phones. A year with no figure (DPWH 2026 budgets) shows a dash instead of a gap.

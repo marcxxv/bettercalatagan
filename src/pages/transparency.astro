@@ -34,8 +34,16 @@ const yearsAsc = [...fdpSummary.years].sort((a, b) => a - b);
 const matrix = fdpSummary.forms.map((form) => ({
   ...form,
   cells: yearsAsc.map((year) => {
-    const inCell = records.filter((r) => r.formSlug === form.slug && r.documentPeriod.year === year);
-    return { year, count: inCell.length, failing: inCell.filter((r) => r.availability !== 'available').length };
+    const inCell = rows
+      .filter((r) => r.formSlug === form.slug && r.documentPeriod.year === year)
+      .sort((a, b) => a.periodLabel.localeCompare(b.periodLabel, 'en', { numeric: true }));
+    return {
+      year,
+      count: inCell.length,
+      failing: inCell.filter((r) => r.availability !== 'available').length,
+      filings: inCell,
+      id: `cell-${form.slug}-${year}`,
+    };
   }),
 }));
 const cellMax = Math.max(1, ...matrix.flatMap((m) => m.cells.map((c) => c.count)));
@@ -170,20 +178,49 @@ const jsonLd = [
                 <th scope="row">{row.label}</th>
                 {row.cells.map((cell) => (
                   <td class="cell-td">
-                    {cell.count > 0 ? (
+                    {cell.count === 1 ? (
+                      // One filing: open it straight away (the list below filters too).
                       <button
                         type="button"
                         class:list={['cov-cell', { hi: heat(cell.count).hi }]}
                         style={`--a:${heat(cell.count).a.toFixed(2)}`}
-                        data-set-filter={`form=${row.slug}&year=${cell.year}`}
-                        data-for="filing-list"
-                        aria-pressed="false"
-                        aria-label={`${row.label}, ${cell.year}: ${cell.count} ${cell.count === 1 ? 'filing' : 'filings'}${cell.failing ? `, ${cell.failing} unavailable` : ''}. Show these filings`}
-                        data-tip={`${row.label}|CY${cell.year}: ${cell.count} ${cell.count === 1 ? 'filing' : 'filings'}${cell.failing ? `|${cell.failing} unavailable at source` : ''}`}
+                        {...(cell.filings[0].read ?? { 'data-set-filter': `form=${row.slug}&year=${cell.year}`, 'data-for': 'filing-list', 'aria-pressed': 'false' })}
+                        aria-label={`${row.label}, ${cell.year}: 1 filing${cell.failing ? ', unavailable at source' : ''}. ${cell.filings[0].read ? 'Open it' : 'Show it'}`}
+                        data-tip={`${row.label}|${cell.filings[0].periodLabel}${cell.failing ? '|Unavailable at source' : '|Click to open'}`}
                       >
                         <span class="num">{cell.count}</span>
                         {cell.failing > 0 && <span class="warn-dot" aria-hidden="true"></span>}
                       </button>
+                    ) : cell.count > 1 ? (
+                      // Several: a small menu of the filings, each opening in the reader.
+                      <>
+                        <button
+                          type="button"
+                          class:list={['cov-cell', { hi: heat(cell.count).hi }]}
+                          style={`--a:${heat(cell.count).a.toFixed(2)}`}
+                          popovertarget={cell.id}
+                          aria-label={`${row.label}, ${cell.year}: ${cell.count} filings${cell.failing ? `, ${cell.failing} unavailable` : ''}. Choose one to open`}
+                          data-tip={`${row.label}|CY${cell.year}: ${cell.count} filings${cell.failing ? `|${cell.failing} unavailable at source` : ''}|Click to choose one`}
+                        >
+                          <span class="num">{cell.count}</span>
+                          {cell.failing > 0 && <span class="warn-dot" aria-hidden="true"></span>}
+                        </button>
+                        <div id={cell.id} popover class="cell-menu" data-ask-skip>
+                          <p class="cm-title">{row.label} <span>· CY{cell.year}</span></p>
+                          <ul>
+                            {cell.filings.map((f) =>
+                              f.read ? (
+                                <li><a href={f.downloadUrl} class="cm-item" {...f.read}><Icon name="eye" size="15" />{f.periodLabel}<span class="cm-meta">{f.fileType?.toUpperCase()}</span></a></li>
+                              ) : (
+                                <li><span class="cm-item off"><Icon name="alert" size="15" />{f.periodLabel}<span class="cm-meta">Unavailable at source</span></span></li>
+                              ),
+                            )}
+                          </ul>
+                          <button type="button" class="cm-list" data-set-filter={`form=${row.slug}&year=${cell.year}`} data-for="filing-list" aria-pressed="false" popovertarget={cell.id} popovertargetaction="hide">
+                            Show in the list below
+                          </button>
+                        </div>
+                      </>
                     ) : (
                       <span class="cov-empty" aria-label="none">·</span>
                     )}
@@ -327,10 +364,120 @@ const jsonLd = [
 
   <script>
     import '../scripts/filter.ts';
+
+    // Cell menus sit beside the cell that opened them, and close once a
+    // filing opens in the reader (which takes the screen).
+    for (const menu of document.querySelectorAll<HTMLElement>('.cell-menu')) {
+      menu.addEventListener('toggle', (event) => {
+        if ((event as ToggleEvent).newState !== 'open') return;
+        const cell = document.querySelector<HTMLElement>(`[popovertarget="${menu.id}"]`);
+        if (!cell) return;
+        const r = cell.getBoundingClientRect();
+        const w = menu.offsetWidth;
+        const h = menu.offsetHeight;
+        const left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2));
+        const below = r.bottom + 8 + h <= innerHeight;
+        menu.style.left = `${left}px`;
+        menu.style.top = `${below ? r.bottom + 8 : Math.max(8, r.top - h - 8)}px`;
+      });
+      menu.addEventListener('click', (event) => {
+        if ((event.target as Element).closest('[data-read]')) menu.hidePopover();
+      });
+    }
+    // A scrolled page would leave an open menu adrift.
+    addEventListener('scroll', () => document.querySelectorAll<HTMLElement>('.cell-menu:popover-open').forEach((m) => m.hidePopover()), { passive: true });
   </script>
 </Base>
 
 <style>
+  .cell-menu {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    width: min(17rem, calc(100vw - 16px));
+    padding: var(--sp-2);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-raised, var(--c-surface));
+    box-shadow: var(--shadow-lg, var(--shadow-md));
+    color: var(--c-ink);
+  }
+  .cell-menu:popover-open {
+    animation: cm-in var(--dur-2) var(--ease-out);
+  }
+  @keyframes cm-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.98);
+    }
+  }
+  .cm-title {
+    margin: 0;
+    padding: var(--sp-1) var(--sp-2) var(--sp-2);
+    font-size: var(--fs-sm);
+    font-weight: 650;
+  }
+  .cm-title span {
+    color: var(--c-muted);
+    font-weight: 500;
+  }
+  .cell-menu ul {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cm-item {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-height: var(--tap);
+    padding: 0 var(--sp-2);
+    border-radius: var(--radius-sm);
+    color: var(--c-ink);
+    font-size: var(--fs-sm);
+    text-decoration: none;
+  }
+  a.cm-item:hover,
+  a.cm-item:focus-visible {
+    background: var(--c-wash-raised, var(--c-accent-wash));
+    color: var(--c-accent-strong);
+  }
+  .cm-item :global(.icon) {
+    color: var(--c-accent);
+  }
+  .cm-item.off {
+    color: var(--c-muted);
+  }
+  .cm-item.off :global(.icon) {
+    color: var(--c-warn);
+  }
+  .cm-meta {
+    margin-left: auto;
+    color: var(--c-muted);
+    font-size: var(--fs-2xs);
+    font-weight: 600;
+  }
+  .cm-list {
+    width: 100%;
+    min-height: 40px;
+    margin-top: var(--sp-2);
+    border: 0;
+    border-top: 1px solid var(--c-line);
+    background: none;
+    color: var(--c-accent);
+    font: 600 var(--fs-xs) var(--font-sans);
+    cursor: pointer;
+  }
+  .cm-list:hover {
+    text-decoration: underline;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cell-menu:popover-open {
+      animation: none;
+    }
+  }
   .page-body {
     padding-block: var(--sp-7) var(--sp-9);
   }
