@@ -88,6 +88,12 @@ async function transcribe(png, key) {
         if (!res.ok) {
           // Never log response bodies: they can echo the request.
           last = new Error(`${model}: HTTP ${res.status}`);
+          if (res.status === 401 || res.status === 403) {
+            // A wrong or placeholder key: stop the whole run instead of failing every page.
+            const fatal = new Error('NYO rejected the API key (HTTP 401/403). Check NYO_API_KEY is your real key.');
+            fatal.fatal = true;
+            throw fatal;
+          }
           if (res.status === 400 || res.status === 404) break; // model cannot take images: try the fallback
           await sleep(4_000 * 2 ** attempt);
           continue;
@@ -96,6 +102,7 @@ async function transcribe(png, key) {
         const text = String(body.choices?.[0]?.message?.content ?? '').trim();
         return { text, model };
       } catch (error) {
+        if (error?.fatal) throw error;
         last = error;
         await sleep(4_000 * 2 ** attempt);
       }
@@ -169,12 +176,18 @@ async function main() {
     .filter(Boolean);
   console.log(`OCR for ${todo.length} scanned documents with ${MODEL}`);
   let done = 0;
+  let aborted = null;
   const queue = [...todo];
   async function worker() {
     for (let doc = queue.shift(); doc; doc = queue.shift()) {
       try {
         store.documents[doc.id] = await ocrDocument(doc, key);
       } catch (error) {
+        if (error?.fatal) {
+          queue.length = 0;
+          aborted = error;
+          return;
+        }
         console.warn(`  ${doc.id}: ${String(error?.message ?? error).slice(0, 80)}`);
       }
       done += 1;
@@ -182,6 +195,12 @@ async function main() {
     }
   }
   await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  if (aborted) {
+    // Pages read before the rejection are kept only if any were stored.
+    console.error(aborted.message);
+    process.exitCode = 1;
+    if (!Object.values(store.documents).some((d) => d.method === 'ocr')) return;
+  }
   const tally = {};
   for (const d of Object.values(store.documents)) tally[d.method === 'ocr' ? `${d.status} (ocr)` : d.status] = (tally[d.method === 'ocr' ? `${d.status} (ocr)` : d.status] ?? 0) + 1;
   await writeFile(OUT, `${JSON.stringify({ ...store, tally }, null, 2)}\n`);
