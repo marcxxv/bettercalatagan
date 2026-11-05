@@ -7,6 +7,17 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added — Offices of government
+- The Government page lists Calatagan's offices as the Local Government Code (RA 7160, read from the
+  Official Gazette's copy) creates them: Municipal Mayor, Vice-Mayor and the Sangguniang Bayan; and in each
+  of the 25 barangays a Punong Barangay, seven Kagawad, the SK chair, a secretary and a treasurer (25,
+  175, 25 and 50 seats), with each office's duties, section references and the three-term limit. No
+  officeholder is named: incumbency is still withheld, and the page now says why campaign lists of
+  barangay officials are not used as evidence.
+- Barangay profiles show their DPWH projects by type of work (each a link to the filtered list), with
+  type icons, status colours and progress bars, matching the infrastructure page.
+- Added the Presidential Communications Office logo for holiday proclamations.
+
 ### Changed — Source cards
 - Source chips are now cards instead of pale pills: the publishing agency's logo, its name, the human
   review date and, when the pipeline has re-read the source since, “Re-read from source <date>”. The

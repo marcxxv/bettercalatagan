@@ -56,3 +56,7 @@ export const KIND_ICONS = {
   building: 'building',
   other: 'flag',
 } as const satisfies Record<ProjectKind, string>;
+
+/** Chip tone (global.css .chip) for a DPWH status. */
+export const statusTone = (status: string) =>
+  status === 'Completed' ? 'ok' : status === 'On-Going' ? 'accent' : status === 'Terminated' ? 'warn' : 'clay';

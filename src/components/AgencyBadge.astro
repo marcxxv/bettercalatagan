@@ -25,6 +25,7 @@ export const AGENCIES = {
   // A wordmark, not a round seal: inset so it reads at small sizes.
   dti: { initials: 'DTI', name: 'Department of Trade and Industry', inset: 0.74 },
   sc: { initials: 'SC', name: 'Supreme Court of the Philippines' },
+  pco: { initials: 'PCO', name: 'Presidential Communications Office' },
 } as const;
 export type AgencyKey = keyof typeof AGENCIES;
 
@@ -38,6 +39,7 @@ export function agencyOf(publisher: string): AgencyKey | null {
   if (/Public Works and Highways/i.test(publisher)) return 'dpwh';
   if (/Trade and Industry/i.test(publisher)) return 'dti';
   if (/^Supreme Court/i.test(publisher)) return 'sc';
+  if (/Presidential Communications Office/i.test(publisher)) return 'pco';
   if (/^Internet Archive/i.test(publisher)) return 'ia';
   return null;
 }

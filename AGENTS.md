@@ -108,7 +108,9 @@ certs/                TLS intermediates: dilg-intermediates.pem (DILG, old + cur
   approximate, never used for area).
 - Hand-maintained: `municipality.ts` (identity, income class, `WITHHELD`), `history.ts`,
   `sources.ts`, `barangays.ts`, `services.ts` (2022 Citizen's Charter services, no fees or times),
-  `calendar.ts` (holidays by proclamation; hotlines by executive order).
+  `calendar.ts` (holidays by proclamation; hotlines by executive order), `offices.ts` (the offices of
+  municipal and barangay government from RA 7160 — titles, duties and Code-fixed seat counts, never names;
+  shown on /government).
 - `resorts.ts` is a distinct, manually reviewed tourism-channel directory: each link has an exact
   cited resort-site page and review date. The dated DOT roster supports only what it listed then;
   resort-published links do not prove social-account control, live accreditation or safe payment.
@@ -178,7 +180,7 @@ dialog is open; grows on hover), `SearchDialog` (⌘K), `DocViewer` (reader), `B
 loading canvas stays inert, then fallback links leave the tab order when the live map is ready), `Source` (provenance card: the lead agency's logo, publisher, review date and — when newer — the latest
 `accessedOn` as "re-read from source"; the caveat always shows in full; opens to method and references;
 `also` groups records that sit together), `Cites`, `Freshness`, `AgencyBadge` (the agency's own
-mark — PSA/DILG/BLGF/DOF/NHCP/IA/DPWH/DTI/SC — in a plain white rounded-square tile, never a ring or crest; files and
+mark — PSA/DILG/BLGF/DOF/NHCP/IA/DPWH/DTI/SC/PCO — in a plain white rounded-square tile, never a ring or crest; files and
 their origins in `public/agencies/README.md`), `Mark` (inline logo,
 theme-aware), `Icon` (stroke icon set; add names to the `IconName` union), charts `ColumnChart`,
 `LineChart`, `Donut`, `Contours` (decorative topography).

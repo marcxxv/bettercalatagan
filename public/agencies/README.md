@@ -16,8 +16,9 @@ seal.
 | `dpwh.png` | Department of Public Works and Highways | Agency seal, from Wikimedia Commons `File:Department of Public Works and Highways (DPWH).svg` (the current mark; Commons keeps the pre-2026 seal separately) |
 | `dti.png` | Department of Trade and Industry | Agency logo, from Wikimedia Commons `File:Department of Trade and Industry (DTI).svg` (a wordmark, so the tile insets it) |
 | `sc.png` | Supreme Court of the Philippines | Court seal, from Wikimedia Commons `File:Supreme Court of the Philippines.svg`; badges only sources published by the Court (the E-Library) |
+| `pco.png` | Presidential Communications Office | Office seal, from Wikimedia Commons `File:Presidential Communications Office (PCO).svg` |
 
-All nine were retrieved on 5 November 2026 and resized to 256 px; nothing was redrawn or recoloured.
+All ten were retrieved on 5 November 2026 and resized to 256 px; nothing was redrawn or recoloured.
 Drop `svg`, `png` or `webp` versions here to replace a tile — `src/components/AgencyBadge.astro`
 picks the file up at build and falls back to the agency's initials when a file is absent.
 

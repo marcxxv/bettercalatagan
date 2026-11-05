@@ -4,6 +4,10 @@ import PageHeader from '../components/PageHeader.astro';
 import { archivedDocuments } from '../data/documents';
 import { KIND_LABELS } from '../data/schemas/documents';
 import { archiveReadAttrs } from '../lib/viewer';
+import Source from '../components/Source.astro';
+import Icon from '../components/Icon.astro';
+import { barangayOffices, municipalOffices, officesSource, TERM } from '../data/offices';
+import { formatNumber } from '../lib/format';
 
 /**
  * A deliberate gap page.
@@ -41,7 +45,8 @@ const crumbs = [{ name: 'Government', href: '/government' }];
       <nav class="rail-nav" aria-labelledby="toc-label" data-spy>
         <p class="rail-title" id="toc-label">On this page</p>
         <ul>
-          <li><a href="#officials">Elected officials</a></li>
+          <li><a href="#offices">Offices of government</a></li>
+          <li><a href="#officials">Who holds office</a></li>
           <li><a href="#contacts">Offices and contacts</a></li>
           <li><a href="#archive">What the archive holds</a></li>
           <li><a href="#reach">Reaching the municipality</a></li>
@@ -49,8 +54,48 @@ const crumbs = [{ name: 'Government', href: '/government' }];
       </nav>
     </aside>
     <div class="content">
+    <section class="section" id="offices" aria-labelledby="offices-title">
+      <div class="prose">
+        <h2 id="offices-title">Offices of government</h2>
+        <p>
+          The Local Government Code creates the same offices in every municipality and barangay.
+          These are Calatagan’s, with what the Code says each one does. Who holds each office is
+          not published here — <a href="#officials">see why</a>.
+        </p>
+      </div>
+      <div class="office-grid">
+        {[
+          { heading: 'Municipality', icon: 'landmark' as const, offices: municipalOffices },
+          { heading: 'In each of the 25 barangays', icon: 'home' as const, offices: barangayOffices },
+        ].map((group) => (
+          <section class="office-panel" aria-label={group.heading}>
+            <h3 class="office-head"><span class="office-icon" aria-hidden="true"><Icon name={group.icon} size="18" /></span>{group.heading}</h3>
+            <ul class="office-list">
+              {group.offices.map((o) => (
+                <li class="office">
+                  <div class="office-top">
+                    <p class="office-title">{o.title}{o.local && <span class="office-local"> · {o.local}</span>}</p>
+                    {o.seats !== undefined && (
+                      <p class="office-seats"><strong>{formatNumber(o.seats)}</strong> {o.seats === 1 ? 'seat' : 'seats'}</p>
+                    )}
+                  </div>
+                  <p class="office-role">{o.role}</p>
+                  <p class="office-meta">
+                    <span>RA 7160, {o.section}</span>
+                    <a href="#officials" class="office-holder"><Icon name="eye-off" size="13" />Officeholder not published</a>
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+      <p class="office-term"><Icon name="clock" size="16" /><span>{TERM.text} <span class="muted">(RA 7160, {TERM.section})</span></span></p>
+      <Source source={officesSource} label="these offices" />
+    </section>
+
     <section class="section prose" id="officials" aria-labelledby="officials-title">
-      <h2 id="officials-title">Elected officials</h2>
+      <h2 id="officials-title">Who holds office</h2>
       <p>
         Calatagan elects a Mayor, a Vice Mayor and eight members of the Sangguniang Bayan. The May
         2025 local elections have been held and the results are a matter of public record.
@@ -75,6 +120,12 @@ const crumbs = [{ name: 'Government', href: '/government' }];
           municipal field office, confirming who is in office now.
         </li>
       </ul>
+      <p>
+        Lists that circulate on social media — including campaign posts naming every barangay
+        captain and kagawad who endorsed a candidate — are not used either: they record who
+        supported a campaign, not who holds office today, and barangay offices change with each
+        barangay election.
+      </p>
       <p>
         This project has not yet been able to obtain either. COMELEC’s published attachment
         directories could not be retrieved by this project’s tools, and we have not found a DILG
@@ -192,5 +243,112 @@ const crumbs = [{ name: 'Government', href: '/government' }];
   }
   th[scope='row'] {
     font-weight: 600;
+  }
+</style>
+
+<style>
+  .office-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: var(--sp-4);
+    margin-top: var(--sp-5, var(--sp-4));
+  }
+  .office-panel {
+    padding: var(--sp-4) var(--sp-5, var(--sp-4));
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+  }
+  .office-head {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-2);
+    font-size: var(--fs-lg);
+  }
+  .office-icon {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 10px;
+    background: var(--c-accent-wash);
+    color: var(--c-accent);
+  }
+  .office-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .office {
+    display: grid;
+    gap: 4px;
+    padding: var(--sp-3) 0;
+    border-top: 1px solid var(--c-line);
+  }
+  .office-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: var(--sp-3);
+  }
+  .office-top p,
+  .office-role,
+  .office-meta {
+    margin: 0;
+  }
+  .office-title {
+    font-weight: 650;
+    color: var(--c-ink);
+  }
+  .office-local {
+    color: var(--c-muted);
+    font-weight: 500;
+  }
+  .office-seats {
+    white-space: nowrap;
+    color: var(--c-muted);
+    font-size: var(--fs-sm);
+    font-variant-numeric: tabular-nums;
+  }
+  .office-seats strong {
+    color: var(--c-ink);
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    font-weight: 500;
+  }
+  .office-role {
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .office-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-1) var(--sp-4);
+    color: var(--c-muted);
+    font-size: var(--fs-xs);
+  }
+  .office-holder {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--c-muted);
+  }
+  .office-holder:hover {
+    color: var(--c-accent);
+  }
+  .office-term {
+    display: flex;
+    gap: var(--sp-2);
+    align-items: flex-start;
+    margin: var(--sp-4) 0 0;
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+  }
+  .office-term :global(.icon) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--c-accent);
   }
 </style>

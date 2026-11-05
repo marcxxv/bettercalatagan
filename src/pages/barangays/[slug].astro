@@ -8,6 +8,7 @@ import { barangayPages, type BarangayPage } from '../../lib/barangay-pages';
 import { barangayPopulation2024, outsideHouseholds } from '../../data/population';
 import { infrastructureSource } from '../../data/infrastructure';
 import { dpwhHeadline, dpwhTitle } from '../../lib/dpwh-text';
+import { KIND_ICONS, KIND_LABELS, projectKind, statusTone, type ProjectKind } from '../../lib/project-kind';
 import { formatDate, formatNumber, formatPeso, formatPesoMillions } from '../../lib/format';
 
 /** One barangay: its census counts, where it ranks, and the national projects DPWH places in it. */
@@ -30,6 +31,11 @@ const index = barangayPages.findIndex((x) => x.slug === b.slug);
 const prev = barangayPages[(index - 1 + barangayPages.length) % barangayPages.length];
 const next = barangayPages[(index + 1) % barangayPages.length];
 const share = b.share === null ? null : b.share < 0.005 ? 'less than 0.5%' : `${(b.share * 100).toFixed(1)}%`;
+const kindCounts = (Object.keys(KIND_LABELS) as ProjectKind[])
+  .map((kind) => ({ kind, count: b.projects.filter((p) => projectKind(p) === kind).length }))
+  .filter((k) => k.count > 0)
+  .sort((x, y) => y.count - x.count);
+
 const description = `${b.name}, a barangay of Calatagan, Batangas: ${b.census ? `${formatNumber(b.census.totalPopulation)} people in ${formatNumber(b.census.households)} households (2024 census)` : 'census figures'}${b.projects.length ? ` and ${b.projects.length} DPWH projects` : ''}.`;
 ---
 
@@ -104,6 +110,16 @@ const description = `${b.name}, a barangay of Calatagan, Batangas: ${b.census ? 
             {b.projects.length === 1 ? 'One DPWH contract names' : `${b.projects.length} DPWH contracts name`} {b.name} in
             {b.projects.length === 1 ? ' its' : ' their'} description, with contract budgets of {formatPesoMillions(b.projectBudget)} in total.
           </p>
+          <ul class="kind-chips" aria-label="Projects by type of work">
+            {kindCounts.map((k) => (
+              <li>
+                <a href={`/infrastructure?barangay=${b.slug}&kind=${k.kind}#projects`}>
+                  <Icon name={KIND_ICONS[k.kind]} size="16" />
+                  <span><strong>{k.count}</strong> {KIND_LABELS[k.kind].toLowerCase()}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
           <div class="dataset" style="--cols: minmax(0, 1fr) 4rem 8.5rem 9rem">
             <div class="dataset-head" aria-hidden="true">
               <span>Project</span><span>Year</span><span>Status</span><span class="num">Contract budget</span>
@@ -111,12 +127,19 @@ const description = `${b.name}, a barangay of Calatagan, Batangas: ${b.census ? 
             <ul class="dataset-rows">
               {b.projects.map((p) => (
                 <li class="dataset-row">
-                  <div class="cell main">
+                  <div class="cell main has-kind">
+                    <span class="kind-mark" data-tip={KIND_LABELS[projectKind(p)]}><Icon name={KIND_ICONS[projectKind(p)]} size="16" /><span class="visually-hidden">{KIND_LABELS[projectKind(p)]}: </span></span>
                     <p class="row-title" title={dpwhTitle(p.description)}><a href={`/infrastructure#contract-${p.contractId}`}>{dpwhHeadline(p.description).headline}</a></p>
                     <p class="row-sub">{p.category && <span>{p.category.split(':')[0]}</span>}<span>{p.contractId}</span></p>
                   </div>
                   <span class="cell"><span class="cell-label">Year</span>{p.infraYear}</span>
-                  <span class="cell"><span class="cell-label">Status</span>{p.status}</span>
+                  <span class="cell">
+                    <span class="cell-label">Status</span>
+                    <span class:list={['chip', statusTone(p.status)]}><span class="dot"></span>{p.status}{p.progress !== null && p.status !== 'Completed' && p.progress > 0 ? ` · ${p.progress}%` : ''}</span>
+                    {p.progress !== null && p.status !== 'Completed' && p.progress > 0 && (
+                      <span class="progress" aria-hidden="true"><span data-grow style={`width:${Math.min(100, p.progress)}%`}></span></span>
+                    )}
+                  </span>
                   <span class="cell num"><span class="cell-label">Budget</span>{p.budget !== null ? <span class="row-amount">{formatPeso(p.budget)}</span> : '—'}</span>
                 </li>
               ))}
@@ -141,6 +164,48 @@ const description = `${b.name}, a barangay of Calatagan, Batangas: ${b.census ? 
 </Base>
 
 <style>
+  .kind-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: 0 0 var(--sp-4);
+    padding: 0;
+    list-style: none;
+  }
+  .kind-chips a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: var(--tap);
+    padding: 0 var(--sp-4) 0 var(--sp-3);
+    border: 1px solid var(--c-line);
+    border-radius: 999px;
+    background: var(--c-surface);
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+    text-decoration: none;
+    transition:
+      border-color var(--dur-1),
+      background var(--dur-1),
+      transform var(--dur-2) var(--ease-out);
+  }
+  .kind-chips a:hover {
+    border-color: var(--c-accent-line, var(--c-line-strong));
+    background: var(--c-accent-wash);
+    color: var(--c-ink);
+    transform: translateY(-1px);
+  }
+  .kind-chips :global(.icon) {
+    color: var(--c-accent);
+  }
+  .kind-chips strong {
+    color: var(--c-ink);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kind-chips a:hover {
+      transform: none;
+    }
+  }
   .pager {
     display: flex;
     flex-wrap: wrap;

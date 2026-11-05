@@ -19,7 +19,7 @@ import { barangayPages } from '../lib/barangay-pages';
 import { formatDate, formatNumber, formatPeso, formatPesoMillions } from '../lib/format';
 import { SITE } from '../lib/site';
 import { dpwhHeadline, dpwhTitle } from '../lib/dpwh-text';
-import { KIND_ICONS, KIND_LABELS, projectKind, type ProjectKind } from '../lib/project-kind';
+import { KIND_ICONS, KIND_LABELS, projectKind, statusTone, type ProjectKind } from '../lib/project-kind';
 
 /**
  * National infrastructure in Calatagan: every DPWH contract whose own
@@ -40,8 +40,6 @@ const chronological = [...byYear].reverse();
 const years = byYear.map((y) => y.year);
 const completed = inCalatagan.filter((p) => p.status === 'Completed').length;
 
-const statusTone = (status: string) =>
-  status === 'Completed' ? 'ok' : status === 'On-Going' ? 'accent' : status === 'Terminated' ? 'warn' : 'clay';
 
 const search = (p: DpwhProject) =>
   [p.contractId, p.description, p.contractor, p.category, p.status, p.infraYear, ...p.barangays.map((c) => barangayName.get(c)?.name)]
@@ -467,39 +465,10 @@ const jsonLd = [
     background: var(--c-sunk);
     overflow: hidden;
   }
-  .kt-bar > span,
-  .progress > span {
+  .kt-bar > span {
     display: block;
     height: 100%;
     border-radius: inherit;
-    background: var(--c-accent);
-  }
-  .has-kind {
-    position: relative;
-    padding-left: calc(28px + var(--sp-3));
-  }
-  .kind-mark {
-    position: absolute;
-    left: 0;
-    top: 0;
-    display: grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    background: var(--c-accent-wash);
-    color: var(--c-accent);
-  }
-  .progress {
-    display: block;
-    width: min(100%, 7rem);
-    height: 4px;
-    margin-top: 6px;
-    border-radius: 999px;
-    background: var(--c-sunk);
-    overflow: hidden;
-  }
-  .progress > span {
     background: var(--c-accent);
   }
   @media (prefers-reduced-motion: reduce) {
