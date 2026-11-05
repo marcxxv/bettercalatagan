@@ -48,6 +48,8 @@ const NUMBER =
 export function prose(text: string): string {
   const blank = (m: string) => ' '.repeat(m.length);
   return text
+    // Ordered-list markers ("1. ", "2) ") number the answer's own list, not a figure.
+    .replace(/^(\s*)\d{1,2}[.)](?=\s)/gm, (m, lead: string) => lead + ' '.repeat(m.length - lead.length))
     .replace(/\]\([^)]*\)/g, blank)
     .replace(/\[\d+(?:\s*[,–-]\s*\d+)*\]/g, blank);
 }

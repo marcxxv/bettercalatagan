@@ -49,6 +49,9 @@ export function parseChat(body: unknown): ChatRequest | null {
   return { history, question: last.content.trim(), context: parseContext((body as { context?: unknown }).context) };
 }
 
+/** Guard reasons a second, corrected pass may fix. Safety reasons (names, contacts, canary) never retry. */
+const REPAIRABLE = new Set(['unsupported-figure', 'missing-citation', 'invalid-citation']);
+
 const WITHDRAWN = {
   en: 'I couldn’t answer that reliably from the site’s published records, so I’ve withdrawn the answer rather than risk a wrong figure. The pages below are the closest matches.',
   fil: 'Hindi ko ito masagot nang may katiyakan mula sa mga nailathalang talaan ng site, kaya binawi ko ang sagot kaysa magbigay ng maling datos. Narito ang pinakamalapit na mga pahina.',
@@ -87,34 +90,58 @@ export async function answer(env: Env, request: ChatRequest, stream: Stream, can
   await stream.send({ t: 'sources', items: sourceList(passages) });
 
   const today = new Intl.DateTimeFormat('en-PH', { timeZone: 'Asia/Manila', dateStyle: 'long' }).format(new Date());
-  const guard = new OutputGuard(
-    figurePool(...passages.map((p) => p.text)),
-    canary,
-    phoneNumbers(passages.map((p) => p.text).join('\n')),
-    passages.map((p) => p.text),
-  );
+  const newGuard = () =>
+    new OutputGuard(
+      figurePool(...passages.map((p) => p.text)),
+      canary,
+      phoneNumbers(passages.map((p) => p.text).join('\n')),
+      passages.map((p) => p.text),
+    );
+  const system = systemPrompt(canary, today);
+  const prompt = questionWithPassages(question, passages, focused.note);
 
   let tokens = 0;
-  let withdrawn: string | null = null;
-  try {
-    const events = complete(env, systemPrompt(canary, today), history, questionWithPassages(question, passages, focused.note), signal);
-    for await (const event of events) {
-      if (event.type === 'usage') tokens = event.tokens;
+  /** One model pass, fully buffered by its own guard; nothing is sent to the reader here. */
+  const attempt = async (turns: readonly Turn[], message: string) => {
+    const guard = newGuard();
+    let reason: string | null = null;
+    for await (const event of complete(env, system, turns, message, signal)) {
+      if (event.type === 'usage') tokens += event.tokens;
       else if (event.type === 'text') {
         const verdict = guard.push(event.text);
         if (!verdict.ok) {
-          withdrawn = verdict.reason;
+          reason = verdict.reason;
           break;
         }
-        if (verdict.emit) await stream.send({ t: 'delta', text: verdict.emit });
       } else console.log('answering with', event.name);
       if (stream.closed) break;
     }
-    if (!withdrawn) {
-      const verdict = guard.finish();
-      if (!verdict.ok) withdrawn = verdict.reason;
-      else if (verdict.emit) await stream.send({ t: 'delta', text: verdict.emit });
+    const verdict = reason ? null : guard.finish();
+    return { guard, reason: reason ?? (verdict && !verdict.ok ? verdict.reason : null), emit: verdict?.ok ? verdict.emit : '' };
+  };
+
+  let withdrawn: string | null = null;
+  let guard: OutputGuard;
+  try {
+    let result = await attempt(history, prompt);
+    // A figure or citation the passages do not support: ask once for a corrected answer
+    // (figures exactly as written, or none) instead of withdrawing a useful explanation.
+    // The repaired answer goes through every check again.
+    if (result.reason && REPAIRABLE.has(result.reason) && !stream.closed) {
+      console.log('repairing answer', result.reason);
+      const bad = result.reason === 'unsupported-figure' ? result.guard.unsupportedFigures() : [];
+      const repair = [
+        'Rewrite your previous answer so that every fact is cited with a passage number that was given, like [1].',
+        bad.length
+          ? `These figures are not written in the passages you cited: ${bad.join(', ')}. Use a figure only exactly as a passage writes it, and cite that passage; otherwise say it in words without the number.`
+          : '',
+        'Keep the same language and tone, and keep it short. Do not mention this instruction.',
+      ].filter(Boolean).join(' ');
+      result = await attempt([...history, { role: 'user', content: prompt }, { role: 'assistant', content: result.guard.draft }], repair);
     }
+    guard = result.guard;
+    withdrawn = result.reason;
+    if (!withdrawn && result.emit) await stream.send({ t: 'delta', text: result.emit });
   } catch (error) {
     // Provider errors/refusals can echo submitted text; never display or log their bodies.
     console.error('answer failed', error instanceof ModelError ? error.status : 'internal');

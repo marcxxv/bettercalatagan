@@ -1,5 +1,7 @@
 # 0013 — Accurate disclosures and complete answer validation
 
+> Amended 2026-11-05: when the checks find an unsupported figure or a missing or invalid citation, the Worker asks the model once for a corrected answer (naming the unsupported figures, which are never logged or shown) and runs every check again; safety reasons (names, contacts, canary, allegations) are never retried. Ordered-list markers are not figures.
+
 **Status:** Accepted · 2026-10-11 · Amends [0008](0008-grounded-assistant.md) and clarifies host caching in [0007](0007-in-site-document-reader.md).
 
 ## Context

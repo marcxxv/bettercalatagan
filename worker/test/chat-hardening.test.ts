@@ -46,4 +46,40 @@ describe('complete chat answer publication', () => {
     expect(events.at(-1)).toEqual({ t: 'done', grounded: false });
     expect(JSON.stringify(events)).not.toContain('The contractor is corrupt');
   });
+  async function runSequence(texts: string[]) {
+    const events: StreamEvent[] = [];
+    let call = 0;
+    mocks.complete.mockImplementation(async function* (): AsyncGenerator<ModelEvent> {
+      yield { type: 'text', text: texts[Math.min(call++, texts.length - 1)] };
+    });
+    const stream = { send: async (event: StreamEvent) => { events.push(event); }, closed: false } as unknown as Stream;
+    await answer({} as Env, { question: 'Explain it simply', history: [], context: { path: null, read: null } }, stream, 'BC-test', new AbortController().signal);
+    return { events, calls: call };
+  }
+  it('repairs an answer with an unsupported figure once, then releases the corrected one', async () => {
+    const good = 'The town reported its year-to-date income for Q2 CY2026 [1].';
+    const { events, calls } = await runSequence(['Income was about ₱240 million [1].', good]);
+    expect(calls).toBe(2);
+    expect(mocks.complete.mock.calls[1][3]).toContain('240');
+    expect(events.filter((e) => e.t === 'delta')).toEqual([{ t: 'delta', text: good }]);
+    expect(events.at(-1)).toEqual({ t: 'done', grounded: true });
+    expect(JSON.stringify(events)).not.toContain('240');
+  });
+  it('withdraws when the repair also fails, without showing either draft', async () => {
+    const { events, calls } = await runSequence(['Income was ₱240 million [1].', 'Income was ₱241 million [1].']);
+    expect(calls).toBe(2);
+    expect(events.at(-1)).toEqual({ t: 'done', grounded: false });
+    expect(JSON.stringify(events)).not.toMatch(/24[01]/);
+  });
+  it('never retries a safety withdrawal', async () => {
+    const { events, calls } = await runSequence(['The mayor, Juan Pantoja, reported it [1].', 'fine [1]']);
+    expect(calls).toBe(1);
+    expect(events.at(-1)).toEqual({ t: 'done', grounded: false });
+  });
+  it('does not treat numbered-list markers as figures', async () => {
+    const text = 'The steps were:\n1. Advertisement [1]\n2. Pre-bid conference [1]\n3. Opening of bids in Q2 CY2026 [1]';
+    const { events, calls } = await runSequence([text]);
+    expect(calls).toBe(1);
+    expect(events.at(-1)).toEqual({ t: 'done', grounded: true });
+  });
 });

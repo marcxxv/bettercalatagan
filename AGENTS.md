@@ -237,6 +237,7 @@ from.
 - **Guard** (`worker/src/guard.ts`, `numbers.ts`): figures must round from the passages; the
   officials/withheld lists must equal the CI lists (a test enforces it). Change both together.
   ADR 0013 buffers complete model answers (24,000 characters maximum) before release;
+  one repair pass is allowed for an unsupported figure or a bad/missing citation (never for safety reasons);
   citation numbers and all numeric values are checked against published cited passages only,
   never against user questions or history; signs, peso markers and code text are checked too.
   Checks do not prove semantic accuracy. Log fixed

@@ -7,6 +7,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed — Assistant withdrew plain-language explanations
+- Asking for a simple explanation of a document (“in layman's terms, what does this imply?”) was withdrawn
+  when the model rephrased a figure. The assistant now gets one chance to correct such an answer (figures
+  exactly as the document writes them, or none) before withdrawing, and every check runs again on the
+  correction; safety failures are never retried. Numbered-list markers no longer count as figures. The
+  instructions now explain archived document text and ask for everyday wording when the reader asks for
+  it. ADR 0013 amended.
+
 ### Added — Ask about a document, beside the document
 - The reader has “Ask about this document”: the assistant opens in a sidebar beside the document (a bottom
   sheet on narrow screens), with document-specific suggestions. Hiding it keeps the conversation and

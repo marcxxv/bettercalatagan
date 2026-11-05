@@ -156,6 +156,20 @@ export class OutputGuard {
     return this.released;
   }
 
+  /** The buffered (unreleased) answer: only for asking the model to repair it, never shown or logged. */
+  get draft(): string {
+    return this.text;
+  }
+
+  /** Figures in the draft that the cited passages do not support: for the repair request only, never logged. */
+  unsupportedFigures(): string[] {
+    const cites = [...this.text.matchAll(/\[(\d+)\]/g)].map((m) => Number(m[1]));
+    const pool = this.passageTexts && cites.length
+      ? figurePool(...[...new Set(cites)].filter((n) => n >= 1 && n <= this.passageTexts!.length).map((n) => this.passageTexts![n - 1]))
+      : this.pool;
+    return [...new Set(unsupported(this.text, pool).map((f) => f.raw))].slice(0, 8);
+  }
+
   private violation(): string | null {
     const head = this.text;
     if (this.canary && head.includes(this.canary)) return 'canary';
