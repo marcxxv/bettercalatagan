@@ -74,8 +74,9 @@ const lines = series.map((s) => {
     {categories.map((c, i) => (
       <text class="cat" x={x(i)} y={H - 10} text-anchor="middle">{c}</text>
     ))}
-    {lines.map((l) => (
+    {lines.map((l, li) => (
       <path
+        data-s={li}
         d={l.d}
         class:list={['line', { dashed: l.dashed }]}
         stroke={l.color}
@@ -83,10 +84,11 @@ const lines = series.map((s) => {
         style={`--len:${l.len}`}
       />
     ))}
-    {lines.map((l) =>
+    {lines.map((l, li) =>
       l.values.map((v, i) =>
         v === null ? null : (
           <circle
+            data-s={li}
             class="dot"
             cx={x(i)}
             cy={y(v)}
@@ -98,9 +100,9 @@ const lines = series.map((s) => {
       ),
     )}
   </svg>
-  <ul class="chart-legend">
-    {series.map((s) => (
-      <li><span class="swatch" style={`background:${s.color}`}></span>{s.name}</li>
+  <ul class="chart-legend" data-chart-legend>
+    {series.map((s, si) => (
+      <li><button type="button" class="legend-toggle" data-series={si} aria-pressed="true"><span class="swatch" style={`background:${s.color}`}></span>{s.name}</button></li>
     ))}
   </ul>
 </figure>

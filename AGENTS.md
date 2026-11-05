@@ -184,7 +184,7 @@ barangays by DPWH projects, budget or kind of work on /infrastructure; `[data-sh
 loading canvas stays inert, then fallback links leave the tab order when the live map is ready), `Source` (provenance card: the lead agency's logo, publisher, review date and — when newer — the latest
 `accessedOn` as "re-read from source"; the caveat always shows in full; opens to method and references;
 `also` groups records that sit together), `Cites`, `Freshness`, `AgencyBadge` (the agency's own
-mark — PSA/DILG/BLGF/DOF/NHCP/IA/DPWH/DTI/SC/PCO — in a plain white rounded-square tile, never a ring or crest; files and
+mark — PSA/DILG/BLGF/DOF/NHCP/IA/DPWH/DTI/SC/PCO — in a plain white **circle** (never a square or rounded square — maintainer's standing choice), never a ring or crest; files and
 their origins in `public/agencies/README.md`), `Mark` (inline logo,
 theme-aware), `Icon` (stroke icon set; add names to the `IconName` union), charts `ColumnChart`,
 `LineChart`, `Donut`, `Contours` (decorative topography).

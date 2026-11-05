@@ -7,6 +7,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Charts: steady labels, toggleable series; agency marks back to circles
+- Chart labels stay about 12–13 px on any screen; they had scaled with the chart, growing large on wide
+  pages and tiny on phones. A year with no figure (DPWH 2026 budgets) shows a dash instead of a gap.
+- Multi-series charts (income and spending, year-to-date lines) toggle a series from the legend, with a
+  fade; at least one series always stays visible.
+- Agency logos are plain white circles again everywhere; the documentation now says so.
+
 ### Changed — Flat colours instead of decorative gradients
 - Removed decorative gradients: page header panels, home feature tiles and panels, the 404 panel,
   the header contour glow, and the bars on Finances and Documents now use flat theme colours. Several
@@ -67,7 +74,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   caveat always shows in full and wraps (it was cut to one line), and the card opens smoothly to the
   method and a list of references, each with its agency's mark.
 - Added the DPWH, DTI and Supreme Court logos (Wikimedia Commons; origins in
-  `public/agencies/README.md`); agency tiles are rounded squares everywhere, as documented. The home
+  `public/agencies/README.md`); agency marks are plain white circles everywhere (corrected the same day after a brief switch to rounded squares). The home
   page's “Scattered records” cards show each agency's mark.
 - PSA OpenSTAT references record the pipeline's retrieval date as `accessedOn` (the tables are opened on
   every refresh), so census cards show when PSA was last read. `lastVerified` is unchanged.
@@ -112,10 +119,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed — Official agency marks
 - The PSA, DILG, BLGF, DOF, NHCP and Internet Archive badges now show each agency's own logo
-  instead of initials. The frame is a plain white rounded tile with a hairline edge, so it presents
+  instead of initials. The frame is a plain white circle with a hairline edge, so it presents
   the agency's artwork rather than imitating a seal — the old gold ring is gone. Files and where
   each came from are recorded in `public/agencies/README.md`; the home manifesto row no longer
-  overlaps the marks, and the reader’s other-source chip uses the same tile shape.
+  overlaps the marks, and the reader’s other-source chip uses the same circle.
 
 ### Added — Home hero scene dots and a history beam
 - The home hero’s six scenes now carry a small position indicator: one dot per scene, the active

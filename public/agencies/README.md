@@ -1,9 +1,9 @@
 # Agency logos
 
 The official mark of each agency is shown in a small white tile wherever the site credits a source
-(the home page manifesto, the sources ring, and every source card). The tile is a plain frame —
-square, rounded corners, no ring — so it presents the agency's own artwork rather than imitating a
-seal.
+(the home page manifesto, the sources ring, and every source card). The frame is a plain white
+**circle** — no ring, no crest, never a square (the maintainer's standing choice) — so it presents the
+agency's own artwork rather than imitating a seal.
 
 | File | Agency | Taken from |
 | --- | --- | --- |

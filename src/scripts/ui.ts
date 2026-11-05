@@ -283,6 +283,41 @@ if (wraps.length) {
   document.addEventListener('toggle', fit, true);
 }
 
+/* ---------- Chart text at a constant size ---------- */
+
+// Charts are SVG drawn on a fixed viewBox and stretched to their column, so
+// their labels grew on wide pages and shrank on phones. --k is the viewBox
+// units per screen pixel; chart text multiplies by it to stay 12–13 px. Kept
+// within bounds so labels never crowd the axes on very narrow screens.
+const chartSvgs = [...document.querySelectorAll<SVGSVGElement>('.chart svg[viewBox]')];
+if (chartSvgs.length && 'ResizeObserver' in window) {
+  const scale = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      const svg = entry.target as SVGSVGElement;
+      const width = entry.contentRect.width;
+      const units = svg.viewBox.baseVal.width;
+      if (!width || !units) continue;
+      svg.style.setProperty('--k', String(Math.min(1.8, Math.max(0.45, units / width)).toFixed(3)));
+    }
+  });
+  for (const svg of chartSvgs) scale.observe(svg);
+}
+
+/* ---------- Chart legends toggle their series ---------- */
+
+for (const button of document.querySelectorAll<HTMLButtonElement>('[data-chart-legend] [data-series]')) {
+  button.addEventListener('click', () => {
+    const chart = button.closest('.chart');
+    if (!chart) return;
+    const legend = button.closest('[data-chart-legend]')!;
+    const on = button.getAttribute('aria-pressed') !== 'false';
+    // Keep at least one series showing.
+    if (on && legend.querySelectorAll('[aria-pressed="true"]').length === 1) return;
+    button.setAttribute('aria-pressed', String(!on));
+    for (const el of chart.querySelectorAll(`[data-s="${button.dataset.series}"]`)) el.classList.toggle('is-off', on);
+  });
+}
+
 /* ---------- Manila clock in the utility bar ---------- */
 
 const clocks = document.querySelectorAll<HTMLElement>('[data-ph-clock]');
