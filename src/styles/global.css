@@ -1807,3 +1807,28 @@ html:not(.js) .js-only {
   border-radius: inherit;
   background: var(--c-accent);
 }
+
+/* Disclosure panels in lists open smoothly where the browser can animate to
+   auto height; elsewhere they open instantly, as before. */
+details.row-more,
+details.data-table {
+  interpolate-size: allow-keywords;
+}
+details.row-more::details-content,
+details.data-table::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition:
+    block-size var(--dur-3) var(--ease-out),
+    content-visibility var(--dur-3) allow-discrete;
+}
+details.row-more[open]::details-content,
+details.data-table[open]::details-content {
+  block-size: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  details.row-more::details-content,
+  details.data-table::details-content {
+    transition: none;
+  }
+}

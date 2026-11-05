@@ -22,6 +22,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The five “at a glance” figures on the home page each open their detail (population, households by
   barangay, all barangays, income class, disclosures), lifting on hover.
 - Holiday proclamation links fit on one line.
+- “Contract details” and “View as a table” panels open and close smoothly (where the browser supports it).
 
 ### Changed — Source cards
 - Source chips are now cards instead of pale pills: the publishing agency's logo, its name, the human
