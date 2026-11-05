@@ -7,6 +7,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Seal as a turning 3D medallion
+- The overview seal is now a real three-dimensional gold medallion (three.js) that turns on its
+  own, slowly — one turn every 24 seconds — with no buttons. It can be dragged, and slows while the
+  pointer rests on it so the lettering can be read. three.js (about 550 kB, ~140 kB compressed)
+  loads only when the seal is about to scroll into view; without JavaScript or WebGL, and under
+  reduced motion, the same seal shows as a still image. The face artwork is unchanged.
+
+### Changed — Official agency marks
+- The PSA, DILG, BLGF, DOF, NHCP and Internet Archive badges now show each agency's own logo
+  instead of initials. The frame is a plain white rounded tile with a hairline edge, so it presents
+  the agency's artwork rather than imitating a seal — the old gold ring is gone. Files and where
+  each came from are recorded in `public/agencies/README.md`; the home manifesto row no longer
+  overlaps the marks, and the reader’s other-source chip uses the same tile shape.
+
 ### Added — Home hero scene dots and a history beam
 - The home hero’s six scenes now carry a small position indicator: one dot per scene, the active
   one widening into an accent pill, and clicking a dot jumps to that scene (keyboard accessible,

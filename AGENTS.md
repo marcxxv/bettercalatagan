@@ -31,11 +31,12 @@ Breaking any of these is a defect, whatever else improves.
    "official" claims. The banner "An independent civic project — not an official government
    website" stays. Maintainer-authorised exception (ADR 0012): the overview history section may
    show the supplied seal as a captioned stylised rendition, never as site branding or proof of
-   government affiliation. `RotatingSeal.astro` rotates automatically with two identical faces and a
-   reduced-motion fallback; its SVG embeds raster artwork, rather than claiming vector paths.
-   The face asset stays unchanged when refining depth. A 64-panel gold sidewall and capped body
-   supply visible thickness; fixed metal colours and bevel lighting are artwork material colours,
-   while surrounding text continues to use theme tokens.
+   government affiliation. `RotatingSeal.astro` is a real three.js medallion (`lib/seal3d.ts`, loaded by `scripts/seal.ts`
+   only when the figure nears the viewport): gold body, bezel, milled edge, the same face on both
+   sides. It turns on its own, slowly (one turn per 24 s), with no visible controls; drag or
+   double-click turns it. The server-rendered still (`public/images/calatagan-seal-face.webp`) stays
+   without JavaScript, without WebGL and under reduced motion. Keep the face asset unchanged; fixed
+   metal colours are artwork material colours, while surrounding text uses theme tokens.
 5. **Provenance fields mean what they say.** `asOf` = period the data describes; `lastVerified` =
    when a *person* checked the source; `accessedOn` = when a URL was actually opened. Scripts
    never set `lastVerified`. Review dates in data modules are explicit literals, never derived
@@ -50,7 +51,7 @@ Breaking any of these is a defect, whatever else improves.
 
 Astro 7 (static output, no adapter), TypeScript, Zod, Vitest, ESLint. Node ≥ 22.12. No
 framework runtime, no Tailwind, no analytics, and the site itself has no backend or database
-(ADR 0002). The one exception to "no third-party requests" is the barangay map (ADR 0011). Runtime deps: `astro`, `zod`, `pdfjs-dist`, `fflate`, `maplibre-gl` (barangay map, lazy-loaded). The one piece of server code is
+(ADR 0002). The one exception to "no third-party requests" is the barangay map (ADR 0011). Runtime deps: `astro`, `zod`, `pdfjs-dist`, `fflate`, `maplibre-gl` (barangay map, lazy-loaded), `three` (seal medallion, lazy-loaded). The one piece of server code is
 the assistant, a Cloudflare Worker in `worker/` with its own `package.json` (ADR 0008, §6).
 
 | Command | What it does |
@@ -175,7 +176,9 @@ width so its `thead` sticks to the page. Selects are `appearance: none` (Safari)
 `data-hero-ask`), `AskBar` (floating 448×56 ask bar; hides when the hero ask is visible or a
 dialog is open; grows on hover), `SearchDialog` (⌘K), `DocViewer` (reader), `BarangayMap` (linked SVG group + lazy MapLibre 3D map, `scripts/barangay-map.ts`;
 loading canvas stays inert, then fallback links leave the tab order when the live map is ready), `Source` (provenance chip;
-`also` groups records that sit together), `Cites`, `Freshness`, `AgencyBadge` (PSA/DILG/BLGF/DOF/NHCP/IA marks), `Mark` (inline logo,
+`also` groups records that sit together), `Cites`, `Freshness`, `AgencyBadge` (the agency's own
+mark — PSA/DILG/BLGF/DOF/NHCP/IA — in a plain white rounded tile, never a ring or crest; files and
+their origins in `public/agencies/README.md`), `Mark` (inline logo,
 theme-aware), `Icon` (stroke icon set; add names to the `IconName` union), charts `ColumnChart`,
 `LineChart`, `Donut`, `Contours` (decorative topography).
 
