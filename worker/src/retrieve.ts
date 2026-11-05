@@ -171,24 +171,35 @@ export async function focus(env: Env, ctx: ReaderContext, query: string): Promis
       passages.push(row);
       doc = row.section;
     }
-    // The open document's own pages (ADR 0015): those matching the question,
-    // or its opening pages when nothing matches ("summarise this").
+    // The open document's own pages (ADR 0015). A question about the whole
+    // document ("summarise", "explain it simply", "what is this for") gets the
+    // whole document, sampled evenly from first page to last when it is long;
+    // any other question gets the pages that match it, or the opening pages.
     const pagesOf = `%?read=${ctx.read}#page=%`;
-    const match = ftsQuery(query);
-    const matched = match
-      ? (
-          await env.DB.prepare(
-            `SELECT c.id, c.url, c.page, c.section, c.text FROM chunks_fts f JOIN chunks c ON c.id = f.id
-             WHERE chunks_fts MATCH ?2 AND c.url LIKE ?1 ORDER BY bm25(chunks_fts, 0.0, 2.5, 1.0) LIMIT 4`,
-          )
-            .bind(pagesOf, match)
-            .all<Passage>()
-        ).results
-      : [];
-    const pages = matched.length
-      ? matched
-      : (await env.DB.prepare('SELECT id, url, page, section, text FROM chunks WHERE url LIKE ?1 ORDER BY length(url), url LIMIT 3').bind(pagesOf).all<Passage>()).results;
-    passages.push(...pages);
+    if (WHOLE_DOCUMENT.test(query)) {
+      const { results: all } = await env.DB.prepare(
+        'SELECT id, url, page, section, text FROM chunks WHERE url LIKE ?1 ORDER BY length(url), url LIMIT 200',
+      )
+        .bind(pagesOf)
+        .all<Passage>();
+      passages.push(...spread(all, DOC_BUDGET_CHARS));
+    } else {
+      const match = ftsQuery(query);
+      const matched = match
+        ? (
+            await env.DB.prepare(
+              `SELECT c.id, c.url, c.page, c.section, c.text FROM chunks_fts f JOIN chunks c ON c.id = f.id
+               WHERE chunks_fts MATCH ?2 AND c.url LIKE ?1 ORDER BY bm25(chunks_fts, 0.0, 2.5, 1.0) LIMIT 5`,
+            )
+              .bind(pagesOf, match)
+              .all<Passage>()
+          ).results
+        : [];
+      const pages = matched.length
+        ? matched
+        : (await env.DB.prepare('SELECT id, url, page, section, text FROM chunks WHERE url LIKE ?1 ORDER BY length(url), url LIMIT 3').bind(pagesOf).all<Passage>()).results;
+      passages.push(...pages);
+    }
   }
   if (ctx.path) {
     const match = ftsQuery(query);
@@ -216,6 +227,34 @@ export async function focus(env: Env, ctx: ReaderContext, query: string): Promis
     ? `The reader asked this from ${page ? `the page “${page}”` : 'the site'}${doc ? `, with the document “${doc}” open` : ''}. “This page”, “this document”, “here” and similar words refer to that.`
     : null;
   return { passages, note };
+}
+
+/** Questions about a document as a whole, in English, Filipino or Taglish. */
+export const WHOLE_DOCUMENT =
+  /\b(summar\w*|sum up|overview|gist|tl;?dr|explain|what (?:is|does) (?:this|it)|what'?s (?:this|it) (?:about|for)|about this|in (?:simple|plain|layman'?s?) (?:terms|words|english)|layman|like (?:a|i'?m(?: a)?) (?:child|kid|\d+)|eli5|\w*buod\w*|\w*paliwanag\w*|ano (?:ang|ba ang) (?:ibig sabihin|laman|tungkol)|tungkol saan|simplehan|simpleng)\b/i;
+
+/** Character budget for a whole document in the prompt (about 7,000 tokens). */
+export const DOC_BUDGET_CHARS = 28_000;
+
+/**
+ * Pages in reading order within a character budget. A long document is
+ * sampled evenly, so the beginning, middle and end are all represented.
+ */
+export function spread<T extends { text: string }>(pages: readonly T[], budget: number): T[] {
+  const total = pages.reduce((n, p) => n + p.text.length, 0);
+  if (total <= budget) return [...pages];
+  const average = total / pages.length;
+  const want = Math.max(3, Math.floor(budget / average));
+  const step = pages.length / want;
+  const picked: T[] = [];
+  let used = 0;
+  for (let i = 0; i < want; i += 1) {
+    const page = pages[Math.min(pages.length - 1, Math.floor(i * step))];
+    if (picked.includes(page) || used + page.text.length > budget) continue;
+    picked.push(page);
+    used += page.text.length;
+  }
+  return picked;
 }
 
 /** Merge focus passages into the retrieved ones: focus first, no duplicates, at most `k`. */

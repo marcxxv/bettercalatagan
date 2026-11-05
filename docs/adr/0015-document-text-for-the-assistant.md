@@ -28,8 +28,12 @@ published nor trustworthy.
   same hybrid retrieval as everything else.
 - **Reader focus** (`worker/src/retrieve.ts` `focus`): with `?read=<id>`, the open document's
   best-matching pages (or its opening pages) come first.
+- **Whole-document questions** (`WHOLE_DOCUMENT` in `retrieve.ts`: summarise, explain, what is this,
+  layman, like a child, *buod*, *ipaliwanag*…) take the document's pages in order within about 28,000
+  characters, sampled evenly when longer (`spread`). Explanations may use general knowledge of terms and
+  processes, never of Calatagan facts or figures.
 - **Interface:** the reader's "Ask about this document" docks the one site conversation in a
-  sidebar beside the document (a bottom sheet on narrow screens); hiding it keeps the
+  sidebar beside the document (a bottom sheet on narrow screens); suggestions follow the document's kind (`data-kind`); hiding it keeps the
   conversation, and closing the reader returns it to its panel. A citation of the open
   document turns the reader to that page.
 

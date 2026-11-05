@@ -86,7 +86,8 @@ export async function answer(env: Env, request: ChatRequest, stream: Stream, can
     retrieve(env, query),
     focus(env, context, query).catch(() => (console.warn('focus failed'), { passages: [], note: null })),
   ]);
-  const passages = withFocus(focused.passages, found);
+  // With a document open, its pages come first and may fill more of the prompt.
+  const passages = withFocus(focused.passages, found, context.read ? Math.max(10, focused.passages.length + 4) : 10);
   await stream.send({ t: 'sources', items: sourceList(passages) });
 
   const today = new Intl.DateTimeFormat('en-PH', { timeZone: 'Asia/Manila', dateStyle: 'long' }).format(new Date());

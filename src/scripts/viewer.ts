@@ -299,6 +299,10 @@ if (dialog) {
   async function open(trigger: HTMLElement, push = true) {
     const src = trigger.dataset.read!;
     opener = trigger;
+    // A new document while the assistant is open: its suggestions follow the document.
+    if (askModule && !askSide.hidden) {
+      void askModule.then((m) => m.dockAsk(askSide, '', { title: trigger.dataset.title, kind: trigger.dataset.kind }));
+    }
     session++;
     const mine = session;
     zoom = 0;
@@ -376,7 +380,7 @@ if (dialog) {
     window.dispatchEvent(new Event('resize'));
     if (show) {
       askModule ??= import('./ask');
-      void askModule.then((m) => m.dockAsk(askSide));
+      void askModule.then((m) => m.dockAsk(askSide, '', { title: opener?.dataset.title, kind: opener?.dataset.kind }));
     } else askToggle.focus({ preventScroll: true });
   };
   askToggle.addEventListener('click', () => setAsk(askSide.hidden));

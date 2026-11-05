@@ -41,6 +41,8 @@ interface ReadOptions {
   filename?: string;
   /** Who serves the bytes, for loading and error copy. */
   source: 'the Internet Archive' | 'the DILG portal';
+  /** What kind of document it is (archive kind, or "fdp-filing"): shapes the assistant's suggestions. */
+  kind?: string;
 }
 
 /** Data attributes that turn any link into a reader trigger. */
@@ -54,6 +56,7 @@ export function readAttrs(o: ReadOptions): Record<string, string> {
     'data-id': o.id,
     'data-filename': o.filename ?? '',
     'data-source': o.source,
+    ...(o.kind ? { 'data-kind': o.kind } : {}),
   };
 }
 
@@ -72,6 +75,7 @@ export function archiveReadAttrs(doc: {
   filename: string;
   publishedYear: number | null;
   byteLength: number | null;
+  kind?: string;
 }): Record<string, string> | null {
   const src = readerSrc(doc.archiveUrl);
   if (!src || !isReadable(doc.fileType)) return null;
@@ -85,6 +89,7 @@ export function archiveReadAttrs(doc: {
     original: doc.archiveUrl,
     id: doc.id,
     filename: doc.filename,
+    kind: doc.kind,
     source: 'the Internet Archive',
   });
 }
@@ -114,5 +119,6 @@ export function fdpReadAttrs(
     id: filing.id,
     filename: `calatagan-${filing.id.replace(/^fdp-/, '')}.${filing.fileType}`,
     source: 'the DILG portal',
+    kind: 'fdp-filing',
   });
 }

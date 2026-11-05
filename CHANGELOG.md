@@ -7,6 +7,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed — Ask about a document: whole-document answers, fitting suggestions, structure
+- “Summarise”, “explain it simply”, “what is this for”, “like I'm 10” (and Filipino: *buod*, *ipaliwanag*,
+  *ano ang ibig sabihin*, *tungkol saan*) now give the assistant the whole document: every page of a
+  short one, or pages sampled evenly from first to last of a long one (about 7,000 tokens). Other
+  questions get the five best-matching pages.
+- The reader's sidebar suggests questions that fit the document: a Citizen's Charter (services,
+  requirements and fees, processing times), a bid or award notice, an ordinance or order, a budget or
+  disclosure report, a plan or profile; each with “Explain it like I'm 10”. Its heading names the document.
+- Document summaries are structured: a bold one-line takeaway, “What it covers” and “What it means for
+  you”, the document's title in italics and a dated-record note.
+- The assistant explains general terms and processes in plain words (a Citizen's Charter, a bid security,
+  R.A. 9184), gives neutral practical guidance, and answers what it can instead of refusing outright. Facts
+  and figures about Calatagan still come only from the site, and every number is still checked.
+
 ### Fixed — Assistant withdrew plain-language explanations
 - Asking for a simple explanation of a document (“in layman's terms, what does this imply?”) was withdrawn
   when the model rephrased a figure. The assistant now gets one chance to correct such an answer (figures

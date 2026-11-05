@@ -87,3 +87,33 @@ describe('sessions', () => {
     expect(await verify('secret', null)).toBeNull();
   });
 });
+
+import { WHOLE_DOCUMENT, spread } from '../src/retrieve';
+
+describe('whole-document questions', () => {
+  it.each([
+    'Summarise this document',
+    'Please keep it short and simple, and in layman’s terms, what does this imply?',
+    "Explain it like I'm 10",
+    'What is this document for?',
+    'Ano ang ibig sabihin nito?',
+    'Pakibuod naman',
+    'ibuod mo nga',
+    'Tungkol saan ito?',
+  ])('%s', (q) => expect(WHOLE_DOCUMENT.test(q)).toBe(true));
+
+  it.each(['How much is the business permit fee?', 'When were the bids opened?'])('not: %s', (q) =>
+    expect(WHOLE_DOCUMENT.test(q)).toBe(false),
+  );
+
+  it('keeps a short document whole and samples a long one evenly, in order, within budget', () => {
+    const short = [1, 2, 3].map((n) => ({ n, text: 'x'.repeat(1000) }));
+    expect(spread(short, 28_000)).toHaveLength(3);
+    const long = Array.from({ length: 60 }, (_, i) => ({ n: i + 1, text: 'x'.repeat(2000) }));
+    const picked = spread(long, 28_000);
+    expect(picked.reduce((t, p) => t + p.text.length, 0)).toBeLessThanOrEqual(28_000);
+    expect(picked[0].n).toBe(1);
+    expect(picked.at(-1)!.n).toBeGreaterThan(50);
+    expect(picked.map((p) => p.n)).toEqual([...picked.map((p) => p.n)].sort((a, b) => a - b));
+  });
+});

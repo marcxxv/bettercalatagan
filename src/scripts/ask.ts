@@ -544,22 +544,83 @@ const siteCopy = {
   chips: chips.map((c) => c.dataset.askSuggest ?? ''),
   close: closeButton.getAttribute('aria-label') ?? 'Close',
 };
-const DOC_CHIPS = [
-  'Summarise this document',
-  'What does it require, and what does it cost?',
-  'What dates and amounts does it mention?',
-  'Which other documents relate to this?',
-];
+/** What a reader is likely to ask, by kind of document (data-kind on the reader link). */
+const DOC_CHIPS: Record<string, string[]> = {
+  'citizens-charter': [
+    'Summarise this charter',
+    'What services does this office offer?',
+    'What do I need to bring, and how much does it cost?',
+    'How long does each service take?',
+    'Explain it like I’m 10',
+  ],
+  procurement: [
+    'Summarise this notice',
+    'What was being bought or built, and for how much?',
+    'What were the steps and dates?',
+    'What does this mean for residents?',
+    'Explain it like I’m 10',
+  ],
+  law: [
+    'Summarise this in plain words',
+    'What does it require or allow?',
+    'Who does it affect?',
+    'When does it take effect?',
+    'Explain it like I’m 10',
+  ],
+  finance: [
+    'Summarise this report',
+    'What are the biggest amounts, and what are they for?',
+    'What period does it cover?',
+    'What does this mean for residents?',
+    'Explain it like I’m 10',
+  ],
+  plan: [
+    'Summarise this plan',
+    'What are its main goals?',
+    'Which areas or barangays does it mention?',
+    'What does this mean for residents?',
+    'Explain it like I’m 10',
+  ],
+  other: [
+    'Summarise this document',
+    'What is this document for?',
+    'What are the key points?',
+    'Which other documents relate to this?',
+    'Explain it like I’m 10',
+  ],
+};
+const CHIP_GROUP: Record<string, string> = {
+  'citizens-charter': 'citizens-charter',
+  'office-document': 'citizens-charter',
+  'procurement-award': 'procurement',
+  'procurement-notice': 'procurement',
+  'procurement-plan': 'procurement',
+  ordinance: 'law',
+  'executive-order': 'law',
+  resolution: 'law',
+  budget: 'finance',
+  'fdp-disclosure': 'finance',
+  'fdp-filing': 'finance',
+  report: 'plan',
+  profile: 'plan',
+  'land-use-plan': 'plan',
+};
 
-function useCopy(docked: boolean) {
-  if (emptyTitle) emptyTitle.textContent = docked ? 'Ask about this document' : siteCopy.title;
+export interface DockedDocument {
+  title?: string;
+  kind?: string;
+}
+
+function useCopy(docked: boolean, doc: DockedDocument = {}) {
+  const docChips = DOC_CHIPS[CHIP_GROUP[doc.kind ?? ''] ?? 'other'];
+  if (emptyTitle) emptyTitle.textContent = docked ? (doc.title ? `Ask about “${doc.title}”` : 'Ask about this document') : siteCopy.title;
   if (emptyText) {
     emptyText.textContent = docked
       ? 'Answers come from the text of this document and the rest of the site’s records, and link to the page they rest on. Scanned pages without a text layer cannot be read; the assistant will say so.'
       : siteCopy.text;
   }
   chips.forEach((chip, i) => {
-    const text = docked ? DOC_CHIPS[i] : siteCopy.chips[i];
+    const text = docked ? docChips[i] : siteCopy.chips[i];
     chip.hidden = !text;
     if (text) {
       chip.dataset.askSuggest = text;
@@ -570,13 +631,14 @@ function useCopy(docked: boolean) {
 }
 
 /** Show the conversation inside `container` (beside an open document), optionally asking `question`. */
-export function dockAsk(container: HTMLElement, question = '') {
+export function dockAsk(container: HTMLElement, question = '', doc: DockedDocument = {}) {
   if (panel.open) panel.close();
   if (dock !== container) {
     container.append(...dockedParts);
     dock = container;
-    useCopy(true);
   }
+  // Suggestions follow the open document, also when another one is opened while docked.
+  useCopy(true, doc);
   if (question.trim()) void send(question);
   else {
     const last = turns.length - 1;
