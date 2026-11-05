@@ -20,6 +20,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   Without JavaScript the map is an outline shaded by project count, each barangay linking to its
   filtered list. (`BarangayMap mode="works"`; per-barangay `budget` and `k_<kind>` counts in
   `/data/barangays.geojson`.)
+- Every project row that names a barangay has “Show on map”: the map flies to it, lights every
+  barangay the contract names, and opens the card with that contract marked first. The 3 contracts
+  whose DPWH description gives GPS coordinates show “Show exact spot” and drop a pin labelled
+  “DPWH-reported location”.
 
 ### Fixed — Document reader and archived titles
 - The reader now retries when the Internet Archive is slow or briefly fails (it can take over a minute

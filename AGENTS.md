@@ -179,7 +179,8 @@ width so its `thead` sticks to the page. Selects are `appearance: none` (Safari)
 (rounded panel with eyebrow, icon, lede, aside slot), `HeroCarousel` (home scenes, hero ask
 `data-hero-ask`), `AskBar` (floating 448×56 ask bar; hides when the hero ask is visible or a
 dialog is open; grows on hover), `SearchDialog` (⌘K), `DocViewer` (reader), `BarangayMap` (linked SVG group + lazy MapLibre 3D map, `scripts/barangay-map.ts`; `mode="works"` raises
-barangays by DPWH projects, budget or kind of work on /infrastructure;
+barangays by DPWH projects, budget or kind of work on /infrastructure; `[data-show-on-map]` links take
+`data-psgcs` (comma list), `data-contract` and optional `data-latlng` (DPWH-reported GPS → pin);
 loading canvas stays inert, then fallback links leave the tab order when the live map is ready), `Source` (provenance card: the lead agency's logo, publisher, review date and — when newer — the latest
 `accessedOn` as "re-read from source"; the caveat always shows in full; opens to method and references;
 `also` groups records that sit together), `Cites`, `Freshness`, `AgencyBadge` (the agency's own

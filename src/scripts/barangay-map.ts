@@ -80,9 +80,20 @@ const PEAK = 650;
 const HOME = { center: [120.645, 13.855] as [number, number], zoom: 11, pitch: 52, bearing: -18 };
 
 const root = document.querySelector<HTMLElement>('[data-bgy-map]');
+/**
+ * What a "show on map" link asks for: the barangays a record names, an exact
+ * point when the source gives one (DPWH sometimes appends GPS coordinates),
+ * and the contract to mark in the card.
+ */
+interface Target {
+  ids: string[];
+  lnglat?: [number, number];
+  contract?: string;
+  label?: string;
+}
 /** Set once the map exists; until then a "show on map" click is remembered in `pending`. */
-let api: { select: (id: string) => void } | null = null;
-let pending: string | null = null;
+let api: { show: (target: Target) => void } | null = null;
+let pending: Target | null = null;
 let webgl = true;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fmt = new Intl.NumberFormat('en-PH');
@@ -292,7 +303,7 @@ async function start() {
     root!.querySelector('[data-legend-label]')!.textContent = LABELS[metric];
     root!.querySelector('[data-legend-max]')!.textContent = metric === 'budget' ? peso(maxOf(metric)) : fmt.format(maxOf(metric));
     // An open card follows the chosen kind of work.
-    if (selected) select(selected, { fly: false });
+    if (selected) select(selected, { fly: false, contract: current });
   }
 
   map.on('load', () => {
@@ -339,10 +350,12 @@ async function start() {
     return `<strong>${f.name}</strong><span>${fmt.format(n)} ${what}${f.budget ? ` · ${peso(f.budget)} in all contracts` : ''}</span>`;
   };
 
-  const frame = (id: string) => {
-    const f = data.features.find((x) => x.properties.psgc10 === id);
-    if (!f) return;
-    const coords = (f.geometry.type === 'Polygon' ? [f.geometry.coordinates] : (f.geometry as GeoJSON.MultiPolygon).coordinates).flat(2);
+  const frame = (id: string | string[]) => {
+    const ids = Array.isArray(id) ? id : [id];
+    const coords = data.features
+      .filter((x) => ids.includes(x.properties.psgc10))
+      .flatMap((f) => (f.geometry.type === 'Polygon' ? [f.geometry.coordinates] : (f.geometry as GeoJSON.MultiPolygon).coordinates).flat(2));
+    if (!coords.length) return;
     const bounds = coords.reduce(
       (b, c) => b.extend(c as [number, number]),
       new maplibregl.LngLatBounds(coords[0] as [number, number], coords[0] as [number, number]),
@@ -350,10 +363,19 @@ async function start() {
     map.fitBounds(bounds, { padding: { top: 90, bottom: 120, left: 80, right: 340 }, maxZoom: 12.6, pitch: threeD ? 48 : 0, duration: reduced ? 0 : 1200 });
   };
 
-  const select = (id: string | null, { fly = true } = {}) => {
+  /** Extra barangays lit alongside the selected one (a contract naming several). */
+  let also: string[] = [];
+  let marker: InstanceType<typeof maplibregl.Marker> | null = null;
+  let current: string | undefined;
+  const select = (id: string | null, { fly = true, contract }: { fly?: boolean; contract?: string } = {}) => {
     if (selected) map.setFeatureState({ source: 'bgy', id: selected }, { selected: false });
     selected = id;
+    current = contract;
     if (!id) {
+      for (const other of also) map.setFeatureState({ source: 'bgy', id: other }, { selected: false });
+      also = [];
+      marker?.remove();
+      current = undefined;
       card.hidden = true;
       return;
     }
@@ -380,7 +402,9 @@ async function start() {
     // What DPWH built here: a breakdown by kind, then the newest few, each
     // linking to its full contract on the infrastructure page.
     const kindFilter = kindOfMetric(metric);
-    const works = (f.works ?? []).filter((w) => !kindFilter || w.kind === kindFilter);
+    const works = (f.works ?? []).filter((w) => !kindFilter || w.kind === kindFilter || w.id === contract);
+    // The contract that was asked for goes first.
+    if (contract) works.sort((a, b) => Number(b.id === contract) - Number(a.id === contract));
     if (works.length) {
       const kinds = el('ul', 'c-kinds');
       kinds.setAttribute('aria-label', 'DPWH projects by kind');
@@ -398,8 +422,9 @@ async function start() {
       list.setAttribute('aria-label', 'Latest DPWH projects');
       works.slice(0, CARD_WORKS).forEach((w, i) => {
         const li = el('li');
-        const a = el('a', 'c-work');
+        const a = el('a', w.id === contract ? 'c-work is-current' : 'c-work');
         a.href = `/infrastructure#contract-${w.id}`;
+        if (w.id === contract) a.setAttribute('aria-current', 'true');
         a.style.setProperty('--i', String(i));
         const icon = el('span', 'c-work-icon');
         icon.append(kindIcon(w.kind));
@@ -457,21 +482,43 @@ async function start() {
   });
   map.on('click', 'bgy-fill', (e) => {
     const id = String(e.features?.[0]?.properties.psgc10 ?? '');
-    if (id) select(id);
+    if (!id) return;
+    // A fresh choice on the map: drop any contract highlight, extra barangays and pin.
+    for (const other of also) map.setFeatureState({ source: 'bgy', id: other }, { selected: false });
+    also = [];
+    marker?.remove();
+    select(id);
   });
 
   for (const row of rows()) {
     row.addEventListener('mouseenter', () => map.loaded() && setHover(row.dataset.psgc!));
     row.addEventListener('mouseleave', () => map.loaded() && setHover(null));
   }
-  api = { select: (id) => select(id) };
+  const show = (t: Target) => {
+    if (!t.ids.length) return;
+    for (const other of also) map.setFeatureState({ source: 'bgy', id: other }, { selected: false });
+    select(t.ids[0], { fly: false, contract: t.contract });
+    also = t.ids.slice(1);
+    for (const other of also) map.setFeatureState({ source: 'bgy', id: other }, { selected: true });
+    marker?.remove();
+    if (t.lnglat) {
+      // DPWH's own coordinates: a pin, labelled as theirs.
+      const pin = el('div', 'bmap-pin');
+      pin.setAttribute('role', 'img');
+      pin.setAttribute('aria-label', `${t.label ?? 'Project'}: location as reported by DPWH`);
+      pin.append(el('span', 'bmap-pin-label', 'DPWH-reported location'), el('span', 'bmap-pin-head'));
+      marker = new maplibregl.Marker({ element: pin, anchor: 'bottom' }).setLngLat(t.lnglat).addTo(map);
+      map.flyTo({ center: t.lnglat, zoom: 14.2, pitch: threeD ? 50 : 0, duration: reduced ? 0 : 1400, offset: [-120, 40] });
+    } else frame(t.ids);
+  };
+  api = { show };
   // A profile page opens the map on its own barangay, selected, without the intro sweep.
-  if (root!.dataset.focus && !pending) pending = root!.dataset.focus;
+  if (root!.dataset.focus && !pending) pending = { ids: [root!.dataset.focus] };
   if (pending) {
-    const id = pending;
+    const t = pending;
     pending = null;
-    if (map.loaded()) select(id);
-    else map.once('load', () => select(id));
+    if (map.loaded()) show(t);
+    else map.once('load', () => show(t));
   }
 
   /* ---------- Controls ---------- */
@@ -522,10 +569,17 @@ if (root) {
     link.addEventListener('click', (event) => {
       if (!webgl) return;
       event.preventDefault();
-      const id = link.closest<HTMLElement>('[data-psgc]')!.dataset.psgc!;
+      const ids = link.dataset.psgcs ? link.dataset.psgcs.split(',') : [link.closest<HTMLElement>('[data-psgc]')!.dataset.psgc!];
+      const [lat, lng] = (link.dataset.latlng ?? '').split(',').map(Number);
+      const target: Target = {
+        ids,
+        lnglat: Number.isFinite(lat) && Number.isFinite(lng) && link.dataset.latlng ? [lng, lat] : undefined,
+        contract: link.dataset.contract,
+        label: link.dataset.label,
+      };
       root.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
-      if (api) api.select(id);
-      else pending = id;
+      if (api) api.show(target);
+      else pending = target;
     });
   }
   const io = new IntersectionObserver(

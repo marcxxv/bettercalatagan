@@ -61,6 +61,12 @@ const kinds = (Object.keys(KIND_LABELS) as ProjectKind[])
   .sort((a, b) => b.budget - a.budget);
 const kindMax = Math.max(...kinds.map((k) => k.budget));
 
+/** GPS coordinates DPWH sometimes appends to a description: "(13.87, 120.66)" → "13.87,120.66". */
+const latLngOf = (description: string) => {
+  const m = description.match(/\(\s*(\d{1,2}\.\d+)\s*,\s*(\d{2,3}\.\d+)\s*\)/);
+  return m ? `${m[1]},${m[2]}` : undefined;
+};
+
 const description = `${inCalatagan.length} DPWH infrastructure projects located in Calatagan, Batangas (${Math.min(...years)}–${Math.max(...years)}): budgets, contractors, status and barangay, from DPWH’s own records.`;
 
 const origin = Astro.site ?? new URL('http://localhost:4321');
@@ -280,6 +286,17 @@ const jsonLd = [
                   })}
                   {p.category && <span>{p.category.split(':')[0]}</span>}
                   <span>{p.contractId}</span>
+                  {p.barangays.length > 0 && (
+                    <a
+                      href="#map"
+                      class="show-on-map"
+                      data-show-on-map
+                      data-psgcs={p.barangays.join(',')}
+                      data-contract={p.contractId}
+                      data-latlng={latLngOf(p.description)}
+                      data-label={dpwhHeadline(p.description).headline}
+                    ><Icon name="pin" size="14" />{latLngOf(p.description) ? 'Show exact spot' : 'Show on map'}</a>
+                  )}
                 </p>
                 <details class="row-more">
                   <summary>Contract details</summary>
@@ -393,6 +410,12 @@ const jsonLd = [
 </Base>
 
 <style>
+  .show-on-map {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+  }
   .kind-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
