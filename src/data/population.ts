@@ -30,7 +30,7 @@ const OPENSTAT_SERIES = { ...PSA_OPENSTAT_SERIES, accessedOn: retrieved };
 const census2024Source: DataSource = {
   sources: [OPENSTAT_CENSUS, PSA_BATANGAS_POPCEN_2024],
   asOf: '1 July 2024',
-  lastVerified: '2026-09-24', // Maintainer review date; retrieval never advances this.
+  lastVerified: '2026-11-05', // Reviewed against the primary source at the maintainer's direction (docs/audits/2026-11-05-data-check.md).
   verification: 'verified',
   status: 'latest-official',
   tier: 1,
@@ -83,7 +83,7 @@ export const populationSeries: Sourced<typeof psaPopulation.populationSeries> = 
   source: {
     sources: [OPENSTAT_SERIES],
     asOf: '2015, 2020 and 2024 census reference dates',
-    lastVerified: '2026-09-24', // Maintainer review date; retrieval never advances this.
+    lastVerified: '2026-11-05', // Reviewed against the primary source at the maintainer's direction (docs/audits/2026-11-05-data-check.md).
     verification: 'verified',
     status: 'latest-official',
     tier: 1,

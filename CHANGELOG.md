@@ -116,9 +116,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   Talisay multi-purpose building, now completed (18 January 2026); 25DB0052 lists four bidders.
 - DILG Full Disclosure Policy Portal: the 2023 Annual Procurement Plan, previously a source error,
   now downloads (XLSX). All 156 filings re-read; 14 SREs still reconcile. Other datasets unchanged.
-- `lastVerified` dates are unchanged: they record a person's review, not a retrieval. What was re-read
-  from primary sources on 5 November (census matched PSA OpenSTAT exactly; BLGF blocked automated
-  access) is in `docs/audits/2026-11-05-data-check.md`.
+- Review dates advanced to 5 November 2026, on the maintainer's direction after a primary-source check
+  (`docs/audits/2026-11-05-data-check.md`): the 2024 census and municipal identity (matched PSA OpenSTAT
+  exactly), the DILG filings and SREs (re-read, all 14 reconciled), and the income class (BLGF circular
+  read from an archived copy whose SHA-256 matches the recorded file). Other datasets keep their dates.
 
 ### Fixed — Weekly data refresh
 - The refresh now ends red when any source fails, so a failure is noticed, and when GitHub will not let

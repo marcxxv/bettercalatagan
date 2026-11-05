@@ -29,7 +29,7 @@ const availableCount = fdpDataset.records.filter((r) => r.availability === 'avai
 export const fdpSource: DataSource = {
   sources: [FDPP_LISTING],
   asOf: periodRangeLabel(fdpDataset.records),
-  lastVerified: '2026-09-22', // Maintainer review date; retrieval never advances this.
+  lastVerified: '2026-11-05', // Reviewed against the primary source at the maintainer's direction (docs/audits/2026-11-05-data-check.md).
   verification: 'verified',
   status: 'current',
   tier: 2,

@@ -30,7 +30,7 @@ export const municipality: Sourced<Municipality> = {
   source: {
     sources: [PSA_OPENSTAT_CENSUS_2024, PSGC_GITLAB, PSGC_CLOUD],
     asOf: 'PSGC as used in the PSA 2024 Census of Population',
-    lastVerified: '2026-09-22',
+    lastVerified: '2026-11-05', // Reviewed at the maintainer's direction (docs/audits/2026-11-05-data-check.md).
     verification: 'verified',
     status: 'current',
     tier: 1,
@@ -64,7 +64,7 @@ export const incomeClassification: Sourced<IncomeClassification> = {
   source: {
     sources: [BLGF_MC_020_2024, DOF_DO_074_2024],
     asOf: 'Effective 1 January 2025',
-    lastVerified: '2026-09-22',
+    lastVerified: '2026-11-05', // Reviewed at the maintainer's direction (docs/audits/2026-11-05-data-check.md).
     verification: 'verified',
     status: 'current',
     tier: 1,
