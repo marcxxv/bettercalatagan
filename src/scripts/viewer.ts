@@ -255,6 +255,9 @@ if (dialog) {
     loading.hidden = true;
     layout(pdf.numPages);
     setCurrent(1);
+    // A link to a page of this document (a citation: ?read=<id>#page=<n>) opens there.
+    const wanted = Number(/page=(\d+)/.exec(location.hash)?.[1]);
+    if (wanted > 1 && wanted <= pdf.numPages) requestAnimationFrame(() => goTo(wanted, false));
   }
 
   async function openOffice(src: string, trigger: HTMLElement, mine: number) {

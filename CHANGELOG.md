@@ -11,7 +11,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The reader has “Ask about this document”: the assistant opens in a sidebar beside the document (a bottom
   sheet on narrow screens), with document-specific suggestions. Hiding it keeps the conversation and
   returns the full-width document; closing the reader returns the conversation to its usual panel. A
-  citation of the open document turns the reader to that page.
+  citation of the open document turns the reader to that page, and a link to a page of another document
+  (`?read=<id>#page=<n>`) opens it at that page.
 - The assistant can now answer from what archived documents say: `scripts/document-text.mjs` extracted the
   text layer of 63 archived PDFs (678 pages) from the Internet Archive into `document-text.json`, published
   as page-linked passages. 127 are scanned images with no text and are described as such; 19 were withheld
