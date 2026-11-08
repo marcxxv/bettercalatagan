@@ -34,7 +34,7 @@
     "documents:ocr": "node scripts/document-ocr.mjs"
   },
   "dependencies": {
-    "astro": "^7.4.4",
+    "astro": "^7.4.7",
     "fflate": "^0.8.3",
     "maplibre-gl": "^6.11.2",
     "pdfjs-dist": "^6.3.289",
